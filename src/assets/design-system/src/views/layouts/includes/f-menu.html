@@ -1,0 +1,92 @@
+<!-- Butter menu -->
+<div id="f-menu-container" class="f-menu-container {{toolkit.sticky}}">
+    <div class="f-flex-columns">
+        {{> f-navbar}}
+        <div class="f-flex-rows">
+            {{> f-controls}}
+
+            {{> f-menu-search}}
+
+            <div class="f-menu nano">
+                <div  class="nano-content">
+                    {{> f-settings }}
+                    <ul role="list">
+                        <li id="menu-section-docs" data-tags="docs overview{{#each docs}} {{name}}{{/each}}" role="listitem" aria-expanded="true">
+                            <a href="docs.html" class="f-menu__heading">Docs</a>
+                            <button class="f-menu-collapse" type="button" data-f-collapse></button>
+                            <ul role="menu">
+                                <li data-tags="docs overview" role="menuitem">
+                                    <a href="index.html">Overview</a>
+                                </li>
+                                {{#each docs}}
+                                <li data-tags="{{../name}} {{name}}" role="menuitem">
+                                    <a href="docs.html#{{@key}}">{{#cond name '==' 'Dna'}}DNA{{else}}{{name}}{{/cond}}</a>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </li>
+
+                        {{#each views}}
+                        <li id="menu-section-{{@key}}" data-tags="views {{name}}{{#each items}} {{name}}{{#if this.data.title}} {{this.data.title}}{{/if}}{{#if data.atomic}} {{data.atomic}}{{/if}}{{/each}}" role="listitem" aria-expanded="true">
+                            {{#if this.data.title}}
+                            <a class="f-menu__heading" href="javascript:void(0);">{{{this.data.title}}}</a>
+                            {{else}}
+                            <a class="f-menu__heading" href="javascript:void(0);">{{name}}</a>
+                            {{/if}}
+                            <button class="f-menu-collapse" type="button" data-f-collapse></button>
+                            <ul role="menu">
+                                {{#each items}}
+                                <li data-tags="{{../name}} {{name}}{{#if data.atomic}} {{data.atomic}}{{/if}}" role="menuitem">
+                                    {{#if this.data.title}}
+                                    <a href="{{@../key}}/{{@key}}.html" target="_blank">{{{this.data.title}}}</a>
+                                    {{else}}
+                                    <a href="{{@../key}}/{{@key}}.html" target="_blank">{{name}}</a>
+                                    {{/if}}
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </li>
+                        {{/each}}
+
+                        {{#if pages}}
+                        <li id="menu-section-pages" data-tags="pages page" role="listitem" aria-expanded="true">
+                            <a href="#pages" class="f-menu__heading">Pages</a>
+                            <button class="f-menu-collapse" type="button" data-f-collapse></button>
+                            <ul role="menu">
+                                {{#each pages}}
+                                <li data-tags="pages page {{label}}" role="menuitem">
+                                    <a href="{{url}}" title="visit page" target="_blank">{{label}}</a>
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </li>
+                        {{/if}}
+
+                        {{#each materials}}
+                        <li id="menu-section-materials-{{@key}}" data-tags="materials {{name}}{{#each items}} {{name}}{{#if this.data.title}} {{this.data.title}}{{/if}}{{#if data.atomic}} {{data.atomic}}{{/if}}{{/each}}" role="listitem" aria-expanded="true">
+                            {{#if this.data.title}}
+                            <a href="{{@key}}.html" class="f-menu__heading">{{{this.data.title}}}</a>
+                            {{else}}
+                            <a href="{{@key}}.html" class="f-menu__heading">{{name}}</a>
+                            {{/if}}
+                            <button class="f-menu-collapse" type="button" data-f-collapse></button>
+                            <ul role="menu">
+                                {{#each items}}
+                                <li data-tags="{{../name}} {{name}}{{#if data.atomic}} {{data.atomic}}{{/if}}" role="menuitem">
+                                    {{#if this.data.title}}
+                                    <a href="{{#if this.data.url}}{{this.data.url}}{{else}}{{@../key}}.html#{{@key}}{{/if}}" {{#if this.data.url}}target="_blank"{{/if}}>{{{this.data.title}}}</a>
+                                    {{else}}
+                                    <a href="{{#if this.data.url}}{{this.data.url}}{{else}}{{@../key}}.html#{{@key}}{{/if}}" {{#if this.data.url}}target="_blank"{{/if}}>{{name}}</a>
+                                    {{/if}}
+                                </li>
+                                {{/each}}
+                            </ul>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Butter menu -->

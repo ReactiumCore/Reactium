@@ -1,0 +1,28 @@
+/**
+ * Atomic Reactor Styles
+ * @author Cam Tullos
+ * Class selectors are namespaced with "f-"
+ */
+
+$settings: (
+	theme: light,
+	accent: hsl(0, 0%, 46%),
+	menu-width: 280px,
+	navbar-width: 92px
+);
+
+@import 'partials/variables';
+@import 'partials/table';
+@import 'partials/docs';
+@import 'partials/code';
+@import 'partials/color-chips';
+@import 'partials/controls';
+@import 'partials/item';
+@import 'partials/layout';
+@import 'partials/menu';
+@import 'partials/icons';
+@import 'partials/icon-font';
+@import 'partials/notes';
+@import 'partials/dependencies';
+@import 'partials/branding';
+@import 'partials/settings';

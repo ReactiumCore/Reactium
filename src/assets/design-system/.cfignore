@@ -1,0 +1,12 @@
+.DS_STORE
+
+# Ignore src
+/src
+
+# Ignore app settings
+.idea
+.eslintrc.yml
+.gitignore
+
+# Ignore node_modules
+node_modules

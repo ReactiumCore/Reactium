@@ -1,0 +1,63 @@
+<div class="f-item-dependencies">
+    {{#if this.data.helix.dependents}}
+    <div class="f-item-column">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 60%;">Dependents</th>
+                    <th>Selectors</th>
+                    <th style="width: 40px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each this.data.helix.dependents}}
+                <tr>
+                    <td>
+                        <a href="{{this.link}}" title="{{this.file}}">{{this.file}}</a>
+                    </td>
+                    <td>
+                        {{#each this.tags}}
+                        <div>{{this}}</div>
+                        {{/each}}
+                    </td>
+                    <td>
+                        <span class="count">{{this.count}}</span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+
+    {{#if this.data.helix.dependency}}
+    <div class="f-item-column">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 60%;">Dependencies</th>
+                    <th>Selectors</th>
+                    <th style="width: 40px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each this.data.helix.dependency}}
+                <tr>
+                    <td>
+                        <a href="{{this.link}}" title="{{this.file}}">{{this.file}}</a>
+                    </td>
+                    <td>
+                        {{#each this.tags}}
+                        <div>{{this}}</div>
+                        {{/each}}
+                    </td>
+                    <td>
+                        <span class="count">{{this.count}}</span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+</div>

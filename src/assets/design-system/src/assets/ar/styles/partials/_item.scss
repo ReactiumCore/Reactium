@@ -1,0 +1,106 @@
+.f-item-group {
+	@include clearfix;
+	margin-top: 32px;
+	margin-bottom: 32px;
+	padding-bottom: 32px;
+	border-bottom: 1px solid color(light);
+
+    &:first-of-type {
+        //margin-top: 0;
+    }
+
+	&:last-child {
+		border-bottom: 0;
+		margin-bottom: 0;
+	}
+
+	& ~ & {
+		margin-top: 0;
+	}
+
+	& > & {
+		padding-bottom: 32px;
+		margin-bottom: 32px;
+		border-bottom: 0;
+
+		&:first-of-type {
+			margin-top: 0;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+			padding-bottom: 0;
+		}
+	}
+}
+
+.f-item-preview {
+	@include clearfix;
+}
+
+.f-item-border-bottom {
+	border-bottom: 1px solid color(light);
+}
+
+.f-item-heading-group {
+	@include clearfix;
+	margin-bottom: 15px;
+	vertical-align: middle;
+    display: flex;
+}
+
+.f-item-heading {
+	margin-top: 0;
+	margin-bottom: 0;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 1;
+    font-size: 18px !important;
+}
+
+
+.f-item-controls {
+	//display: inline-block;
+    display: flex;
+	vertical-align: middle;
+	margin-left: 8px;
+    color: color(light);
+
+    &:hover {
+        color: color(normal);
+    }
+
+	.f-control {
+		width: 16px;
+		height: 16px;
+		//display: block;
+		//float: left;
+
+		&:hover {
+			use {
+				fill: color(normal);
+			}
+		}
+
+		use {
+			fill: color(light);
+		}
+	}
+}
+
+.f-item-hidden {
+	display: none;
+}
+
+.f-item-notes {
+	font-size: 14px;
+}
+
+h1[data-f-toggle="labels"] {
+    margin-top: 32px;
+    font-size: 24px;
+
+    &:first-of-type {
+        margin-top: 0;
+    }
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{{title}}</title>
+
+    <!-- toolkit styles -->
+    <link rel="stylesheet" href="{{baseurl}}/assets/toolkit/styles/toolkit.css">
+    <!-- /toolkit styles -->
+
+    {{#if sidebar}}
+    <link rel="stylesheet" href="{{baseurl}}/assets/ar/styles/ar.css">
+    {{/if}}
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+
+</head>
+<body>
+
+    {{#if sidebar}}
+    <div class="f-container" id="f-container">
+        {{> f-branding}}
+        {{> f-icons}}
+        {{> f-menu}}
+    {{/if}}
+    {% body %}
+    {{#if sidebar}}
+    </div>
+    {{/if}}
+
+    <!-- polyfill scripts -->
+    <script src="{{baseurl}}/assets/toolkit/scripts/polyfill.js"></script>
+    <!--/polyfill scripts -->
+
+    <!-- vendor scripts -->
+    <script src="{{baseurl}}/assets/toolkit/scripts/vendor.js"></script>
+    <!--/vendor scripts -->
+
+    <!-- toolkit scripts -->
+    <script src="{{baseurl}}/assets/toolkit/scripts/toolkit.js"></script>
+    <!-- /toolkit scripts -->
+
+    <!-- catalyst scripts -->
+    <script src="{{baseurl}}/assets/toolkit/scripts/catalyst.js"></script>
+    <!-- /catalyst scripts -->
+
+    {{#if sidebar}}
+    <!-- AR scripts -->
+    <script src="{{baseurl}}/assets/ar/scripts/ar.js"></script>
+    <!-- /AR scripts -->
+    {{/if}}
+
+</body>
+</html>

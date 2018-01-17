@@ -1,0 +1,86 @@
+.f-controls {
+
+    width: $menu-width;
+    height: 56px;
+    background-color: $gray-dark;
+    display: flex;
+    justify-items: stretch;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    .f-control {
+        text-align: center;
+        margin: 0;
+        padding: 16px 0;
+        flex: 1;
+        border: none;
+        background-color: transparent;
+        color: $f-grey-light;
+        &:focus {
+            outline: none;
+        }
+
+        &.f-active {
+            box-shadow: inset 0 0.25rem 0 0 color(accent);
+            border-radius: 0px !important;
+
+            use {
+                fill: color(menu-text);
+            }
+        }
+
+        &[data-f-toggle-control="dna"] svg {
+            transform: rotate(25deg);
+        }
+
+        svg {
+            vertical-align: middle;
+
+            use {
+                fill: if($theme == $theme-dark, color(normal), color(light));
+            }
+        }
+    }
+}
+
+.f-control {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 0.66rem;
+
+    &:first-child {
+        margin-left: 0;
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+
+        use {
+            fill: color(light);
+        }
+    }
+}
+
+.f-menu-toggle {
+    cursor: pointer;
+    vertical-align: middle;
+
+    svg {
+        display: block;
+        float: left;
+        margin-bottom: -1px;
+    }
+}
+
+.f-container {
+    .btn i {
+        line-height: 1.5;
+    }
+}
+
+*[data-f-toggle] {
+    &[aria-expanded="false"] {
+        display: none;
+    }
+}

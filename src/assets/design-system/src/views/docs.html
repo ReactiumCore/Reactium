@@ -1,0 +1,21 @@
+---
+sidebar: true
+title: "Docs"
+---
+
+<section>
+    <h1 data-f-toggle="labels">{{title}}</h1>
+    <ul>
+        <li><a href="{{baseurl}}/index.html">Overview</a></li>
+        {{#each docs}}
+        <li><a href="#{{@key}}">{{#cond name '==' 'Dna'}}DNA{{else}}{{name}}{{/cond}}</a></li>
+        {{/each}}
+    </ul>
+
+    {{#each docs}}
+    <div class="f-item-group">
+        <h2 id="{{@key}}"><a href="#{{@key}}">{{#cond name '==' 'Dna'}}DNA{{else}}{{name}}{{/cond}}</a></h2>
+        {{{content}}}
+    </div>
+    {{/each}}
+</section>

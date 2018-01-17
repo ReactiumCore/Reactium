@@ -1,0 +1,32 @@
+@font-face {
+    font-family    : 'butter';
+    font-weight    : normal;
+    font-style     : normal;
+    src            : url($f-font-dir+'/butter.eot?lt71vn');
+    src            : url($f-font-dir+'/butter.eot?lt71vn#iefix') format('embedded-opentype'),
+    url($f-font-dir+'/butter.ttf?lt71vn') format('truetype'),
+    url($f-font-dir+'/butter.woff?lt71vn') format('woff'),
+    url($f-font-dir+'/butter.svg?lt71vn#butter') format('svg');
+}
+
+b, .bicon {
+    font-family       : 'butter' !important;
+    speak             : none;
+    font-style        : normal;
+    font-weight       : normal;
+    font-variant      : normal;
+    font-size         : 16px;
+    text-transform    : none;
+    line-height       : 1;
+
+    -webkit-font-smoothing     : antialiased;
+    -moz-osx-font-smoothing    : grayscale;
+}
+
+/** F-ICONS **/
+@each $p, $c in $f-btr-ico {
+    .#{$p}:before {
+        content: $c;
+    }
+}
+

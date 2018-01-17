@@ -1,0 +1,4 @@
+[submodule "src/assets/design-system"]
+	path = src/assets/design-system
+	url = git@bitbucket.org:newelldigitaltech/toolkit.git
+	branch = master

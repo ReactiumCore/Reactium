@@ -1,0 +1,19 @@
+.DS_STORE
+
+# Ignore app settings
+.idea
+.eslintrc.yml
+.gitignore
+
+# Ignore app files
+gulp.config.js
+gulpfile.js
+readme.md
+webpack.config.js
+
+# Ignore node_modules
+node_modules
+
+# Ignore src
+src/assets
+src/index.js

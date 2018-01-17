@@ -1,0 +1,14 @@
+---
+{
+    "atomic"     : "atom",
+    "dna"        : ["checkbox", "label"]
+}
+---
+{{#loop 1 3 1}}
+<label data-dna="label">
+    <input type="checkbox" data-dna="checkbox" name="checkbox" value="{{this}}" /> Checkbox {{this}}
+</label>
+{{/loop}}
+<label data-dna="label">
+    <input type="checkbox" data-dna="checkbox" name="checkbox" value="4" checked /> Checkbox 4
+</label>

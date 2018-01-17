@@ -1,0 +1,53 @@
+.input-wrapper {
+    outline: none;
+    position: relative;
+    width: 100%;
+    height: auto;
+    border: 0;
+    padding: 0;
+
+    &__text-input {
+        width: 100%;
+        height: 100%;
+        outline: none;
+        border: 1px solid $gray;
+        box-sizing: border-box;
+        padding: 15px 25px;
+        height: 50px;
+
+        &:focus,
+        &:active,
+        &:visited {
+            border: 1px solid $black;
+            outline: none;
+            padding-top: 20px;
+            padding-bottom: 10px;
+
+            ~ label {
+                top:14px;
+                transition: all .2s linear;
+            }
+        }
+    }
+
+    &__label {
+        position: absolute;
+        pointer-events: none;
+        left: 25px;
+        top:50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+    }
+
+    &.filled {
+        label {
+            top:14px;
+            color: $gray-dark;
+        }
+
+        input {
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+    }
+}

@@ -1,0 +1,51 @@
+.f-branding {
+    position                 : fixed;
+    top                      : 0;
+    left                     : 0;
+    height                   : 56px;
+    width                    : 100vw;
+    background-color         : $gray;
+    z-index                  : 50;
+    display                  : flex;
+    flex-wrap                : nowrap;
+    justify-items            : flex-start;
+    align-items              : center;
+    font-family              : Roboto, Helvetica, Arial, sans-serif !important;
+
+    > :last-child {
+        flex-grow            : 1;
+    }
+
+    h1 {
+        color          : $white !important;
+        font-size      : 24px !important;
+        margin         : 0 !important;
+        font-weight    : normal !important;
+    }
+
+    .ver {
+        color                : $gray-lightest;
+        font-size            : 12px;
+        text-align           : right;
+    }
+
+    &.right {
+        h1 {
+            padding          : 0 15px !important;
+        }
+
+        .ver {
+            padding-right    : 71px;
+        }
+    }
+
+    &.left {
+        h1 {
+            padding-left     : 71px;
+        }
+
+        .ver {
+            padding-right    : 15px;
+        }
+    }
+}

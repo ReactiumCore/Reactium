@@ -1,0 +1,40 @@
+.file-input-wrapper {
+     position: relative;
+    input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+
+        + label {
+            font-size: 1em;
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+            padding: 0.625rem 1.25rem;
+            color: #f1e5e6;
+            background-color: #d3394c;
+
+            &:hover {
+                background-color: #722040;
+            }
+
+            .icon {
+                margin-right: 10px;
+                font-weight: 800;
+                font-size: 18px;
+            }
+        }
+
+
+        &:focus {
+            + label {
+                background-color: #722040;
+                outline: 1px dotted #000;
+                outline: -webkit-focus-ring-color auto 5px;
+            }
+        }
+    }
+}

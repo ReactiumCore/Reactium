@@ -1,0 +1,108 @@
+{
+  "dev": false,
+  "materials": [
+    "src/materials/**/*",
+    "libs/*/materials/**/*"
+  ],
+  "views": [
+    "src/views/**/*",
+    "!src/views/+(layouts)/**"
+  ],
+  "dna": "src/data/dependencies.json",
+  "port": {
+    "browsersync": 3000,
+    "proxy": 3030
+  },
+  "styles": {
+    "browsers": "last 1 version",
+    "ar": {
+      "src": "src/assets/ar/styles/ar.scss",
+      "dest": "dist/assets/ar/styles",
+      "watch": "src/assets/ar/styles/**/*.scss"
+    },
+    "toolkit": {
+      "src": "src/assets/toolkit/styles/toolkit.scss",
+      "dest": "dist/assets/toolkit/styles",
+      "watch": [
+        "src/assets/toolkit/styles/**/*.scss",
+        "src/lib/**/*.scss"
+      ]
+    }
+  },
+  "scripts": {
+    "catalyst": {
+      "src": "./src/catalyst/catalyst.js",
+      "dest": "dist/assets/toolkit/scripts",
+      "watch": "./src/catalyst/**/*"
+    },
+    "ar": {
+      "src": "./src/assets/ar/scripts/ar.js",
+      "dest": "dist/assets/ar/scripts",
+      "watch": "src/assets/ar/scripts/**/*"
+    },
+    "toolkit": {
+      "src": "./src/assets/toolkit/scripts/toolkit.js",
+      "dest": "dist/assets/toolkit/scripts",
+      "watch": "src/assets/toolkit/scripts/**/*"
+    },
+    "polyfill": {
+      "dest": "dist/assets/toolkit/scripts",
+      "watch": [
+        "src/assets/toolkit/scripts/polyfills/**/*.js"
+      ]
+    },
+    "vendor": {
+      "dest": "dist/assets/toolkit/scripts",
+      "watch": [
+        "src/assets/toolkit/scripts/vendor/**/*.js",
+        "src/lib/**/*.js"
+      ]
+    },
+    "helpers": {}
+  },
+  "images": {
+    "ar": {
+      "src": [
+        "src/assets/ar/images/**/*",
+        "src/favicon.ico"
+      ],
+      "dest": "dist/assets/ar/images",
+      "watch": "src/assets/ar/images/**/*"
+    },
+    "toolkit": {
+      "src": [
+        "src/assets/toolkit/images/**/*",
+        "src/favicon.ico"
+      ],
+      "dest": "dist/assets/toolkit/images",
+      "watch": "src/assets/toolkit/images/**/*"
+    }
+  },
+  "fonts": {
+    "src": ["./src/assets/toolkit/fonts/**/*"],
+    "dest": "dist/assets/toolkit/fonts",
+    "watch": "src/assets/toolkit/fonts/**/*",
+    "butter": {
+      "src": ["./src/assets/ar/fonts/**/*"],
+      "dest": "dist/assets/ar/fonts"
+    }
+  },
+  "templates": {
+    "watch": [
+      "src/**/*.{html,md,json,yml}",
+      "src/libs/**/*.{html,md,json,yml}"
+    ]
+  },
+  "tasks": [
+    "styles",
+    "vendor",
+    "polyfill",
+    "scripts",
+    "images",
+    "fonts"
+  ],
+  "dest": "dist",
+  "src": "src",
+  "zip": "atomic-reactor-toolkit.zip",
+  "hooks": {}
+}

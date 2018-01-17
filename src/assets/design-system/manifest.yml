@@ -1,0 +1,10 @@
+applications:
+- path: ./
+  instances: 1
+  memory: 1024M
+  disk_quota: 1024M
+  name: Yankee Candle Toolkit
+  host: yankee-candle-toolkit
+  domain: mybluemix.net
+  env:
+    APP_PORT: 8080

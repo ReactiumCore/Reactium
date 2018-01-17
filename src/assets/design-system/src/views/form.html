@@ -1,0 +1,14 @@
+---
+{
+    "sidebar": true,
+    "title": "Form Elements"
+}
+---
+
+<h1 data-f-toggle="labels" class="mt-4">{{title}}</h1>
+
+{{#each materials.form.items}}
+
+{{> f-item this}}
+
+{{/each}}
