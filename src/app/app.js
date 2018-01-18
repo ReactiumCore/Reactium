@@ -6,24 +6,16 @@
  * -----------------------------------------------------------------------------
  */
 
-import React from 'react';
-import thunk from 'redux-thunk';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-localstorage-simple';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import DevTools from 'appdir/components/DevTools';
+import Router from 'appdir/components/Router';
+import NotFound from 'appdir/components/NotFound';
+import importDefined from './defineHelper';
+import storeCreator from './storeCreator';
 
-/**
- * -----------------------------------------------------------------------------
- * @description Redux setup
- * -----------------------------------------------------------------------------
- */
-let localizeState     = true;
-let initialState      = {};
 let bindPoints        = [];
-const elements        = Array.prototype.slice.call(document.querySelectorAll('component'));
-
+const elements        = typeof document !== 'undefined' ? Array.prototype.slice.call(document.querySelectorAll('component')) : [];
 
 export const getComponents = (types) => {
     let cmps = {};
@@ -65,7 +57,6 @@ export const getComponents = (types) => {
     return cmps;
 };
 
-
 if (elements.length > 0) {
 
     let types = elements.map((elm) => { return elm.getAttribute('type'); });
@@ -99,22 +90,6 @@ if (elements.length > 0) {
     });
 }
 
-// Utility for importing webpack define plugin defined files
-const importDefined = filesObj => Object.keys(filesObj).reduce((loaded, key) => {
-    let fileName = filesObj[key];
-    if (fileName) {
-        let newLoaded = require(fileName + "");
-        if ( 'default' in newLoaded ) {
-            newLoaded = newLoaded.default;
-        }
-        loaded = {
-            ...loaded,
-            [key]: newLoaded,
-        };
-    }
-    return loaded;
-}, {});
-
 export const actions = importDefined(allActions);
 
 let importedActionTypes = importDefined(allActionTypes);
@@ -128,13 +103,12 @@ export const services = importDefined(allServices);
 let importedRoutes = importDefined(allRoutes);
 export const routes = Object.keys(importedRoutes)
 .map(route => importedRoutes[route])
-.reduce((rts, route, key) => {
+.reduce((rts, route) => {
     // Support multiple routable components per route file
     if ( Array.isArray(route) ) {
         return [...rts,
             ...route.map((subRoute, subKey) => ({
                 order: 0,
-                key: `${key}+${subKey}`,
                 ...subRoute,
             }))
         ];
@@ -143,25 +117,25 @@ export const routes = Object.keys(importedRoutes)
     // Support one routable component
     return [...rts, {
         order: 0,
-        key,
         ...route,
     }];
 }, [])
-.sort((a,b) => a.order - b.order);
+.reduce((rts, route) => {
+    // Support multiple paths for one route
+    if ( Array.isArray(route.path) ) {
+        return [...rts, ...route.path.map(path => ({
+            ...route,
+            path,
+        }))];
+    }
+    return [...rts, route];
+}, [])
+.sort((a,b) => a.order - b.order)
+.concat([{ component: NotFound }]);
 
 export const restHeaders = () => {
     return {};
 };
-
-// Make sure initial loaded state matches reducers and that
-// the current route will dictate the Router state
-const sanitizeInitialState = state => Object.keys(state)
-.filter(s => s in allReducers)
-.filter(s => s !== 'Router')
-.reduce((states, key) => ({
-    ...states,
-    [key]: state[key],
-}), {});
 
 /**
  * -----------------------------------------------------------------------------
@@ -171,51 +145,32 @@ const sanitizeInitialState = state => Object.keys(state)
  * -----------------------------------------------------------------------------
  */
 
+
 export const App = () => {
-    if (bindPoints.length > 0) {
-
-        // Load middleware
-        let middleWare = [thunk];
-
-        // Load InitialState first from modules
-        let importedStates = importDefined(allInitialStates);
-        initialState = {
-            ...initialState,
-            ...sanitizeInitialState(importedStates),
-        };
-
-        // Get localized state and apply it
-        if (localizeState === true) {
-            middleWare.push(lsSave());
-            initialState = {
-                ...initialState,
-                ...sanitizeInitialState(lsLoad()),
-            };
-        } else {
-            lsClear();
+    if (typeof document !== 'undefined') {
+        const store = storeCreator();
+        if (bindPoints.length > 0) {
+            // Render the React Components
+            bindPoints.forEach((item) => {
+                ReactDOM.render(
+                    <Provider store={store}>
+                        <Fragment>
+                            {item.component}
+                        </Fragment>
+                    </Provider>,
+                    item.element
+                );
+            });
         }
 
-        const createStoreWithMiddleware = applyMiddleware(...middleWare)(createStore);
-
-        // Combine all Top-level reducers into one
-        let rootReducer = combineReducers(importDefined(allReducers));
-
-        // Add DevTools redux enhancer in development
-        let storeEnhancer = process.env.NODE_ENV === 'development' ? DevTools.instrument() : _=>_;
-
-        // Create the store
-        const store = createStoreWithMiddleware(rootReducer, initialState, storeEnhancer);
-
-        // Render the React Components
-        bindPoints.forEach((item) => {
-            ReactDOM.render(
-                <Provider store={store}>
-                    <div>
-                        {item.component}
-                    </div>
-                </Provider>,
-                item.element
-            );
-        });
+        // Hydrate the Routed component
+        ReactDOM.hydrate(
+            <Provider store={store}>
+                <Fragment>
+                    <Router />
+                </Fragment>
+            </Provider>,
+            document.getElementById('router')
+        );
     }
 };

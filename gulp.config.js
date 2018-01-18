@@ -24,7 +24,6 @@ module.exports = () => {
         env: "development",
         entries: entries(["src/app/*.js"]),
         defines: {
-            "global": "window",
             restAPI: JSON.stringify(process.env.REST_API_URL || "https://demo3914762.mockable.io"),
             allInitialStates: JSON.stringify(globDefineFiles('src/app/components/**/state.js')),
             allRoutes: JSON.stringify(globDefineFiles('src/app/components/**/route.js')),
@@ -109,7 +108,7 @@ module.exports = () => {
             rootdir: path.resolve(__dirname),
         },
         dest: {
-            server: './',
+            server: './build',
             dist: 'public',
             js: 'public/assets/js',
             markup: 'public',
