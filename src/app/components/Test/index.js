@@ -7,10 +7,10 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { actions } from 'appdir/app';
-
+import { Helmet } from 'react-helmet';
 
 /**
  * -----------------------------------------------------------------------------
@@ -45,14 +45,27 @@ class Test extends Component {
     }
 
     render() {
+        let title = 'Test Component';
+
         return (
-            <div className="test-component">
-                <div>{this.state.msg}</div>
-                <button type="button" onClick={this.onClick.bind(this)}>
-                    Click Me
-                </button>
-                <div>{this.state.count || 0}</div>
-            </div>
+            <Fragment>
+                <Helmet titleTemplate="%s | Reactium-SSR">
+                    <title>{title}</title>
+                    <meta name="description" content="This is an example Reactium component"/>
+                    <meta property="og:title" content={title} />
+                    <meta property="og:type" content="article" />
+                    <html lang="en" />
+                    <body className="test-body" />
+                </Helmet>
+
+                <div className="test-component">
+                    <div>{this.state.msg}</div>
+                    <button type="button" onClick={this.onClick.bind(this)}>
+                        Click Me
+                    </button>
+                    <div>{this.state.count || 0}</div>
+                </div>
+            </Fragment>
         );
     }
 }
