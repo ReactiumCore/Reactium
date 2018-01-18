@@ -4,7 +4,6 @@ const fs               = require('fs');
 const path             = require('path');
 const webpack          = require('webpack');
 const browserSync      = require('browser-sync');
-const spa              = require('browser-sync-spa');
 const runSequence      = require('run-sequence');
 const gulp             = require('gulp');
 const gulpif           = require('gulp-if');
@@ -16,7 +15,6 @@ const sourcemaps       = require('gulp-sourcemaps');
 const env              = require('yargs').argv;
 const config           = require('./gulp.config')();
 const nodemon          = require('nodemon');
-
 
 // Update config from environment variables
 config.port.browsersync = (env.hasOwnProperty('APP_PORT')) ? env.APP_PORT : config.port.browsersync;
@@ -158,11 +156,11 @@ gulp.task('nodemon', (done) => {
 
     let callbackCalled = false;
     nodemon({
-        watch : 'index.js',
+        watch : config.dest.server,
         env: {
             port: config.port.proxy
         },
-        script: 'index.js',
+        script: config.dest.server + '/index.js',
         ext: 'js ejs json jsx html css scss jpg png gif svg txt md'
     }).on('start', function () {
         if (!callbackCalled) {
@@ -178,16 +176,6 @@ gulp.task('nodemon', (done) => {
 
 // Server locally
 gulp.task('serve', () => {
-
-    let index = '/';
-    index = (typeof config.spa === 'string') ? config.spa : index;
-
-    browserSync.use(spa({
-        history: {
-            index: index,
-        }
-    }));
-
     browserSync({
         notify: false,
         timestamps: true,

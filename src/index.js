@@ -28,11 +28,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(cookieSession({name: 'aljtka4', keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbnoNSdWxlcw']}));
 
-// default route handler
-app.use('/', router);
-
 // serve the static files out of ./public
-app.use(express.static('./public'));
+app.use(express.static('public'));
+
+// default route handler
+app.use(router);
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {

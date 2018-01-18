@@ -15,7 +15,7 @@ module.exports = (config, type = 'app') => {
     let dest       = (type === 'server') ? config.dest.server : config.dest.js;
     let externals  = (type === 'server' && env !== 'development') ? [nodeExternals()] : [];
 
-    if (env !== 'development' || type === 'server') {
+    if (env !== 'development' || type === 'server' && false) {
         plugins.push(new UglifyJSPlugin());
     } else {
         tools = 'source-map';

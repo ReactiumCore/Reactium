@@ -1,34 +1,13 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import RouteObserver from './RouteObserver';
-import { routes } from 'appdir/app';
-import NotFound from 'appdir/components/NotFound';
+import React from 'react';
+import ServerRouter from './server';
+import ClientRouter from './browser';
 
-export default class AppRouter extends Component {
-    render() {
-        return (
-            <Router>
-                <div>
-                    <RouteObserver />
-                    <Switch>
-                        {
-                            routes.map(route => {
-                                if (typeof route.path === 'string') {
-                                    return <Route {...route} />;
-                                }
-
-                                if (Array.isArray(route.path)) {
-                                    return route.path.map((path, key) => {
-                                        const params = {...route, path, key: `${route.key}+${key}`};
-                                        return <Route {...params} />
-                                    })
-                                }
-                            })
-                        }
-                        <Route component={NotFound} />
-                    </Switch>
-                </div>
-            </Router>
-        );
+const Router = ({server = false, location="", context={}}) => {
+    if ( server ) {
+        return <ServerRouter location={location} context={context} />;
     }
-}
+
+    return <ClientRouter />;
+};
+
+export default Router;

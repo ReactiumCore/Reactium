@@ -4,7 +4,7 @@ export default {
     updateRoute: (location, route = {}, params) => (dispatch, getState) => {
         const { Router } = getState();
 
-        if ( Router.pathname !== location.pathname ) {
+        if ( typeof window !== 'undefined' && Router.pathname !== location.pathname ) {
             window.scrollTo(0,0);
         }
 
