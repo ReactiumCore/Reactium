@@ -1,6 +1,6 @@
 import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-localstorage-simple';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
+import { createStore, combineReducers } from 'redux';
+import thunk, { applyMiddleware } from 'redux-super-thunk';
 import DevTools from 'appdir/components/DevTools';
 import importDefined from './defineHelper';
 
