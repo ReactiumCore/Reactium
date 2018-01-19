@@ -147,7 +147,7 @@ When it comes to a Redux Class Component the following architecture is applied:
 
 | File | Description |
 |:----|:----|
-| [actions.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-actionsjs-file) | List of action functions. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). Redux [Thunk actions](https://github.com/gaearon/redux-thunk) are automatically supported. |
+| [actions.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-actionsjs-file) | List of action functions. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). Redux [Super Thunk actions](https://github.com/Atomic-Reactor/redux-super-thunk), based on the (https://github.com/gaearon/redux-thunk), are automatically supported. |
 | [actionTypes.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-actiontypesjs-file) | List of action filters. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). |
 | [index.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-indexjs-file) | Main component class. |
 | [reducers.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-reducersjs-file) | Action handlers. See [Redux Reducers](https://redux.js.org/docs/basics/Reducers.html). |
@@ -286,6 +286,44 @@ export default {
 
 In addition to [`<Route />`](https://reacttraining.com/react-router/web/api/Route) properties, you can also provide a [Redux thunk](https://github.com/gaearon/redux-thunk) action function to the `load` property. The Reactium `RouteObserver` component will automatically dispatch your `load` thunk, passing along route parameters. Use this for asynchronous loading of data on observed route changes.
 
+#### Multi-route Modules
+You can also support multiple routes for a module, in one of two methods:
+1. provide multiple paths for a single route
+```js
+import MyComponent from './index';
+import { actions } from 'appdir/app';
+
+export default {
+    // both of these will resolve to this component
+    path: ['/first/path', '/second/path'],
+    exact: true,
+    component: MyComponent,
+};
+```
+2. provide multiple route objects
+```js
+import MyComponent from './index';
+import { actions } from 'appdir/app';
+
+// export an array of routes
+export default [
+    {
+        order: 1,
+        path: '/base-route',
+        exact: true,
+        component: MyComponent,
+        load: params => actions.MyComponent(params)
+    },
+    {
+        order: 0,
+        path: '/base-route/:param',
+        exact: true,
+        component: MyComponent,
+        load: params => actions.MyComponent(params)
+    },
+];
+```
+
 ### The services.js File
 Reactium aggregates all `services.js` files into the `services` export of the `app.js` file.
 
@@ -294,7 +332,7 @@ A typical `services.js` file may look like this:
 import axios from 'axios';
 import { restHeaders } from "appdir/app";
 
-const restAPI = 'https://demo3914762.mockable.io';
+const restAPI = 'http://demo3914762.mockable.io';
 
 const fetchHello = () => {
     let hdr = restHeaders();
@@ -576,4 +614,3 @@ When changes to the `config.watch.markup` files are detected, the `markup` task 
 ### asset changes
 When changes to the `config.watch.assets` files are detected, the `assets` task is run.
 > Browsersync does a full reload of the page.
-
