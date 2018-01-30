@@ -108,7 +108,7 @@ module.exports = () => {
             rootdir: path.resolve(__dirname),
         },
         dest: {
-            server: './build',
+            server: 'build',
             dist: 'public',
             js: 'public/assets/js',
             markup: 'public',
