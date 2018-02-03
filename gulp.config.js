@@ -11,13 +11,6 @@ const entries = pattern => globby.sync(pattern)
         return files;
     }, {});
 
-const globDefineFiles = pattern => globby.sync(pattern)
-    .reduce((files, f) => {
-        let cmp = path.basename(path.parse(f).dir);
-        files[cmp] = f.replace(/^src\/app/, '.').replace(/.js$/, '');
-        return files;
-    }, {});
-
 module.exports = () => {
     return {
         spa: true,
@@ -25,12 +18,6 @@ module.exports = () => {
         entries: entries(["src/app/*.js"]),
         defines: {
             restAPI: JSON.stringify(process.env.REST_API_URL || "https://demo3914762.mockable.io"),
-            allInitialStates: JSON.stringify(globDefineFiles('src/app/components/**/state.js')),
-            allRoutes: JSON.stringify(globDefineFiles('src/app/components/**/route.js')),
-            allActions: JSON.stringify(globDefineFiles('src/app/components/**/actions.js')),
-            allActionTypes: JSON.stringify(globDefineFiles('src/app/components/**/actionTypes.js')),
-            allServices: JSON.stringify(globDefineFiles('src/app/components/**/services.js')),
-            allReducers: JSON.stringify(globDefineFiles('src/app/components/**/reducers.js')),
         },
         browsers: 'last 1 version',
         port: {

@@ -7,7 +7,7 @@
     "start": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm install && gulp --environment production",
-    "launch": "npm install && gulp --environment development",
+    "local": "npm install && gulp --environment development",
     "deploy": "cf push"
   },
   "keywords": [
@@ -79,6 +79,7 @@
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^3.9.1",
     "webpack-node-externals": "^1.6.0",
+    "window-or-global": "^1.0.1",
     "yargs": "^10.0.3"
   }
 }

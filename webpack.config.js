@@ -13,7 +13,11 @@ module.exports = (config, type = 'app') => {
     let filename   = (type === 'server') ? 'index.js' : '[name].js';
     let entries    = (type === 'server') ? './src/index.js' : config.entries;
     let dest       = (type === 'server') ? config.dest.server : config.dest.js;
-    let externals  = (type === 'server' && env !== 'development') ? [nodeExternals()] : [];
+    let externals  = [];
+
+    if (type === 'server' && env !== 'development') {
+        externals.push(nodeExternals());
+    };
 
     if (env !== 'development' || type === 'server' && false) {
         plugins.push(new UglifyJSPlugin());

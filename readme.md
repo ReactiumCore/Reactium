@@ -23,9 +23,9 @@ DDD focuses on three core principles:
 
 # Quick Start
 
-From your project directory:
+From your project directory for local development:
 ```
-$ npm run launch
+$ npm run local
 ```
 
 # Development Guide

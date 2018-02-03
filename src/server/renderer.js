@@ -20,7 +20,15 @@ const template = (content, helmet, store) =>
         <Component type="DevTools"></Component>
         <div id="router">${content}</div>
 
-        <script>window.INITIAL_STATE = ${serialize(store.getState())}</script>
+        <script>
+            window.INITIAL_STATE = ${serialize(store.getState())}
+            window.allInitialStates = ${serialize(allInitialStates)}
+            window.allRoutes = ${serialize(allRoutes)}
+            window.allActions = ${serialize(allActions)}
+            window.allActionTypes = ${serialize(allActionTypes)}
+            window.allServices = ${serialize(allServices)}
+            window.allReducers = ${serialize(allReducers)}
+        </script>
         <script src="/assets/js/main.js"></script>
     </body>
 </html>`;

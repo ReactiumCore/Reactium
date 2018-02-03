@@ -13,6 +13,14 @@ import Router from 'appdir/components/Router';
 import NotFound from 'appdir/components/NotFound';
 import importDefined from './defineHelper';
 import storeCreator from './storeCreator';
+import root from 'window-or-global'
+
+const allInitialStates = root.allInitialStates || {};
+const allRoutes = root.allRoutes || {};
+const allActions = root.allActions || {};
+const allActionTypes = root.allActionTypes || {};
+const allServices = root.allServices || {};
+const allReducers = root.allReducers || {};
 
 let bindPoints        = [];
 const elements        = typeof document !== 'undefined' ? Array.prototype.slice.call(document.querySelectorAll('component')) : [];

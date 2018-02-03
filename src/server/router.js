@@ -4,6 +4,7 @@ import renderer from './renderer';
 const router = express.Router();
 router.get('*', (req, res) => {
     let context = {};
+
     renderer(req, res, context)
     .then(content => {
         if (context.url) {

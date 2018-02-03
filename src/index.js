@@ -8,13 +8,20 @@ import bodyParser from 'body-parser';
 import router from './server/router';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
+import { globDefineFiles } from './utils';
+
+global.allInitialStates = globDefineFiles('src/app/components/**/state.js');
+global.allRoutes        = globDefineFiles('src/app/components/**/route.js');
+global.allActions       = globDefineFiles('src/app/components/**/actions.js');
+global.allActionTypes   = globDefineFiles('src/app/components/**/actionTypes.js');
+global.allServices      = globDefineFiles('src/app/components/**/services.js');
+global.allReducers      = globDefineFiles('src/app/components/**/reducers.js');
 
 const app     = express();
 
 let node_env  = (process.env.hasOwnProperty('NODE_ENV')) ? process.env.NODE_ENV : 'development';
 let port      = (process.env.hasOwnProperty('APP_PORT')) ? process.env.APP_PORT : '3030';
 port          = (node_env === 'production') ? '8080' : port;
-
 
 // set app variables
 app.set('x-powered-by', false);
