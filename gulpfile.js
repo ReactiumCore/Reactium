@@ -30,6 +30,7 @@ const timestamp = () => {
 // Set webpack config after environment variables
 const webpackConfig    = require('./webpack.config')(config);
 const webpackConfigServer    = require('./webpack.config')(config, 'server');
+const webpackConfigRods    = require('./webpack.rods.config')(config);
 
 // Compile js
 gulp.task('scripts', (done) => {
@@ -74,6 +75,27 @@ gulp.task('scripts:server', (done) => {
         done();
     });
 });
+
+gulp.task('rods', (done) => {
+    webpack(webpackConfigRods, (err, stats) => {
+        if (err) {
+            console.log(err());
+            done();
+            return;
+        }
+
+        let result = stats.toJson();
+
+        if (result.errors.length > 0) {
+            result.errors.forEach((error) => {
+                console.log(error);
+            });
+            done();
+            return;
+        }
+    });
+
+})
 
 // Sass styles
 gulp.task('styles', () => {

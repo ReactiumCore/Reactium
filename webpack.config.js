@@ -1,19 +1,32 @@
 'use strict';
 
-const path              = require('path');
-const webpack           = require('webpack');
-const nodeExternals     = require('webpack-node-externals');
-const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
+const path                  = require('path');
+const webpack               = require('webpack');
+const nodeExternals         = require('webpack-node-externals');
+const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
+const VirtualModulePlugin   = require('virtual-module-webpack-plugin');
+const reduxExports           = require('./redux.exports');
 
 module.exports = (config, type = 'app') => {
-    let plugins    = [];
+    let plugins    = [
+        // Importable Modules that are generated code, not in filesystem
+        new VirtualModulePlugin({
+            moduleName: 'src/app/redux-exports.js',
+            contents: reduxExports,
+        }),
+    ];
     let tools      = '';
     let env        = config.env || 'production';
     let target     = (type === 'server') ? 'node' : 'web';
     let filename   = (type === 'server') ? 'index.js' : '[name].js';
     let entries    = (type === 'server') ? './src/index.js' : config.entries;
+
     let dest       = (type === 'server') ? config.dest.server : config.dest.js;
-    let externals  = (type === 'server' && env !== 'development') ? [nodeExternals()] : [];
+    let externals  = [];
+
+    if (type === 'server' && env !== 'development') {
+        externals.push(nodeExternals());
+    };
 
     if (env !== 'development' || type === 'server' && false) {
         plugins.push(new UglifyJSPlugin());
