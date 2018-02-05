@@ -1,17 +1,31 @@
 'use strict';
 
-const path              = require('path');
-const webpack           = require('webpack');
-const nodeExternals     = require('webpack-node-externals');
-const UglifyJSPlugin    = require('uglifyjs-webpack-plugin');
+const path                  = require('path');
+const webpack               = require('webpack');
+const nodeExternals         = require('webpack-node-externals');
+const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
+const VirtualModulePlugin   = require('virtual-module-webpack-plugin');
+const reduxExports           = require('./redux.exports');
+const rodsExports           = require('./rods.exports');
 
 module.exports = (config, type = 'app') => {
-    let plugins    = [];
+    let plugins    = [
+        // Importable Modules that are generated code, not in filesystem
+        new VirtualModulePlugin({
+            moduleName: 'src/app/redux-exports.js',
+            contents: reduxExports,
+        }),
+        new VirtualModulePlugin({
+            moduleName: 'src/app/rods-exports.js',
+            contents: rodsExports,
+        }),
+    ];
     let tools      = '';
     let env        = config.env || 'production';
     let target     = (type === 'server') ? 'node' : 'web';
     let filename   = (type === 'server') ? 'index.js' : '[name].js';
     let entries    = (type === 'server') ? './src/index.js' : config.entries;
+
     let dest       = (type === 'server') ? config.dest.server : config.dest.js;
     let externals  = [];
 

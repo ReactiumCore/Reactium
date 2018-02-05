@@ -3,6 +3,12 @@ import { createStore, combineReducers } from 'redux';
 import thunk, { applyMiddleware } from 'redux-super-thunk';
 import DevTools from 'appdir/components/DevTools';
 import importDefined from './defineHelper';
+import reduxExports from 'appdir/redux-exports';
+
+const {
+    allInitialStates,
+    allReducers,
+} = reduxExports;
 
 /**
  * -----------------------------------------------------------------------------
