@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm install && gulp --environment production",
     "local": "npm install && gulp --environment development",
+    "export-rods": "gulp --environment products rods",
     "deploy": "cf push"
   },
   "keywords": [

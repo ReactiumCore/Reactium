@@ -6,7 +6,6 @@ const nodeExternals         = require('webpack-node-externals');
 const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
 const VirtualModulePlugin   = require('virtual-module-webpack-plugin');
 const reduxExports           = require('./redux.exports');
-const rodsExports           = require('./rods.exports');
 
 module.exports = (config, type = 'app') => {
     let plugins    = [
@@ -14,10 +13,6 @@ module.exports = (config, type = 'app') => {
         new VirtualModulePlugin({
             moduleName: 'src/app/redux-exports.js',
             contents: reduxExports,
-        }),
-        new VirtualModulePlugin({
-            moduleName: 'src/app/rods-exports.js',
-            contents: rodsExports,
         }),
     ];
     let tools      = '';
