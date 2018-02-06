@@ -5,9 +5,14 @@ const webpack               = require('webpack');
 const nodeExternals         = require('webpack-node-externals');
 const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
 const VirtualModulePlugin   = require('virtual-module-webpack-plugin');
-const reduxExports           = require('./redux.exports');
+const reduxExports          = require('./redux.exports');
+const _                     = require('underscore');
 
-module.exports = (config, type = 'app') => {
+module.exports = (gulpConfig, type = 'app') => {
+    // shallow copy config and config.defines to prevent squashing server env
+    let config = _.clone(gulpConfig);
+    config.defines = _.clone(gulpConfig.defines);
+
     let plugins    = [
         // Importable Modules that are generated code, not in filesystem
         new VirtualModulePlugin({
@@ -34,10 +39,12 @@ module.exports = (config, type = 'app') => {
         tools = 'source-map';
     }
 
-    config.defines['process.env'] = {
-        NODE_ENV: JSON.stringify(env)
-    };
-
+    // Only override process.env on client side
+    if ( type === 'app' ) {
+        config.defines['process.env'] = {
+            NODE_ENV: JSON.stringify(env)
+        };
+    }
     plugins.push(new webpack.DefinePlugin(config.defines));
 
     return {

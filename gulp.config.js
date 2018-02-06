@@ -16,9 +16,7 @@ module.exports = () => {
         spa: true,
         env: "development",
         entries: entries(["src/app/*.js"]),
-        defines: {
-            restAPI: JSON.stringify(process.env.REST_API_URL || "https://demo3914762.mockable.io"),
-        },
+        defines: {},
         browsers: 'last 1 version',
         port: {
             browsersync: 3000,
