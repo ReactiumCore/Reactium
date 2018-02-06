@@ -22,6 +22,7 @@ const template = (content, helmet, store) =>
 
         <script>
             window.INITIAL_STATE = ${serialize(store.getState())}
+            window.restAPI = '/api';
         </script>
         <script src="/assets/js/main.js"></script>
     </body>

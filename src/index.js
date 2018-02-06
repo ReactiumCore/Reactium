@@ -8,7 +8,8 @@ import bodyParser from 'body-parser';
 import router from './server/router';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
-import { globDefineFiles } from './utils';
+import proxy from 'express-http-proxy';
+import morgan from 'morgan';
 
 const app     = express();
 
@@ -16,11 +17,27 @@ let node_env  = (process.env.hasOwnProperty('NODE_ENV')) ? process.env.NODE_ENV 
 let port      = (process.env.hasOwnProperty('APP_PORT')) ? process.env.APP_PORT : '3030';
 port          = (node_env === 'production') ? '8080' : port;
 
+global.restAPI = process.env.REST_API_URL || "https://demo3914762.mockable.io";
+
 // set app variables
 app.set('x-powered-by', false);
 
+// logging
+app.use(morgan('combined'));
+
 // apply cross site scripting
 app.use(cors());
+
+// Proxy /api
+app.use(
+    '/api',
+    proxy(`${restAPI}`, {
+        proxyReqOptDecorator: req => {
+          req.headers['x-forwarded-host'] = 'localhost:3000';
+          return req;
+      },
+    })
+)
 
 // parsers
 app.use(bodyParser.json());
