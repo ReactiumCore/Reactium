@@ -1,11 +1,7 @@
-import axios from 'axios';
-import { restHeaders } from "appdir/app";
-
+import Parse from 'appdir/api';
 
 const fetchHello = () => {
-    let hdr = restHeaders();
-    console.log(restAPI)
-    return axios.get(`${restAPI}/hello`, {headers: hdr}).then(({data}) => data);
+    return Parse.Cloud.run('hello');
 };
 
 export default {

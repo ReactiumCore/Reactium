@@ -10,6 +10,8 @@ import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import proxy from 'express-http-proxy';
 import morgan from 'morgan';
+import apiConfig from 'appdir/api/config';
+import { adminProxy } from './server/admin-proxy';
 
 const app     = express();
 
@@ -17,7 +19,10 @@ let node_env  = (process.env.hasOwnProperty('NODE_ENV')) ? process.env.NODE_ENV 
 let port      = (process.env.hasOwnProperty('APP_PORT')) ? process.env.APP_PORT : '3030';
 port          = (node_env === 'production') ? '8080' : port;
 
-global.restAPI = process.env.REST_API_URL || "https://demo3914762.mockable.io";
+global.parseAppId = apiConfig.parseAppId;
+global.restAPI = apiConfig.restAPI;
+
+const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
 
 // set app variables
 app.set('x-powered-by', false);
@@ -30,14 +35,22 @@ app.use(cors());
 
 // Proxy /api
 app.use(
-    '/api',
+    ['/api', '/api/*'],
     proxy(`${restAPI}`, {
         proxyReqOptDecorator: req => {
-          req.headers['x-forwarded-host'] = 'localhost:3000';
-          return req;
-      },
+            req.headers['x-forwarded-host'] = `localhost:${port}`;
+            return req;
+        },
+        proxyReqPathResolver: req => {
+            const resolvedPath = `${restAPI}${req.url}`;
+            return resolvedPath;
+        },
     })
-)
+);
+
+if ( adminURL ) {
+    adminProxy(app, port, adminURL);
+}
 
 // parsers
 app.use(bodyParser.json());

@@ -14,7 +14,6 @@ const globDefineFiles = pattern => {
     return {};
 };
 
-
 module.exports = {
-    globDefineFiles
+    globDefineFiles,
 };

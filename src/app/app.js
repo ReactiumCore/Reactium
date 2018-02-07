@@ -13,7 +13,6 @@ import Router from 'appdir/components/Router';
 import NotFound from 'appdir/components/NotFound';
 import importDefined from './defineHelper';
 import storeCreator from './storeCreator';
-import root from 'window-or-global'
 import reduxExports from 'appdir/redux-exports';
 
 const {

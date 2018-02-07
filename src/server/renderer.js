@@ -23,6 +23,7 @@ const template = (content, helmet, store) =>
         <script>
             window.INITIAL_STATE = ${serialize(store.getState())}
             window.restAPI = '/api';
+            window.parseAppId = '${parseAppId}'
         </script>
         <script src="/assets/js/main.js"></script>
     </body>
@@ -40,16 +41,26 @@ export default (req, res, context) => {
         .map(route => route.load(route.params))
         .map(thunk => thunk(store.dispatch, store.getState, store));
 
-    return Promise.all(loaders)
-        .then(() => {
-            const content = renderToString(
-                <Provider store={store}>
-                    <Router server={true} location={req.path} context={context} />
-                </Provider>
-            );
 
-            const helmet = Helmet.renderStatic();
+    // Wait for all loaders or go ahead and render on error
+    return new Promise(resolve => {
+        Promise.all(loaders)
+            .then(() => resolve(true))
+            .catch(err => {
+                console.error(err);
+                resolve(true)
+            });
+    })
+    .then(() => {
+        const content = renderToString(
+            <Provider store={store}>
+                <Router server={true} location={req.path} context={context} />
+            </Provider>
+        );
 
-            return template(content, helmet, store);
-        })
+        const helmet = Helmet.renderStatic();
+
+        return template(content, helmet, store);
+    })
+    .catch(_=>_);
 };
