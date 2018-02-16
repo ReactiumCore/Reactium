@@ -62,5 +62,5 @@ export default (req, res, context) => {
 
         return template(content, helmet, store);
     })
-    .catch(_=>_);
+    .catch(err => console.error(err));
 };
