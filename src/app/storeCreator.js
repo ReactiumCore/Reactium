@@ -39,8 +39,8 @@ export default ({server = false} = {}) => {
     // Load InitialState first from modules
     let importedStates = importDefined(allInitialStates);
     initialState = {
-        ...initialState,
         ...sanitizeInitialState(importedStates),
+        ...initialState,
     };
 
     // Get localized state and apply it
