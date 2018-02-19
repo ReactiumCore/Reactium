@@ -1,4 +1,5 @@
 import { actionTypes } from 'appdir/app';
+import queryString from 'query-string'; // front-end library
 
 export default {
     updateRoute: (location, route = {}, params) => (dispatch, getState) => {
@@ -11,11 +12,12 @@ export default {
         dispatch({
             type: actionTypes.UPDATE_ROUTE,
             location,
+            params,
         });
 
         // load route data
         if ( 'load' in route ) {
-            dispatch(route.load(params));
+            dispatch(route.load(params, queryString.parse(location.search)));
         }
     },
 };

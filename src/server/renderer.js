@@ -7,6 +7,7 @@ import storeCreator from 'appdir/storeCreator';
 import { matchRoutes } from 'react-router-config';
 import { routes } from 'appdir/app';
 import Router from 'appdir/components/Router';
+import querystring from 'querystring'; // built-in to node/express
 
 const template = (content, helmet, store) =>
 `<html ${helmet.htmlAttributes.toString()}>
@@ -33,12 +34,15 @@ export default (req, res, context) => {
     const store = storeCreator({ server: true });
 
     const loaders = matchRoutes(routes, req.path)
-        .map(({route, match}) => ({
-            ...route,
-            params: match.params,
-        }))
+        .map(({route, match}) => {
+            return {
+                ...route,
+                params: match.params,
+                query: req.query ? req.query : {},
+            };
+        })
         .filter(route => route.load)
-        .map(route => route.load(route.params))
+        .map(route => route.load(route.params, route.query))
         .map(thunk => thunk(store.dispatch, store.getState, store));
 
 
