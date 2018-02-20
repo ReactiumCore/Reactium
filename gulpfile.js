@@ -190,7 +190,9 @@ gulp.task('nodemon', (done) => {
         ext: 'js ejs json jsx html css scss jpg png gif svg txt md'
     })
     .on('start', function () {
-        setTimeout(done, 3000);
+        if ( ! started ) {
+            setTimeout(done, 3000);
+        }
     }).on('quit', () => {
         process.exit();
     });
