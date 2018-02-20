@@ -1,6 +1,8 @@
 const { globDefineFiles }   = require('./src/utils');
-const rods = globDefineFiles('src/app/components/**/rod.js');
-const layouts = globDefineFiles('src/app/components/**/layout.js');
+let { rods, layouts } = require('./manifest');
+
+rods = globDefineFiles(rods);
+layouts = globDefineFiles(layouts);
 
 module.exports = Object.keys(rods).map(rod => `import ${rod} from '${rods[rod]}'\n`) +
     Object.keys(layouts).map(layout => `import ${layout} from '${layouts[layout]}'\n`) +

@@ -1,21 +1,13 @@
 'use strict';
 
 const path    = require('path');
-const globby  = require('globby');
-
-// Create the webpack entries object.
-const entries = pattern => globby.sync(pattern)
-    .reduce((files, f) => {
-        let file = path.basename(f, '.js');
-        files[file] = path.resolve(f);
-        return files;
-    }, {});
+const { entries } = require('./manifest');
 
 module.exports = () => {
     return {
         spa: true,
         env: "development",
-        entries: entries(["src/app/*.js"]),
+        entries: entries.map(entry => path.resolve(entry)),
         defines: {},
         browsers: 'last 1 version',
         port: {

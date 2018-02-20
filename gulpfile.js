@@ -17,6 +17,7 @@ const config         = require('./gulp.config')();
 const chalk          = require('chalk');
 const moment         = require('moment');
 const nodemon        = require('gulp-nodemon');
+const webpackStream  = require('webpack-stream');
 
 // Update config from environment variables
 config.port.browsersync = (env.hasOwnProperty('APP_PORT')) ? env.APP_PORT : config.port.browsersync;
@@ -34,25 +35,35 @@ const webpackConfigRods    = require('./webpack.rods.config')(config);
 
 // Compile js
 gulp.task('scripts', (done) => {
-    webpack(webpackConfig, (err, stats) => {
-        if (err) {
-            console.log(err());
+    let isDev     = (config.env === 'development');
+
+    if ( isDev ) {
+        return gulp.src(webpackConfig.entry)
+            .pipe(webpackStream(webpackConfig, webpack))
+            .pipe(gulp.dest(webpackConfig.output.path))
+            .pipe(browserSync.stream());
+    } else {
+        webpack(webpackConfig, (err, stats) => {
+            if (err) {
+                console.log(err());
+                done();
+                return;
+            }
+
+            let result = stats.toJson();
+
+            if (result.errors.length > 0) {
+                result.errors.forEach((error) => {
+                    console.log(error);
+                });
+
+                done();
+                return;
+            }
             done();
-            return;
-        }
+        });
+    }
 
-        let result = stats.toJson();
-
-        if (result.errors.length > 0) {
-            result.errors.forEach((error) => {
-                console.log(error);
-            });
-
-            done();
-            return;
-        }
-        done();
-    });
 });
 gulp.task('scripts:server', (done) => {
     webpack(webpackConfigServer, (err, stats) => {
@@ -177,12 +188,9 @@ gulp.task('nodemon', (done) => {
         ignore: ["**/*.css", "**/*.DS_Store"],
         script: path.join('.', config.dest.server, 'index.js'),
         ext: 'js ejs json jsx html css scss jpg png gif svg txt md'
-    }).on('start', function () {
-        if (started === true) {
-            setTimeout(browserSync.reload, 725);
-        } else {
-            setTimeout(done, 3000);
-        }
+    })
+    .on('start', function () {
+        setTimeout(done, 3000);
     }).on('quit', () => {
         process.exit();
     });
@@ -207,7 +215,8 @@ gulp.task('serve', (done) => {
 gulp.task('build', (done) => {
     runSequence(
         ['clean'],
-        ['assets', 'assets:toolkit', 'markup', 'styles', 'scripts', 'scripts:server'],
+        ['scripts', 'scripts:server', 'assets', 'assets:toolkit', 'styles'],
+        ['markup'],
         done
     );
 });

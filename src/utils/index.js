@@ -1,8 +1,6 @@
-const globby = require('globby');
 const path = require('path');
 
-const globDefineFiles = pattern => {
-    const matches = globby.sync(pattern);
+const globDefineFiles = (matches = []) => {
     if ( matches.length ) {
         return matches
         .reduce((files, f) => {
