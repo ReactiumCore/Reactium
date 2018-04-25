@@ -34,6 +34,6 @@ export default [
         path: '/routes-test/:param1/:param2/:param3',
         exact: true,
         component: RoutesTest4,
-        load: params => actions.RoutesTest.mount(params),
+        load: (params, search) => actions.RoutesTest.mount(params, search),
     },
 ];

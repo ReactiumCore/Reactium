@@ -15,7 +15,9 @@ import { NavLink } from 'react-router-dom'
  * React Component: RoutesTest
  * -----------------------------------------------------------------------------
  */
-const mapStateToProps = (state, props) => ({});
+ const mapStateToProps = (state, props) => ({
+     ...state.RoutesTest
+ });
 
 const mapDispatchToProps = (dispatch) => ({});
 
@@ -43,6 +45,7 @@ class RoutesTest3 extends Component {
                     <li><NavLink exact={true} to="/routes-test/1">Route w/1 parameter</NavLink></li>
                     <li><NavLink exact={true} to="/routes-test/1/2">Route w/2 parameters</NavLink></li>
                     <li><NavLink exact={true} to="/routes-test/1/2/3">Route w/3 parameters</NavLink></li>
+                    <li><NavLink exact={true} to="/routes-test/1/2/3?search=test">Route w/3 parameters + search</NavLink></li>
                 </ul>
 
                 <h2>Current Route</h2>

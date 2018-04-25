@@ -12,7 +12,10 @@ class RouteObserver extends Component {
     processRoute() {
         const { location, Router, updateRoute } = this.props;
 
-        if ( ! Router.pathname || location.pathname !== Router.pathname ) {
+        const pathChanged = ! Router.pathname || location.pathname !== Router.pathname;
+        const searchChanged = 'search' in Router && location.search !== Router.search;
+
+        if ( pathChanged || searchChanged) {
             let [ route ] = routes.filter(route => {
                 let match = matchPath(location.pathname, route);
                 return match && match.isExact;

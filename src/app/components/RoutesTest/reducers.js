@@ -7,9 +7,11 @@ export default (state = {}, action) => {
     switch (action.type) {
 
         case actionTypes.ROUTESTEST_MOUNT:
-            newState = Object.assign({}, state, {...action.data});
-            return newState;
-
+            return {
+                ...state,
+                ...action.data,
+                search: action.search
+            };
         default:
             return state;
     }
