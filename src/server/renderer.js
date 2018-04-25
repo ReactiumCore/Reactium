@@ -7,7 +7,7 @@ import storeCreator from 'appdir/storeCreator';
 import { matchRoutes } from 'react-router-config';
 import { routes } from 'appdir/app';
 import Router from 'appdir/components/Router';
-import querystring from 'querystring'; // built-in to node/express
+import querystring from 'querystring';
 
 const template = (content, helmet, store) =>
 `<html ${helmet.htmlAttributes.toString()}>
@@ -32,8 +32,8 @@ const template = (content, helmet, store) =>
 
 export default (req, res, context) => {
     const store = storeCreator({ server: true });
-
-    const loaders = matchRoutes(routes, req.path)
+    const matches = matchRoutes(routes, req.path);
+    const loaders = matches
         .map(({route, match}) => {
             return {
                 ...route,
@@ -45,26 +45,33 @@ export default (req, res, context) => {
         .map(route => route.load(route.params, route.query))
         .map(thunk => thunk(store.dispatch, store.getState, store));
 
+    // Check for 404
+    context.notFound = ! matches.length || !( 'path' in matches[0].route );
 
     // Wait for all loaders or go ahead and render on error
     return new Promise(resolve => {
+        console.log('Loading page data...');
+
         Promise.all(loaders)
-            .then(() => resolve(true))
-            .catch(err => {
-                console.error(err);
-                resolve(true)
-            });
-    })
-    .then(() => {
-        const content = renderToString(
+            .then(() => {
+                console.log('Page data loading complete.')
+                resolve();
+            })
+            .catch(error => {
+                console.error('Page data loading error.', error);
+                resolve();
+            })
+    }).then(() => {
+        let html = '';
+        const body = renderToString(
             <Provider store={store}>
                 <Router server={true} location={req.path} context={context} />
             </Provider>
         );
 
         const helmet = Helmet.renderStatic();
+        html = template(body, helmet, store);
 
-        return template(content, helmet, store);
-    })
-    .catch(err => console.error(err));
+        return html;
+    });
 };

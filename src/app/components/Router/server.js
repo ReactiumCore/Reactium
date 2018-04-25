@@ -6,7 +6,7 @@ import { routes } from 'appdir/app';
 export default class AppRouter extends Component {
     render() {
         return (
-            <StaticRouter {...this.props}>
+            <StaticRouter {...this.props} context={this.props.context}>
                 <Fragment>
                     <Switch>
                         {renderRoutes(routes)}
