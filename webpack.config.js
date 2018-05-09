@@ -20,14 +20,16 @@ module.exports = (gulpConfig, type = 'app') => {
             contents: reduxExports,
         }),
     ];
-    let tools      = '';
-    let env        = config.env || 'production';
-    let target     = (type === 'server') ? 'node' : 'web';
-    let filename   = (type === 'server') ? 'index.js' : '[name].js';
-    let entries    = (type === 'server') ? './src/index.js' : config.entries;
+    let tools     = '';
+    let env       = config.env || 'production';
+    let target    = (type === 'server') ? 'node' : 'web';
+    let filename  = (type === 'server') ? 'index.js' : '[name].js';
+    let entries   = ['babel-polyfill'];
+        entries   = entries.concat(Object.values(config.entries));
+        entries   = (type === 'server') ? './src/index.js' : entries;
 
-    let dest       = (type === 'server') ? config.dest.server : config.dest.js;
-    let externals  = [];
+    let dest      = (type === 'server') ? config.dest.server : config.dest.js;
+    let externals = [];
 
     if (type === 'server' && env !== 'development') {
         externals.push(nodeExternals());
@@ -64,21 +66,17 @@ module.exports = (gulpConfig, type = 'app') => {
             filename: filename,
         },
         module:  {
-            loaders: [
+            rules: [
                 {
-                    test           : [/\.js$/],
-                    loader         : 'babel-loader',
-                    exclude        : /node_modules/,
-                    query          : {
-                        presets    : ['react', ['env', {
-                            targets: {
-                                browsers: [config.browsers],
-                            },
-                        }]],
-                        plugins    : ['transform-object-rest-spread'],
-                    }
+                    test: [/.js$/],
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                        }
+                    ]
                 }
             ]
-        },
+        }
     };
 };
