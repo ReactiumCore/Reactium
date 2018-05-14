@@ -1,13 +1,13 @@
 'use strict';
 
 const path    = require('path');
-const { entries } = require('./manifest');
+const { entries } = require('./src/manifest');
 
 module.exports = () => {
     return {
         spa: true,
         env: "development",
-        entries: entries.map(entry => path.resolve(entry)),
+        entries: entries.map(entry => path.resolve('./src/app', entry)),
         defines: {},
         browsers: 'last 1 version',
         port: {

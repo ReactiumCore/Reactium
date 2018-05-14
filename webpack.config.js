@@ -4,8 +4,6 @@ const path                  = require('path');
 const webpack               = require('webpack');
 const nodeExternals         = require('webpack-node-externals');
 const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
-const VirtualModulePlugin   = require('virtual-module-webpack-plugin');
-const reduxExports          = require('./redux.exports');
 const _                     = require('underscore');
 
 module.exports = (gulpConfig, type = 'app') => {
@@ -13,18 +11,15 @@ module.exports = (gulpConfig, type = 'app') => {
     let config = _.clone(gulpConfig);
     config.defines = _.clone(gulpConfig.defines);
 
-    let plugins    = [
-        // Importable Modules that are generated code, not in filesystem
-        new VirtualModulePlugin({
-            moduleName: 'src/app/redux-exports.js',
-            contents: reduxExports,
-        }),
-    ];
+    let plugins    = [];
     let tools      = '';
     let env        = config.env || 'production';
     let target     = (type === 'server') ? 'node' : 'web';
     let filename   = (type === 'server') ? 'index.js' : '[name].js';
-    let entries    = (type === 'server') ? './src/index.js' : config.entries;
+    let entries    = ['babel-polyfill'];
+
+    entries        = entries.concat(Object.values(config.entries));
+    entries        = (type === 'server') ? './src/index.js' : entries;
 
     let dest       = (type === 'server') ? config.dest.server : config.dest.js;
     let externals  = [];
@@ -64,21 +59,17 @@ module.exports = (gulpConfig, type = 'app') => {
             filename: filename,
         },
         module:  {
-            loaders: [
+            rules: [
                 {
-                    test           : [/\.js$/],
-                    loader         : 'babel-loader',
-                    exclude        : /node_modules/,
-                    query          : {
-                        presets    : ['react', ['env', {
-                            targets: {
-                                browsers: [config.browsers],
-                            },
-                        }]],
-                        plugins    : ['transform-object-rest-spread'],
-                    }
+                    test: [/.js$/],
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                        }
+                    ]
                 }
             ]
-        },
+        }
     };
 };

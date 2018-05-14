@@ -11,18 +11,16 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import Router from 'appdir/components/Router';
 import NotFound from 'appdir/components/NotFound';
-import importDefined from './defineHelper';
 import storeCreator from './storeCreator';
-import reduxExports from 'appdir/redux-exports';
+import loader from 'appdir/dependencies/loader';
+import dependencies from 'appdir/dependencies';
 
 const {
-    allInitialStates,
     allRoutes,
     allActions,
     allActionTypes,
     allServices,
-    allReducers
-} = reduxExports;
+} = dependencies;
 
 let bindPoints        = [];
 const elements        = typeof document !== 'undefined' ? Array.prototype.slice.call(document.querySelectorAll('component')) : [];
@@ -100,17 +98,17 @@ if (elements.length > 0) {
     });
 }
 
-export const actions = importDefined(allActions);
+export const actions = loader(allActions);
 
-let importedActionTypes = importDefined(allActionTypes);
+let importedActionTypes = loader(allActionTypes);
 export const actionTypes = Object.keys(importedActionTypes).reduce((types, key) => ({
     ...types,
     ...importedActionTypes[key],
 }), {});
 
-export const services = importDefined(allServices);
+export const services = loader(allServices);
 
-let importedRoutes = importDefined(allRoutes);
+let importedRoutes = loader(allRoutes);
 export const routes = Object.keys(importedRoutes)
 .map(route => importedRoutes[route])
 .reduce((rts, route) => {
