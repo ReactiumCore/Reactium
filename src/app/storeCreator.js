@@ -2,13 +2,13 @@ import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-localsto
 import { createStore, combineReducers } from 'redux';
 import thunk, { applyMiddleware } from 'redux-super-thunk';
 import DevTools from 'appdir/components/DevTools';
-import importDefined from './defineHelper';
-import reduxExports from 'appdir/redux-exports';
+import loader from 'appdir/dependencies/loader';
+import dependencies from 'appdir/dependencies';
 
 const {
     allInitialStates,
     allReducers,
-} = reduxExports;
+} = dependencies;
 
 /**
  * -----------------------------------------------------------------------------
@@ -25,7 +25,7 @@ if ( typeof window !== 'undefined' && 'INITIAL_STATE' in window ) {
 // Make sure initial loaded state matches reducers and that
 // the current route will dictate the Router state
 const sanitizeInitialState = state => Object.keys(state)
-.filter(s => s in allReducers)
+.filter(s => s in loader(allReducers))
 .filter(s => s !== 'Router')
 .reduce((states, key) => ({
     ...states,
@@ -37,7 +37,7 @@ export default ({server = false} = {}) => {
     let middleWare = [thunk];
 
     // Load InitialState first from modules
-    let importedStates = importDefined(allInitialStates);
+    let importedStates = loader(allInitialStates);
     initialState = {
         ...sanitizeInitialState(importedStates),
         ...initialState,
@@ -59,7 +59,7 @@ export default ({server = false} = {}) => {
     const createStoreWithMiddleware = applyMiddleware(...middleWare)(createStore);
 
     // Combine all Top-level reducers into one
-    let rootReducer = combineReducers(importDefined(allReducers));
+    let rootReducer = combineReducers(loader(allReducers));
 
     // Add DevTools redux enhancer in development
     let storeEnhancer = process.env.NODE_ENV === 'development' ? DevTools.instrument() : _=>_;

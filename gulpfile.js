@@ -12,16 +12,17 @@ const sass           = require('gulp-sass');
 const less           = require('gulp-less');
 const csso           = require('gulp-csso');
 const sourcemaps     = require('gulp-sourcemaps');
-const env            = require('yargs').argv;
 const config         = require('./gulp.config')();
 const chalk          = require('chalk');
 const moment         = require('moment');
 const nodemon        = require('gulp-nodemon');
 const webpackStream  = require('webpack-stream');
 
+const env = process.env;
+
 // Update config from environment variables
 config.port.browsersync = (env.hasOwnProperty('APP_PORT')) ? env.APP_PORT : config.port.browsersync;
-config.env = (env.hasOwnProperty('environment')) ? env.environment : config.env;
+config.env = (env.hasOwnProperty('NODE_ENV')) ? env.NODE_ENV : config.env;
 
 const timestamp = () => {
     let now = moment().format('HH:mm:ss');
@@ -31,7 +32,6 @@ const timestamp = () => {
 // Set webpack config after environment variables
 const webpackConfig    = require('./webpack.config')(config);
 const webpackConfigServer    = require('./webpack.config')(config, 'server');
-const webpackConfigRods    = require('./webpack.rods.config')(config);
 
 // Compile js
 gulp.task('scripts', (done) => {
@@ -86,27 +86,6 @@ gulp.task('scripts:server', (done) => {
         done();
     });
 });
-
-gulp.task('rods', (done) => {
-    webpack(webpackConfigRods, (err, stats) => {
-        if (err) {
-            console.log(err());
-            done();
-            return;
-        }
-
-        let result = stats.toJson();
-
-        if (result.errors.length > 0) {
-            result.errors.forEach((error) => {
-                console.log(error);
-            });
-            done();
-            return;
-        }
-    });
-
-})
 
 // Sass styles
 gulp.task('styles', () => {
@@ -218,6 +197,7 @@ gulp.task('build', (done) => {
     runSequence(
         ['clean'],
         ['scripts', 'scripts:server', 'assets', 'assets:toolkit', 'styles'],
+        // ['assets', 'assets:toolkit', 'styles'],
         ['markup'],
         done
     );

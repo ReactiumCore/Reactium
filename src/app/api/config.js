@@ -8,7 +8,7 @@ if ( typeof window !== 'undefined' ) {
 } else {
     apiConfig = {
         parseAppId: process.env.PARSE_APP_ID || "Actinium",
-        restAPI: process.env.REST_API_URL || "http://localhost:9000/api",
+        restAPI: process.env.REST_API_URL || "http://demo3914762.mockable.io",
     };
 }
 
