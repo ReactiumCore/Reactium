@@ -1,9 +1,9 @@
-import { actionTypes } from 'appdir/app';
+import deps from 'dependencies';
 import { combineReducers } from 'redux';
 
 const Router = (state = {}, action) => {
     switch ( action.type ) {
-        case actionTypes.UPDATE_ROUTE: {
+        case deps.actionTypes.UPDATE_ROUTE: {
             const { location, params } = action;
             return {
                 ...location,

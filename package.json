@@ -7,9 +7,12 @@
     "start": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "manifest": "node ./createManifest.js",
-    "build": "npm install && npm-run-all -s manifest build:gulp",
+    "build": "npm install && npm-run-all -s manifest build:*",
     "build:gulp": "cross-env NODE_ENV=production gulp",
-    "local": "npm install && npm-run-all -s manifest local:gulp",
+    "build:babel": "cross-env NODE_ENV=production babel ./src --out-dir public",
+    "local": "npm install && npm run manifest && npm run local-start",
+    "local-start": "npm-run-all -p local:*",
+    "local:babel-node": "NODE_ENV=development nodemon ./src/index.js --watch ./src --exec babel-node",
     "local:gulp": "cross-env NODE_ENV=development gulp",
     "clean": "gulp clean",
     "docker": "npm-run-all -s clean docker:*",
@@ -35,15 +38,6 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "babel-core": "^6.24.1",
-    "babel-loader": "^7.0.0",
-    "babel-plugin-react-transform": "^3.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.5.0",
     "body-parser": "^1.18.2",
     "browser-sync": "2.13.0",
     "chalk": "^2.3.0",
@@ -84,6 +78,13 @@
   },
   "devDependencies": {
     "del": "^2.2.2",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "directory-tree": "^2.0.0",
     "globby": "^7.1.1",
     "gulp": "^3.9.1",
@@ -108,5 +109,37 @@
     "webpack-node-externals": "^1.6.0",
     "webpack-stream": "^4.0.1",
     "yargs": "^10.0.3"
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "stage-2",
+      [
+        "env",
+        {
+          "useBuiltIns": true,
+          "debug": false,
+          "targets": {
+            "browsers": [
+              ">= 1%"
+            ]
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "cwd": "packagejson",
+          "alias": {
+            "dependencies": "./src/app/dependencies",
+            "manifest": "./src/manifest",
+            "appdir": "./src/app",
+            "components": "./src/app/components"
+          }
+        }
+      ]
+    ]
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { StaticRouter, Switch } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
-import { routes } from 'appdir/app';
+import deps from 'dependencies';
 
 export default class AppRouter extends Component {
     render() {
@@ -9,7 +9,7 @@ export default class AppRouter extends Component {
             <StaticRouter {...this.props} context={this.props.context}>
                 <Fragment>
                     <Switch>
-                        {renderRoutes(routes)}
+                        {renderRoutes(deps.routes)}
                     </Switch>
                 </Fragment>
             </StaticRouter>

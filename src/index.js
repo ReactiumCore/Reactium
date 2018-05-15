@@ -21,7 +21,6 @@ port          = (node_env === 'production') ? '8080' : port;
 
 global.parseAppId = apiConfig.parseAppId;
 global.restAPI = apiConfig.restAPI;
-
 const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
 
 // set app variables
@@ -66,5 +65,8 @@ app.use(router);
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {
+    app.dependencies.init();
     console.log(`[00:00:00] Server running on port ${port}...`);
 });
+
+app.dependencies = global.dependencies = require('dependencies').default;

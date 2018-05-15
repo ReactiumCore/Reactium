@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { restHeaders } from "appdir/app";
-
+import { restHeaders } from 'dependencies';
 
 const fetchHello = () => {
     let hdr = restHeaders();

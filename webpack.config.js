@@ -7,27 +7,20 @@ const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
 const _                     = require('underscore');
 
 module.exports = (gulpConfig, type = 'app') => {
-    // shallow copy config and config.defines to prevent squashing server env
-    let config = _.clone(gulpConfig);
-    config.defines = _.clone(gulpConfig.defines);
-
+    let config = gulpConfig;
     let plugins    = [];
     let tools      = '';
     let env        = config.env || 'production';
-    let target     = (type === 'server') ? 'node' : 'web';
-    let filename   = (type === 'server') ? 'index.js' : '[name].js';
+    let target     = 'web';
+    let filename   = '[name].js';
     let entries    = ['babel-polyfill'];
         entries    = entries.concat(Object.values(config.entries));
-        entries    = (type === 'server') ? './src/index.js' : entries;
 
-    let dest      = (type === 'server') ? config.dest.server : config.dest.js;
+    let dest      = config.dest.js;
     let externals = [];
 
-    if (type === 'server' && env !== 'development') {
-        externals.push(nodeExternals());
-    };
 
-    if (env !== 'development' || type === 'server' && false) {
+    if (env === 'production') {
         plugins.push(new UglifyJSPlugin());
     } else {
         tools = 'source-map';
@@ -47,12 +40,6 @@ module.exports = (gulpConfig, type = 'app') => {
         devtool: tools,
         plugins: plugins,
         externals: externals,
-        resolve: {
-            alias: {
-                appdir: config.src.appdir,
-                rootdir: config.src.rootdir,
-            }
-        },
         output:  {
             path: path.resolve(__dirname, dest),
             filename: filename,

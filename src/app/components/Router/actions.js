@@ -1,4 +1,4 @@
-import { actionTypes } from 'appdir/app';
+import deps from 'dependencies';
 import queryString from 'querystring-browser';
 
 export default {
@@ -10,7 +10,7 @@ export default {
         }
 
         dispatch({
-            type: actionTypes.UPDATE_ROUTE,
+            type: deps.actionTypes.UPDATE_ROUTE,
             location,
             params,
         });

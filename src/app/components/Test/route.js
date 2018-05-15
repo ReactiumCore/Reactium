@@ -1,5 +1,5 @@
 import Test from './index';
-import { actions } from 'appdir/app';
+import deps from 'dependencies';
 
 export default {
     // Route pattern
@@ -12,5 +12,5 @@ export default {
     component: Test,
 
     // load callback should return thunk that uses route params.
-    load: params => actions.Test.mount(params),
+    load: params => deps.actions.Test.mount(params),
 };

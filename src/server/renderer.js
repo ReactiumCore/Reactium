@@ -5,8 +5,7 @@ import { Helmet } from 'react-helmet';
 import serialize from 'serialize-javascript';
 import storeCreator from 'appdir/storeCreator';
 import { matchRoutes } from 'react-router-config';
-import { routes } from 'appdir/app';
-import Router from 'appdir/components/Router';
+import Router from 'components/Router';
 import querystring from 'querystring';
 
 const template = (content, helmet, store) =>
@@ -32,7 +31,7 @@ const template = (content, helmet, store) =>
 
 export default (req, res, context) => {
     const store = storeCreator({ server: true });
-    const matches = matchRoutes(routes, req.path);
+    const matches = matchRoutes(dependencies.routes, req.path);
     const loaders = matches
         .map(({route, match}) => {
             return {

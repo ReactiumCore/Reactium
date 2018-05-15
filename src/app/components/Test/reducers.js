@@ -1,4 +1,4 @@
-import { actionTypes } from 'appdir/app';
+import deps from 'dependencies';
 
 export default (state = {}, action) => {
 
@@ -6,13 +6,13 @@ export default (state = {}, action) => {
 
     switch (action.type) {
 
-        case actionTypes.TEST_MOUNT:
+        case deps.actionTypes.TEST_MOUNT:
 
             newState = Object.assign({}, state, {...action.data});
             return newState;
             break;
 
-        case actionTypes.TEST_CLICK:
+        case deps.actionTypes.TEST_CLICK:
 
             let count = state.count || 0;
             newState = Object.assign({}, state, {count: count + 1});

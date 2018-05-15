@@ -15,8 +15,6 @@ const sourcemaps     = require('gulp-sourcemaps');
 const config         = require('./gulp.config')();
 const chalk          = require('chalk');
 const moment         = require('moment');
-const nodemon        = require('gulp-nodemon');
-const webpackStream  = require('webpack-stream');
 
 const env = process.env;
 
@@ -31,42 +29,10 @@ const timestamp = () => {
 
 // Set webpack config after environment variables
 const webpackConfig    = require('./webpack.config')(config);
-const webpackConfigServer    = require('./webpack.config')(config, 'server');
 
 // Compile js
 gulp.task('scripts', (done) => {
-    let isDev     = (config.env === 'development');
-
-    if ( isDev ) {
-        return gulp.src(webpackConfig.entry)
-            .pipe(webpackStream(webpackConfig, webpack))
-            .pipe(gulp.dest(webpackConfig.output.path))
-            .pipe(browserSync.stream());
-    } else {
-        webpack(webpackConfig, (err, stats) => {
-            if (err) {
-                console.log(err());
-                done();
-                return;
-            }
-
-            let result = stats.toJson();
-
-            if (result.errors.length > 0) {
-                result.errors.forEach((error) => {
-                    console.log(error);
-                });
-
-                done();
-                return;
-            }
-            done();
-        });
-    }
-
-});
-gulp.task('scripts:server', (done) => {
-    webpack(webpackConfigServer, (err, stats) => {
+    webpack(webpackConfig, (err, stats) => {
         if (err) {
             console.log(err());
             done();
@@ -83,6 +49,8 @@ gulp.task('scripts:server', (done) => {
             done();
             return;
         }
+
+        browserSync.reload();
         done();
     });
 });
@@ -147,34 +115,9 @@ const watcher = (e) => {
 
 gulp.task('watching', (done) => {
     gulp.watch(config.watch.style, ['styles']);
-    gulp.watch(config.watch.server, ['scripts:server']);
     gulp.watch([config.watch.markup, config.watch.assets], watcher);
-    gulp.watch(config.watch.js, () => { runSequence(['scripts'], ['scripts:server']); });
+    gulp.watch(config.watch.js, () => { runSequence(['scripts']); });
     done();
-});
-
-// nodemon -> start server and reload on change
-let started = false;
-gulp.task('nodemon', (done) => {
-    if (config.env !== 'development') { done(); return; }
-
-    nodemon({
-        quite: true,
-        watch : config.dest.server,
-        env: {
-            port: config.port.proxy
-        },
-        ignore: ["**/*.css", "**/*.DS_Store"],
-        script: path.join('.', config.dest.server, 'index.js'),
-        ext: 'js ejs json jsx html css scss jpg png gif svg txt md'
-    })
-    .on('start', function () {
-        if ( ! started ) {
-            setTimeout(done, 3000);
-        }
-    }).on('quit', () => {
-        process.exit();
-    });
 });
 
 // Server locally
@@ -188,7 +131,6 @@ gulp.task('serve', (done) => {
         proxy: `localhost:${config.port.proxy}`
     });
 
-    started = true;
     done();
 });
 
@@ -196,8 +138,7 @@ gulp.task('serve', (done) => {
 gulp.task('build', (done) => {
     runSequence(
         ['clean'],
-        ['scripts', 'scripts:server', 'assets', 'assets:toolkit', 'styles'],
-        // ['assets', 'assets:toolkit', 'styles'],
+        ['scripts', 'assets', 'assets:toolkit', 'styles'],
         ['markup'],
         done
     );
@@ -206,7 +147,10 @@ gulp.task('build', (done) => {
 // The default task
 gulp.task('default', (done) => {
     if (config.env === 'development') {
-        runSequence(['build'], ['nodemon'], ['watching'], () => {
+        runSequence(
+            ['build'],
+            ['watching'],
+        () => {
             gulp.start('serve');
             done();
         });

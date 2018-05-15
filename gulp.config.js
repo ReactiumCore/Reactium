@@ -1,13 +1,13 @@
 'use strict';
 
 const path    = require('path');
-const { entries } = require('./src/manifest');
+const globby  = require('globby');
 
 module.exports = () => {
     return {
         spa: true,
         env: "development",
-        entries: entries.map(entry => path.resolve('./src/app', entry)),
+        entries: globby.sync('./src/app/*.js'),
         defines: {},
         browsers: 'last 1 version',
         port: {

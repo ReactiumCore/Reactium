@@ -9,18 +9,8 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import Router from 'appdir/components/Router';
-import NotFound from 'appdir/components/NotFound';
+import Router from 'components/Router';
 import storeCreator from './storeCreator';
-import loader from 'appdir/dependencies/loader';
-import dependencies from 'appdir/dependencies';
-
-const {
-    allRoutes,
-    allActions,
-    allActionTypes,
-    allServices,
-} = dependencies;
 
 let bindPoints        = [];
 const elements        = typeof document !== 'undefined' ? Array.prototype.slice.call(document.querySelectorAll('component')) : [];
@@ -98,53 +88,6 @@ if (elements.length > 0) {
     });
 }
 
-export const actions = loader(allActions);
-
-let importedActionTypes = loader(allActionTypes);
-export const actionTypes = Object.keys(importedActionTypes).reduce((types, key) => ({
-    ...types,
-    ...importedActionTypes[key],
-}), {});
-
-export const services = loader(allServices);
-
-let importedRoutes = loader(allRoutes);
-export const routes = Object.keys(importedRoutes)
-.map(route => importedRoutes[route])
-.reduce((rts, route) => {
-    // Support multiple routable components per route file
-    if ( Array.isArray(route) ) {
-        return [...rts,
-            ...route.map((subRoute, subKey) => ({
-                order: 0,
-                ...subRoute,
-            }))
-        ];
-    }
-
-    // Support one routable component
-    return [...rts, {
-        order: 0,
-        ...route,
-    }];
-}, [])
-.reduce((rts, route) => {
-    // Support multiple paths for one route
-    if ( Array.isArray(route.path) ) {
-        return [...rts, ...route.path.map(path => ({
-            ...route,
-            path,
-        }))];
-    }
-    return [...rts, route];
-}, [])
-.sort((a,b) => a.order - b.order)
-.concat([{ component: NotFound }]);
-
-export const restHeaders = () => {
-    return {};
-};
-
 /**
  * -----------------------------------------------------------------------------
  * @function App()
@@ -153,6 +96,8 @@ export const restHeaders = () => {
  * -----------------------------------------------------------------------------
  */
 export const App = () => {
+    require('dependencies').default.init();
+
     if (typeof document !== 'undefined') {
         const store = storeCreator();
         if (bindPoints.length > 0) {

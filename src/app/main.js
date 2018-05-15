@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import { App } from 'appdir/app';
+import { App } from './app';
 
 /**
  * @description Initialize the app.

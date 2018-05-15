@@ -90,7 +90,7 @@ Redux Class Components work just like Class Components accept you will need to m
 ```js
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actions } from 'appdir/app';
+import deps from 'dependencies';
 
 // Map state to properties
 const mapStateToProps = (state, props) => {
@@ -100,7 +100,7 @@ const mapStateToProps = (state, props) => {
 // Map dispatchers to actions
 const mapDispatchToProps = (dispatch, props) => ({
     test: {
-        click: () => dispatch(actions.Test.click()),
+        click: () => dispatch(deps.actions.Test.click()),
     }
 });
 
@@ -166,35 +166,29 @@ Reactium aggregates all `action.js` files into the `actions` export of the `app.
 A typical `actions.js` file may look like this:
 
 ```js
-import { actionTypes } from 'appdir/app';
+import deps from 'dependencies';
 
 export default {
     mount: params => (dispatch) => {
-        dispatch({type: actionTypes.TEST_MOUNT, data: params});
+        dispatch({type: deps.actionTypes.TEST_MOUNT, data: params});
     },
 
     click: () => (dispatch) => {
-        dispatch({type: actionTypes.TEST_CLICK});
+        dispatch({type: deps.actionTypes.TEST_CLICK});
     },
 };
 ```
 
-To access the actions simply import the actions:
+To access the actions simply import the dependencies:
 ```
-import { actions } from 'appdir/app';
+import deps from 'dependencies';
 ```
 
 Then use an action by targeting the component domain that created the action:
 ```js
 ...
-actions.Test.mount({some: "params"});
+deps.actions.Test.mount({some: "params"});
 ```
-
-> Q: What's this `appdir` thing all about?
-
-> A: `appdir` is a constant defined in the Webpack configuration that references the `~/src/app` directory. It helps clarify where you're importing something from by eliminating the need to do something like:
-> `import { something } from '../../../components/SomeOtherComponent'`.
-
 
 ### The actionTypes.js File
 Reactium aggregates all `actionTypes.js` files in the `actionTypes` export of the `app.js` file.
@@ -209,13 +203,13 @@ export default {
 
 To access the actionTypes, import them into your component:
 ```js
-import { actionTypes } from 'appdir/app';
+import deps from 'dependencies';
 ```
 
 Usage:
 ```js
 ...
-dispatch({type: actionTypes.TEST_MOUNT, data: data});
+dispatch({type: deps.actionTypes.TEST_MOUNT, data: data});
 ```
 
 ### The index.js File
@@ -226,7 +220,7 @@ Reactium aggregates all `reducers.js` files into the Redux store using the [reac
 
 A typical `reducers.js` file may look like this:
 ```js
-import { actionTypes } from 'appdir/app';
+import deps from 'dependencies';
 
 export default (state = {}, action) => {
 
@@ -234,13 +228,13 @@ export default (state = {}, action) => {
 
     switch (action.type) {
 
-        case actionTypes.TEST_MOUNT:
+        case deps.actionTypes.TEST_MOUNT:
 
             newState = Object.assign({}, state, {...action.data});
             return newState;
             break;
 
-        case actionTypes.TEST_CLICK:
+        case deps.actionTypes.TEST_CLICK:
 
             let count = state.count || 0;
             newState = Object.assign({}, state, {count: count + 1});
@@ -264,7 +258,7 @@ A typical `route.js` file in `MyComponent` may look like this:
 import MyComponent from './index';
 
 // Import the aggregated actions (optional)
-import { actions } from 'appdir/app';
+import deps from 'dependencies';
 
 export default {
     // Make this higher number to have route evaluated later (default 0)
@@ -280,7 +274,7 @@ export default {
     component: MyComponent,
 
     // (optional) a Redux thunk action to load data for this component
-    load: params => actions.MyComponent.mount(params),
+    load: params => deps.actions.MyComponent.mount(params),
 };
 ```
 
@@ -291,7 +285,6 @@ You can also support multiple routes for a module, in one of two methods:
 1. provide multiple paths for a single route
 ```js
 import MyComponent from './index';
-import { actions } from 'appdir/app';
 
 export default {
     // both of these will resolve to this component
@@ -303,7 +296,7 @@ export default {
 2. provide multiple route objects
 ```js
 import MyComponent from './index';
-import { actions } from 'appdir/app';
+import deps from 'dependencies';
 
 // export an array of routes
 export default [
@@ -312,14 +305,14 @@ export default [
         path: '/base-route',
         exact: true,
         component: MyComponent,
-        load: params => actions.MyComponent(params)
+        load: params => deps.actions.MyComponent(params)
     },
     {
         order: 0,
         path: '/base-route/:param',
         exact: true,
         component: MyComponent,
-        load: params => actions.MyComponent(params)
+        load: params => deps.actions.MyComponent(params)
     },
 ];
 ```
@@ -330,7 +323,7 @@ Reactium aggregates all `services.js` files into the `services` export of the `a
 A typical `services.js` file may look like this:
 ```js
 import axios from 'axios';
-import { restHeaders } from "appdir/app";
+import { restHeaders } from 'dependencies';
 
 const restAPI = 'http://demo3914762.mockable.io';
 
@@ -352,12 +345,12 @@ export default {
 
 In your actions.js file you would do something like:
 ```
-import { actionTypes } from 'appdir/app';
-import { services } from 'appdir/app';
+import { actionTypes } from 'dependencies';
+import deps from 'dependencies';
 
 export default {
     mount: params => (dispatch) => {
-        services.Test.fetchHello().then((data) => {
+        deps.services.Test.fetchHello().then((data) => {
             dispatch({type: actionTypes.TEST_MOUNT, data: data});
         });
     },
@@ -368,13 +361,13 @@ export default {
 
 To access the services, import them into your component:
 ```js
-import { services } from 'appdir/app';
+import deps from 'dependencies';
 ```
 
 Usage:
 ```js
 ...
-services.Test.fetchHello().then((result) => {
+deps.services.Test.fetchHello().then((result) => {
     // Do something with the result
 });
 ```
