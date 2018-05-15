@@ -15,6 +15,8 @@ const sourcemaps     = require('gulp-sourcemaps');
 const config         = require('./gulp.config')();
 const chalk          = require('chalk');
 const moment         = require('moment');
+const regenManifest  = require('./manifest-tools');
+
 
 const env = process.env;
 
@@ -29,6 +31,11 @@ const timestamp = () => {
 
 // Set webpack config after environment variables
 const webpackConfig    = require('./webpack.config')(config);
+
+gulp.task('manifest', (done) => {
+    regenManifest();
+    done();
+});
 
 // Compile js
 gulp.task('scripts', (done) => {
@@ -116,7 +123,7 @@ const watcher = (e) => {
 gulp.task('watching', (done) => {
     gulp.watch(config.watch.style, ['styles']);
     gulp.watch([config.watch.markup, config.watch.assets], watcher);
-    gulp.watch(config.watch.js, () => { runSequence(['scripts']); });
+    gulp.watch(config.watch.js, () => { runSequence(['manifest','scripts']); });
     done();
 });
 

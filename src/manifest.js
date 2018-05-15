@@ -3,28 +3,29 @@
 module.exports = {
     get: () => {
         return {
-  allActions: {
-      Router: require('components/Router/actions').default,
-      Test: require('components/Test/actions').default,
-  },
-  allActionTypes: {
-      Router: require('components/Router/actionTypes').default,
-      Test: require('components/Test/actionTypes').default,
-  },
-  allReducers: {
-      Router: require('components/Router/reducers').default,
-      Test: require('components/Test/reducers').default,
-  },
-  allInitialStates: {
-      Router: require('components/Router/state').default,
-      Test: require('components/Test/state').default,
-  },
-  allRoutes: {
-      Test: require('components/Test/route').default,
-  },
-  allServices: {
-      Test: require('components/Test/services').default,
-  },
-}
+          allActions: {
+            Router: require('components/Router/actions').default,
+            Test: require('components/Test/actions').default,
+          },
+          allActionTypes: {
+            Router: require('components/Router/actionTypes').default,
+            Test: require('components/Test/actionTypes').default,
+          },
+          allReducers: {
+            Router: require('components/Router/reducers').default,
+            Test: require('components/Test/reducers').default,
+          },
+          allInitialStates: {
+            Router: require('components/Router/state').default,
+            Test: require('components/Test/state').default,
+          },
+          allRoutes: {
+            Test: require('components/Test/route').default,
+          },
+          allServices: {
+            Test: require('components/Test/services').default,
+          },
+
+        }
     }
 }
