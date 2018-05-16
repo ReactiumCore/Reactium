@@ -64,15 +64,9 @@ if ( process.env.NODE_ENV === 'development' ) {
     const gulpConfig     = require('../gulp.config')();
     const webpackConfig  = require('../webpack.config')(gulpConfig);
     const wpMiddlware    = require('webpack-dev-middleware');
-    const wpHotMiddlware    = require('webpack-hot-middleware');
-
+    const wpHotMiddlware = require('webpack-hot-middleware');
 
     webpackConfig.entry = ['webpack-hot-middleware/client?http://localhost:3030'].concat(webpackConfig.entry);
-    // webpackConfig.devServer = {
-    //     hot: true,
-    // };
-    // webpackConfig.plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
-    // webpackConfig.plugins.push(new webpack.NamedModulesPlugin());
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
 
     const compiler = webpack(webpackConfig);

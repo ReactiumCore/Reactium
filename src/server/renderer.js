@@ -13,13 +13,12 @@ function normalizeAssets(assets) {
 }
 
 const template = (content, helmet, store, res) => {
-
-    let scripts =  '<script src="/assets/js/vendors.js"></script>' +
-                    '<script src="/assets/js/main.js"></script>';
+    let scripts =
+        '<script src="/assets/js/vendors.js"></script>' +
+        '<script src="/assets/js/main.js"></script>';
 
     if ( process.env.NODE_ENV === 'development' ) {
         const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
-        console.log('assetsByChunkName', assetsByChunkName)
         const { vendors, main } = assetsByChunkName;
         scripts = [ vendors, main ]
             .map(chunk => normalizeAssets(chunk).filter(path => path.endsWith('.js')))

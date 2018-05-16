@@ -17,7 +17,6 @@ const chalk          = require('chalk');
 const moment         = require('moment');
 const regenManifest  = require('./manifest-tools');
 
-
 const env = process.env;
 
 // Update config from environment variables
@@ -128,22 +127,26 @@ const watcher = (e) => {
 gulp.task('watching', (done) => {
     gulp.watch(config.watch.style, ['styles']);
     gulp.watch([config.watch.markup, config.watch.assets], watcher);
-    gulp.watch(config.watch.js, () => { runSequence(['manifest','scripts']); });
+    const scriptWatcher = gulp.watch(config.watch.js, () => { runSequence(['manifest']); });
+
     done();
 });
 
 // Server locally
 gulp.task('serve', (done) => {
-    browserSync({
-        notify: false,
-        timestamps: true,
-        logPrefix: '00:00:00',
-        port: config.port.browsersync,
-        ui: {port: config.port.browsersync + 1},
-        proxy: `localhost:${config.port.proxy}`
-    });
+    // Delay to allow server time to start
+    setTimeout(() => {
+        browserSync({
+            notify: false,
+            timestamps: true,
+            logPrefix: '00:00:00',
+            port: config.port.browsersync,
+            ui: {port: config.port.browsersync + 1},
+            proxy: `localhost:${config.port.proxy}`
+        });
 
-    done();
+        done();
+    }, 2000);
 });
 
 // Build

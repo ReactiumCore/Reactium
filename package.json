@@ -13,7 +13,7 @@
     "local": "npm install && npm run manifest && npm run local-start",
     "local:gulp": "cross-env NODE_ENV=development gulp",
     "local-start": "npm-run-all -p local:*",
-    "local:babel-node": "NODE_ENV=development nodemon ./src/index.js --watch ./src --exec babel-node",
+    "local:babel-node": "NODE_ENV=development nodemon ./src/index.js --exec babel-node",
     "clean": "gulp clean",
     "docker": "npm-run-all -s clean docker:*",
     "docker:build": "docker image build -t atomicreactor/reactium:$npm_package_version .",
@@ -111,7 +111,14 @@
     "yargs": "^10.0.3"
   },
   "nodemonConfig": {
-    "delay": "3500"
+    "watch": [
+      "src/index.js",
+      "src/manifest.js",
+      "src/server"
+    ],
+    "ignore": [
+      "src/app/*"
+    ]
   },
   "babel": {
     "presets": [
