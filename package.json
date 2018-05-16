@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "0.0.19",
+  "version": "2.0.0",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "javascript",
     "ddd"
   ],
-  "author": "Cam Tullos <cam@tullos.ninja> (http://cam.tullos.ninja)",
+  "author": "Cam Tullos <cam@tullos.ninja> (http://cam.tullos.ninja) and John Dillick <john@dillick.us>",
   "license": "MIT",
   "engines": {
     "node": "9.2.1",
