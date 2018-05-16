@@ -23,10 +23,16 @@ DDD focuses on three core principles:
 
 # Quick Start
 
-From your project directory for local development:
+To run in **front-end only** (no server side rendering) development mode from your project directory for local development:
 ```
 $ npm run local
 ```
+
+To run in **server side rendering** development mode from your project directory for local development:
+```
+$ npm run local-ssr
+```
+
 
 # Development Guide
 The intent behind the Reactium Framework is to get you quickly creating React components and applications.
@@ -42,7 +48,7 @@ There are 3 types of components you can create:
 ### Functional Components
 Create a Functional Component if your component will not need to worry about application state or events. Functional components accept a single `props` argument and should be very clear and concise in their make-up.
 ```js
-const Hello = (props) => {
+export default (props) => {
     return (
         <div>
           <h1>Hey {props.name}!</h1>
@@ -57,7 +63,7 @@ Create a Class Component if your component will need the React Life Cycle Method
 ```js
 import React, { Component } from 'react';
 
-class Hello extends Component {
+export default class Hello extends Component {
   constructor(props) {
     super(props);
     this.state = Object.assign({}, this.props});
@@ -79,16 +85,15 @@ class Hello extends Component {
 Hello.defaultProps = {
   name: "Bob"
 };
-
-export default Hello;
 ```
 
 ### Redux Class Components
 Create a Redux Class Component if your component will need to interact with the application state.
 Redux Class Components work just like Class Components accept you will need to map state to properties and map dispatchers to actions via the [react-redux](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) `connect` method.
 
+index.js (redux wrapper):
 ```js
-import React, { Component } from 'react';
+import Test from './Test';
 import { connect } from 'react-redux';
 import deps from 'dependencies';
 
@@ -104,7 +109,15 @@ const mapDispatchToProps = (dispatch, props) => ({
     }
 });
 
-class Test extends Component {
+export default connect(mapStateToProps, mapDispatchToProps)(Test);
+```
+
+Test.js:
+
+```js
+import React, { Component } from 'react';
+
+export default class Test extends Component {
     constructor(props) {
         super(props);
 
@@ -134,8 +147,6 @@ class Test extends Component {
         );
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Test);
 ```
 
 ## Component Architecture
