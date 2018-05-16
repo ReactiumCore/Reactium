@@ -30,6 +30,8 @@ const sanitizeInitialState = state => Object.keys(state)
     [key]: state[key],
 }), {});
 
+let store = {};
+
 export default ({server = false} = {}) => {
     // Load middleware
     let middleWare = [thunk];
@@ -63,5 +65,7 @@ export default ({server = false} = {}) => {
     let storeEnhancer = process.env.NODE_ENV === 'development' ? DevTools.instrument() : _=>_;
 
     // Create the store
-    return createStoreWithMiddleware(rootReducer, initialState, storeEnhancer);
+    store = createStoreWithMiddleware(rootReducer, initialState, storeEnhancer);
+
+    return store;
 }

@@ -34,7 +34,7 @@ export const getComponents = (types) => {
         while (!req && paths.length > 0) {
             cpath = paths.shift();
 
-            try { req = require('appdir/' + cpath); } catch (err) { }
+            try { req = require('./' + cpath); } catch (err) { }
             if (!req) {
                 try { req = require(cpath + ''); } catch (err) { }
             }
@@ -125,3 +125,9 @@ export const App = () => {
         );
     }
 };
+
+if (module.hot) {
+    module.hot.accept(['./app.js', './storeCreator.js', './main.js'], () => {
+        console.log('Updated app');
+    });
+}

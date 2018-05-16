@@ -7,7 +7,7 @@ module.exports = () => {
     return {
         spa: true,
         env: "development",
-        entries: globby.sync('./src/app/*.js'),
+        entries: globby.sync(path.resolve('./src/app/', '*.js')),
         defines: {},
         browsers: 'last 1 version',
         port: {

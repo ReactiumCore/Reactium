@@ -11,6 +11,7 @@ import cookieSession from 'cookie-session';
 import proxy from 'express-http-proxy';
 import morgan from 'morgan';
 import apiConfig from 'appdir/api/config';
+import path from 'path';
 import { adminProxy } from './server/admin-proxy';
 
 const app     = express();
@@ -57,6 +58,34 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(cookieSession({name: 'aljtka4', keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbnoNSdWxlcw']}));
 
+// development mode
+if ( process.env.NODE_ENV === 'development' ) {
+    const webpack        = require('webpack');
+    const gulpConfig     = require('../gulp.config')();
+    const webpackConfig  = require('../webpack.config')(gulpConfig);
+    const wpMiddlware    = require('webpack-dev-middleware');
+    const wpHotMiddlware    = require('webpack-hot-middleware');
+
+
+    webpackConfig.entry = ['webpack-hot-middleware/client?http://localhost:3030'].concat(webpackConfig.entry);
+    // webpackConfig.devServer = {
+    //     hot: true,
+    // };
+    // webpackConfig.plugins.push(new webpack.optimize.OccurrenceOrderPlugin());
+    // webpackConfig.plugins.push(new webpack.NamedModulesPlugin());
+    webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+    const compiler = webpack(webpackConfig);
+
+    app.use(wpMiddlware(compiler, {
+        serverSideRender: true,
+    }));
+
+    app.use(wpHotMiddlware(compiler, {
+        reload: true,
+    }));
+}
+
 // serve the static files out of ./public
 app.use(express.static('public'));
 
@@ -66,6 +95,7 @@ app.use(router);
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {
     app.dependencies.init();
+
     console.log(`[00:00:00] Server running on port ${port}...`);
 });
 

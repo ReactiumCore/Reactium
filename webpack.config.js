@@ -2,7 +2,6 @@
 
 const path                  = require('path');
 const webpack               = require('webpack');
-const nodeExternals         = require('webpack-node-externals');
 const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
 const _                     = require('underscore');
 
@@ -40,9 +39,21 @@ module.exports = (gulpConfig, type = 'app') => {
         devtool: tools,
         plugins: plugins,
         externals: externals,
+        mode: config.env,
         output:  {
             path: path.resolve(__dirname, dest),
             filename: filename,
+        },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    commons: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: "vendors",
+                        chunks: "all"
+                    }
+                }
+            },
         },
         module:  {
             rules: [

@@ -8,26 +8,46 @@ import { matchRoutes } from 'react-router-config';
 import Router from 'components/Router';
 import querystring from 'querystring';
 
-const template = (content, helmet, store) =>
-`<html ${helmet.htmlAttributes.toString()}>
-    <head>
-        ${helmet.title.toString()}
-        ${helmet.meta.toString()}
-        ${helmet.link.toString()}
-        <link rel="stylesheet" href="/assets/style/style.css" />
-    </head>
-    <body ${helmet.bodyAttributes.toString()}>
-        <Component type="DevTools"></Component>
-        <div id="router">${content}</div>
+function normalizeAssets(assets) {
+    return Array.isArray(assets) ? assets : [assets]
+}
 
-        <script>
-            window.INITIAL_STATE = ${serialize(store.getState())}
-            window.restAPI = '/api';
-            window.parseAppId = '${parseAppId}'
-        </script>
-        <script src="/assets/js/main.js"></script>
-    </body>
-</html>`;
+const template = (content, helmet, store, res) => {
+
+    let scripts =  '<script src="/assets/js/vendors.js"></script>' +
+                    '<script src="/assets/js/main.js"></script>';
+
+    if ( process.env.NODE_ENV === 'development' ) {
+        const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
+        console.log('assetsByChunkName', assetsByChunkName)
+        const { vendors, main } = assetsByChunkName;
+        scripts = [ vendors, main ]
+            .map(chunk => normalizeAssets(chunk).filter(path => path.endsWith('.js')))
+            .reduce((files, chunk) => files.concat(chunk), [])
+            .map(path => `<script src="${path}"></script>`)
+            .join('\n');
+    }
+
+    return `<html ${helmet.htmlAttributes.toString()}>
+        <head>
+            ${helmet.title.toString()}
+            ${helmet.meta.toString()}
+            ${helmet.link.toString()}
+            <link rel="stylesheet" href="/assets/style/style.css" />
+        </head>
+        <body ${helmet.bodyAttributes.toString()}>
+            <Component type="DevTools"></Component>
+            <div id="router">${content}</div>
+
+            <script>
+                window.INITIAL_STATE = ${serialize(store.getState())}
+                window.restAPI = '/api';
+                window.parseAppId = '${parseAppId}'
+            </script>
+            ${scripts}
+        </body>
+    </html>`;
+};
 
 export default (req, res, context) => {
     const store = storeCreator({ server: true });
@@ -69,7 +89,7 @@ export default (req, res, context) => {
         );
 
         const helmet = Helmet.renderStatic();
-        html = template(body, helmet, store);
+        html = template(body, helmet, store, res);
 
         return html;
     });

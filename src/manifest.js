@@ -27,5 +27,49 @@ module.exports = {
           },
 
         }
+    },
+    list: () => {
+        return {
+  "allActions": {
+    "type": "actions",
+    "imports": [
+      "components/Router/actions",
+      "components/Test/actions"
+    ]
+  },
+  "allActionTypes": {
+    "type": "actionTypes",
+    "imports": [
+      "components/Router/actionTypes",
+      "components/Test/actionTypes"
+    ]
+  },
+  "allReducers": {
+    "type": "reducers",
+    "imports": [
+      "components/Router/reducers",
+      "components/Test/reducers"
+    ]
+  },
+  "allInitialStates": {
+    "type": "state",
+    "imports": [
+      "components/Router/state",
+      "components/Test/state"
+    ]
+  },
+  "allRoutes": {
+    "type": "route",
+    "imports": [
+      "components/Test/route"
+    ]
+  },
+  "allServices": {
+    "type": "services",
+    "imports": [
+      "components/Test/services"
+    ]
+  }
+};
     }
 }

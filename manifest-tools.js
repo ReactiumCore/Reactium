@@ -94,6 +94,9 @@ module.exports = {
         })
         .join('')}
         }
+    },
+    list: () => {
+        return ${JSON.stringify(manifest, null, 2)};
     }
 }
 `;

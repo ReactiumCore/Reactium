@@ -39,27 +39,32 @@ gulp.task('manifest', (done) => {
 
 // Compile js
 gulp.task('scripts', (done) => {
-    webpack(webpackConfig, (err, stats) => {
-        if (err) {
-            console.log(err());
+    let isDev = (config.env === 'development');
+
+    if ( ! isDev ) {
+        webpack(webpackConfig, (err, stats) => {
+            if (err) {
+                console.log(err());
+                done();
+                return;
+            }
+
+            let result = stats.toJson();
+
+            if (result.errors.length > 0) {
+                result.errors.forEach((error) => {
+                    console.log(error);
+                });
+
+                done();
+                return;
+            }
+
             done();
-            return;
-        }
-
-        let result = stats.toJson();
-
-        if (result.errors.length > 0) {
-            result.errors.forEach((error) => {
-                console.log(error);
-            });
-
-            done();
-            return;
-        }
-
-        browserSync.reload();
+        });
+    } else {
         done();
-    });
+    }
 });
 
 // Sass styles
@@ -153,7 +158,7 @@ gulp.task('build', (done) => {
 
 // The default task
 gulp.task('default', (done) => {
-    if (config.env === 'development') {
+    if (process.env.NODE_ENV === 'development') {
         runSequence(
             ['build'],
             ['watching'],
