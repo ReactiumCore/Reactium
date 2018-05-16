@@ -8,11 +8,9 @@ import { matchRoutes } from 'react-router-config';
 import Router from 'components/Router';
 import querystring from 'querystring';
 
-function normalizeAssets(assets) {
-    return Array.isArray(assets) ? assets : [assets]
-}
+const normalizeAssets = assets => Array.isArray(assets) ? assets : [assets];
 
-const template = (content, helmet, store, res) => {
+const scripts = res => {
     let scripts =
         '<script src="/assets/js/vendors.js"></script>' +
         '<script src="/assets/js/main.js"></script>';
@@ -26,7 +24,10 @@ const template = (content, helmet, store, res) => {
             .map(path => `<script src="${path}"></script>`)
             .join('\n');
     }
+    return scripts;
+};
 
+const template = (content, helmet, store, res) => {
     return `<html ${helmet.htmlAttributes.toString()}>
         <head>
             ${helmet.title.toString()}
@@ -39,16 +40,36 @@ const template = (content, helmet, store, res) => {
             <div id="router">${content}</div>
 
             <script>
+                window.ssr = true;
                 window.INITIAL_STATE = ${serialize(store.getState())}
                 window.restAPI = '/api';
                 window.parseAppId = '${parseAppId}'
             </script>
-            ${scripts}
+            ${scripts(res)}
         </body>
     </html>`;
 };
 
-export default (req, res, context) => {
+const feTemplate = (req, res, context) => {
+    return `<html>
+        <head>
+            <link rel="stylesheet" href="/assets/style/style.css" />
+        </head>
+        <body>
+            <Component type="DevTools"></Component>
+            <div id="router"></div>
+
+            <script>
+                window.ssr = false;
+                window.restAPI = '/api';
+                window.parseAppId = '${parseAppId}'
+            </script>
+            ${scripts(res)}
+        </body>
+    </html>`;
+};
+
+const ssr = (req, res, context) => {
     const store = storeCreator({ server: true });
     const matches = matchRoutes(dependencies.routes, req.path);
     const loaders = matches
@@ -92,4 +113,12 @@ export default (req, res, context) => {
 
         return html;
     });
+};
+
+export default (req, res, context) => {
+    if ( ! ('SSR_MODE' in process.env) || process.env.SSR_MODE === 'on' ) {
+        return ssr(req, res, context);
+    }
+
+    return Promise.resolve(feTemplate(req, res, context));
 };

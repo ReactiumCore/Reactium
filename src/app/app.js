@@ -114,15 +114,31 @@ export const App = () => {
             });
         }
 
-        // Hydrate the Routed component
-        ReactDOM.hydrate(
-            <Provider store={store}>
-                <Fragment>
-                    <Router />
-                </Fragment>
-            </Provider>,
-            document.getElementById('router')
-        );
+        if ( window && 'ssr' in window && window.ssr ) {
+            console.log('SSR Mode: Hydrating Reactium.');
+
+            // Hydrate the Routed component
+            ReactDOM.hydrate(
+                <Provider store={store}>
+                    <Fragment>
+                        <Router />
+                    </Fragment>
+                </Provider>,
+                document.getElementById('router')
+            );
+        } else {
+            console.log('FE Mode: Binding Reactium.');
+
+            // Bind the Routed component
+            ReactDOM.render(
+                <Provider store={store}>
+                    <Fragment>
+                        <Router />
+                    </Fragment>
+                </Provider>,
+                document.getElementById('router')
+            );
+        }
     }
 };
 
