@@ -121,7 +121,7 @@ module.exports = {
             return (
                 `          ${key}: {\n` +
                 imports.map(file => {
-                    const found = file.match(new RegExp(`\/(.+?)\/${type}$`))
+                    const found = file.match(new RegExp(`\/([A-Za-z_0-9]+?)\/${type}$`))
                     let [ ,domain ] = found;
                     return `            ${domain}: require('${file}').default,\n`;
                 }).join('') +
