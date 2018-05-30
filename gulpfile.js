@@ -1,12 +1,13 @@
 
 const del            = require('del');
-const fs             = require('fs');
+const fs             = require('fs-extra');
 const path           = require('path');
 const webpack        = require('webpack');
 const browserSync    = require('browser-sync');
 const runSequence    = require('run-sequence');
 const gulp           = require('gulp');
 const gulpif         = require('gulp-if');
+const gulpwatch      = require('gulp-watch');
 const prefix         = require('gulp-autoprefixer');
 const sass           = require('gulp-sass');
 const less           = require('gulp-less');
@@ -112,21 +113,23 @@ const watcher = (e) => {
     let src      = path.relative(path.resolve(__dirname), e.path);
     let fpath    = `${config.dest.dist}/${path.relative(path.resolve(config.src.app), e.path)}`;
     let dest     = path.normalize(path.dirname(fpath));
+    let ext      = path.extname(src);
 
     if (fs.existsSync(fpath)) {
         del.sync([fpath]);
     }
 
-    if (e.type !== 'deleted') {
+    if (e.event !== 'unlink') {
         gulp.src(src).pipe(gulp.dest(dest));
     }
 
-    console.log(`${timestamp()} File '${chalk.cyan(e.type)}' ${src}`);
+    console.log(`${timestamp()} File ${e.event}: ${src} -> ${fpath}`);
 };
 
 gulp.task('watching', (done) => {
     gulp.watch(config.watch.style, ['styles']);
-    gulp.watch([config.watch.markup, config.watch.assets], watcher);
+    gulpwatch(config.watch.markup, watcher);
+    gulpwatch(config.watch.assets, watcher);
     const scriptWatcher = gulp.watch(config.watch.js, () => { runSequence(['manifest']); });
 
     done();
