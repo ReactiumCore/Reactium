@@ -20,8 +20,9 @@ let port      = (process.env.hasOwnProperty('APP_PORT')) ? process.env.APP_PORT 
 port          = (node_env === 'production') ? '8080' : port;
 
 global.parseAppId = apiConfig.parseAppId;
-global.restAPI = apiConfig.restAPI;
-const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
+global.restAPI    = apiConfig.restAPI;
+
+const adminURL    = process.env.ACTINIUM_ADMIN_URL || false;
 
 // set app variables
 app.set('x-powered-by', false);
