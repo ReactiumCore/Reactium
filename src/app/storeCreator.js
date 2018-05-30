@@ -2,6 +2,7 @@ import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-localsto
 import { createStore, combineReducers } from 'redux';
 import thunk, { applyMiddleware } from 'redux-super-thunk';
 import DevTools from 'components/DevTools';
+import moment from 'moment';
 
 const {
     allInitialStates,
@@ -13,11 +14,18 @@ const {
  * @description Redux setup
  * -----------------------------------------------------------------------------
  */
+let localStorageExpirationSecs = 3600;
 let localizeState = true;
 let initialState  = {};
-if ( typeof window !== 'undefined' && 'INITIAL_STATE' in window ) {
-    initialState = window.INITIAL_STATE;
-    delete window.INITIAL_STATE;
+if ( typeof window !== 'undefined' ) {
+    if ( 'INITIAL_STATE' in window ) {
+        initialState = window.INITIAL_STATE;
+        delete window.INITIAL_STATE;
+    }
+
+    if ( 'LOCAL_STORAGE_EXPIRATION_SECS' in window ) {
+        localStorageExpirationSecs = window.LOCAL_STORAGE_EXPIRATION_SECS;
+    }
 }
 
 // Make sure initial loaded state matches reducers and that
@@ -31,6 +39,12 @@ const sanitizeInitialState = state => Object.keys(state)
 }), {});
 
 let store = {};
+
+const getLoadedState = () => {
+    const loadedState = lsLoad();
+    const expired = loadedState.timeStamp && moment().diff(moment(loadedState.timeStamp), 'seconds', true) >= localStorageExpirationSecs;
+    return expired ? {} : loadedState;
+};
 
 export default ({server = false} = {}) => {
     // Load middleware
@@ -49,7 +63,7 @@ export default ({server = false} = {}) => {
             middleWare.push(lsSave());
             initialState = {
                 ...initialState,
-                ...sanitizeInitialState(lsLoad()),
+                ...sanitizeInitialState(getLoadedState()),
             };
         } else {
             lsClear();
@@ -57,6 +71,10 @@ export default ({server = false} = {}) => {
     }
 
     const createStoreWithMiddleware = applyMiddleware(...middleWare)(createStore);
+
+    if (localizeState) {
+        allReducers.timeStamp = (state = moment().toISOString()) => state;
+    }
 
     // Combine all Top-level reducers into one
     let rootReducer = combineReducers(allReducers);
