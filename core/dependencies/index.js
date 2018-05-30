@@ -1,4 +1,4 @@
-import NotFound from 'components/NotFound';
+import NotFound from 'reactium-core/components/NotFound';
 
 class ReactiumDependencies {
     constructor() {

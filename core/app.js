@@ -9,8 +9,8 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import Router from 'components/Router';
-import storeCreator from './storeCreator';
+import Router from 'reactium-core/components/Router';
+import storeCreator from 'reactium-core/storeCreator';
 
 let bindPoints        = [];
 const elements        = typeof document !== 'undefined' ? Array.prototype.slice.call(document.querySelectorAll('component')) : [];
@@ -19,33 +19,31 @@ export const getComponents = (types) => {
     let cmps = {};
 
     types = (typeof types === 'string') ? [types] : types;
+
     types.forEach((cname) => {
         let req, cpath;
 
         let paths = [
-            cname,
-            `${cname}/index`,
-            `components/${cname}`,
-            `components/${cname}/index`,
-            `components/common-ui/${cname}`,
-            `components/common-ui/${cname}/index`,
+            () => require(`components/${cname}/index`),
+            () => require(`components/common-ui/${cname}/index`),
+            () => require(`components/${cname}`),
+            () => require(`components/common-ui/${cname}`),
+            () => require(`reactium-core/components/${cname}/index`),
+            () => require(`reactium-core/components/common-ui/${cname}/index`),
+            () => require(`reactium-core/components/${cname}`),
+            () => require(`reactium-core/components/common-ui/${cname}`),
         ];
 
-        while (!req && paths.length > 0) {
-            cpath = paths.shift();
+        paths.forEach(path => {
+            if (req) return;
 
-            try { req = require('./' + cpath); } catch (err) { }
-            if (!req) {
-                try { req = require(cpath + ''); } catch (err) { }
-            }
-
-            if (req) {
-                if (req.hasOwnProperty('default')) {
+            try {
+                req = path();
+                if ( 'default' in req ) {
                     req = req.default;
                 }
-                break;
-            }
-        }
+            } catch (err) {}
+        })
 
         if (req) {
             cmps[cname] = req;
@@ -55,7 +53,7 @@ export const getComponents = (types) => {
     return cmps;
 };
 
-if (elements.length > 0) {
+if ( elements.length > 0) {
 
     let types = elements.map((elm) => { return elm.getAttribute('type'); });
     let components = getComponents(types);
@@ -141,9 +139,3 @@ export const App = () => {
         }
     }
 };
-
-if (module.hot) {
-    module.hot.accept(['./app.js', './storeCreator.js', './main.js'], () => {
-        console.log('Updated app');
-    });
-}

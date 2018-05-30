@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import { App } from './app';
+import { App } from 'reactium-core/app';
 
 /**
  * @description Initialize the app.

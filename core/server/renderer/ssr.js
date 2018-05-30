@@ -5,8 +5,8 @@ import { Helmet } from 'react-helmet';
 import serialize from 'serialize-javascript';
 import querystring from 'querystring';
 import { matchRoutes } from 'react-router-config';
-import storeCreator from 'appdir/storeCreator';
-import Router from 'components/Router';
+import storeCreator from 'reactium-core/storeCreator';
+import Router from 'reactium-core/components/Router';
 
 const template = (content, helmet, store, req, res) => {
     return `<html ${helmet.htmlAttributes.toString()}>
