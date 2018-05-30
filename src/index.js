@@ -12,7 +12,6 @@ import proxy from 'express-http-proxy';
 import morgan from 'morgan';
 import apiConfig from 'appdir/api/config';
 import path from 'path';
-import { adminProxy } from './server/admin-proxy';
 
 const app     = express();
 
@@ -47,10 +46,6 @@ app.use(
         },
     })
 );
-
-if ( adminURL ) {
-    adminProxy(app, port, adminURL);
-}
 
 // parsers
 app.use(bodyParser.json());

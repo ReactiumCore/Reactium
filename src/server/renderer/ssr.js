@@ -3,31 +3,12 @@ import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import serialize from 'serialize-javascript';
-import storeCreator from 'appdir/storeCreator';
-import { matchRoutes } from 'react-router-config';
-import Router from 'components/Router';
 import querystring from 'querystring';
+import { matchRoutes } from 'react-router-config';
+import storeCreator from 'appdir/storeCreator';
+import Router from 'components/Router';
 
-const normalizeAssets = assets => Array.isArray(assets) ? assets : [assets];
-
-const scripts = res => {
-    let scripts =
-        '<script src="/assets/js/vendors.js"></script>' +
-        '<script src="/assets/js/main.js"></script>';
-
-    if ( process.env.NODE_ENV === 'development' ) {
-        const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
-        const { vendors, main } = assetsByChunkName;
-        scripts = [ vendors, main ]
-            .map(chunk => normalizeAssets(chunk).filter(path => path.endsWith('.js')))
-            .reduce((files, chunk) => files.concat(chunk), [])
-            .map(path => `<script src="${path}"></script>`)
-            .join('\n');
-    }
-    return scripts;
-};
-
-const template = (content, helmet, store, res) => {
+const template = (content, helmet, store, req, res) => {
     return `<html ${helmet.htmlAttributes.toString()}>
         <head>
             ${helmet.title.toString()}
@@ -45,31 +26,12 @@ const template = (content, helmet, store, res) => {
                 window.restAPI = '/api';
                 window.parseAppId = '${parseAppId}'
             </script>
-            ${scripts(res)}
+            ${req.scripts}
         </body>
     </html>`;
 };
 
-const feTemplate = (req, res, context) => {
-    return `<html>
-        <head>
-            <link rel="stylesheet" href="/assets/style/style.css" />
-        </head>
-        <body>
-            <Component type="DevTools"></Component>
-            <div id="router"></div>
-
-            <script>
-                window.ssr = false;
-                window.restAPI = '/api';
-                window.parseAppId = '${parseAppId}'
-            </script>
-            ${scripts(res)}
-        </body>
-    </html>`;
-};
-
-const ssr = (req, res, context) => {
+module.exports = (req, res, context) => {
     const store = storeCreator({ server: true });
     const matches = matchRoutes(dependencies.routes, req.path);
     const loaders = matches
@@ -109,16 +71,8 @@ const ssr = (req, res, context) => {
         );
 
         const helmet = Helmet.renderStatic();
-        html = template(body, helmet, store, res);
+        html = template(body, helmet, store, req, res);
 
         return html;
     });
-};
-
-export default (req, res, context) => {
-    if ( ! ('SSR_MODE' in process.env) || process.env.SSR_MODE === 'on' ) {
-        return ssr(req, res, context);
-    }
-
-    return Promise.resolve(feTemplate(req, res, context));
 };
