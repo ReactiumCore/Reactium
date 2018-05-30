@@ -20,7 +20,7 @@ const scripts = res => {
 export default (req, res, context) => {
     req.scripts = scripts(res);
 
-    if ( ! ('SSR_MODE' in process.env) || process.env.SSR_MODE === 'on' ) {
+    if ( 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on' ) {
         const ssr = require('./ssr');
         return ssr(req, res, context);
     }
