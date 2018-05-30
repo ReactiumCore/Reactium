@@ -2,13 +2,11 @@
 
 const path                  = require('path');
 const webpack               = require('webpack');
-const UglifyJSPlugin        = require('uglifyjs-webpack-plugin');
 const _                     = require('underscore');
 
 module.exports = (gulpConfig, type = 'app') => {
     let config = gulpConfig;
     let plugins    = [];
-    let tools      = '';
     let env        = config.env || 'production';
     let target     = 'web';
     let filename   = '[name].js';
@@ -18,12 +16,7 @@ module.exports = (gulpConfig, type = 'app') => {
     let dest      = config.dest.js;
     let externals = [];
 
-
-    if (env === 'production') {
-        plugins.push(new UglifyJSPlugin());
-    } else {
-        tools = 'source-map';
-    }
+    let tools = (env === 'development') ? 'source-map' : '';
 
     // Only override process.env on client side
     if ( type === 'app' ) {
@@ -45,6 +38,7 @@ module.exports = (gulpConfig, type = 'app') => {
             filename: filename,
         },
         optimization: {
+            minimize: Boolean(env !== 'development'),
             splitChunks: {
                 cacheGroups: {
                     commons: {

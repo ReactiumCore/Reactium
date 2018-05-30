@@ -37,10 +37,15 @@
     "node": "9.2.1",
     "npm": ">=2.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Atomic-Reactor/Reactium.git"
+  },
   "browser": {
     "parse/node": false
   },
   "dependencies": {
+    "ajv": "^6.5.0",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "browser-sync": "2.13.0",
@@ -61,7 +66,6 @@
     "morgan": "^1.9.0",
     "parse": "^1.11.0",
     "passport": "^0.4.0",
-    "query-string": "^6.0.0",
     "querystring-browser": "^1.0.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -83,13 +87,11 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.0.0",
+    "babel-loader": "^7.1.4",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "del": "^2.2.2",
-    "directory-tree": "^2.0.0",
     "fs-extra": "^6.0.1",
     "globby": "^7.1.1",
     "gulp": "^3.9.1",
@@ -109,7 +111,6 @@
     "npm-run-all": "^4.1.2",
     "readdir-recursive": "0.0.4",
     "run-sequence": "^1.2.2",
-    "uglifyjs-webpack-plugin": "^0.4.3",
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^4.8.3",
     "webpack-dev-middleware": "^3.1.3",
