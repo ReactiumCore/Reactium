@@ -4,20 +4,20 @@
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "node public/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "manifest": "node ./createManifest.js",
     "build": "npm install && npm-run-all -s manifest build:*",
     "build:gulp": "cross-env NODE_ENV=production gulp",
-    "build:babel": "cross-env NODE_ENV=production babel ./src --out-dir public",
+    "build:babel": "cross-env NODE_ENV=production babel ./ --ignore node_modules,public --out-dir public",
     "local": "npm install && npm run manifest && npm run local-fe-start",
     "local-fe-start": "npm-run-all -p local-fe:*",
     "local-fe:gulp": "cross-env SSR_MODE=off NODE_ENV=development gulp",
-    "local-fe:babel-node": "cross-env SSR_MODE=off NODE_ENV=development nodemon ./src/index.js --exec babel-node",
+    "local-fe:babel-node": "cross-env SSR_MODE=off NODE_ENV=development nodemon ./core/index.js --exec babel-node",
     "local-ssr": "npm install && npm run manifest && npm run local-ssr-start",
     "local-ssr-start": "npm-run-all -p local-ssr:*",
     "local-ssr:gulp": "cross-env SSR_MODE=on NODE_ENV=development gulp",
-    "local-ssr:babel-node": "cross-env SSR_MODE=on NODE_ENV=development nodemon ./src/index.js --exec babel-node",
+    "local-ssr:babel-node": "cross-env SSR_MODE=on NODE_ENV=development nodemon ./core/index.js --exec babel-node",
     "clean": "gulp clean",
     "docker": "npm-run-all -s clean docker:*",
     "docker:build": "docker image build -t atomicreactor/reactium:$npm_package_version .",
@@ -119,9 +119,9 @@
   },
   "nodemonConfig": {
     "watch": [
-      "src/index.js",
       "src/manifest.js",
-      "src/server"
+      "core/index.js",
+      "core/server"
     ],
     "ignore": [
       "src/app/*"
@@ -150,10 +150,11 @@
         {
           "cwd": "packagejson",
           "alias": {
-            "dependencies": "./src/app/dependencies",
+            "dependencies": "./core/dependencies",
             "manifest": "./src/manifest",
             "appdir": "./src/app",
-            "components": "./src/app/components"
+            "components": "./src/app/components",
+            "reactium-core": "./core"
           }
         }
       ]

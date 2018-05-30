@@ -25,6 +25,12 @@ module.exports = (gulpConfig, type = 'app') => {
         };
     }
     plugins.push(new webpack.DefinePlugin(config.defines));
+    plugins.push(new webpack.ContextReplacementPlugin(/^components/, context => {
+        context.request = path.resolve('./src/app/components');
+    }));
+    plugins.push(new webpack.ContextReplacementPlugin(/^reactium-core\/components/, context => {
+        context.request = path.resolve('./core/components');
+    }));
 
     return {
         target: target,

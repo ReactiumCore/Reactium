@@ -1,7 +1,7 @@
 import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-localstorage-simple';
 import { createStore, combineReducers } from 'redux';
 import thunk, { applyMiddleware } from 'redux-super-thunk';
-import DevTools from 'components/DevTools';
+import DevTools from 'reactium-core/components/DevTools';
 import moment from 'moment';
 
 const {

@@ -4,20 +4,20 @@ module.exports = {
     get: () => {
         return {
           allActions: {
-            Router: require('components/Router/actions').default,
             Test: require('components/Test/actions').default,
+            Router: require('reactium-core/components/Router/actions').default,
           },
           allActionTypes: {
-            Router: require('components/Router/actionTypes').default,
             Test: require('components/Test/actionTypes').default,
+            Router: require('reactium-core/components/Router/actionTypes').default,
           },
           allReducers: {
-            Router: require('components/Router/reducers').default,
             Test: require('components/Test/reducers').default,
+            Router: require('reactium-core/components/Router/reducers').default,
           },
           allInitialStates: {
-            Router: require('components/Router/state').default,
             Test: require('components/Test/state').default,
+            Router: require('reactium-core/components/Router/state').default,
           },
           allRoutes: {
             Test: require('components/Test/route').default,
@@ -33,29 +33,29 @@ module.exports = {
   "allActions": {
     "type": "actions",
     "imports": [
-      "components/Router/actions",
-      "components/Test/actions"
+      "components/Test/actions",
+      "reactium-core/components/Router/actions"
     ]
   },
   "allActionTypes": {
     "type": "actionTypes",
     "imports": [
-      "components/Router/actionTypes",
-      "components/Test/actionTypes"
+      "components/Test/actionTypes",
+      "reactium-core/components/Router/actionTypes"
     ]
   },
   "allReducers": {
     "type": "reducers",
     "imports": [
-      "components/Router/reducers",
-      "components/Test/reducers"
+      "components/Test/reducers",
+      "reactium-core/components/Router/reducers"
     ]
   },
   "allInitialStates": {
     "type": "state",
     "imports": [
-      "components/Router/state",
-      "components/Test/state"
+      "components/Test/state",
+      "reactium-core/components/Router/state"
     ]
   },
   "allRoutes": {
