@@ -396,6 +396,19 @@ export default {
 };
 ```
 
+To persist the domain state to local storage for insertion as initial state on hard reload, add a `persist` property:
+
+```js
+export default {
+    some: "value",
+    another: 1,
+
+    // See https://www.npmjs.com/package/redux-local-persist for additional
+    // configuration options.
+    persist: true,
+};
+```
+
 ## Creating Components
 
 
