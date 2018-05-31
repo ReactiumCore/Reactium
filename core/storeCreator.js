@@ -1,5 +1,5 @@
 
-import { save as lsSave, load as lsLoad, clear as lsClear } from 'reactium-core/lib/redux-local-persist';
+import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-local-persist';
 
 import { createStore, combineReducers } from 'redux';
 import thunk, { applyMiddleware } from 'redux-super-thunk';
