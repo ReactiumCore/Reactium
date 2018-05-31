@@ -1,0 +1,29 @@
+{
+  "name": "redux-local-persist",
+  "version": "0.0.1",
+  "description": "Redux middleware for selectively loading and saving state to localStorage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Atomic-Reactor/redux-local-persist.git"
+  },
+  "keywords": [
+    "redux",
+    "localStorage",
+    "persist",
+    "state"
+  ],
+  "author": "Cam Tullos <cam@tullos.ninja> (http://cam.tullos.ninja)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Atomic-Reactor/redux-local-persist/issues"
+  },
+  "homepage": "https://github.com/Atomic-Reactor/redux-local-persist#readme",
+  "dependencies": {
+    "moment": "^2.22.1",
+    "object-path": "^0.11.4"
+  }
+}
