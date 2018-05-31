@@ -8,7 +8,7 @@ export default (state = {}, action) => {
 
         case deps.actionTypes.TEST_MOUNT:
 
-            newState = Object.assign({}, state, {...action.data});
+            newState = Object.assign({}, state, {...action.data}, {loaded: true});
             return newState;
             break;
 
