@@ -2,9 +2,11 @@
   "name": "redux-local-persist",
   "version": "0.0.1",
   "description": "Redux middleware for selectively loading and saving state to localStorage.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install && npx babel src/index.js --out-file lib/index.js --source-maps",
+    "watch": "npm install && npx babel src/index.js --watch --out-file lib/index.js --source-maps"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,15 @@
   "homepage": "https://github.com/Atomic-Reactor/redux-local-persist#readme",
   "dependencies": {
     "moment": "^2.22.1",
-    "object-path": "^0.11.4"
+    "object-path": "^0.11.4",
+    "underscore": "^1.9.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "npx": "^10.2.0"
   }
 }

@@ -69,3 +69,5 @@ build
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+core/lib/redux-local-persist
