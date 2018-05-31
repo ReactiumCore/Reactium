@@ -24,11 +24,9 @@ if ( typeof window !== 'undefined' ) {
     }
 }
 
-// Make sure initial loaded state matches reducers and that
-// the current route will dictate the Router state
+// Make sure initial loaded state matches reducers
 const sanitizeInitialState = state => Object.keys(state)
 .filter(s => s in allReducers)
-.filter(s => s !== 'Router')
 .reduce((states, key) => ({
     ...states,
     [key]: state[key],
