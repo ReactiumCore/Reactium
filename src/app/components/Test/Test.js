@@ -34,6 +34,7 @@ export default class Test extends Component {
 
     render() {
         let title = 'Test Component';
+        let { count = 0, msg } = this.state;
 
         return (
             <Fragment>
@@ -47,11 +48,11 @@ export default class Test extends Component {
                 </Helmet>
 
                 <div className="test-component">
-                    <div>{this.state.msg}</div>
+                    <div>{msg}</div>
                     <button type="button" onClick={this.onClick.bind(this)}>
                         Click Me
                     </button>
-                    <div>{this.state.count || 0}</div>
+                    <div>{count}</div>
                 </div>
             </Fragment>
         );
