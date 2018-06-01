@@ -86,7 +86,7 @@ module.exports = function() {
             to: '',
         },
         {
-            from: 'core/',
+            from: '.core/',
             to: 'reactium-core/',
         },
     ]);
