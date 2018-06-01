@@ -1,22 +1,20 @@
 'use strict';
 
-const path                  = require('path');
-const webpack               = require('webpack');
-const _                     = require('underscore');
+const path    = require('path');
+const webpack = require('webpack');
+const _       = require('underscore');
+const env     = process.env.NODE_ENV || 'development';
 
 module.exports = (gulpConfig, type = 'app') => {
-    let config = gulpConfig;
-    let plugins    = [];
-    let env        = config.env || 'production';
-    let target     = 'web';
-    let filename   = '[name].js';
-    let entries    = ['babel-polyfill'];
-        entries    = entries.concat(Object.values(config.entries));
-
+    let config    = gulpConfig;
+    let plugins   = [];
+    let target    = 'web';
+    let filename  = '[name].js';
+    let entries   = ['babel-polyfill'];
+        entries   = entries.concat(Object.values(config.entries));
     let dest      = config.dest.js;
     let externals = [];
-
-    let tools = (env === 'development') ? 'source-map' : '';
+    let tools     = (env === 'development') ? 'source-map' : '';
 
     // Only override process.env on client side
     if ( type === 'app' ) {
@@ -38,7 +36,7 @@ module.exports = (gulpConfig, type = 'app') => {
         devtool: tools,
         plugins: plugins,
         externals: externals,
-        mode: config.env,
+        mode: env,
         output:  {
             path: path.resolve(__dirname, dest),
             filename: filename,

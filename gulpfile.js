@@ -18,11 +18,10 @@ const chalk          = require('chalk');
 const moment         = require('moment');
 const regenManifest  = require('./manifest-tools');
 
-const env = process.env;
+const env = process.env.NODE_ENV || 'development';
 
 // Update config from environment variables
-config.port.browsersync = (env.hasOwnProperty('APP_PORT')) ? env.APP_PORT : config.port.browsersync;
-config.env = (env.hasOwnProperty('NODE_ENV')) ? env.NODE_ENV : config.env;
+config.port.browsersync = (process.env.hasOwnProperty('APP_PORT')) ? process.env.APP_PORT : config.port.browsersync;
 
 const timestamp = () => {
     let now = moment().format('HH:mm:ss');
@@ -39,7 +38,7 @@ gulp.task('manifest', (done) => {
 
 // Compile js
 gulp.task('scripts', (done) => {
-    let isDev = (config.env === 'development');
+    let isDev = (env === 'development');
 
     if ( ! isDev ) {
         webpack(webpackConfig, (err, stats) => {
@@ -69,7 +68,7 @@ gulp.task('scripts', (done) => {
 
 // Sass styles
 gulp.task('styles', () => {
-    let isDev     = (config.env === 'development');
+    let isDev     = (env === 'development');
     let isSass    = (config.cssPreProcessor === 'sass');
     let isLess    = (config.cssPreProcessor === 'less');
 
@@ -164,7 +163,7 @@ gulp.task('build', (done) => {
 
 // The default task
 gulp.task('default', (done) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (env === 'development') {
         runSequence(
             ['build'],
             ['watching'],
