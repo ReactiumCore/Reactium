@@ -5,8 +5,6 @@ const globby  = require('globby');
 
 module.exports = () => {
     return {
-        spa: true,
-        env: "development",
         entries: globby.sync(path.resolve('./src/app/', '*.js')),
         defines: {},
         browsers: 'last 1 version',

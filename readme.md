@@ -33,7 +33,6 @@ To run in **server side rendering** development mode from your project directory
 $ npm run local-ssr
 ```
 
-
 # Development Guide
 The intent behind the Reactium Framework is to get you quickly creating React components and applications.
 With that in mind, we geared the tooling towards automation and ease of use.
@@ -60,7 +59,7 @@ export default (props) => {
 
 ### Class Components
 Create a Class Component if your component will need the React Life Cycle Methods or internal state management.
-```js
+``` javascript
 import React, { Component } from 'react';
 
 export default class Hello extends Component {
@@ -92,7 +91,8 @@ Create a Redux Class Component if your component will need to interact with the 
 Redux Class Components work just like Class Components accept you will need to map state to properties and map dispatchers to actions via the [react-redux](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) `connect` method.
 
 index.js (redux wrapper):
-```js
+
+``` javascript
 import Test from './Test';
 import { connect } from 'react-redux';
 import deps from 'dependencies';
@@ -114,7 +114,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Test);
 
 Test.js:
 
-```js
+``` javascript
 import React, { Component } from 'react';
 
 export default class Test extends Component {
@@ -176,7 +176,7 @@ Reactium aggregates all `action.js` files into the `actions` export of the `app.
 
 A typical `actions.js` file may look like this:
 
-```js
+``` javascript
 import deps from 'dependencies';
 
 export default {
@@ -191,13 +191,15 @@ export default {
 ```
 
 To access the actions simply import the dependencies:
-```
+
+``` javascript
 import deps from 'dependencies';
 ```
 
 Then use an action by targeting the component domain that created the action:
-```js
-...
+
+``` javascript
+//...
 deps.actions.Test.mount({some: "params"});
 ```
 
@@ -205,7 +207,8 @@ deps.actions.Test.mount({some: "params"});
 Reactium aggregates all `actionTypes.js` files in the `actionTypes` export of the `app.js` file.
 
 A typical `actionTypes.js` file may look like this:
-```js
+
+``` javascript
 export default {
     TEST_MOUNT: 'TEST_MOUNT',
     TEST_CLICK: 'TEST_CLICK',
@@ -213,13 +216,15 @@ export default {
 ```
 
 To access the actionTypes, import them into your component:
-```js
+
+``` javascript
 import deps from 'dependencies';
 ```
 
 Usage:
-```js
-...
+
+``` javascript
+//...
 dispatch({type: deps.actionTypes.TEST_MOUNT, data: data});
 ```
 
@@ -230,7 +235,8 @@ See [Redux Class Components](https://github.com/Atomic-Reactor/Reactium#redux-cl
 Reactium aggregates all `reducers.js` files into the Redux store using the [react-redux](https://github.com/reactjs/react-redux/tree/master/docs) `combineReducers` method.
 
 A typical `reducers.js` file may look like this:
-```js
+
+``` javascript
 import deps from 'dependencies';
 
 export default (state = {}, action) => {
@@ -264,7 +270,8 @@ Reactium aggregates all `route.js` files into a list of routes used to render Re
 A route can have any property that is supported by [`<Route />`](https://reacttraining.com/react-router/web/api/Route) (e.g. `path`, `exact`, `strict`, `location`, `component`, `render`, and `children`).
 
 A typical `route.js` file in `MyComponent` may look like this:
-```js
+
+``` javascript
 // Import your component
 import MyComponent from './index';
 
@@ -293,8 +300,9 @@ In addition to [`<Route />`](https://reacttraining.com/react-router/web/api/Rout
 
 #### Multi-route Modules
 You can also support multiple routes for a module, in one of two methods:
-1. provide multiple paths for a single route
-```js
+* provide multiple paths for a single route
+
+``` javascript
 import MyComponent from './index';
 
 export default {
@@ -304,8 +312,10 @@ export default {
     component: MyComponent,
 };
 ```
-2. provide multiple route objects
-```js
+
+* provide multiple route objects
+
+``` javascript
 import MyComponent from './index';
 import deps from 'dependencies';
 
@@ -332,7 +342,7 @@ export default [
 Reactium aggregates all `services.js` files into the `services` export of the `app.js` file.
 
 A typical `services.js` file may look like this:
-```js
+``` javascript
 import axios from 'axios';
 import { restHeaders } from 'dependencies';
 
@@ -355,7 +365,7 @@ export default {
 ```
 
 In your actions.js file you would do something like:
-```
+``` javascript
 import { actionTypes } from 'dependencies';
 import deps from 'dependencies';
 
@@ -371,13 +381,15 @@ export default {
 > Reactium uses [axios](https://www.npmjs.com/package/axios) to make XMLHttpRequests from the browser. You can swap that out with whatever you want.
 
 To access the services, import them into your component:
-```js
+
+``` javascript
 import deps from 'dependencies';
 ```
 
 Usage:
-```js
-...
+
+``` javascript
+///...
 deps.services.Test.fetchHello().then((result) => {
     // Do something with the result
 });
@@ -389,7 +401,7 @@ Reactium aggregates all `state.js` files into the Redux `store` for the applicat
 
 A typical `state.js` file may look like this:
 
-```js
+``` javascript
 export default {
     some: "value",
     another: 1,
@@ -398,7 +410,7 @@ export default {
 
 To persist the domain state to local storage for insertion as initial state on hard reload, add a `persist` property:
 
-```js
+``` javascript
 export default {
     some: "value",
     another: 1,
@@ -439,7 +451,7 @@ Flags:
     --no-types [types]           Exclude the actionsTypes.js file.
     --no-reducers [reducers]     Exclude the reducers.js file.
     --no-services [services]     Exclude the services.js file.
-    --no-router [router]         Exclude the route.js file.
+    --no-route [router]         Exclude the route.js file.
     --no-state [state]           Exclude the state.js file.
     -h, --help                   Output usage information.
 ```
@@ -457,7 +469,7 @@ Flags:
 Now that you've created your first component, it's time to use it.
 Open the `~/src/index.html` file and add the component to the layout using the custom element `<Component />`.
 
-```html
+``` html
 <!doctype html>
 <html class="no-js" lang="">
     <head>
@@ -469,6 +481,7 @@ Open the `~/src/index.html` file and add the component to the layout using the c
     </head>
     <body>
         <Component type="Fubar"></Component>
+        <script src="/assets/js/vendors.js"></script>
         <script src="/assets/js/main.js"></script>
     </body>
 </html>
@@ -479,6 +492,88 @@ Open the `~/src/index.html` file and add the component to the layout using the c
 Reactium will now scan your markup for the `<Component />` tags and bind the specified `type` to the element.
 You can pass initial state to the component via attributes but that's not necessary if you're using Redux for state management.
 
+The component can be located in either the `src/components` directory or the `src/components/common-ui` directory, or one of the built-in core components.
+
+## Using SPA
+
+For Single-Page Applications, simply add `<div id="router"></div>` to your html, with or in place of `<Component />` tags. You will need to serve the same html page for all URLs your SPA supports. See only
+
+``` html
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Reactium</title>
+        <meta name="description" content="A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.">
+        <link rel="stylesheet" href="/assets/style/style.css">
+    </head>
+    <body>
+        <div id="router"></div>
+        <script src="/assets/js/vendors.js"></script>
+        <script src="/assets/js/main.js"></script>
+    </body>
+</html>
+```
+# Deployment
+
+To run the production build:
+
+```
+$ npm run build
+```
+This will build both the front-end assets (in *public*), as well as the node/express the production ready files (in *build*).
+
+```
+public
+└── assets
+    ├── fonts
+    ├── images
+    ├── js
+    └── style
+```
+
+To run the production server in front-end only mode, either deploy the *public* assets to your server and add them to your backend templates (with appropriate bindings)
+
+``` html
+<html>
+    <head>
+        <link rel="stylesheet" href="/assets/style/style.css" />
+    </head>
+    <body>
+        <!-- Automatically bind MyComponent -->
+        <Component type="MyComponent"></Component>
+
+        <!-- For Single-Page Application, the top-level component binding -->
+        <div id="router"></div>
+
+        <script src="/assets/js/vendors.js"></script>
+        <script src="/assets/js/main.js"></script>
+    </body>
+</html>
+```
+
+Deploy the entire project directory if you wish to run the node/express server to serve either your front-end only application, or the application with server-side rendering.
+
+## Node Server
+
+By default, running the server with `npm start` will start the server on port 3030 in front-end rendering mode.
+
+## Server-Side Rendering
+
+To bind port 80, and use server-side rendering, start the application like so (for linux/mac):
+
+```
+SSR_MODE=on APP_PORT=80 npm start
+```
+
+For Windows:
+
+```
+set SSR_MODE=on
+set APP_PORT=80
+npm start
+```
 
 ## The Build Process
 ![](https://image.ibb.co/jeddNw/reactium_build_process_2.png)
@@ -507,25 +602,12 @@ Browsersync offers a large variety of simple configurations that allows you to s
 ## The Gulp Config
 Source paths and destinations should be managed in the `gulp.config.js` file, giving you a single place to alter build behaviors without directly altering Gulp Tasks.
 
-### spa
-Determines if this is a Single Page App or not.
-If set to `true` all .html routes will be redirected to `index.html`.
-If set to a valid url string, routes will be redirected to the specified url.
-
-_**Default:**_ `false`
-
-### env
-The environment type: development/production.
-
-_**Default:**_ `development`
-
 ### entries
 List of files that will be bundled and transpiled by Webpack.
 
 _**Default:**_ `src/app/*.js`
 
 > Top level .js files in the `~/src/app` directory
-
 
 ### browsers
 Babel browser support when transpiling.
@@ -562,11 +644,10 @@ List of source locations for the default build task.
 
 > You can define more source locations and use them for your own tasks.
 
-
 ### watch
 List of watch locations for the default defined Gulp tasks.
 
-* **watch.js:** The locations to watch for js file changes.
+* **watch.js:** The locations to watch for js file changes, used to automatically build the src/manifest.js
 * **watch.markup:** The locations to watch for html file changes.
 * **watch.style:** The locations to watch for `.scss` or `.less` file changes.
 * **watch.assets:** The locations to watch for asset files such as images, web fonts, and other support files.
