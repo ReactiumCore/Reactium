@@ -8,11 +8,7 @@ App();
 
 // Can not get HMR working, so this is a cheap-out
 if ( module.hot ) {
-    const reload = () => window.location.reload();
-
-    module.hot.addStatusHandler(status => {
-        if ( module.hot.status() === 'apply' ) {
-            reload();
-        }
+    module.hot.accept('../.././.core/app.js', () => {
+        window.location.reload();
     });
 }
