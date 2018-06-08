@@ -14,7 +14,7 @@ const template = (content, helmet, store, req, res) => {
             ${helmet.title.toString()}
             ${helmet.meta.toString()}
             ${helmet.link.toString()}
-            <link rel="stylesheet" href="/assets/style/style.css" />
+            ${req.styles}
         </head>
         <body ${helmet.bodyAttributes.toString()}>
             <Component type="DevTools"></Component>

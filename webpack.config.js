@@ -11,7 +11,7 @@ module.exports = (gulpConfig, type = 'app') => {
     let target    = 'web';
     let filename  = '[name].js';
     let entries   = ['babel-polyfill'];
-        entries   = entries.concat(Object.values(config.entries));
+        entries   = entries.concat(Object.values(config.entries));        
     let dest      = config.dest.js;
     let externals = [];
     let tools     = (env === 'development') ? 'source-map' : '';

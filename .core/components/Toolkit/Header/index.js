@@ -4,22 +4,43 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { connect } from 'react-redux';
-import Header from './Header';
-import deps from 'dependencies';
+import React, { Component, Fragment } from 'react';
+
 
 /**
  * -----------------------------------------------------------------------------
- * Inject Redux State and Actions into React Component: Header
+ * React Component: Header
  * -----------------------------------------------------------------------------
  */
-const mapStateToProps = (state, props) => ({
-    ...state.Header,
-    ...props,
-});
 
-const mapDispatchToProps = (dispatch) => ({
-    mount: () => dispatch(deps.actions.Header.mount()),
-});
+export default class Header extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ...this.props,
+        };
+    }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+    componentDidMount() {
+        if (this.state.hasOwnProperty('mount')) {
+            this.state.mount(this);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(prevState => ({
+            ...prevState,
+            ...nextProps,
+        }));
+    }
+
+    render() {
+        return (
+            <header className={'re-toolkit-header'}>
+                HEADER
+            </header>
+        );
+    }
+}
+
+Header.defaultProps = {};

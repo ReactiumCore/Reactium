@@ -4,22 +4,43 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { connect } from 'react-redux';
-import Toolbar from './Toolbar';
-import deps from 'dependencies';
+import React, { Component, Fragment } from 'react';
+
 
 /**
  * -----------------------------------------------------------------------------
- * Inject Redux State and Actions into React Component: Toolbar
+ * React Component: Toolbar
  * -----------------------------------------------------------------------------
  */
-const mapStateToProps = (state, props) => ({
-    ...state.Toolbar,
-    ...props,
-});
 
-const mapDispatchToProps = (dispatch) => ({
-    mount: () => dispatch(deps.actions.Toolbar.mount()),
-});
+export default class Toolbar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ...this.props,
+        };
+    }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Toolbar);
+    componentDidMount() {
+        if (this.state.hasOwnProperty('mount')) {
+            this.state.mount(this);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(prevState => ({
+            ...prevState,
+            ...nextProps,
+        }));
+    }
+
+    render() {
+        return (
+            <Fragment>
+                TOOLBAR
+            </Fragment>
+        );
+    }
+}
+
+Toolbar.defaultProps = {};

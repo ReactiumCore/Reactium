@@ -9,11 +9,11 @@ import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Menu
+ * React Component: Sidebar
  * -----------------------------------------------------------------------------
  */
 
-export default class Menu extends Component {
+export default class Sidebar extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,12 +35,16 @@ export default class Menu extends Component {
     }
 
     render() {
+        let { closed } = this.state;
+        let cls = (closed === true) ? 're-toolkit-sidebar-closed' : '';
         return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
+            <aside className={`re-toolkit-sidebar ${cls}`}>
+                SIDEBAR
+            </aside>
         );
     }
 }
 
-Menu.defaultProps = {};
+Sidebar.defaultProps = {
+    closed: false,
+};

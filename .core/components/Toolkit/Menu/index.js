@@ -4,22 +4,43 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { connect } from 'react-redux';
-import Menu from './Menu';
-import deps from 'dependencies';
+import React, { Component, Fragment } from 'react';
+
 
 /**
  * -----------------------------------------------------------------------------
- * Inject Redux State and Actions into React Component: Menu
+ * React Component: Menu
  * -----------------------------------------------------------------------------
  */
-const mapStateToProps = (state, props) => ({
-    ...state.Menu,
-    ...props,
-});
 
-const mapDispatchToProps = (dispatch) => ({
-    mount: () => dispatch(deps.actions.Menu.mount()),
-});
+export default class Menu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ...this.props,
+        };
+    }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+    componentDidMount() {
+        if (this.state.hasOwnProperty('mount')) {
+            this.state.mount(this);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(prevState => ({
+            ...prevState,
+            ...nextProps,
+        }));
+    }
+
+    render() {
+        return (
+            <Fragment>
+                MENU
+            </Fragment>
+        );
+    }
+}
+
+Menu.defaultProps = {};

@@ -9,11 +9,11 @@ import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Header
+ * React Component: Content
  * -----------------------------------------------------------------------------
  */
 
-export default class Header extends Component {
+export default class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,11 +36,11 @@ export default class Header extends Component {
 
     render() {
         return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
+            <section className={'re-toolkit-content'}>
+                CONTENT
+            </section>
         );
     }
 }
 
-Header.defaultProps = {};
+Content.defaultProps = {};

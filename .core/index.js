@@ -28,7 +28,9 @@ const adminURL    = process.env.ACTINIUM_ADMIN_URL || false;
 app.set('x-powered-by', false);
 
 // logging
-app.use(morgan('combined'));
+if (process.env.DEBUG !== 'off') {
+    app.use(morgan('combined'));
+}
 
 // apply cross site scripting
 app.use(cors());

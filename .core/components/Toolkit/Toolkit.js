@@ -5,6 +5,9 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Header from './Header';
+import Sidebar from './Sidebar';
+import Content from './Content';
 
 
 /**
@@ -21,12 +24,6 @@ export default class Toolkit extends Component {
         };
     }
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
@@ -37,7 +34,11 @@ export default class Toolkit extends Component {
     render() {
         return (
             <Fragment>
-                TOOLKIT
+                <Header />
+                <main className={'re-toolkit-container'}>
+                    <Sidebar />
+                    <Content />
+                </main>
             </Fragment>
         );
     }
