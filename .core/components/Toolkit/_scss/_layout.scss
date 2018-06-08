@@ -1,6 +1,11 @@
+body {
+    background-color: $grey-light;
+    position: relative;
+}
+
 .re-toolkit-container {
     display: flex;
     align-items: stretch;
-    padding-top: 50px;
+    padding-top: $header-height;
     height: 100vh;
 }

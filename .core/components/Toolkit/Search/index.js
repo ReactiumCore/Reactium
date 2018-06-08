@@ -36,9 +36,9 @@ export default class Search extends Component {
 
     render() {
         return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
+            <form className={'re-toolkit-search'}>
+                <input type={'text'} placeholder={'search'} />
+            </form>
         );
     }
 }

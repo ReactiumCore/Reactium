@@ -37,7 +37,8 @@ export default class Header extends Component {
     render() {
         return (
             <header className={'re-toolkit-header'}>
-                HEADER
+                <img className={'re-toolkit-header-logo'} src={'/assets/images/logo.png'} />
+                <h1>Style Guide</h1>
             </header>
         );
     }

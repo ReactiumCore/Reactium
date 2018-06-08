@@ -5,7 +5,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-
+import ToolbarIcons from './ToolbarIcons';
 
 /**
  * -----------------------------------------------------------------------------
@@ -21,26 +21,36 @@ export default class Toolbar extends Component {
         };
     }
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-    }
-
     render() {
+        let { buttons } = this.state;
+
         return (
-            <Fragment>
-                TOOLBAR
-            </Fragment>
+            <nav className={'re-toolkit-toolbar'}>
+                <ToolbarIcons />
+                {
+                    buttons.map((item, i) => {
+                        let { icon, name, label } = item;
+                        return (
+                            <button type={'button'} key={`re-toolkit-toolbar-${i}`}>
+                                <svg>
+                        			<use xlinkHref={icon}></use>
+                        		</svg>
+                                <div>{label}</div>
+                            </button>
+                        );
+                    })
+                }
+            </nav>
         );
     }
 }
 
-Toolbar.defaultProps = {};
+Toolbar.defaultProps = {
+    buttons: [
+        {icon:'#re-icon-dna', name: 'filter-all', label: 'All Elements'},
+        {icon: '#re-icon-atom', name: 'filter-atom', label: 'Atoms'},
+        {icon: '#re-icon-molecule', name: 'filter-molecule', label: 'Molecules'},
+        {icon: '#re-icon-organism', name: 'filter-organism', label: 'Organisms'},
+        {icon: '#re-icon-template', name: 'filter-template', label: 'Template'},
+    ]
+};

@@ -5,7 +5,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-
+import Search from '../Search';
 
 /**
  * -----------------------------------------------------------------------------
@@ -36,9 +36,10 @@ export default class Menu extends Component {
 
     render() {
         return (
-            <Fragment>
-                MENU
-            </Fragment>
+            <ul className={'re-toolkit-menu'}>
+                <li><Search /></li>
+                <li>MENU</li>
+            </ul>
         );
     }
 }

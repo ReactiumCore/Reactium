@@ -5,6 +5,8 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Toolbar from '../Toolbar';
+import Menu from '../Menu';
 
 
 /**
@@ -39,7 +41,8 @@ export default class Sidebar extends Component {
         let cls = (closed === true) ? 're-toolkit-sidebar-closed' : '';
         return (
             <aside className={`re-toolkit-sidebar ${cls}`}>
-                SIDEBAR
+                <Toolbar />
+                <Menu />
             </aside>
         );
     }
