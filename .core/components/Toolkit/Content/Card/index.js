@@ -6,8 +6,7 @@
  */
 import React, { Component, Fragment } from 'react';
 import { renderToString } from 'react-dom/server';
-//import TestRenderer from 'react-test-renderer';
-
+import Test from 'components/Test/Test';
 
 /**
  * -----------------------------------------------------------------------------
@@ -42,12 +41,27 @@ export default class Card extends Component {
         }));
     }
 
-    render() {
-        // const testRenderer = TestRenderer.create(
-        //   <Preview title={'testing'} />
-        // );
+    resizeIframe(e) {
+        let h = e.target.contentWindow.document.body.scrollHeight;
+        h = (h < 500) ? 500 : h;
+        this.setState({height: h});
+    }
 
-        let cont = renderToString(<Preview title={'testing'} />);
+    render() {
+
+        let { height = 0 } = this.state;
+        let cmp = renderToString(<Preview title={'cool!'} />);
+
+        let markup = `
+            <html>
+                <head>
+                    <link rel="stylesheet" href="/assets/style/style.css">
+                </head>
+                <body id="toolkit-preview">
+                    ${cmp}
+                </body>
+            </html>
+        `;
 
         return (
             <div className={'re-toolkit-card'}>
@@ -61,7 +75,7 @@ export default class Card extends Component {
                 </div>
                 <div className={'re-toolkit-card-body'}>
                     <div className={'re-toolkit-card-body-wrap'}>
-                        <iframe srcDoc={cont} />
+                        <iframe sandbox={'allow-scripts allow-same-origin'} src={'/preview/test'} onLoad={this.resizeIframe.bind(this)} style={{height}} />
                     </div>
                 </div>
                 <div className={'re-toolkit-card-footer'}>
@@ -72,4 +86,6 @@ export default class Card extends Component {
     }
 }
 
-Card.defaultProps = {};
+Card.defaultProps = {
+    height: 0,
+};

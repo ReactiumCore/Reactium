@@ -5,6 +5,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Test from 'components/Test';
 
 
 /**
@@ -37,7 +38,7 @@ export default class ToolkitElement extends Component {
     render() {
         return (
             <Fragment>
-                PREVIEW
+                <Test />
             </Fragment>
         );
     }

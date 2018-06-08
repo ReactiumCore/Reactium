@@ -50,6 +50,13 @@
 
         &-wrap {
             padding: 24px;
+            position: relative;
+            overflow-y: visible;
+
+            iframe {
+                position: relative;
+                width: 100%;
+            }
         }
     }
 
