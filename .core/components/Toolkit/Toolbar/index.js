@@ -29,15 +29,18 @@ export default class Toolbar extends Component {
                 <ToolbarIcons />
                 {
                     buttons.map((item, i) => {
-                        let { icon, name, label } = item;
-                        return (
-                            <button type={'button'} key={`re-toolkit-toolbar-${i}`}>
-                                <svg>
-                        			<use xlinkHref={icon}></use>
-                        		</svg>
-                                <div>{label}</div>
-                            </button>
-                        );
+                        let { icon, name, label = null, cls = null } = item;
+                        return (name === 'spacer')
+                            ? (
+                                <div className={'spacer'} key={`re-toolkit-toolbar-${i}`}></div>
+                            ) : (
+                                <button type={'button'} key={`re-toolkit-toolbar-${i}`} id={`toolbar-${name}`} className={cls}>
+                                    <svg>
+                            			<use xlinkHref={icon}></use>
+                            		</svg>
+                                    {(label) ? (<div>{label}</div>) : ''}
+                                </button>
+                            );
                     })
                 }
             </nav>
@@ -51,6 +54,9 @@ Toolbar.defaultProps = {
         {icon: '#re-icon-atom', name: 'filter-atom', label: 'Atoms'},
         {icon: '#re-icon-molecule', name: 'filter-molecule', label: 'Molecules'},
         {icon: '#re-icon-organism', name: 'filter-organism', label: 'Organisms'},
-        {icon: '#re-icon-template', name: 'filter-template', label: 'Template'},
+        {icon: '#re-icon-template', name: 'filter-template', label: 'Templates'},
+        {name: 'spacer'},
+        {icon: '#re-icon-settings', name: 'toggle-settings', cls: 'toggle'},
+        {icon: '#re-icon-chevron-left', name: 'toggle-sidebar', cls: 'toggle'}
     ]
 };

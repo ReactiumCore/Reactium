@@ -5,6 +5,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
 import Search from '../Search';
 
 /**
@@ -21,12 +22,6 @@ export default class Menu extends Component {
         };
     }
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
@@ -35,13 +30,36 @@ export default class Menu extends Component {
     }
 
     render() {
+        let { items } = this.state;
+
         return (
-            <ul className={'re-toolkit-menu'}>
-                <li><Search /></li>
-                <li>MENU</li>
-            </ul>
+            <div className={'re-toolkit-menu'}>
+                <Search />
+                <ul>
+                    {items.map((item, i) => {
+                        let { label, link, heading = false } = item;
+
+                        let cls = (heading === true) ? 'heading' : 'link';
+                        let exact = !heading;
+
+                        return (
+                            <li key={`re-toolkit-menu-${i}`}>
+                                <NavLink className={cls} exact={exact} to={link}>{label}</NavLink>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
         );
     }
 }
 
-Menu.defaultProps = {};
+Menu.defaultProps = {
+    items: [
+        {label: 'Typography', link: '/toolkit/typography', heading: true},
+        {label: 'Link 1', link: '/toolkit/typography/link-1'},
+        {label: 'Link 2', link: '/toolkit/typography/link-2'},
+        {label: 'Link 3', link: '/toolkit/typography/link-3'},
+        {label: 'Link 4', link: '/toolkit/typography/link-4'},
+    ]
+};

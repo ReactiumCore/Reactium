@@ -8,3 +8,56 @@
         padding: 0;
     }
 }
+
+.re-toolkit-card {
+    width: 100%;
+    box-shadow: $drop-shadow;
+
+    &-heading {
+        display: flex;
+        background-color: $white;
+        padding: 12px 24px;
+        color: $black;
+        border-radius: 4px 4px 0 0;
+        align-items: center;
+        border-bottom: 1px solid $border-color;
+
+        *:first-child {
+            flex-grow: 1;
+        }
+
+        h3 {
+            font-weight: bold;
+        }
+
+        button {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: -10px;
+
+            svg {
+                width: 14px;
+                height: 14px;
+            }
+        }
+    }
+
+    &-body {
+        background-color: $white;
+
+        &-wrap {
+            padding: 24px;
+        }
+    }
+
+    &-footer {
+        padding: 16px 24px;
+        background-color: $white;
+        border-top: 1px solid $border-color;
+        border-radius: 0 0 2px 2px;
+    }
+
+}

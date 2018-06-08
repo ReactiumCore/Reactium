@@ -1,3 +1,79 @@
 .re-toolkit-menu {
+    display: flex;
+    align-items: stretch;
     flex-grow: 1;
+    flex-direction: column;
+
+    ul {
+        flex-grow: 1;
+
+        li {
+            a {
+                display: block;
+                text-decoration: none;
+                color: $gray;
+                position: relative;
+
+                &.link {
+                    padding: 15px 25px 15px 45px;
+                    font-size: 12px;
+
+                    &:hover,
+                    &:focus,
+                    &.active {
+                        color: darken($gray, 10%);
+                    }
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        width: 92%;
+                        height: 1px;
+                        background-color: $grey;
+                        opacity: 0.25;
+                    }
+
+                    &.active {
+                        &:before {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 11%;
+                            width: 5px;
+                            height: 5px;
+                            transform: translateY(-50%);
+                            background-color: $blue;
+                        }
+                    }
+                }
+
+                &.heading {
+                    @extend h1;
+
+                    padding: 15px 24px;
+                    font-size: 11px;
+                    font-weight: bold;
+
+                    border-left: 2px solid transparent;
+                    color: lighten($black, 20%);
+
+                    &:after {
+                        content: '';
+                        width: 100%;
+                        height: 1px;
+                        bottom: 0;
+                        left: 0;
+                        position: absolute;
+                        background-color: lighten($border-color, 5%);
+                    }
+
+                    &.active {
+                        border-left: 2px solid $blue;
+                    }
+                }
+            }
+        }
+    }
 }

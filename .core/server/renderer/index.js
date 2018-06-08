@@ -14,10 +14,9 @@ const scripts = (req, res) => {
     if (process.env.NODE_ENV === 'development') {
         const assetsByChunkName = res.locals.webpackStats.toJson().assetsByChunkName;
         const { vendors, main } = assetsByChunkName;
-        let chunks = [vendors, main];
-        scripts = chunks.map(chunk => normalizeAssets(chunk).filter(path => path.endsWith('.js')))
+        scripts = [vendors, main].map(chunk => normalizeAssets(chunk).filter(path => path.endsWith('.js')))
             .reduce((files, chunk) => files.concat(chunk), [])
-            .map(path => `<script src="${path}"></script>`);
+            .map(path => `<script src="/${path}"></script>`);
     }
 
     return scripts.join('\n\t');
@@ -26,7 +25,7 @@ const scripts = (req, res) => {
 const styles = (req, res) => {
     let css    = (isToolkit(req.path) === true) ? 'toolkit.css' : 'style.css';
     let styles = [
-        `<link rel="stylesheet" href="/assets/style/${css}" />`
+        `<link rel="stylesheet" href="/assets/style/${css}">`
     ];
 
     return styles.join('\n\t');

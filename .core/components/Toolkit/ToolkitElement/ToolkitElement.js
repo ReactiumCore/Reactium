@@ -5,16 +5,15 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import Card from './Card';
 
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Content
+ * React Component: ToolkitElement
  * -----------------------------------------------------------------------------
  */
 
-export default class Content extends Component {
+export default class ToolkitElement extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,11 +36,11 @@ export default class Content extends Component {
 
     render() {
         return (
-            <section className={'re-toolkit-content'}>
-                <Card />
-            </section>
+            <Fragment>
+                PREVIEW
+            </Fragment>
         );
     }
 }
 
-Content.defaultProps = {};
+ToolkitElement.defaultProps = {};

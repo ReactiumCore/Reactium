@@ -10,7 +10,7 @@ module.exports = (req, res, context) => {
             <script>
                 window.ssr = false;
                 window.restAPI = '/api';
-                window.parseAppId = '${parseAppId}'
+                window.parseAppId = '${parseAppId}';
             </script>
             ${req.scripts}
         </body>
