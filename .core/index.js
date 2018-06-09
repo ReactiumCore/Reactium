@@ -64,7 +64,7 @@ if ( process.env.NODE_ENV === 'development' ) {
     const wpMiddlware    = require('webpack-dev-middleware');
     const wpHotMiddlware = require('webpack-hot-middleware');
 
-    webpackConfig.entry = ['webpack-hot-middleware/client?http://localhost:3030'].concat(webpackConfig.entry);
+    webpackConfig.entry.main = ['webpack-hot-middleware/client?http://localhost:3030', webpackConfig.entry.main];
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
 
     const compiler = webpack(webpackConfig);
@@ -78,8 +78,9 @@ if ( process.env.NODE_ENV === 'development' ) {
     }));
 }
 
-// serve the static files out of ./public
-app.use(express.static('public'));
+// serve the static files out of ./public or specified directory
+const staticAssets = process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), 'public');
+app.use(express.static(staticAssets));
 
 // default route handler
 app.use(router);

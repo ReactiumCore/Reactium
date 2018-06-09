@@ -5,7 +5,13 @@ const globby  = require('globby');
 
 module.exports = () => {
     return {
-        entries: globby.sync(path.resolve('./src/app/', '*.js')),
+        entries: globby
+            .sync('./src/app/*.js')
+            .map(p => path.resolve(p))
+            .reduce((entries, entry) => {
+                entries[path.parse(entry).name] = entry;
+                return entries;
+            }, {}),
         defines: {},
         browsers: 'last 1 version',
         port: {
