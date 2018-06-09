@@ -4,8 +4,9 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import React, { Component, Fragment } from 'react';
+//import getDisplayName from 'react-display-name';
 import { Link } from 'react-router-dom';
 import Card from './Card';
 
@@ -19,6 +20,8 @@ import Card from './Card';
 export default class Content extends Component {
     constructor(props) {
         super(props);
+
+        this.iframes = [];
         this.state = {
             ...this.props,
         };
@@ -41,13 +44,21 @@ export default class Content extends Component {
         console.log('onCardButtonClick:', e.currentTarget.id, card.state);
     }
 
+    getDisplayName(Component) {
+        return (
+            Component.displayName || Component.name ||
+            (typeof Component === 'string' && Component.length > 0
+            ? Component
+            : 'Unknown')
+        );
+    }
+
     resizeIframe(e) {
         let h = e.target.contentWindow.document.body.scrollHeight;
             h = (h < 1) ? 100 : h;
 
         e.target.parentNode.style.height = h;
         e.target.style.height = h;
-
     }
 
     renderCrumbs({title, group, element}) {
@@ -78,7 +89,27 @@ export default class Content extends Component {
                 );
 
             case 'function':
-                let cmp = renderToString(<Component />);
+                // let cname = this.getDisplayName(Component);
+                // let markup = `
+                //     <html>
+                //         <head>
+                //             <link rel="stylesheet" href="/assets/style/style.css">
+                //         </head>
+                //         <body style="padding: 25px;">
+                //             <div id="router"></div>
+                //             <Component type="${cname}"></Component>
+                //             <script>
+                //                 window.ssr = false;
+                //                 window.restAPI = '/api';
+                //                 window.parseAppId = 'Actinium';
+                //             </script>
+                //             <script src="/vendors.js"></script>
+                //             <script src="/main.js"></script>
+                //         </body>
+                //     </html>
+                // `;
+
+                let cmp   = renderToString(<Component />);
                 let markup = `
                     <html>
                         <head>
@@ -91,12 +122,18 @@ export default class Content extends Component {
                 `;
 
                 return (
-                    <iframe id={Date.now()} src={''} srcDoc={markup} onLoad={this.resizeIframe} />
+                    <iframe sandbox={'allow-scripts allow-same-origin'} id={Date.now()} src={''} srcDoc={markup} onLoad={this.resizeIframe} />
                 );
 
             default:
                 return null;
         }
+    }
+
+    renderCode(Component) {
+        // if (typeof Component !== 'function') { return null; }
+        //
+        // let cmp = renderToString(<Component />);
     }
 
     renderCards(data, options) {
@@ -108,6 +145,7 @@ export default class Content extends Component {
             return (
                 <Card key={`card-${k}`} title={label} onButtonClick={this.onCardButtonClick.bind(this)} buttons={options.buttons}>
                     {this.renderIframe(component)}
+                    {this.renderCode(component)}
                 </Card>
             );
         });
@@ -118,18 +156,31 @@ export default class Content extends Component {
 
         if (!data) { return null; }
 
-        element = data[element] || {};
+        if (typeof data !== 'function') {
 
-        let { label = null } = element;
+            element = data[element] || {};
 
-        return (
-            <Fragment>
-                <section className={'re-toolkit-content'}>
-                    {this.renderCrumbs({title, group, element: label})}
-                    {this.renderCards(data, card)}
-                </section>
-            </Fragment>
-        );
+            let { label = null } = element;
+
+            return (
+                <Fragment>
+                    <section className={'re-toolkit-content'}>
+                        {this.renderCrumbs({title, group, element: label})}
+                        {this.renderCards(data, card)}
+                    </section>
+                </Fragment>
+            );
+        } else {
+            const Component = data;
+            return (
+                <Fragment>
+                    <section className={'re-toolkit-content'}>
+                        {this.renderCrumbs({title})}
+                        {<Component />}
+                    </section>
+                </Fragment>
+            )
+        }
     }
 }
 

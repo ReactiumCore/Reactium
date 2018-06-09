@@ -19,18 +19,15 @@ export default class TextLink extends Component {
         super(props);
 
         this.state = Object.assign({}, this.props);
+        this.onClick = this.onClick.bind(this);
     }
 
     onClick(e) {
-        let { onClick } = this.state;
-
-        if (typeof onClick === 'function') {
-            e.preventDefault();
-        }
+        console.log('CLICKED');
     }
 
     render() {
-        return (<a href={'javascript:void(0);'}>Click Me</a>);
+        return (<a href={`javascript:void(0);`}>Click Me</a>);
     }
 }
 

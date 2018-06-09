@@ -3,7 +3,6 @@ export default {
         typography: {
             label: 'Typography',
             link: '/toolkit/typography',
-            component: require('appdir/toolkit/typography').default,
             elements: {
                 'paragraph': {
                     type: 'atom',
@@ -24,6 +23,11 @@ export default {
                     component: '/test',
                 },
             },
+        },
+        custom: {
+            label: 'Custom Component',
+            link: '/toolkit/custom',
+            component: require('appdir/toolkit/typography').default,
         },
         navaway: {
             label: 'Nav Away',

@@ -40,10 +40,11 @@ export default class Toolkit extends Component {
     getElements({ menu, group, element }) {
         let elements = {};
 
-        if (Object.keys(menu).length < 1) { return null; }
+        if (Object.keys(menu).length < 1 || !group) { return null; }
 
         if (!element) {
-            elements = menu[group]['elements'];
+            let { component = null } = menu[group];
+            elements = component || menu[group]['elements'];
         } else {
             elements[element] = menu[group]['elements'][element];
         }
