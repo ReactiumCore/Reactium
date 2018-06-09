@@ -29,7 +29,9 @@ export default class Content extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this.onResize);
+
+        this.onResize();
+        setInterval(this.onResize, 200);
 
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
@@ -43,12 +45,32 @@ export default class Content extends Component {
         }));
     }
 
-    onResize(e) {
-
+    onResize() {
+        if (this.iframes.length > 0) {
+            this.iframes.forEach((elm) => {
+                this.resizeIframe(elm);
+            });
+        }
     }
 
     onCardButtonClick(e, card) {
         console.log('onCardButtonClick:', e.currentTarget.id, card.state);
+    }
+
+    registerIframe(elm) {
+        if (!elm) { return; }
+        this.iframes.push(elm);
+    }
+
+    resizeIframe(iframe) {
+        iframe = iframe || {};
+        if (!iframe.contentWindow) { return; }
+
+        let h = iframe.contentWindow.document.body.scrollHeight;
+            h = (h < 1) ? 100 : h;
+
+        iframe.parentNode.style.height = h;
+        iframe.style.height = h;
     }
 
     getDisplayName(Component) {
@@ -58,14 +80,6 @@ export default class Content extends Component {
             ? Component
             : 'Unknown')
         );
-    }
-
-    resizeIframe(e) {
-        let h = e.target.contentWindow.document.body.scrollHeight;
-            h = (h < 1) ? 100 : h;
-
-        e.target.parentNode.style.height = h;
-        e.target.style.height = h;
     }
 
     renderCrumbs({title, group, element}) {
@@ -86,6 +100,26 @@ export default class Content extends Component {
         );
     }
 
+    renderCmp({ cname, cpath }) {
+        return (`
+            <html>
+                <head>
+                    <link rel="stylesheet" href="/assets/style/style.css">
+                </head>
+                <body style="padding: 25px;">
+                    <Component type="${cname}" path="${cpath}"></Component>
+                    <script>
+                        window.ssr = false;
+                        window.restAPI = '/api';
+                        window.parseAppId = '${parseAppId}';
+                    </script>
+                    <script src="/vendors.js"></script>
+                    <script src="/main.js"></script>
+                </body>
+            </html>
+        `);
+    }
+
     renderIframe(Component) {
         let type = typeof Component;
         let { group, element } = this.state;
@@ -93,33 +127,25 @@ export default class Content extends Component {
         switch(type) {
             case 'string':
                 return (
-                    <iframe src={Component} onLoad={this.resizeIframe} />
+                    <iframe
+                        src={Component}
+                        onLoad={this.onResize}
+                        ref={this.registerIframe.bind(this)}
+                    />
                 );
 
             case 'function':
                 // let cmp   = renderToString(<Component />);
                 let cname = this.getDisplayName(Component);
                 let cpath = `${group}/elements/${cname}`;
-                let markup = `
-                    <html>
-                        <head>
-                            <link rel="stylesheet" href="/assets/style/style.css">
-                        </head>
-                        <body style="padding: 25px;">
-                            <Component type="${cname}" path="${cpath}"></Component>
-                            <script>
-                                window.ssr = false;
-                                window.restAPI = '/api';
-                                window.parseAppId = 'Actinium';
-                            </script>
-                            <script src="/vendors.js"></script>
-                            <script src="/main.js"></script>
-                        </body>
-                    </html>
-                `;
+                let markup = this.renderCmp({cname, cpath});
 
                 return (
-                    <iframe ref={(elm) => { this.iframes.push(elm); }} id={Date.now()} srcDoc={markup} onLoad={this.resizeIframe} />
+                    <iframe
+                        srcDoc={markup}
+                        onLoad={this.onResize}
+                        ref={this.registerIframe.bind(this)}
+                    />
                 );
 
             default:
