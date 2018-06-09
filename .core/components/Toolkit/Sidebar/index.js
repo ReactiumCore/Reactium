@@ -37,12 +37,12 @@ export default class Sidebar extends Component {
     }
 
     render() {
-        let { closed } = this.state;
+        let { closed, menu } = this.state;
         let cls = (closed === true) ? 're-toolkit-sidebar-closed' : '';
         return (
             <aside className={`re-toolkit-sidebar ${cls}`}>
                 <Toolbar />
-                <Menu />
+                <Menu data={menu} />
             </aside>
         );
     }

@@ -30,12 +30,27 @@ export default class Menu extends Component {
     }
 
     render() {
-        let { items } = this.state;
+        let { data = {} } = this.state;
+
+        let items = [];
 
         return (
             <div className={'re-toolkit-menu'}>
                 <Search />
                 <ul>
+                    {Object.keys(data).map((key, k) => {
+
+                        let { label, link } = data[key];
+
+                        return (
+                            <li key={`group-${key}`}>
+                                <NavLink className={'heading'} exact={false} to={link}>
+                                    {label}
+                                </NavLink>
+                            </li>
+                        );
+                    })}
+
                     {items.map((item, i) => {
                         let { label, link, heading = false } = item;
 
@@ -43,7 +58,7 @@ export default class Menu extends Component {
                         let exact = !heading;
 
                         return (
-                            <li key={`re-toolkit-menu-${i}`}>
+                            <li key={`re-toolkit-menu-item-${i}`}>
                                 <NavLink className={cls} exact={exact} to={link}>{label}</NavLink>
                             </li>
                         );
@@ -55,6 +70,7 @@ export default class Menu extends Component {
 }
 
 Menu.defaultProps = {
+    data: {},
     items: [
         {label: 'Typography', link: '/toolkit/typography', heading: true},
         {label: 'Link 1', link: '/toolkit/typography/link-1'},

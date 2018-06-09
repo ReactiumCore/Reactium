@@ -5,20 +5,12 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import { renderToString } from 'react-dom/server';
-import Test from 'components/Test/Test';
 
 /**
  * -----------------------------------------------------------------------------
  * React Component: Card
  * -----------------------------------------------------------------------------
  */
-const Preview = (props) => {
-    let { title } = props;
-    return (
-        <div>{title}</div>
-    );
-};
 
 export default class Card extends Component {
     constructor(props) {
@@ -28,12 +20,6 @@ export default class Card extends Component {
         };
     }
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
@@ -41,51 +27,55 @@ export default class Card extends Component {
         }));
     }
 
-    resizeIframe(e) {
-        let h = e.target.contentWindow.document.body.scrollHeight;
-        h = (h < 500) ? 500 : h;
-        this.setState({height: h});
+    renderButtons(buttons) {
+        let { onButtonClick:onClick } = this.state;
+        return buttons.map((item, i) => {
+            let { title, name, icon } = item;
+            return (
+                <button onClick={(e) => { onClick(e, this); }} type={'button'} title={title} key={`button-${i}`} id={name}>
+                    <svg>
+                        <use xlinkHref={icon}></use>
+                    </svg>
+                </button>
+            );
+        });
     }
 
     render() {
+        let { children = [], buttons = {}, title = null } = this.state;
 
-        let { height = 0 } = this.state;
-        let cmp = renderToString(<Preview title={'cool!'} />);
-
-        let markup = `
-            <html>
-                <head>
-                    <link rel="stylesheet" href="/assets/style/style.css">
-                </head>
-                <body id="toolkit-preview">
-                    ${cmp}
-                </body>
-            </html>
-        `;
+        let { header:hbuttons = [], footer:fbuttons = [] } = buttons;
 
         return (
             <div className={'re-toolkit-card'}>
-                <div className={'re-toolkit-card-heading'}>
-                    <h3>Card</h3>
-                    <button type={'button'} title={'fullscreen mode'}>
-                        <svg>
-                            <use xlinkHref={'#re-icon-fullscreen'}></use>
-                        </svg>
-                    </button>
-                </div>
+                {(!title && hbuttons.length < 1) ? null : (
+                    <div className={'re-toolkit-card-heading'}>
+                        {(!title) ? <div /> : (<h3>{title}</h3>)}
+                        {this.renderButtons(hbuttons)}
+                    </div>
+                )}
                 <div className={'re-toolkit-card-body'}>
                     <div className={'re-toolkit-card-body-wrap'}>
-                        <iframe sandbox={'allow-scripts allow-same-origin'} src={'/preview/test'} onLoad={this.resizeIframe.bind(this)} style={{height}} />
+                        {children}
                     </div>
                 </div>
-                <div className={'re-toolkit-card-footer'}>
-                    Footer
-                </div>
+                {(fbuttons.length < 1) ? null : (
+                    <div className={'re-toolkit-card-footer'}>
+                        {this.renderButtons(fbuttons)}
+                    </div>
+                )}
             </div>
         );
     }
 }
 
 Card.defaultProps = {
-    height: 0,
+    title: null,
+    onButtonClick: null,
+    buttons: {
+        header: [
+            {name: 'toggle-fullscreen', title: 'toggle fullscreen', icon: '#re-icon-close'}
+        ],
+        footer: [],
+    }
 };

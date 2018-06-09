@@ -10,9 +10,14 @@
     left: 50%;
     top: 50%;
     width: 100%;
+    min-height: 500px;
     font-family: Helvetica, Arial, sans-serif;
     transform: translate(-50%, -50%);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
     div {
         font-size: 20px;

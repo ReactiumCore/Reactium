@@ -38,7 +38,7 @@ export default class Test extends Component {
 
         return (
             <Fragment>
-                <Helmet titleTemplate="%s | Reactium-SSR">
+                <Helmet titleTemplate="%s | Reactium">
                     <title>{title}</title>
                     <meta name="description" content="This is an example Reactium component"/>
                     <meta property="og:title" content={title} />

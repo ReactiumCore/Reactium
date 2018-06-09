@@ -24,6 +24,10 @@ export default class Toolkit extends Component {
         };
     }
 
+    componentDidMount() {
+        //console.log(manifest);
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
@@ -32,11 +36,14 @@ export default class Toolkit extends Component {
     }
 
     render() {
+        let { manifest = {} } = this.state;
+        let { menu = {} } = manifest;
+
         return (
             <Fragment>
                 <Header />
                 <main className={'re-toolkit-container'}>
-                    <Sidebar />
+                    <Sidebar menu={menu} />
                     <Content />
                 </main>
             </Fragment>

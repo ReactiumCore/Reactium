@@ -7,16 +7,37 @@
     &-fullscreen {
         padding: 0;
     }
+
+    > h2 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
 }
 
 .re-toolkit-card {
     width: 100%;
     box-shadow: $drop-shadow;
+    overflow-x: hidden;
+    min-width: 320px;
+
+    button {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
+
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
 
     &-heading {
         display: flex;
         background-color: $white;
-        padding: 12px 24px;
+        padding: 12px 8px 12px 24px;
         color: $black;
         border-radius: 4px 4px 0 0;
         align-items: center;
@@ -24,24 +45,6 @@
 
         *:first-child {
             flex-grow: 1;
-        }
-
-        h3 {
-            font-weight: bold;
-        }
-
-        button {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: -10px;
-
-            svg {
-                width: 14px;
-                height: 14px;
-            }
         }
     }
 
@@ -61,10 +64,19 @@
     }
 
     &-footer {
-        padding: 16px 24px;
+        padding: 2px 8px 2px 24px;
         background-color: $white;
         border-top: 1px solid $border-color;
         border-radius: 0 0 2px 2px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+
+        button svg {
+            width: 18px;
+            height: 18px;
+        }
     }
 
 }
