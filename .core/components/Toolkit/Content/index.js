@@ -22,7 +22,9 @@ export default class Content extends Component {
         super(props);
 
         this.iframes = [];
+        this.cards = {};
         this.onResize = this.onResize.bind(this);
+        this.onCardButtonClick = this.onCardButtonClick.bind(this);
         this.state = {
             ...this.props,
         };
@@ -54,11 +56,19 @@ export default class Content extends Component {
     }
 
     onCardButtonClick(e, card) {
-        console.log('onCardButtonClick:', e.currentTarget.id, card.state);
+        //console.log('[Reactium]', this.cards);
+        //console.log('[Reactium] onCardButtonClick:', e.currentTarget.id, card.state);
+    }
+
+    registerCard({elm, id}) {
+        if (!elm) { return; }
+
+        this.cards[id] = elm;
     }
 
     registerIframe(elm) {
         if (!elm) { return; }
+
         this.iframes.push(elm);
     }
 
@@ -120,15 +130,16 @@ export default class Content extends Component {
         `);
     }
 
-    renderIframe(Component) {
+    renderIframe({component:Component, id}) {
         let type = typeof Component;
-        let { group, element } = this.state;
+        let { group } = this.state;
 
         switch(type) {
             case 'string':
                 return (
                     <iframe
                         src={Component}
+                        id={`iframe-${id}`}
                         onLoad={this.onResize}
                         ref={this.registerIframe.bind(this)}
                     />
@@ -143,6 +154,7 @@ export default class Content extends Component {
                 return (
                     <iframe
                         srcDoc={markup}
+                        id={`iframe-${id}`}
                         onLoad={this.onResize}
                         ref={this.registerIframe.bind(this)}
                     />
@@ -161,13 +173,28 @@ export default class Content extends Component {
 
     renderCards(data, options) {
 
+        let { group } = this.state;
+        this.cards   = {};
+
         return Object.keys(data).map((key, k) => {
+            let id   = [group, key].join('_');
             let item = data[key];
+
             let { label, component } = item;
+            let { buttons = {} } = options;
+
+            buttons = JSON.stringify(buttons);
+            buttons = JSON.parse(buttons);
 
             return (
-                <Card key={`card-${k}`} title={label} onButtonClick={this.onCardButtonClick.bind(this)} buttons={options.buttons}>
-                    {this.renderIframe(component)}
+                <Card
+                    id={id}
+                    title={label}
+                    buttons={buttons}
+                    key={`card-${id}`}
+                    onButtonClick={this.onCardButtonClick}
+                    ref={(elm) => { this.registerCard({elm, id}); }}>
+                    {this.renderIframe({ component, id })}
                     {this.renderCode(component)}
                 </Card>
             );
@@ -178,8 +205,6 @@ export default class Content extends Component {
         let { card, title, data, element, group } = this.state;
 
         if (!data) { return null; }
-
-        this.iframes = [];
 
         if (typeof data !== 'function') {
 
