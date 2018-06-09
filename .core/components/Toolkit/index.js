@@ -20,6 +20,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     mount: () => dispatch(deps.actions.Toolkit.mount()),
+    menuItemClick: (url) => dispatch(deps.actions.Toolkit.menuItemClick(url))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Toolkit);

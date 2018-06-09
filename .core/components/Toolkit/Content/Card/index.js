@@ -20,6 +20,10 @@ export default class Card extends Component {
         };
     }
 
+    componentDidMount() {
+        this.forceUpdate();
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
@@ -42,7 +46,7 @@ export default class Card extends Component {
     }
 
     render() {
-        let { children = [], buttons = {}, title = null } = this.state;
+        let { children = null, buttons = {}, title = null } = this.state;
 
         let { header:hbuttons = [], footer:fbuttons = [] } = buttons;
 

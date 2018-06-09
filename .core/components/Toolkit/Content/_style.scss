@@ -8,9 +8,40 @@
         padding: 0;
     }
 
-    > h2 {
-        font-size: 24px;
-        margin-bottom: 24px;
+    &-crumbs {
+        @extend h3;
+
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+
+
+        * {
+            font-family: inherit;
+            position: relative;
+            color: $gray;
+        }
+
+        *:not(:last-child) {
+            &:after {
+                content: '/';
+                color: $blue;
+                margin: 0 10px;
+                transform: translateX(100%);
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: $black;
+            line-height: 1;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
     }
 }
 
@@ -19,6 +50,10 @@
     box-shadow: $drop-shadow;
     overflow-x: hidden;
     min-width: 320px;
+
+    &:not(:last-child) {
+        margin-bottom: 60px;
+    }
 
     button {
         width: 40px;
@@ -52,12 +87,9 @@
         background-color: $white;
 
         &-wrap {
-            padding: 24px;
-            position: relative;
-            overflow-y: visible;
-
+            display: block;
             iframe {
-                position: relative;
+                display: block;
                 width: 100%;
             }
         }

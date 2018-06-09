@@ -30,7 +30,7 @@ export default class Menu extends Component {
     }
 
     render() {
-        let { data = {} } = this.state;
+        let { data = {}, onItemClick } = this.state;
 
         let items = [];
 
@@ -40,26 +40,40 @@ export default class Menu extends Component {
                 <ul>
                     {Object.keys(data).map((key, k) => {
 
-                        let { label, link } = data[key];
+                        let { label, link, redirect = false, elements = {}, target = null } = data[key];
 
                         return (
                             <li key={`group-${key}`}>
-                                <NavLink className={'heading'} exact={false} to={link}>
-                                    {label}
-                                </NavLink>
-                            </li>
-                        );
-                    })}
-
-                    {items.map((item, i) => {
-                        let { label, link, heading = false } = item;
-
-                        let cls = (heading === true) ? 'heading' : 'link';
-                        let exact = !heading;
-
-                        return (
-                            <li key={`re-toolkit-menu-item-${i}`}>
-                                <NavLink className={cls} exact={exact} to={link}>{label}</NavLink>
+                                {(redirect === true)
+                                    ? (
+                                        <a className={'heading'} href={link} target={target}>{label}</a>
+                                    )
+                                    : (
+                                        <NavLink className={'heading'} exact={false} to={link} onClick={onItemClick}>
+                                            {label}
+                                        </NavLink>
+                                    )
+                                }
+                                {(Object.keys(elements).length < 1) ? null : (
+                                    <ul>
+                                        {Object.keys(elements).map((elm, i) => {
+                                            let item = elements[elm];
+                                            let { label, link, redirect = false, target = null } = item;
+                                            return (
+                                                <li key={`re-toolkit-menu-item-${i}`}>
+                                                    {(redirect === true)
+                                                        ? (
+                                                            <a className={'link'} href={link} target={target}>{label}</a>
+                                                        )
+                                                        : (
+                                                            <NavLink className={'link'} exact={true} to={link} onClick={onItemClick}>{label}</NavLink>
+                                                        )
+                                                    }
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
                             </li>
                         );
                     })}
@@ -68,14 +82,3 @@ export default class Menu extends Component {
         );
     }
 }
-
-Menu.defaultProps = {
-    data: {},
-    items: [
-        {label: 'Typography', link: '/toolkit/typography', heading: true},
-        {label: 'Link 1', link: '/toolkit/typography/link-1'},
-        {label: 'Link 2', link: '/toolkit/typography/link-2'},
-        {label: 'Link 3', link: '/toolkit/typography/link-3'},
-        {label: 'Link 4', link: '/toolkit/typography/link-4'},
-    ]
-};
