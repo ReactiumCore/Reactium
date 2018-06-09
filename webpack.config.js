@@ -10,8 +10,7 @@ module.exports = (gulpConfig, type = 'app') => {
     let plugins   = [];
     let target    = 'web';
     let filename  = '[name].js';
-    let entries   = ['babel-polyfill'];
-        entries   = entries.concat(Object.values(config.entries));        
+    let entries   = config.entries;
     let dest      = config.dest.js;
     let externals = [];
     let tools     = (env === 'development') ? 'source-map' : '';
@@ -39,18 +38,18 @@ module.exports = (gulpConfig, type = 'app') => {
         mode: env,
         output:  {
             path: path.resolve(__dirname, dest),
-            filename: filename,
+            filename,
         },
         optimization: {
             minimize: Boolean(env !== 'development'),
             splitChunks: {
-                cacheGroups: {
-                    commons: {
+                cacheGroups: Object.assign({
+                    vendors: {
                         test: /[\\/]node_modules[\\/]/,
                         name: "vendors",
-                        chunks: "all"
-                    }
-                }
+                        chunks: "all",
+                    },
+                }),
             },
         },
         module:  {
