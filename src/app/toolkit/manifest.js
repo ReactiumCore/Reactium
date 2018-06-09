@@ -25,6 +25,7 @@ export default {
             },
         },
         custom: {
+            type: 'organism',
             label: 'Custom Component',
             link: '/toolkit/custom',
             component: require('appdir/toolkit/typography').default,

@@ -7,7 +7,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -17,20 +17,17 @@ import React, { Component, Fragment } from 'react';
 export default class TextLink extends Component {
     constructor(props) {
         super(props);
-
         this.state = Object.assign({}, this.props);
-        this.onClick = this.onClick.bind(this);
     }
 
     onClick(e) {
-        console.log('CLICKED');
+        e.preventDefault();
+        window.alert('LINK CLICKED');
     }
 
     render() {
-        return (<a href={`javascript:void(0);`}>Click Me</a>);
+        return (<a href={'#'} onClick={this.onClick.bind(this)}>Click Me</a>);
     }
 }
 
-TextLink.defaultProps = {
-    onClick: null,
-};
+TextLink.defaultProps = {};

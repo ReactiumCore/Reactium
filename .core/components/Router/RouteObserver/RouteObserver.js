@@ -20,9 +20,9 @@ export default class RouteObserver extends Component {
                 return match && match.isExact;
             });
 
-            if ( location && route ) {
+            if ( location ) {
                 let routeParams = {};
-                
+
                 if (route) {
                     routeParams = matchPath(location.pathname, route).params;
                 }

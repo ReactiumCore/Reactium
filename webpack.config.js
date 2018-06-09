@@ -22,6 +22,9 @@ module.exports = (gulpConfig, type = 'app') => {
         };
     }
     plugins.push(new webpack.DefinePlugin(config.defines));
+    plugins.push(new webpack.ContextReplacementPlugin(/^toolkit/, context => {
+        context.request = path.resolve('./src/app/toolkit');
+    }));
     plugins.push(new webpack.ContextReplacementPlugin(/^components/, context => {
         context.request = path.resolve('./src/app/components');
     }));

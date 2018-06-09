@@ -12,51 +12,87 @@ import { Provider } from 'react-redux';
 import Router from 'reactium-core/components/Router';
 import storeCreator from 'reactium-core/storeCreator';
 
-let bindPoints        = [];
-const elements        = typeof document !== 'undefined' ? Array.prototype.slice.call(document.querySelectorAll('component')) : [];
+// Placeholder for the bindable elements
+const bindPoints = [];
 
-export const getComponents = (types) => {
+// <Component /> DOM Elements array
+const elements = (typeof document !== 'undefined')
+    ? Array.prototype.slice.call(document.querySelectorAll('component'))
+    : [];
+
+export const getComponents = (elms = []) => {
     let cmps = {};
 
-    types = (typeof types === 'string') ? [types] : types;
+    // Traverse the Array of bindable elements and require the components for them
+    elms.forEach(elm => {
 
-    types.forEach((cname) => {
-        let req, cpath;
+        let req;
+        let { type, path } = elm;
 
+        // The path to the component
+        path = (!path) ? type : path;
+
+        // Force webpack to include the components we need.
+        // The order of this Array is SUPER important.
+
+        // Q: Why?
+        // A: As we traverse the array, the first match of the `path` is used as the component.
+        //    Keeping this hierarchy insures that user created components
+        //    will supercede .core and /toolkit components.
         let paths = [
-            () => require(`components/${cname}/index`),
-            () => require(`components/common-ui/${cname}/index`),
-            () => require(`components/${cname}`),
-            () => require(`components/common-ui/${cname}`),
-            () => require(`reactium-core/components/${cname}/index`),
-            () => require(`reactium-core/components/common-ui/${cname}/index`),
-            () => require(`reactium-core/components/${cname}`),
-            () => require(`reactium-core/components/common-ui/${cname}`),
+            () => require(`components/${path}`),
+            () => require(`components/${path}/index`),
+            () => require(`components/common-ui/${path}`),
+            () => require(`components/common-ui/${path}/index`),
+            () => require(`toolkit/${path}`),
+            () => require(`toolkit/${path}/index`),
+            () => require(`reactium-core/components/${path}`),
+            () => require(`reactium-core/components/${path}/index`),
+            () => require(`reactium-core/components/common-ui/${path}`),
+            () => require(`reactium-core/components/common-ui/${paty}/index`),
         ];
 
-        paths.forEach(path => {
-            if (req) return;
+        // Aggregate the required components into the `cmps` Object;
+        paths.forEach((cmp, i) => {
 
+            // Exit if the component has already been defined
+            if (cmps[type]) { return; }
+
+            // Construct the component
             try {
-                req = path();
-                if ( 'default' in req ) {
-                    req = req.default;
-                }
+
+                req = cmp();
+
+                // Check if the component has a .default
+                // -> if so: set that as the component constructor
+                req = ('default' in req) ? req.default : req;
+
             } catch (err) {}
-        })
+        });
 
         if (req) {
-            cmps[cname] = req;
+            cmps[type] = req;
         }
     });
 
+    // Output the Components Object
     return cmps;
 };
 
-if ( elements.length > 0) {
+if (elements.length > 0) {
 
-    let types = elements.map((elm) => { return elm.getAttribute('type'); });
-    let components = getComponents(types);
+    let types = [];
+
+    let elms = elements.map((elm) => {
+        let path = elm.getAttribute('path');
+        let type = elm.getAttribute('type');
+
+        types.push(type);
+
+        return { path, type };
+    });
+
+    let components = getComponents(elms);
 
     elements.forEach((elm) => {
         // Get the component type
@@ -67,11 +103,12 @@ if ( elements.length > 0) {
         }
 
         // Get parameters from container element
-        let params = {};
+        let params  = {};
+        let exclude = ['type', 'path'];
         Object.entries(elm.attributes).forEach(([key, attr]) => {
-            if ( key !== 'type') {
-                params[attr.name] = attr.value;
-            }
+            key = String(key).toLowerCase();
+            if (exclude.indexOf(key) < 0) { return; }
+            params[attr.name] = attr.value;
         });
 
         // Get the children from the element and pass them to the component
@@ -112,30 +149,38 @@ export const App = () => {
             });
         }
 
-        if ( window && 'ssr' in window && window.ssr ) {
-            console.log('SSR Mode: Hydrating Reactium.');
+        // Get the router target DOM Element
+        let routerTarget = document.getElementById('router');
 
-            // Hydrate the Routed component
-            ReactDOM.hydrate(
-                <Provider store={store}>
-                    <Fragment>
-                        <Router />
-                    </Fragment>
-                </Provider>,
-                document.getElementById('router')
-            );
-        } else {
-            console.log('FE Mode: Binding Reactium.');
+        if (routerTarget) { // ensure router DOM Element is on the page
 
-            // Bind the Routed component
-            ReactDOM.render(
-                <Provider store={store}>
-                    <Fragment>
-                        <Router />
-                    </Fragment>
-                </Provider>,
-                document.getElementById('router')
-            );
+            if ( window && 'ssr' in window && window.ssr ) { // Reactium SSR Mode
+
+                console.log('SSR Mode: Hydrating Reactium.');
+
+                // Hydrate the Routed component
+                ReactDOM.hydrate(
+                    <Provider store={store}>
+                        <Fragment>
+                            <Router />
+                        </Fragment>
+                    </Provider>,
+                    routerTarget
+                );
+            } else { // Reactium FE Mode
+
+                console.log('FE Mode: Binding Reactium.');
+
+                // Bind the Routed component
+                ReactDOM.render(
+                    <Provider store={store}>
+                        <Fragment>
+                            <Router />
+                        </Fragment>
+                    </Provider>,
+                    routerTarget
+                );
+            }
         }
     }
 };

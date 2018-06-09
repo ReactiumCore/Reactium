@@ -73,21 +73,22 @@ export default class Content extends Component {
         let elms = [];
 
         if (!element) {
-            elms.push(<span>{title}</span>);
+            elms.push(<span key={`group-${group}`}>{title}</span>);
         } else {
-            elms.push(<span><Link to={`/toolkit/${group}`} onClick={onCrumbClick}>{title}</Link></span>);
+            elms.push(<span key={`group-${group}-element`}><Link to={`/toolkit/${group}`} onClick={onCrumbClick}>{title}</Link></span>);
             //elms.push(<span>{element}</span>);
         }
 
         return (
             <div className={'re-toolkit-content-crumbs'}>
-                {elms}
+                {elms.map(elm => elm)}
             </div>
         );
     }
 
     renderIframe(Component) {
         let type = typeof Component;
+        let { group, element } = this.state;
 
         switch(type) {
             case 'string':
@@ -96,40 +97,29 @@ export default class Content extends Component {
                 );
 
             case 'function':
-                // let cname = this.getDisplayName(Component);
-                // let markup = `
-                //     <html>
-                //         <head>
-                //             <link rel="stylesheet" href="/assets/style/style.css">
-                //         </head>
-                //         <body style="padding: 25px;">
-                //             <div id="router"></div>
-                //             <Component type="${cname}"></Component>
-                //             <script>
-                //                 window.ssr = false;
-                //                 window.restAPI = '/api';
-                //                 window.parseAppId = 'Actinium';
-                //             </script>
-                //             <script src="/vendors.js"></script>
-                //             <script src="/main.js"></script>
-                //         </body>
-                //     </html>
-                // `;
-
-                let cmp   = renderToString(<Component />);
+                // let cmp   = renderToString(<Component />);
+                let cname = this.getDisplayName(Component);
+                let cpath = `${group}/elements/${cname}`;
                 let markup = `
                     <html>
                         <head>
                             <link rel="stylesheet" href="/assets/style/style.css">
                         </head>
                         <body style="padding: 25px;">
-                            ${cmp}
+                            <Component type="${cname}" path="${cpath}"></Component>
+                            <script>
+                                window.ssr = false;
+                                window.restAPI = '/api';
+                                window.parseAppId = 'Actinium';
+                            </script>
+                            <script src="/vendors.js"></script>
+                            <script src="/main.js"></script>
                         </body>
                     </html>
                 `;
 
                 return (
-                    <iframe ref={(elm) => { this.iframes.push(elm) }} sandbox={'allow-scripts allow-same-origin'} id={Date.now()} src={''} srcDoc={markup} onLoad={this.resizeIframe} />
+                    <iframe ref={(elm) => { this.iframes.push(elm); }} id={Date.now()} srcDoc={markup} onLoad={this.resizeIframe} />
                 );
 
             default:
