@@ -134,9 +134,12 @@ export const App = () => {
     require('dependencies').default.init();
 
     if (typeof document !== 'undefined') {
+
+        // Create the Redux store
         const store = storeCreator();
+
+        // Render the React Components
         if (bindPoints.length > 0) {
-            // Render the React Components
             bindPoints.forEach((item) => {
                 ReactDOM.render(
                     <Provider store={store}>
@@ -151,12 +154,11 @@ export const App = () => {
 
         // Get the router target DOM Element
         let routerTarget = document.getElementById('router');
-
         if (routerTarget) { // ensure router DOM Element is on the page
 
             if ( window && 'ssr' in window && window.ssr ) { // Reactium SSR Mode
 
-                console.log('SSR Mode: Hydrating Reactium.');
+                console.log('[Reactium] SSR Mode: Hydrating Reactium.');
 
                 // Hydrate the Routed component
                 ReactDOM.hydrate(
@@ -169,7 +171,7 @@ export const App = () => {
                 );
             } else { // Reactium FE Mode
 
-                console.log('FE Mode: Binding Reactium.');
+                console.log('[Reactium] FE Mode: Binding Reactium.');
 
                 // Bind the Routed component
                 ReactDOM.render(

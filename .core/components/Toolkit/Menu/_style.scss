@@ -1,8 +1,17 @@
 .re-toolkit-menu {
+    position: fixed;
+    top: $menu-height-offset;
+    left: $toolbar-width;
+    width: $menu-width;
+    height: calc(100vh - #{$menu-height-offset});
     display: flex;
     align-items: stretch;
     flex-grow: 1;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 10;
+    padding-bottom: 40px;
 
     ul {
         flex-grow: 1;
@@ -24,6 +33,18 @@
                         color: darken($gray, 10%);
                     }
 
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        width: 8px;
+                        height: 8px;
+                        transition: all 1s ease-in-out;
+                        transform: translateY(-50%) translateX(-150%) rotate(45deg);
+                        background-color: $blue;
+                    }
+
                     &:after {
                         content: '';
                         position: absolute;
@@ -40,10 +61,11 @@
                             content: '';
                             position: absolute;
                             top: 50%;
-                            left: 11%;
-                            width: 5px;
-                            height: 5px;
-                            transform: translateY(-50%);
+                            left: 0;
+                            width: 8px;
+                            height: 8px;
+                            transition: all 1s ease-in-out;
+                            transform: translateY(-50%) translateX(-50%) rotate(45deg);
                             background-color: $blue;
                         }
                     }

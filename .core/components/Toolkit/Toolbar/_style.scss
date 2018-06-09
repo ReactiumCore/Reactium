@@ -1,25 +1,45 @@
 .re-toolkit-toolbar {
-    box-shadow: $drop-shadow;
-    width: 72px;
+    position: fixed;
+    left: 0;
+    top: $header-height;
+    width: $toolbar-width;
+    height: calc(100vh - #{$header-height});
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     padding-bottom: 20px;
+    box-shadow: $drop-shadow;
 
     .spacer {
+        min-height: 10px;
         flex: 1;
     }
 
     button {
         width: 100%;
         height: 72px;
+        min-height: 72px;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         font-size: 10px;
         color: $black;
-        border-left: 3px solid $white;
         transition: all .5s ease-in-out;
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 5px;
+            height: 5px;
+            transform: translateY(-120%) translateX(-150%) rotate(45deg);
+            background-color: $blue;
+            transition: all .5s ease-in-out;
+        }
 
         div {
             margin-top: 5px;
@@ -29,7 +49,6 @@
             width: 24px;
             height: 24px;
 
-            opacity: 0.5;
             transition: all .5s ease-in-out;
 
             * {
@@ -38,34 +57,29 @@
             }
         }
 
-        &:hover,
-        &:focus {
-            svg {
-                opacity: 0.8;
-            }
+        &:hover {
             color: $black;
-            border-left: 3px solid $blue;
         }
 
-        &.active {
-            svg {
-                opacity: 1;
+        &.active,
+        &:focus {
+            &:before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 8px;
+                height: 8px;
+                transform: translateY(-120%) translateX(-50%) rotate(45deg);
+                background-color: $blue;
+                transition: all .5s ease-in-out;
             }
-            border-left: 3px solid $blue;
         }
     }
 
     button.toggle {
         height: 64px;
-
-        &:hover,
-        &:focus {
-            svg {
-                opacity: 0.8;
-            }
-            color: $black;
-            border-left: 3px solid $white;
-        }
+        min-height: 64px;
 
         svg {
             width: 18px;
@@ -73,11 +87,16 @@
 
         }
 
-        &.active {
-            svg {
-                opacity: 1;
+        &:hover {
+            color: $black;
+            opacity: 0.5;
+        }
+        &.active,
+        &:focus {
+            &:before {
+                content: '';
+                display: none;
             }
-            border-left: 3px solid $white;
         }
     }
 
