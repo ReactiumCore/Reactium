@@ -22,12 +22,15 @@ export default class Content extends Component {
         super(props);
 
         this.iframes = [];
+        this.onResize = this.onResize.bind(this);
         this.state = {
             ...this.props,
         };
     }
 
     componentDidMount() {
+        window.addEventListener('resize', this.onResize);
+
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
@@ -38,6 +41,10 @@ export default class Content extends Component {
             ...prevState,
             ...nextProps,
         }));
+    }
+
+    onResize(e) {
+
     }
 
     onCardButtonClick(e, card) {
@@ -122,7 +129,7 @@ export default class Content extends Component {
                 `;
 
                 return (
-                    <iframe sandbox={'allow-scripts allow-same-origin'} id={Date.now()} src={''} srcDoc={markup} onLoad={this.resizeIframe} />
+                    <iframe ref={(elm) => { this.iframes.push(elm) }} sandbox={'allow-scripts allow-same-origin'} id={Date.now()} src={''} srcDoc={markup} onLoad={this.resizeIframe} />
                 );
 
             default:
@@ -155,6 +162,8 @@ export default class Content extends Component {
         let { card, title, data, element, group } = this.state;
 
         if (!data) { return null; }
+
+        this.iframes = [];
 
         if (typeof data !== 'function') {
 
