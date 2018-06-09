@@ -65,6 +65,14 @@ module.exports = (gulpConfig, type = 'app') => {
                             loader: 'babel-loader',
                         }
                     ]
+                },
+                {
+                    test: [/.scss$/, /.css$/, /.sass$/, /.less$/],
+                    use: [
+                        {
+                            loader: 'ignore-loader',
+                        }
+                    ]
                 }
             ]
         }
