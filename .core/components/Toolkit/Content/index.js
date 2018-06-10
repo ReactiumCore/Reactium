@@ -7,6 +7,8 @@
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import Preview from './Preview';
+import op from 'object-path';
 import Card from './Card';
 
 
@@ -20,23 +22,22 @@ export default class Content extends Component {
     constructor(props) {
         super(props);
 
-        this.iframes = [];
-        this.cards = {};
-        this.onResize = this.onResize.bind(this);
+        this.cards             = {};
+        this.previews          = {};
+        this.watcher           = null;
+        this.onWatch           = this.onWatch.bind(this);
+        this.registerPreview   = this.registerPreview.bind(this);
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
-        this.state = {
-            ...this.props,
-        };
+
+        this.state = {...this.props };
     }
 
     componentDidMount() {
-
-        this.onResize();
-        setInterval(this.onResize, 200);
-
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
+
+        this.watcher = setInterval(this.onWatch, this.state.watchTimer);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -46,48 +47,48 @@ export default class Content extends Component {
         }));
     }
 
-    onResize() {
-        if (this.iframes.length > 0) {
-            this.iframes.forEach((elm) => {
-                this.resizeIframe(elm);
-            });
-        }
-    }
-
     onCardButtonClick(e, card) {
+
+        let { id:action } = e.currentTarget;
+
+        // Toggle the preview
+        if (op.has(card, 'state.id') && action !== 'toggle-fullscreen') {
+            let preview = this.previews[card.state.id];
+            if (preview) {
+                let { visible:previewVis } = preview.state;
+                previewVis = !previewVis;
+                preview.setState({visible: previewVis});
+            }
+        }
+
+        switch(action) {
+            case 'toggle-code': {
+
+
+
+                return;
+            }
+
+        }
+
+
         //console.log('[Reactium]', this.cards);
         //console.log('[Reactium] onCardButtonClick:', e.currentTarget.id, card.state);
     }
 
-    registerCard({elm, id}) {
-        if (!elm) { return; }
+    onWatch() {
+        // Resize previews
+        Object.values(this.previews).forEach(preview => preview.resize());
+    }
 
+    registerCard({ elm, id }) {
+        if (!elm) { return; }
         this.cards[id] = elm;
     }
 
-    registerIframe(elm) {
+    registerPreview({ elm, id }) {
         if (!elm) { return; }
-
-        this.iframes.push(elm);
-    }
-
-    resizeIframe(iframe) {
-        try {
-            let h = iframe.contentWindow.document.body.scrollHeight;
-                h = (h < 1) ? 100 : h;
-
-            iframe.parentNode.style.height = h;
-            iframe.style.height = h;
-        } catch (err) { }
-    }
-
-    getDisplayName(Component) {
-        return (
-            Component.displayName || Component.name ||
-            (typeof Component === 'string' && Component.length > 0
-            ? Component
-            : 'Unknown')
-        );
+        this.previews[id] = elm;
     }
 
     renderCrumbs({title, group, element}) {
@@ -108,78 +109,23 @@ export default class Content extends Component {
         );
     }
 
-    renderCmp({ cname, cpath }) {
-        return (`
-            <html>
-                <head>
-                    <link rel="stylesheet" href="/assets/style/style.css">
-                </head>
-                <body style="padding: 25px;">
-                    <Component type="${cname}" path="${cpath}"></Component>
-                    <script>
-                        window.ssr = false;
-                        window.restAPI = '/api';
-                        window.parseAppId = '${parseAppId}';
-                    </script>
-                    <script src="/vendors.js"></script>
-                    <script src="/main.js"></script>
-                </body>
-            </html>
-        `);
-    }
-
-    renderIframe({component:Component, id}) {
-        let type = typeof Component;
-        let { group } = this.state;
-
-        switch(type) {
-            case 'string':
-                return (
-                    <iframe
-                        src={Component}
-                        id={`iframe-${id}`}
-                        onLoad={this.onResize}
-                        ref={this.registerIframe.bind(this)}
-                    />
-                );
-
-            case 'function':
-                // let cmp   = renderToString(<Component />);
-                let cname = this.getDisplayName(Component);
-                let cpath = `${group}/elements/${cname}`;
-                let markup = this.renderCmp({cname, cpath});
-
-                return (
-                    <iframe
-                        srcDoc={markup}
-                        id={`iframe-${id}`}
-                        onLoad={this.onResize}
-                        ref={this.registerIframe.bind(this)}
-                    />
-                );
-
-            default:
-                return null;
-        }
-    }
-
     renderCode(Component) {
         // if (typeof Component !== 'function') { return null; }
         //
         // let cmp = renderToString(<Component />);
     }
 
-    renderCards(data, options) {
+    renderCards({ data, card, group }) {
 
-        let { group } = this.state;
-        this.cards   = {};
+        this.cards    = {};
+        this.previews = {};
 
         return Object.keys(data).map((key, k) => {
             let id   = [group, key].join('_');
             let item = data[key];
 
             let { label, component } = item;
-            let { buttons = {} } = options;
+            let { buttons = {} } = card;
 
             buttons = JSON.stringify(buttons);
             buttons = JSON.parse(buttons);
@@ -191,8 +137,14 @@ export default class Content extends Component {
                     buttons={buttons}
                     key={`card-${id}`}
                     onButtonClick={this.onCardButtonClick}
-                    ref={(elm) => { this.registerCard({elm, id}); }}>
-                    {this.renderIframe({ component, id })}
+                    ref={(elm) => { this.registerCard({elm, id}); }} >
+
+                    <Preview
+                        ref={(elm) => { this.registerPreview({elm, id}); }}
+                        component={component}
+                        group={group}
+                        id={id}
+                    />
                     {this.renderCode(component)}
                 </Card>
             );
@@ -214,7 +166,7 @@ export default class Content extends Component {
                 <Fragment>
                     <section className={'re-toolkit-content'}>
                         {this.renderCrumbs({title, group, element: label})}
-                        {this.renderCards(data, card)}
+                        {this.renderCards({ data, card, group })}
                     </section>
                 </Fragment>
             );
@@ -233,10 +185,11 @@ export default class Content extends Component {
 }
 
 Content.defaultProps = {
-    onCrumbClick: null,
-    data: {},
-    title: null,
-    card: {
+    onCrumbClick : null,
+    title        : null,
+    watchTimer   : 200,
+    data         : {},
+    card         : {
         buttons: {
             header: [
                 {name: 'toggle-fullscreen', title: 'toggle fullscreen', icon: '#re-icon-fullscreen'}
