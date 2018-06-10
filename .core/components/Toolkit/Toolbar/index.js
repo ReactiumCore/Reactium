@@ -54,6 +54,7 @@ Toolbar.defaultProps = {
         {icon: '#re-icon-atom', name: 'filter-atom', label: 'Atoms'},
         {icon: '#re-icon-molecule', name: 'filter-molecule', label: 'Molecules'},
         {icon: '#re-icon-organism', name: 'filter-organism', label: 'Organisms'},
+        {icon: '#re-icon-catalyst', name: 'filter-catalyst', label: 'Catalysts'},
         {icon: '#re-icon-template', name: 'filter-template', label: 'Templates'},
         {name: 'spacer'},
         {icon: '#re-icon-settings', name: 'toggle-settings', cls: 'toggle'},

@@ -4,12 +4,12 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Preview from './Preview';
 import op from 'object-path';
 import Card from './Card';
+import Code from './Code';
 
 
 /**
@@ -23,13 +23,13 @@ export default class Content extends Component {
         super(props);
 
         this.cards             = {};
+        this.codes             = {};
         this.previews          = {};
         this.watcher           = null;
+        this.state             = { ...this.props };
         this.onWatch           = this.onWatch.bind(this);
         this.registerPreview   = this.registerPreview.bind(this);
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
-
-        this.state = {...this.props };
     }
 
     componentDidMount() {
@@ -52,14 +52,14 @@ export default class Content extends Component {
         let { id:action } = e.currentTarget;
 
         // Toggle the preview
-        if (op.has(card, 'state.id') && action !== 'toggle-fullscreen') {
-            let preview = this.previews[card.state.id];
-            if (preview) {
-                let { visible:previewVis } = preview.state;
-                previewVis = !previewVis;
-                preview.setState({visible: previewVis});
-            }
-        }
+        // if (op.has(card, 'state.id') && action !== 'toggle-fullscreen') {
+        //     let preview = this.previews[card.state.id];
+        //     if (preview) {
+        //         let { visible:previewVis } = preview.state;
+        //         previewVis = !previewVis;
+        //         preview.setState({visible: previewVis});
+        //     }
+        // }
 
         switch(action) {
             case 'toggle-code': {
@@ -86,38 +86,20 @@ export default class Content extends Component {
         this.cards[id] = elm;
     }
 
+    registerCode({ elm, id }) {
+        if (!elm) { return; }
+        this.codes[id] = elm;
+    }
+
     registerPreview({ elm, id }) {
         if (!elm) { return; }
         this.previews[id] = elm;
     }
 
-    renderCrumbs({title, group, element}) {
-        let { onCrumbClick } = this.state;
-        let elms = [];
-
-        if (!element) {
-            elms.push(<span key={`group-${group}`}>{title}</span>);
-        } else {
-            elms.push(<span key={`group-${group}-element`}><Link to={`/toolkit/${group}`} onClick={onCrumbClick}>{title}</Link></span>);
-            //elms.push(<span>{element}</span>);
-        }
-
-        return (
-            <div className={'re-toolkit-content-crumbs'}>
-                {elms.map(elm => elm)}
-            </div>
-        );
-    }
-
-    renderCode(Component) {
-        // if (typeof Component !== 'function') { return null; }
-        //
-        // let cmp = renderToString(<Component />);
-    }
-
     renderCards({ data, card, group }) {
 
         this.cards    = {};
+        this.codes    = {};
         this.previews = {};
 
         return Object.keys(data).map((key, k) => {
@@ -145,10 +127,34 @@ export default class Content extends Component {
                         group={group}
                         id={id}
                     />
-                    {this.renderCode(component)}
+
+                    <Code
+                        ref={(elm) => { this.registerCode({elm, id}); }}
+                        component={component}
+                        group={group}
+                        id={id}
+                    />
+
                 </Card>
             );
         });
+    }
+
+    renderCrumbs({title, group, element}) {
+        let { onCrumbClick } = this.state;
+        let elms = [];
+
+        if (!element) {
+            elms.push(<span key={`group-${group}`}>{title}</span>);
+        } else {
+            elms.push(<span key={`group-${group}-element`}><Link to={`/toolkit/${group}`} onClick={onCrumbClick}>{title}</Link></span>);
+        }
+
+        return (
+            <div className={'re-toolkit-content-crumbs'}>
+                {elms.map(elm => elm)}
+            </div>
+        );
     }
 
     render() {

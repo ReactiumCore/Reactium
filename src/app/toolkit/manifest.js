@@ -16,47 +16,53 @@ export default {
                     link: '/toolkit/typography/text-link',
                     component: require('appdir/toolkit/typography/elements/TextLink').default,
                 },
+            },
+        },
+        components: {
+            label: 'Components',
+            link: '/toolkit/components',
+            elements: {
                 'test-component': {
                     type: 'organism',
                     label: 'Test Component',
-                    link: '/toolkit/typography/test-component',
+                    link: '/toolkit/components/test-component',
                     component: '/test',
                 },
-            },
-        },
-        custom: {
-            type: 'organism',
-            label: 'Custom Component',
-            link: '/toolkit/custom',
-            component: require('appdir/toolkit/typography').default,
-        },
-        navaway: {
-            label: 'Nav Away',
-            link: '/test',
-            redirect: true,
-            elements: {
-                'navaway-sub': {
-                    type: 'page',
-                    label: 'Nav Away - Element',
-                    link: '/test',
-                    redirect: true
-                },
             }
         },
-        navout: {
-            label: 'Nav Away Blank',
-            link: '/test',
-            redirect: true,
-            target: '_blank',
-            elements: {
-                'navout-sub': {
-                    type: 'page',
-                    label: 'Nav Away - Element Blank',
-                    link: '/test',
-                    redirect: true,
-                    target: '_blank',
-                }
-            }
-        }
+        // custom: {
+        //     type: 'organism',
+        //     label: 'Custom Component',
+        //     link: '/toolkit/custom',
+        //     component: require('appdir/toolkit/typography').default,
+        // },
+        // navaway: {
+        //     label: 'Nav Away',
+        //     link: '/test',
+        //     redirect: true,
+        //     elements: {
+        //         'navaway-sub': {
+        //             type: 'page',
+        //             label: 'Nav Away - Element',
+        //             link: '/test',
+        //             redirect: true
+        //         },
+        //     }
+        // },
+        // navout: {
+        //     label: 'Nav Away Blank',
+        //     link: '/test',
+        //     redirect: true,
+        //     target: '_blank',
+        //     elements: {
+        //         'navout-sub': {
+        //             type: 'page',
+        //             label: 'Nav Away - Element Blank',
+        //             link: '/test',
+        //             redirect: true,
+        //             target: '_blank',
+        //         }
+        //     }
+        // }
     },
 }

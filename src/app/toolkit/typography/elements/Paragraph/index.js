@@ -33,9 +33,14 @@ export default class Paragraph extends Component {
     render() {
         let { content } = this.state;
         return (
-            <p>
-                {content}
-            </p>
+            <div>
+                <p class='text'>
+                    {content}
+                </p>
+                <p class='text'>
+                    {content}
+                </p>
+            </div>
         );
     }
 }
