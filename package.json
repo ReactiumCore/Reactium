@@ -58,7 +58,7 @@
     "express": "^4.16.2",
     "express-http-proxy": "^1.1.0",
     "globby": "^7.1.1",
-    "gsap": "^2.0.1",
+    "gsap": "^2.0.0",
     "html-to-jsx": "0.0.4",
     "htmltojsx": "^0.3.0",
     "http-auth": "^3.2.3",
