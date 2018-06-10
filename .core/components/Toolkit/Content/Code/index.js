@@ -8,7 +8,7 @@ import { TweenMax, Power2 } from 'gsap';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs2015 } from 'react-syntax-highlighter/styles/hljs';
+import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
 import HTMLtoJSX from 'html-to-jsx';
 import beautify from 'js-beautify';
@@ -50,31 +50,50 @@ export default class Code extends Component {
         });
     }
 
+    getPref(newState = {}, key, vals) {
+        let { prefs = {} } = this.state;
+
+        vals.forEach((v, i) => {
+            if (op.has(newState, key)) { return; }
+            if (typeof v !== 'undefined') { newState[key] = v; }
+        });
+
+        return newState;
+    }
+
     applyPrefs() {
 
         let newState = {};
             newState = this.applyVisiblePref(newState);
+            newState = this.applyThemePref(newState);
 
         if (Object.keys(newState).length > 0) {
             this.setState(newState);
         }
     }
 
+    applyThemePref(newState = {}) {
+        let { prefs = {}, theme, id } = this.state;
+
+        let vals = [
+            op.get(prefs, `codeColor.${id}`),
+            op.get(prefs, `codeColor.all`),
+            theme,
+        ];
+
+        return this.getPref(newState, 'theme', vals);
+    }
+
     applyVisiblePref(newState = {}) {
         let { prefs = {}, visible, id } = this.state;
 
-        let vis = [
+        let vals = [
             op.get(prefs, `code.${id}`),
             op.get(prefs, 'code.all'),
             visible,
         ];
 
-        vis.forEach((v, i) => {
-            if (op.has(newState, 'visible')) { return; }
-            if (typeof v !== 'undefined') { newState['visible'] = v; console.log(id, i, v); }
-        });
-
-        return newState;
+        return this.getPref(newState, 'visible', vals);
     }
 
     onCopyClick(e) {
@@ -134,14 +153,25 @@ export default class Code extends Component {
         }
     }
 
+    themes(theme = 'dark') {
+        let thms = {
+            'dark'  : vs2015,
+            'light' : vs
+        };
+
+        return (op.has(thms, theme)) ? thms[theme] : thms.dark;
+    }
+
     render() {
-        let { component:Component, group, id, visible, height, beauty = {} } = this.state;
+        let { component:Component, group, id, visible, height, beauty = {}, theme = 'dark' } = this.state;
 
         if (!Component) { return null; }
 
         let type = typeof Component;
 
         let display = (visible === true) ? 'block' : 'none';
+
+        let style = this.themes(theme);
 
         switch(type) {
             case 'function': {
@@ -163,7 +193,8 @@ export default class Code extends Component {
                         <div className={'re-toolkit-code'}>
                             <SyntaxHighlighter
                                 showLineNumbers={true}
-                                style={vs2015}
+                                style={style}
+                                customStyle={{padding: "20px 30px"}}
                                 language={'HTML'} >
                                 {markup}
                             </SyntaxHighlighter>
@@ -194,6 +225,7 @@ Code.defaultProps = {
     component     : null,
     group         : null,
     id            : null,
+    theme         : 'light',
     beauty        : {
         wrap_line_length: 10000000000000,
     }

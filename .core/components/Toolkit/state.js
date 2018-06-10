@@ -9,6 +9,9 @@ export default {
     prefs: {
         code: {
             all: true,
+        },
+        codeColor: {
+            all: 'dark',
         }
     }
 };

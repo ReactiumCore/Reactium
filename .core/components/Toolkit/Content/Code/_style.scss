@@ -1,14 +1,17 @@
 
 .re-toolkit-code {
-    background-color: rgb(30, 30, 30);
-    padding: 10px 20px;
     overflow-x: auto;
-    font-size: 14px;
+    font-size: 13px;
 
     * {
         font-family: monospace;
         font-size: 16px;
         line-height: 2;
+    }
+
+    .react-syntax-highlighter-line-number {
+        margin-left: -5px;
+        margin-right: 10px;
     }
 }
 
