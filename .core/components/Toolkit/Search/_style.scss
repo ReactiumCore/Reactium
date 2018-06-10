@@ -1,5 +1,4 @@
 .re-toolkit-search {
-    position: fixed;
     padding: 15px 20px;
     display: flex;
     justify-content: center;
@@ -8,10 +7,7 @@
     height: $search-height;
     min-height: $search-height;
     width: 248px;
-    top: 80px;
-    left: $toolbar-width;
     overflow: hidden;
-    z-index: $z-top;
     background-color: $white;
 
     input {

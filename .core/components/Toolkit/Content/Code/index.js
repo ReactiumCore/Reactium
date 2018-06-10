@@ -11,6 +11,8 @@ import { vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
 import pretty from 'pretty';
 import HTMLtoJSX from 'html-to-jsx';
+import { TweenMax, Power2 } from "gsap/TweenMax";
+
 
 
 /**
@@ -22,7 +24,12 @@ import HTMLtoJSX from 'html-to-jsx';
 export default class Code extends Component {
     constructor(props) {
         super(props);
-        this.state = { ...this.props };
+
+        this.cont        = null;
+        this.state       = { ...this.props };
+        this.open        = this.open.bind(this);
+        this.close       = this.close.bind(this);
+        this.toggle      = this.toggle.bind(this);
         this.onCopyClick = this.onCopyClick.bind(this);
     }
 
@@ -33,10 +40,13 @@ export default class Code extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
+        this.setState((prevState) => {
+            let newState = {
+                ...prevState,
+                ...nextProps,
+            };
+            return newState;
+        });
     }
 
     onCopyClick(e) {
@@ -52,20 +62,60 @@ export default class Code extends Component {
         }
     }
 
+    open() {
+        let { speed } = this.state;
+        let _self = this;
+
+        TweenMax.set(this.cont, {height: 'auto', display: 'block'});
+        TweenMax.from(this.cont, speed, {
+            height: 0,
+            overwrite: 'all',
+            ease: Power2.easeInOut,
+            onComplete: () => {
+                _self.setState({visible: true, height: 'auto'});
+            }
+        });
+    }
+
+    close() {
+        let { speed } = this.state;
+        let _self = this;
+
+        TweenMax.to(this.cont, speed, {
+            height: 0,
+            overwrite: 'all',
+            ease: Power2.easeInOut,
+            onComplete: () => {
+                _self.setState({visible: false, height: 0});
+            }
+        });
+    }
+
+    toggle() {
+        let { visible } = this.state;
+
+        if (visible !== true) {
+            this.open();
+        } else {
+            this.close();
+        }
+    }
+
     render() {
-        let { component:Component, group, id, visible } = this.state;
+        let { component:Component, group, id, visible, height } = this.state;
 
         if (!Component) { return null; }
 
-        let type    = typeof Component;
-        let display = (visible) ? 'block' : 'none';
+        let type = typeof Component;
+
+        let display = (visible === true) ? 'block' : 'none';
 
         switch(type) {
             case 'function': {
                 let markup = pretty(renderToStaticMarkup(<Component />));
 
                 return (
-                    <Fragment>
+                    <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-code-view'} style={{height, display}}>
                         <div className={'re-toolkit-card-heading thin'}>
                             <h3>Code</h3>
                             <button
@@ -85,7 +135,7 @@ export default class Code extends Component {
                                 {markup}
                             </SyntaxHighlighter>
                         </div>
-                    </Fragment>
+                    </div>
                 );
             }
 
@@ -101,6 +151,8 @@ export default class Code extends Component {
 }
 
 Code.defaultProps = {
+    height    : 'auto',
+    speed     : 0.25,
     visible   : true,
     component : null,
     group     : null,

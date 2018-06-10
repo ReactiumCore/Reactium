@@ -1,23 +1,25 @@
 .re-toolkit-toolbar {
-    position: fixed;
-    left: 0;
-    top: $header-height;
     width: $toolbar-width;
-    height: calc(100vh - #{$header-height});
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
+    z-index: $z-top;
     display: flex;
-    flex-direction: column;
-    padding-bottom: 20px;
+    align-items: stretch;
     box-shadow: $drop-shadow;
 
+    > div {
+        min-width: $toolbar-width + 40px;
+        padding-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
     .spacer {
         min-height: 10px;
         flex: 1;
     }
 
     button {
-        width: 100%;
+        width: $toolbar-width;
         height: 72px;
         min-height: 72px;
         display: flex;
@@ -84,7 +86,6 @@
         svg {
             width: 18px;
             height: 18px;
-
         }
 
         &:hover {
@@ -99,6 +100,10 @@
             }
         }
     }
+}
+
+.re-toolkit-icons {
+    display: none;
 
     .st0 {
         fill: $black;
@@ -107,5 +112,4 @@
     .cls-1 {
         fill: $toolbar-svg-fill;
     }
-
 }

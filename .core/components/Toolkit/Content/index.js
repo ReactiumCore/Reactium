@@ -51,29 +51,15 @@ export default class Content extends Component {
 
         let { id:action } = e.currentTarget;
 
-        // Toggle the preview
-        // if (op.has(card, 'state.id') && action !== 'toggle-fullscreen') {
-        //     let preview = this.previews[card.state.id];
-        //     if (preview) {
-        //         let { visible:previewVis } = preview.state;
-        //         previewVis = !previewVis;
-        //         preview.setState({visible: previewVis});
-        //     }
-        // }
-
         switch(action) {
             case 'toggle-code': {
-
-
-
+                if (op.has(card, 'state.id')) {
+                    let code = this.codes[card.state.id];
+                    if (code) { code.toggle(); }
+                }
                 return;
             }
-
         }
-
-
-        //console.log('[Reactium]', this.cards);
-        //console.log('[Reactium] onCardButtonClick:', e.currentTarget.id, card.state);
     }
 
     onWatch() {

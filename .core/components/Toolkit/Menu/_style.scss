@@ -1,21 +1,12 @@
 .re-toolkit-menu {
-    position: fixed;
-    top: $menu-height-offset;
-    left: $toolbar-width;
     width: $menu-width;
-    height: calc(100vh - #{$menu-height-offset});
     display: flex;
     align-items: stretch;
     flex-grow: 1;
     flex-direction: column;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 10;
-    padding-bottom: 40px;
+    overflow: hidden;
 
     ul {
-        flex-grow: 1;
-
         li {
             a {
                 display: block;
@@ -97,5 +88,11 @@
                 }
             }
         }
+    }
+
+    &-middle {
+        flex-grow: 1;
+        flex-wrap: wrap;
+        overflow-y: auto;
     }
 }

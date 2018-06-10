@@ -6,9 +6,12 @@
  */
 import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
+import op from 'object-path';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Content from './Content';
+import ToolbarIcons from './Toolbar/ToolbarIcons';
+
 
 
 /**
@@ -54,21 +57,26 @@ export default class Toolkit extends Component {
 
     render() {
         let { manifest = {}, group, element } = this.state;
-        let { menu = {} } = manifest;
+        let { menu = {}, toolbar = {}, sidebar = {} } = manifest;
 
-        let elements = this.getElements({ menu, group, element });
-
+        let elements  = this.getElements({ menu, group, element });
         let groupName = (group) ? menu[group]['label'] : 'Style Guide';
 
         return (
             <Fragment>
+                <ToolbarIcons />
                 <Header />
                 <main className={'re-toolkit-container'}>
-                    <Sidebar menu={menu} onMenuItemClick={this.onMenuItemClick.bind(this)} />
+                    <Sidebar
+                        {...sidebar}
+                        menu={menu}
+                        toolbar={toolbar}
+                        onMenuItemClick={this.onMenuItemClick.bind(this)}
+                    />
                     <Content
-                        title={groupName}
                         group={group}
                         data={elements}
+                        title={groupName}
                         element={element}
                         onCrumbClick={this.onMenuItemClick.bind(this)}
                     />

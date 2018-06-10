@@ -1,4 +1,5 @@
 .re-toolkit-sidebar {
+    display: flex;
     position: relative;
     min-width: $sidebar-width;
     width: $sidebar-width;
@@ -12,5 +13,20 @@
         box-shadow: none;
         width: 0px;
         min-width: 0px;
+    }
+
+    &.right {
+        order: 10;
+        flex-direction: row-reverse;
+
+        .show-left {
+            display: none;
+        }
+    }
+
+    &-left {
+        .show-right {
+            display: none;
+        }
     }
 }
