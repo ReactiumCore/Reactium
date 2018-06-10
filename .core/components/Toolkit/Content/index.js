@@ -6,7 +6,6 @@
  */
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import React, { Component, Fragment } from 'react';
-//import getDisplayName from 'react-display-name';
 import { Link } from 'react-router-dom';
 import Card from './Card';
 
@@ -73,14 +72,13 @@ export default class Content extends Component {
     }
 
     resizeIframe(iframe) {
-        iframe = iframe || {};
-        if (!iframe.contentWindow) { return; }
+        try {
+            let h = iframe.contentWindow.document.body.scrollHeight;
+                h = (h < 1) ? 100 : h;
 
-        let h = iframe.contentWindow.document.body.scrollHeight;
-            h = (h < 1) ? 100 : h;
-
-        iframe.parentNode.style.height = h;
-        iframe.style.height = h;
+            iframe.parentNode.style.height = h;
+            iframe.style.height = h;
+        } catch (err) { }
     }
 
     getDisplayName(Component) {

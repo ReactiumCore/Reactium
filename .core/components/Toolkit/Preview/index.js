@@ -5,16 +5,15 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import Test from 'components/Test';
 
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: ToolkitElement
+ * React Component: Preview
  * -----------------------------------------------------------------------------
  */
 
-export default class ToolkitElement extends Component {
+export default class Preview extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,10 +37,10 @@ export default class ToolkitElement extends Component {
     render() {
         return (
             <Fragment>
-                <Test />
+                COMPONENT
             </Fragment>
         );
     }
 }
 
-ToolkitElement.defaultProps = {};
+Preview.defaultProps = {};

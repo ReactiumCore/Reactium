@@ -1,3 +1,0 @@
-export default {
-    TOOLKITELEMENT_MOUNT: 'TOOLKITELEMENT_MOUNT',
-};
