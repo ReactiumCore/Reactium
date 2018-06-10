@@ -49,7 +49,7 @@ export default class Code extends Component {
 
     onCopyClick(e) {
         let { component:Component, onCopyClick } = this.state;
-        let markup = pretty(renderToStaticMarkup(<Component />));
+        let markup = renderToStaticMarkup(<Component />);
 
         markup = HTMLtoJSX(markup);
 
@@ -114,7 +114,7 @@ export default class Code extends Component {
 
         switch(type) {
             case 'function': {
-                let markup = pretty(renderToStaticMarkup(<Component />));
+                let markup = renderToStaticMarkup(<Component />);
 
                 return (
                     <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-code-view'} style={{height, display}}>
