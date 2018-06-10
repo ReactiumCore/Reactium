@@ -1,5 +1,6 @@
 import deps from 'dependencies';
 import manifest from 'appdir/toolkit/manifest';
+import op from 'object-path';
 
 
 export default (state = {}, action) => {
@@ -15,6 +16,11 @@ export default (state = {}, action) => {
         case deps.actionTypes.TOOLKIT_NAV:
             let { group = null, element = null } = action.params;
             newState = { ...state, group, element };
+            return newState;
+
+        case deps.actionTypes.TOOLKIT_PREF:
+            newState = { ...state };
+            op.set(newState, action.key, action.value);
             return newState;
 
         default:

@@ -46,39 +46,39 @@ export default {
                 },
             }
         },
-        custom: {
-            type: 'organism',
-            label: 'Custom Component',
-            route: '/toolkit/custom',
-            component: require('appdir/toolkit/typography').default,
-        },
-        navaway: {
-            label: 'Nav Away',
-            route: '/test',
-            redirect: true,
-            elements: {
-                'navaway-sub': {
-                    type: 'page',
-                    label: 'Nav Away - Element',
-                    route: '/test',
-                    redirect: true
-                },
-            }
-        },
-        navout: {
-            label: 'Nav Away Blank',
-            route: '/test',
-            redirect: true,
-            target: '_blank',
-            elements: {
-                'navout-sub': {
-                    type: 'page',
-                    label: 'Nav Away - Element Blank',
-                    route: '/test',
-                    redirect: true,
-                    target: '_blank',
-                }
-            }
-        }
+        // custom: {
+        //     type: 'organism',
+        //     label: 'Custom Component',
+        //     route: '/toolkit/custom',
+        //     component: require('appdir/toolkit/typography').default,
+        // },
+        // navaway: {
+        //     label: 'Nav Away',
+        //     route: '/test',
+        //     redirect: true,
+        //     elements: {
+        //         'navaway-sub': {
+        //             type: 'page',
+        //             label: 'Nav Away - Element',
+        //             route: '/test',
+        //             redirect: true
+        //         },
+        //     }
+        // },
+        // navout: {
+        //     label: 'Nav Away Blank',
+        //     route: '/test',
+        //     redirect: true,
+        //     target: '_blank',
+        //     elements: {
+        //         'navout-sub': {
+        //             type: 'page',
+        //             label: 'Nav Away - Element Blank',
+        //             route: '/test',
+        //             redirect: true,
+        //             target: '_blank',
+        //         }
+        //     }
+        // }
     },
 }

@@ -10,8 +10,9 @@ import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
-import pretty from 'pretty';
 import HTMLtoJSX from 'html-to-jsx';
+import beautify from 'js-beautify';
+import op from 'object-path';
 
 /**
  * -----------------------------------------------------------------------------
@@ -32,6 +33,8 @@ export default class Code extends Component {
     }
 
     componentDidMount() {
+        this.applyPrefs();
+
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
@@ -47,16 +50,44 @@ export default class Code extends Component {
         });
     }
 
+    applyPrefs() {
+
+        let newState = {};
+            newState = this.applyVisiblePref(newState);
+
+        if (Object.keys(newState).length > 0) {
+            this.setState(newState);
+        }
+    }
+
+    applyVisiblePref(newState = {}) {
+        let { prefs = {}, visible, id } = this.state;
+
+        let vis = [
+            op.get(prefs, `code.${id}`),
+            op.get(prefs, 'code.all'),
+            visible,
+        ];
+
+        vis.forEach((v, i) => {
+            if (op.has(newState, 'visible')) { return; }
+            if (typeof v !== 'undefined') { newState['visible'] = v; console.log(id, i, v); }
+        });
+
+        return newState;
+    }
+
     onCopyClick(e) {
-        let { component:Component, onCopyClick } = this.state;
-        let markup = renderToStaticMarkup(<Component />);
+        let { beauty = {}, component:Component, onButtonClick } = this.state;
+        let markup = beautify.html(renderToStaticMarkup(<Component />), beauty);
 
         markup = HTMLtoJSX(markup);
 
         copy(markup);
 
-        if (typeof onCopyClick === 'function') {
-            onCopyClick(e, markup);
+        if (typeof onButtonClick === 'function') {
+            e['type'] = 'copy';
+            onButtonClick(e, markup);
         }
     }
 
@@ -104,7 +135,7 @@ export default class Code extends Component {
     }
 
     render() {
-        let { component:Component, group, id, visible, height } = this.state;
+        let { component:Component, group, id, visible, height, beauty = {} } = this.state;
 
         if (!Component) { return null; }
 
@@ -114,7 +145,7 @@ export default class Code extends Component {
 
         switch(type) {
             case 'function': {
-                let markup = renderToStaticMarkup(<Component />);
+                let markup = beautify.html(renderToStaticMarkup(<Component />), beauty);
 
                 return (
                     <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-code-view'} style={{height, display}}>
@@ -143,8 +174,10 @@ export default class Code extends Component {
 
             default: {
                 return (
-                    <div className={'re-toolkit-card-heading thin'}>
-                        <small><em>* Code view not available for this type of element.</em></small>
+                    <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-code-view'} style={{height, display}}>
+                        <div className={'re-toolkit-card-heading thin'}>
+                            <small><em>* Code view not available for this type of element.</em></small>
+                        </div>
                     </div>
                 );
             }
@@ -153,10 +186,15 @@ export default class Code extends Component {
 }
 
 Code.defaultProps = {
-    height    : 'auto',
-    speed     : 0.25,
-    visible   : true,
-    component : null,
-    group     : null,
-    id        : null,
+    prefs         : {},
+    onButtonClick : null,
+    height        : 'auto',
+    speed         : 0.25,
+    visible       : false,
+    component     : null,
+    group         : null,
+    id            : null,
+    beauty        : {
+        wrap_line_length: 10000000000000,
+    }
 };

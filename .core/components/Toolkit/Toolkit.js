@@ -23,9 +23,9 @@ import ToolbarIcons from './Toolbar/ToolbarIcons';
 export default class Toolkit extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            ...this.props,
-        };
+
+        this.content = null;
+        this.state   = { ...this.props };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -55,12 +55,36 @@ export default class Toolkit extends Component {
         return elements;
     }
 
+    onButtonClick(e, data) {
+
+        let { type } = e;
+        let { set } = this.state;
+
+        let persist = [
+            'toggle-code',
+        ];
+
+        if (persist.indexOf(type) > -1) {
+            let karry = type.split('-'); karry.shift();
+            let key, value;
+
+            switch (type) {
+                case 'toggle-code':{
+                    key   = `prefs.${karry.join('-')}.${data.state.id}`;
+                    value = !op.get(this.content, `codes.${data.state.id}.state.visible`);
+                    set({key, value});
+                    break;
+                }
+            }
+        }
+    }
+
     render() {
-        let { manifest = {}, group, element } = this.state;
+        let { manifest = {}, prefs = {}, group, element } = this.state;
         let { menu = {}, toolbar = {}, sidebar = {} } = manifest;
 
         let elements  = this.getElements({ menu, group, element });
-        let groupName = (group) ? menu[group]['label'] : 'Style Guide';
+        let groupName = (group) ? menu[group]['label'] : 'Reactium';
 
         return (
             <Fragment>
@@ -75,9 +99,12 @@ export default class Toolkit extends Component {
                     />
                     <Content
                         group={group}
+                        prefs={prefs}
                         data={elements}
                         title={groupName}
                         element={element}
+                        ref={(elm) => { this.content = elm; }}
+                        onButtonClick={this.onButtonClick.bind(this)}
                         onCrumbClick={this.onMenuItemClick.bind(this)}
                     />
                 </main>
@@ -91,4 +118,6 @@ export default class Toolkit extends Component {
     }
 }
 
-Toolkit.defaultProps = {};
+Toolkit.defaultProps = {
+    prefs: {},
+};

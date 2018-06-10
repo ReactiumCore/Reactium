@@ -32,6 +32,7 @@ export default class Content extends Component {
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
     }
 
+    // Handlers
     componentDidMount() {
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
@@ -49,16 +50,29 @@ export default class Content extends Component {
 
     onCardButtonClick(e, card) {
 
+        let { onButtonClick } = this.state;
+
         let { id:action } = e.currentTarget;
+
+        let evtdata = {};
 
         switch(action) {
             case 'toggle-code': {
                 if (op.has(card, 'state.id')) {
                     let code = this.codes[card.state.id];
-                    if (code) { code.toggle(); }
+                    if (code) {
+                        code.toggle();
+                        evtdata = card;
+                    }
                 }
-                return;
+
+                break;
             }
+        }
+
+        if (typeof onButtonClick === 'function') {
+            e['type'] = action;
+            onButtonClick(e, evtdata);
         }
     }
 
@@ -67,6 +81,7 @@ export default class Content extends Component {
         Object.values(this.previews).forEach(preview => preview.resize());
     }
 
+    // Registers
     registerCard({ elm, id }) {
         if (!elm) { return; }
         this.cards[id] = elm;
@@ -82,7 +97,10 @@ export default class Content extends Component {
         this.previews[id] = elm;
     }
 
+    // Renderers
     renderCards({ data, card, group }) {
+
+        let { onButtonClick, prefs } = this.state;
 
         this.cards    = {};
         this.codes    = {};
@@ -116,7 +134,9 @@ export default class Content extends Component {
 
                     <Code
                         ref={(elm) => { this.registerCode({elm, id}); }}
+                        onButtonClick={onButtonClick}
                         component={component}
+                        prefs={prefs}
                         group={group}
                         id={id}
                     />
@@ -177,11 +197,13 @@ export default class Content extends Component {
 }
 
 Content.defaultProps = {
-    onCrumbClick : null,
-    title        : null,
-    watchTimer   : 200,
-    data         : {},
-    card         : {
+    onButtonClick : null,
+    onCrumbClick  : null,
+    title         : null,
+    watchTimer    : 200,
+    data          : {},
+    prefs         : {},
+    card          : {
         buttons: {
             header: [
                 {name: 'toggle-fullscreen', title: 'toggle fullscreen', icon: '#re-icon-fullscreen'}

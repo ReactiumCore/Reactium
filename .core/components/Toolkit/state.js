@@ -5,5 +5,10 @@
 export default {
     // do not persist to local storage (default)
     // see https://www.npmjs.com/package/redux-local-persist
-    persist: false,
+    persist: ['prefs'],
+    prefs: {
+        code: {
+            all: true,
+        }
+    }
 };

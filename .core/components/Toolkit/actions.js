@@ -29,5 +29,13 @@ export default {
                 params,
             });
         }
-    }
+    },
+
+    set: ({key, value}) => (dispatch) => {
+        return dispatch({
+            type: deps.actionTypes.TOOLKIT_PREF,
+            key,
+            value
+        });
+    },
 };
