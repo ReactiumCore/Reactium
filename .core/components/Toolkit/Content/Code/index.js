@@ -4,6 +4,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
+import { TweenMax, Power2 } from 'gsap';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
@@ -11,9 +12,6 @@ import { vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
 import pretty from 'pretty';
 import HTMLtoJSX from 'html-to-jsx';
-import { TweenMax, Power2 } from "gsap/TweenMax";
-
-
 
 /**
  * -----------------------------------------------------------------------------
@@ -63,6 +61,8 @@ export default class Code extends Component {
     }
 
     open() {
+        if (!this.cont) { return; }
+
         let { speed } = this.state;
         let _self = this;
 
@@ -78,6 +78,8 @@ export default class Code extends Component {
     }
 
     close() {
+        if (!this.cont) { return; }
+
         let { speed } = this.state;
         let _self = this;
 
