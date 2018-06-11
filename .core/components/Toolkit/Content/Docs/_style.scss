@@ -5,12 +5,22 @@
 .re-toolkit-card-docs {
 
     display: block;
-    padding: 25px 25px 10px 25px;
+    padding: 25px 25px 0 25px;
     font-family: Helvetica, arial, sans-serif;
     font-size: 14px;
     line-height: 1.6;
     background-color: white;
     color: #333;
+
+    .re-toolkit-code {
+        &:last-child {
+            pre {
+                margin-bottom: -1px !important;
+            }
+        }
+    }
+
+
 
     & > *:first-child {
       margin-top: 0 !important;

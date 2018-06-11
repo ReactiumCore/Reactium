@@ -43,9 +43,6 @@ export default class Toolkit extends Component {
 
     onButtonClick(e, data) {
         let { type } = e;
-
-        console.log('Toolkit.onToolbarItemClick(', type, ')');
-        console.log(data);
         this.togglePref({type, data});
     }
 

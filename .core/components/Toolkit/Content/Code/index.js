@@ -14,6 +14,7 @@ import HTMLtoJSX from 'html-to-jsx';
 import beautify from 'js-beautify';
 import op from 'object-path';
 
+
 /**
  * -----------------------------------------------------------------------------
  * React Component: Code
@@ -180,21 +181,21 @@ export default class Code extends Component {
         return (op.has(thms, theme)) ? thms[theme] : thms.dark;
     }
 
+    markup(Component, beauty) {
+        return beautify.html(renderToStaticMarkup(<Component />), beauty);
+    }
+
     render() {
         let { component:Component, visible, height, beauty = {}, theme = 'dark' } = this.state;
 
         if (!Component) { return null; }
 
-        let type = typeof Component;
-
+        let type    = typeof Component;
+        let style   = this.themes(theme);
         let display = (visible === true) ? 'block' : 'none';
-
-        let style = this.themes(theme);
 
         switch(type) {
             case 'function': {
-                let markup = beautify.html(renderToStaticMarkup(<Component />), beauty);
-
                 return (
                     <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-code-view'} style={{height, display}}>
                         <div className={'re-toolkit-card-heading thin'}>
@@ -221,7 +222,7 @@ export default class Code extends Component {
                                 style={style}
                                 customStyle={{padding: "20px 30px"}}
                                 language={'HTML'} >
-                                {markup}
+                                {this.markup(Component, beauty)}
                             </SyntaxHighlighter>
                         </div>
                     </div>

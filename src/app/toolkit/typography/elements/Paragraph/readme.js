@@ -23,6 +23,14 @@ let inlineCode = () => {
     console.log('Whoa dude!');
 };
 ${'```'}
+
+${'```html'}
+<html>
+    <body>
+        <p>Some HTML markup</p>
+    </body>
+</html>
+${'```'}
 `;
 
 
