@@ -26,6 +26,7 @@ export default class Content extends Component {
 
         this.cards             = {};
         this.codes             = {};
+        this.docs              = {};
         this.previews          = {};
         this.watcher           = null;
         this.state             = { ...this.props };
@@ -70,6 +71,18 @@ export default class Content extends Component {
 
                 break;
             }
+
+            case 'toggle-docs': {
+                if (op.has(card, 'state.id')) {
+                    let doc = this.docs[card.state.id];
+                    if (doc) {
+                        doc.toggle();
+                        evtdata = doc;
+                    }
+                }
+
+                break;
+            }
         }
 
         if (typeof onButtonClick === 'function') {
@@ -92,6 +105,11 @@ export default class Content extends Component {
     registerCode({ elm, id }) {
         if (!elm) { return; }
         this.codes[id] = elm;
+    }
+
+    registerDocs({ elm, id }) {
+        if (!elm) { return; }
+        this.docs[id] = elm;
     }
 
     registerPreview({ elm, id }) {
@@ -165,7 +183,14 @@ export default class Content extends Component {
                     }
                     {
                         (readme)
-                        ? <Docs component={readme} />
+                        ? (
+                            <Docs
+                                ref={(elm) => { this.registerDocs({elm, id}); }}
+                                component={readme}
+                                prefs={prefs}
+                                id={id}
+                            />
+                        )
                         : null
                     }
                 </Card>

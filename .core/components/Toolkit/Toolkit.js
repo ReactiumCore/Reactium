@@ -41,6 +41,14 @@ export default class Toolkit extends Component {
         this.state.menuItemClick(url);
     }
 
+    onButtonClick(e, data) {
+        let { type } = e;
+
+        console.log('Toolkit.onToolbarItemClick(', type, ')');
+        console.log(data);
+        this.togglePref({type, data});
+    }
+
     getElements({ menu, group, element }) {
         let elements = {};
 
@@ -56,18 +64,12 @@ export default class Toolkit extends Component {
         return elements;
     }
 
-    onButtonClick(e, data) {
-        let { type } = e;
-
-        console.log('Toolkit.onToolbarItemClick(', type, ')');
-        this.togglePref({type, data});
-    }
-
     togglePref({type, data}) {
 
         let toggles = [
             'toggle-code',
             'toggle-codeColor',
+            'toggle-docs',
         ];
 
         if (toggles.indexOf(type) < 0) { return; }
@@ -81,6 +83,11 @@ export default class Toolkit extends Component {
         switch (type) {
             case 'toggle-code': {
                 value = !op.get(this.content, `codes.${data.state.id}.state.visible`);
+                break;
+            }
+
+            case 'toggle-docs': {
+                value = !op.get(this.content, `docs.${data.state.id}.state.visible`);
                 break;
             }
 

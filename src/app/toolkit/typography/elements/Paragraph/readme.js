@@ -11,9 +11,18 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  _does this work?_
 
  ## Hmmm..
- **Probably not**
+ **I think so**
 
- <p>What about this</p>
+ <p>What about inline HTML?</p>
+
+${'`'}
+code
+${'`'}
+${'```js'}
+let inlineCode = () => {
+    console.log('Whoa dude!');
+};
+${'```'}
 `;
 
 

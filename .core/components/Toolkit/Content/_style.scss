@@ -3,6 +3,7 @@
     overflow-x: hidden;
     z-index: 1;
     padding: 60px;
+    padding-top: 48px;
 
     &-fullscreen {
         padding: 0;
@@ -16,6 +17,7 @@
         align-items: center;
         justify-content: flex-start;
         position: relative;
+        font-size: 24px;
 
 
         * {

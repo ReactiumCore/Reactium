@@ -120,7 +120,7 @@ export default class Code extends Component {
 
         if (typeof onButtonClick === 'function') {
             e['type'] = 'toggle-codeColor';
-            //let data = {state: Object.assign({}, this.state, { theme })};
+
             let data = { ...this };
                 data.state.theme = theme;
 
@@ -181,7 +181,7 @@ export default class Code extends Component {
     }
 
     render() {
-        let { component:Component, group, id, visible, height, beauty = {}, theme = 'dark' } = this.state;
+        let { component:Component, visible, height, beauty = {}, theme = 'dark' } = this.state;
 
         if (!Component) { return null; }
 
@@ -245,7 +245,7 @@ Code.defaultProps = {
     prefs         : {},
     onButtonClick : null,
     height        : 'auto',
-    speed         : 0.25,
+    speed         : 0.2,
     visible       : false,
     component     : null,
     group         : null,
