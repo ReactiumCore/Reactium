@@ -62,20 +62,26 @@ export default class Toolkit extends Component {
 
         let persist = [
             'toggle-code',
+            'toggle-codeColor',
         ];
 
         if (persist.indexOf(type) > -1) {
             let karry = type.split('-'); karry.shift();
-            let key, value;
+            let value, key = `prefs.${karry.join('-')}.${data.state.id}`;
 
             switch (type) {
-                case 'toggle-code':{
-                    key   = `prefs.${karry.join('-')}.${data.state.id}`;
+                case 'toggle-code': {
                     value = !op.get(this.content, `codes.${data.state.id}.state.visible`);
-                    set({key, value});
+                    break;
+                }
+
+                case 'toggle-codeColor': {
+                    value = data.state.theme;
                     break;
                 }
             }
+
+            set({key, value});
         }
     }
 

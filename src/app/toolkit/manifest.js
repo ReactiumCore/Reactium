@@ -20,17 +20,17 @@ export default {
             label: 'Typography',
             route: '/toolkit/typography',
             elements: {
-                'paragraph': {
-                    type: 'atom',
-                    label: 'Paragraph',
-                    route: '/toolkit/typography/paragraph',
-                    component: require('appdir/toolkit/typography/elements/Paragraph').default,
-                },
                 'text-link': {
                     type: 'atom',
                     label: 'Text Link',
                     route: '/toolkit/typography/text-link',
                     component: require('appdir/toolkit/typography/elements/TextLink').default,
+                },
+                'paragraph': {
+                    type: 'atom',
+                    label: 'Paragraph',
+                    route: '/toolkit/typography/paragraph',
+                    component: require('appdir/toolkit/typography/elements/Paragraph').default,
                 },
             },
         },

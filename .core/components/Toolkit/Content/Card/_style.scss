@@ -17,6 +17,10 @@
         align-items: center;
         margin-left: 5px;
 
+        &:hover {
+            opacity: 0.5;
+        }
+
         svg {
             width: 14px;
             height: 14px;

@@ -24,12 +24,13 @@ export default class Code extends Component {
     constructor(props) {
         super(props);
 
-        this.cont        = null;
-        this.state       = { ...this.props };
-        this.open        = this.open.bind(this);
-        this.close       = this.close.bind(this);
-        this.toggle      = this.toggle.bind(this);
-        this.onCopyClick = this.onCopyClick.bind(this);
+        this.cont         = null;
+        this.state        = { ...this.props };
+        this.open         = this.open.bind(this);
+        this.close        = this.close.bind(this);
+        this.toggle       = this.toggle.bind(this);
+        this.onCopyClick  = this.onCopyClick.bind(this);
+        this.onThemeClick = this.onThemeClick.bind(this);
     }
 
     componentDidMount() {
@@ -106,7 +107,24 @@ export default class Code extends Component {
 
         if (typeof onButtonClick === 'function') {
             e['type'] = 'copy';
-            onButtonClick(e, markup);
+            onButtonClick(e, this, markup);
+        }
+    }
+
+    onThemeClick(e) {
+        let { theme, onButtonClick } = this.state;
+
+        theme = (theme === 'dark') ? 'light' : 'dark';
+
+        this.setState({theme});
+
+        if (typeof onButtonClick === 'function') {
+            e['type'] = 'toggle-codeColor';
+            //let data = {state: Object.assign({}, this.state, { theme })};
+            let data = { ...this };
+                data.state.theme = theme;
+
+            onButtonClick(e, data);
         }
     }
 
@@ -181,6 +199,13 @@ export default class Code extends Component {
                     <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-code-view'} style={{height, display}}>
                         <div className={'re-toolkit-card-heading thin'}>
                             <h3>Code</h3>
+                            <button
+                                className={`theme-btn ${theme}`}
+                                title={`theme: ${theme}`}
+                                onClick={this.onThemeClick}
+                                type={'button'} >
+                                <span /><span />
+                            </button>
                             <button
                                 title={'copy to clipboard'}
                                 onClick={this.onCopyClick}
