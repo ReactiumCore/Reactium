@@ -32,6 +32,7 @@ export default {
                     label: 'Paragraph',
                     route: '/toolkit/typography/paragraph',
                     component: require('appdir/toolkit/typography/elements/Paragraph').default,
+                    readme: require('appdir/toolkit/typography/elements/Paragraph/readme').default,
                 },
             },
         },

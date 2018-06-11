@@ -16,9 +16,9 @@ import React, { Component, Fragment } from 'react';
 export default class Docs extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            ...this.props,
-        };
+
+        this.cont = null;
+        this.state = { ...this.props };
     }
 
     componentDidMount() {
@@ -35,10 +35,17 @@ export default class Docs extends Component {
     }
 
     render() {
-        return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
+        let { component:Component } = this.state;
+
+        return (!Component) ? null : (
+            <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-docs-view'}>
+                <div className={'re-toolkit-card-heading thin'}>
+                    <h3>Documentation</h3>
+                </div>
+                <div className={'re-toolkit-card-docs'}>
+                    <Component />
+                </div>
+            </div>
         );
     }
 }

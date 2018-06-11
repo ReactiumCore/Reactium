@@ -8,8 +8,10 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Preview from './Preview';
 import op from 'object-path';
+import _ from 'underscore';
 import Card from './Card';
 import Code from './Code';
+import Docs from './Docs';
 
 
 /**
@@ -110,11 +112,27 @@ export default class Content extends Component {
             let id   = [group, key].join('_');
             let item = data[key];
 
-            let { label, component } = item;
+            let { label, component, readme, dna } = item;
             let { buttons = {} } = card;
 
             buttons = JSON.stringify(buttons);
             buttons = JSON.parse(buttons);
+
+            let noCode = Boolean(typeof component === 'string');
+            if (noCode === true) {
+                let idx = _.indexOf(_.pluck(buttons.footer, 'name'), 'toggle-code');
+                buttons.footer.splice(idx, 1);
+            }
+
+            if (!dna) {
+                let idx = _.indexOf(_.pluck(buttons.footer, 'name'), 'toggle-link');
+                buttons.footer.splice(idx, 1);
+            }
+
+            if (!readme) {
+                let idx = _.indexOf(_.pluck(buttons.footer, 'name'), 'toggle-docs');
+                buttons.footer.splice(idx, 1);
+            }
 
             return (
                 <Card
@@ -131,16 +149,25 @@ export default class Content extends Component {
                         group={group}
                         id={id}
                     />
-
-                    <Code
-                        ref={(elm) => { this.registerCode({elm, id}); }}
-                        onButtonClick={onButtonClick}
-                        component={component}
-                        prefs={prefs}
-                        group={group}
-                        id={id}
-                    />
-
+                    {
+                        (noCode !== true)
+                        ? (
+                            <Code
+                                ref={(elm) => { this.registerCode({elm, id}); }}
+                                onButtonClick={onButtonClick}
+                                component={component}
+                                prefs={prefs}
+                                group={group}
+                                id={id}
+                            />
+                        )
+                        : null
+                    }
+                    {
+                        (readme)
+                        ? <Docs component={readme} />
+                        : null
+                    }
                 </Card>
             );
         });
