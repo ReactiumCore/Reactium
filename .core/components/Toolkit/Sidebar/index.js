@@ -37,12 +37,12 @@ export default class Sidebar extends Component {
     }
 
     render() {
-        let { closed, menu, onMenuItemClick, position } = this.state;
+        let { closed, menu, onMenuItemClick, onToolbarItemClick, position, toolbar = {} } = this.state;
 
         let cls = (closed === true) ? 're-toolkit-sidebar-closed' : '';
         return (
             <aside className={`re-toolkit-sidebar ${cls} ${position}`}>
-                <Toolbar />
+                <Toolbar {...toolbar} onToolbarItemClick={onToolbarItemClick} />
                 <Menu data={menu} onItemClick={onMenuItemClick} />
             </aside>
         );
@@ -50,6 +50,10 @@ export default class Sidebar extends Component {
 }
 
 Sidebar.defaultProps = {
+    toolbar: {},
+    menu: {},
     closed: false,
     position: 'left',
+    onMenuItemClick: null,
+    onToolbarItemClick: null,
 };

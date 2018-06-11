@@ -58,6 +58,8 @@ export default class Toolkit extends Component {
 
     onButtonClick(e, data) {
         let { type } = e;
+
+        console.log('Toolkit.onToolbarItemClick(', type, ')');
         this.togglePref({type, data});
     }
 
@@ -107,6 +109,7 @@ export default class Toolkit extends Component {
                         {...sidebar}
                         menu={menu}
                         toolbar={toolbar}
+                        onToolbarItemClick={this.onButtonClick.bind(this)}
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
                     />
                     <Content

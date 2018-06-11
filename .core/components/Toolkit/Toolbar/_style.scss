@@ -28,7 +28,6 @@
         flex-direction: column;
         font-size: 10px;
         color: $black;
-        transition: all .5s ease-in-out;
         position: relative;
 
         &:before {
@@ -40,7 +39,7 @@
             height: 5px;
             transform: translateY(-120%) translateX(-150%) rotate(45deg);
             background-color: $blue;
-            transition: all .5s ease-in-out;
+            transition: transform .5s ease-in-out;
         }
 
         div {
@@ -51,11 +50,8 @@
             width: 24px;
             height: 24px;
 
-            transition: all .5s ease-in-out;
-
             * {
                 fill: $black;
-                transition: all .2s ease-in-out;
             }
         }
 
@@ -74,7 +70,7 @@
                 height: 8px;
                 transform: translateY(-120%) translateX(-50%) rotate(45deg);
                 background-color: $blue;
-                transition: all .5s ease-in-out;
+                transition: transform .5s ease-in-out;
             }
         }
     }
@@ -111,5 +107,9 @@
 
     .cls-1 {
         fill: $toolbar-svg-fill;
+    }
+
+    .cls-2 {
+        fill: $white
     }
 }

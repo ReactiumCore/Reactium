@@ -318,7 +318,7 @@ export default class ToolbarIcons extends Component {
                     <title>Pages</title>
                     <g>
                         <g>
-                            <rect className="cls-1" x="30.7" y="5.88" width="173.77" height="223.42" />
+                            <rect className="cls-2" x="30.7" y="5.88" width="173.77" height="223.42" />
                             <path d="M210.35,235.18H24.82V0H210.35ZM36.58,223.42h162V11.76h-162Z" />
                             <polygon className="cls-1" points="179.65 254.12 5.88 254.12 5.88 30.7 124.77 30.7 124.77 84.27 179.65 84.27 179.65 254.12" />
                             <path d="M130.65,24.82H0V260H185.53V78.39Zm37.84,53.57H130.65V41.77Zm5.27,169.85h-162V36.58H118.89V90.15h54.87Z" />

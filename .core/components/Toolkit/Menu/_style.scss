@@ -31,7 +31,7 @@
                         left: 0;
                         width: 8px;
                         height: 8px;
-                        transition: all 1s ease-in-out;
+                        transition: transform 1s ease-in-out;
                         transform: translateY(-50%) translateX(-150%) rotate(45deg);
                         background-color: $blue;
                     }
@@ -55,7 +55,7 @@
                             left: 0;
                             width: 8px;
                             height: 8px;
-                            transition: all 1s ease-in-out;
+                            transition: transform 1s ease-in-out;
                             transform: translateY(-50%) translateX(-50%) rotate(45deg);
                             background-color: $blue;
                         }
