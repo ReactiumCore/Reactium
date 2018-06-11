@@ -24,8 +24,9 @@ export default class Toolkit extends Component {
     constructor(props) {
         super(props);
 
-        this.content = null;
-        this.state   = { ...this.props };
+        this.content    = null;
+        this.togglePref = this.togglePref.bind(this);
+        this.state      = { ...this.props };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -56,33 +57,38 @@ export default class Toolkit extends Component {
     }
 
     onButtonClick(e, data) {
-
         let { type } = e;
-        let { set } = this.state;
+        this.togglePref({type, data});
+    }
 
-        let persist = [
+    togglePref({type, data}) {
+
+        let toggles = [
             'toggle-code',
             'toggle-codeColor',
         ];
 
-        if (persist.indexOf(type) > -1) {
-            let karry = type.split('-'); karry.shift();
-            let value, key = `prefs.${karry.join('-')}.${data.state.id}`;
+        if (toggles.indexOf(type) < 0) { return; }
 
-            switch (type) {
-                case 'toggle-code': {
-                    value = !op.get(this.content, `codes.${data.state.id}.state.visible`);
-                    break;
-                }
+        let { set } = this.state;
 
-                case 'toggle-codeColor': {
-                    value = data.state.theme;
-                    break;
-                }
+        let value;
+        let key = type.split('toggle-').join('');
+            key = `prefs.${key}.${data.state.id}`;
+
+        switch (type) {
+            case 'toggle-code': {
+                value = !op.get(this.content, `codes.${data.state.id}.state.visible`);
+                break;
             }
 
-            set({key, value});
+            case 'toggle-codeColor': {
+                value = data.state.theme;
+                break;
+            }
         }
+
+        set({key, value});
     }
 
     render() {
