@@ -21,18 +21,18 @@ export default {
             label: 'Typography',
             route: '/toolkit/typography',
             elements: {
-                'text-link': {
-                    type: 'atom',
-                    label: 'Text Link',
-                    route: '/toolkit/typography/text-link',
-                    component: require('appdir/toolkit/typography/elements/TextLink').default,
-                },
                 'paragraph': {
                     type: 'atom',
                     label: 'Paragraph',
                     route: '/toolkit/typography/paragraph',
                     component: require('appdir/toolkit/typography/elements/Paragraph').default,
                     readme: require('appdir/toolkit/typography/elements/Paragraph/readme').default,
+                },
+                'text-link': {
+                    type: 'atom',
+                    label: 'Text Link',
+                    route: '/toolkit/typography/text-link',
+                    component: require('appdir/toolkit/typography/elements/TextLink').default,
                 },
             },
         },
@@ -48,12 +48,12 @@ export default {
                 },
             }
         },
-        // custom: {
-        //     type: 'organism',
-        //     label: 'Custom Component',
-        //     route: '/toolkit/custom',
-        //     component: require('appdir/toolkit/typography').default,
-        // },
+        custom: {
+            type: 'organism',
+            label: 'Custom View',
+            route: '/toolkit/custom',
+            component: require('appdir/toolkit/typography').default,
+        },
         // navaway: {
         //     label: 'Nav Away',
         //     route: '/test',

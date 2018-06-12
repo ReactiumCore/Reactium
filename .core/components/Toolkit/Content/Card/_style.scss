@@ -4,6 +4,11 @@
     box-shadow: $drop-shadow;
     overflow-x: hidden;
     min-width: 320px;
+    display: block;
+    z-index: 1;
+    height: auto;
+    display: flex;
+    flex-direction: column;
 
     &:not(:last-child) {
         margin-bottom: 60px;
@@ -35,6 +40,7 @@
         border-radius: 4px 4px 0 0;
         align-items: center;
         border-bottom: 1px solid $border-color;
+        min-height: 65px;
 
         *:first-child {
             flex-grow: 1;
@@ -63,6 +69,7 @@
 
     &-body {
         background-color: $white;
+        flex-grow: 1;
 
         &-wrap {
             display: block;
@@ -83,10 +90,21 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: flex-end;
+        min-height: 45px;
 
         button svg {
             width: 18px;
             height: 18px;
+        }
+    }
+
+    &.fixed {
+        overflow-y: auto;
+        z-index: 100000;
+        min-height: calc(100vh - 80px);
+
+        .re-toolkit-card-heading {
+            border-radius: 0;
         }
     }
 

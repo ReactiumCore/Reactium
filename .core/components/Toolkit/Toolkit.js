@@ -43,22 +43,14 @@ export default class Toolkit extends Component {
 
     onButtonClick(e, data) {
         let { type } = e;
+
         this.togglePref({type, data});
+        this.toggleFullscreen({type, data, e});
     }
 
-    getElements({ menu, group, element }) {
-        let elements = {};
-
-        if (Object.keys(menu).length < 1 || !group) { return null; }
-
-        if (!element) {
-            let { component = null } = menu[group];
-            elements = component || menu[group]['elements'];
-        } else {
-            elements[element] = menu[group]['elements'][element];
-        }
-
-        return elements;
+    toggleFullscreen({type, data, e}) {
+        if (type !== 'toggle-fullscreen') { return; }
+        data.toggleFullScreen(e);
     }
 
     togglePref({type, data}) {
@@ -78,13 +70,10 @@ export default class Toolkit extends Component {
             key = `prefs.${key}.${data.state.id}`;
 
         switch (type) {
+            case 'toggle-docs':
             case 'toggle-code': {
-                value = !op.get(this.content, `codes.${data.state.id}.state.visible`);
-                break;
-            }
-
-            case 'toggle-docs': {
-                value = !op.get(this.content, `docs.${data.state.id}.state.visible`);
+                let k = (type === 'toggle-code') ? 'codes' : 'docs';
+                value = !op.get(this.content, `${k}.${data.state.id}.state.visible`);
                 break;
             }
 
@@ -95,6 +84,21 @@ export default class Toolkit extends Component {
         }
 
         set({key, value});
+    }
+
+    getElements({ menu, group, element }) {
+        let elements = {};
+
+        if (Object.keys(menu).length < 1 || !group) { return null; }
+
+        if (!element) {
+            let { component = null } = menu[group];
+            elements = component || menu[group]['elements'];
+        } else {
+            elements[element] = menu[group]['elements'][element];
+        }
+
+        return elements;
     }
 
     render() {

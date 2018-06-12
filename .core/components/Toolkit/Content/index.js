@@ -54,31 +54,18 @@ export default class Content extends Component {
     onCardButtonClick(e, card) {
 
         let { onButtonClick } = this.state;
-
-        let { id:action } = e.currentTarget;
-
-        let evtdata = {};
+        let { id:action }     = e.currentTarget;
+        
+        let evtdata = card;
 
         switch(action) {
+            case 'toggle-docs':
             case 'toggle-code': {
-                if (op.has(card, 'state.id')) {
-                    let code = this.codes[card.state.id];
-                    if (code) {
-                        code.toggle();
-                        evtdata = card;
-                    }
-                }
 
-                break;
-            }
-
-            case 'toggle-docs': {
                 if (op.has(card, 'state.id')) {
-                    let doc = this.docs[card.state.id];
-                    if (doc) {
-                        doc.toggle();
-                        evtdata = doc;
-                    }
+                    let k = (action === 'toggle-code') ? 'codes' : 'docs';
+                    let cmp = this[k][card.state.id];
+                    if (cmp) { cmp.toggle(); }
                 }
 
                 break;
@@ -124,6 +111,7 @@ export default class Content extends Component {
 
         this.cards    = {};
         this.codes    = {};
+        this.docs     = {};
         this.previews = {};
 
         return Object.keys(data).map((key, k) => {

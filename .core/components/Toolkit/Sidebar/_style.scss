@@ -6,7 +6,7 @@
     height: calc(100vh - #{$header-height});
     overflow: hidden;
     background-color: $white;
-    z-index: 10;
+    //z-index: 10;
     box-shadow: $drop-shadow;
 
     &-closed {
