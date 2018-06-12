@@ -179,12 +179,12 @@ export default class Card extends Component {
 }
 
 Card.defaultProps = {
-    speed: 0.125,
-    fullscreen: false,
-    title: null,
-    onButtonClick: null,
-    buttons: {
-        header: [],
-        footer: [],
+    speed         : 0.125,
+    fullscreen    : false,
+    title         : null,
+    onButtonClick : null,
+    buttons       : {
+        header : [],
+        footer : [],
     }
 };
