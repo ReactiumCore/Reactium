@@ -57,7 +57,6 @@ export default class Search extends Component {
         return (
             <div className={'re-toolkit-search'}>
                 <input
-                    value={null}
                     ref={(elm) => { this.input = elm; }}
                     name={'search'}
                     type={'text'}

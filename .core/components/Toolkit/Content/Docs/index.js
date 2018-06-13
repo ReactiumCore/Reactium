@@ -120,15 +120,21 @@ export default class Docs extends Component {
     }
 
     render() {
-        let { component:Component, visible, height } = this.state;
+        let { component:Component, visible, height, title } = this.state;
 
         let display = (visible === true) ? 'block' : 'none';
 
         return (!Component) ? null : (
             <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-docs-view'} style={{height, display}}>
-                <div className={'re-toolkit-card-heading thin'}>
-                    <h3>Documentation</h3>
-                </div>
+                {(title)
+                    ? (
+                        <div className={'re-toolkit-card-heading thin'}>
+                            <h3>{title}</h3>
+                        </div>
+                    )
+                    : null
+                }
+
                 <div className={'re-toolkit-card-docs'}>
                     <Component />
                 </div>
@@ -138,9 +144,10 @@ export default class Docs extends Component {
 }
 
 Docs.defaultProps = {
+    title   : null,
     prefs   : {},
     height  : 'auto',
     speed   : 0.2,
-    visible : false,
+    visible : true,
     id      : null,
 };

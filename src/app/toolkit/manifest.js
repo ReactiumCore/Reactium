@@ -1,4 +1,5 @@
 export default {
+    overview: require('appdir/toolkit/overview').default,
     sidebar: {
         closed   : false,
         position : 'left',

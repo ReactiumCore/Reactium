@@ -55,7 +55,7 @@ export default class Content extends Component {
 
         let { onButtonClick } = this.state;
         let { id:action }     = e.currentTarget;
-        
+
         let evtdata = card;
 
         switch(action) {
@@ -174,6 +174,7 @@ export default class Content extends Component {
                         ? (
                             <Docs
                                 ref={(elm) => { this.registerDocs({elm, id}); }}
+                                title={'Documentation'}
                                 component={readme}
                                 prefs={prefs}
                                 id={id}
@@ -204,9 +205,19 @@ export default class Content extends Component {
     }
 
     render() {
-        let { card, title, data, element, group } = this.state;
+        let { card, title, data, element, group, defaultComponent } = this.state;
 
-        if (!data) { return null; }
+
+        if (!data) {
+            if (!defaultComponent) { return null; }
+
+            const Overview = defaultComponent;
+            return (
+                <section className={'re-toolkit-content'}>
+                    <Overview />
+                </section>
+            );
+        }
 
         if (typeof data !== 'function') {
 
@@ -215,23 +226,19 @@ export default class Content extends Component {
             let { label = null } = element;
 
             return (
-                <Fragment>
-                    <section className={'re-toolkit-content'}>
-                        {this.renderCrumbs({title, group, element: label})}
-                        {this.renderCards({ data, card, group })}
-                    </section>
-                </Fragment>
+                <section className={'re-toolkit-content'}>
+                    {this.renderCrumbs({title, group, element: label})}
+                    {this.renderCards({ data, card, group })}
+                </section>
             );
         } else {
             const Component = data;
             return (
-                <Fragment>
-                    <section className={'re-toolkit-content'}>
-                        {this.renderCrumbs({title})}
-                        {<Component />}
-                    </section>
-                </Fragment>
-            )
+                <section className={'re-toolkit-content'}>
+                    {this.renderCrumbs({title})}
+                    {<Component />}
+                </section>
+            );
         }
     }
 }

@@ -130,6 +130,12 @@ export default class Toolkit extends Component {
         set({key, value});
     }
 
+    toggleSettings({type, data}) {
+        if (type !== 'toolbar-toggle-settings') { return; }
+
+        let { manifest = {} } = this.state;
+    }
+
     getElements({ menu, group, element }) {
         let elements = {};
 
@@ -147,7 +153,8 @@ export default class Toolkit extends Component {
 
     render() {
         let { manifest = {}, prefs = {}, group, element, filters = [] } = this.state;
-        let { menu = {}, toolbar = {}, sidebar = {} } = manifest;
+        let { menu = {}, toolbar = {}, sidebar = {}, overview } = manifest;
+
 
         let elements  = this.getElements({ menu, group, element });
         let groupName = (group) ? menu[group]['label'] : 'Reactium';
@@ -172,6 +179,7 @@ export default class Toolkit extends Component {
                         data={elements}
                         title={groupName}
                         element={element}
+                        defaultComponent={overview}
                         ref={(elm) => { this.content = elm; }}
                         onButtonClick={this.onButtonClick.bind(this)}
                         onCrumbClick={this.onMenuItemClick.bind(this)}
