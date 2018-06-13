@@ -16,9 +16,9 @@ import React, { Component, Fragment } from 'react';
 export default class Search extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            ...this.props,
-        };
+
+        this.input = null;
+        this.state = { ...this.props };
     }
 
     componentDidMount() {
@@ -34,13 +34,47 @@ export default class Search extends Component {
         }));
     }
 
+    onInput(e) {
+        let { onChange } = this.state;
+
+        if (typeof onChange === 'function') {
+            onChange(e);
+        }
+    }
+
+    onSearchClear(e) {
+        let { onSearchClear } = this.state;
+        this.input.value = '';
+
+        this.input.focus();
+        onSearchClear();
+    }
+
+
     render() {
+        let { text } = this.state;
+
         return (
-            <form className={'re-toolkit-search'}>
-                <input type={'text'} placeholder={'search'} />
-            </form>
+            <div className={'re-toolkit-search'}>
+                <input
+                    value={null}
+                    ref={(elm) => { this.input = elm; }}
+                    name={'search'}
+                    type={'text'}
+                    placeholder={'search'}
+                    onChange={this.onInput.bind(this)}
+                    onKeyUp={this.onInput.bind(this)} />
+
+                <button type={'button'} className={'re-toolkit-search-clear'} onClick={this.onSearchClear.bind(this)}>
+                    <svg><use xlinkHref={'#re-icon-close'}></use></svg>
+                </button>
+            </div>
         );
     }
 }
 
-Search.defaultProps = {};
+Search.defaultProps = {
+    text: null,
+    onChange: null,
+    onSearchClear: null,
+};

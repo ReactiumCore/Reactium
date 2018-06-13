@@ -32,8 +32,6 @@ export default class Toolbar extends Component {
         let { id } = e.currentTarget;
         let { onToolbarItemClick } = this.state;
 
-        console.log('Toolbar.onButtonClick(',id,')');
-
         if (typeof onToolbarItemClick === 'function') {
             e['type'] = id;
             onToolbarItemClick(e, this);

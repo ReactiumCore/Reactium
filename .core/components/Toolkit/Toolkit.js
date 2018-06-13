@@ -11,7 +11,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import ToolbarIcons from './Toolbar/ToolbarIcons';
-
+import _ from 'underscore';
 
 
 /**
@@ -44,8 +44,52 @@ export default class Toolkit extends Component {
     onButtonClick(e, data) {
         let { type } = e;
 
+        console.log('Toolkit.onButtonClick(',type,')');
+
         this.togglePref({type, data});
+        this.toggleFilter({type, data});
         this.toggleFullscreen({type, data, e});
+    }
+
+    onFilterClick(e, filter) {
+        let { filters = [] } = this.state;
+
+        let { type } = filter;
+
+        let idx = _.indexOf(_.pluck(filters, 'type'), type);
+        if (idx > -1) { filters.splice(idx, 1); }
+
+        this.setState({filters});
+    }
+
+    toggleFilter({type, data}) {
+
+        let isFilter = (new RegExp('^toolbar-filter')).test(type);
+        if (isFilter !== true) { return; }
+
+        let { filters = [], manifest = {} } = this.state;
+
+        let filter = type.split('toolbar-filter-').join('');
+
+        if (filter !== 'all') {
+            if (!_.findWhere(filters, {type: filter})) {
+
+                let { buttons } = manifest.toolbar;
+                let btn = _.findWhere(buttons, {name: `filter-${filter}`});
+                let { label } = btn;
+
+                filter = {type: filter, label};
+
+                filters.push(filter);
+            } else {
+                let idx = _.indexOf(_.pluck(filters, 'type'), filter);
+                if (idx > -1) { filters.splice(idx, 1); }
+            }
+        } else {
+            filters = [];
+        }
+
+        this.setState({filters});
     }
 
     toggleFullscreen({type, data, e}) {
@@ -102,7 +146,7 @@ export default class Toolkit extends Component {
     }
 
     render() {
-        let { manifest = {}, prefs = {}, group, element } = this.state;
+        let { manifest = {}, prefs = {}, group, element, filters = [] } = this.state;
         let { menu = {}, toolbar = {}, sidebar = {} } = manifest;
 
         let elements  = this.getElements({ menu, group, element });
@@ -117,8 +161,10 @@ export default class Toolkit extends Component {
                         {...sidebar}
                         menu={menu}
                         toolbar={toolbar}
+                        filters={filters}
                         onToolbarItemClick={this.onButtonClick.bind(this)}
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
+                        onFilterClick={this.onFilterClick.bind(this)}
                     />
                     <Content
                         group={group}
@@ -143,4 +189,5 @@ export default class Toolkit extends Component {
 
 Toolkit.defaultProps = {
     prefs: {},
+    filters: [],
 };
