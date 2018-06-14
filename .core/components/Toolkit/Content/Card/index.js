@@ -154,7 +154,7 @@ export default class Card extends Component {
 
         return (
             <Fragment>
-                <div className={'re.toolkit-card-anchor'} ref={(elm) => { this.anchor = elm; }} style={{zIndex}} />
+                <div className={'re-toolkit-card-anchor'} ref={(elm) => { this.anchor = elm; }} style={{zIndex}} />
                 <div className={`re-toolkit-card${position}`} ref={(elm) => { this.cont = elm; }} >
                     {(!title && hbuttons.length < 1) ? null : (
                         <div className={'re-toolkit-card-heading'}>

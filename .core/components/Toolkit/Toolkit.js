@@ -10,6 +10,7 @@ import op from 'object-path';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Content from './Content';
+import Settings from './Settings';
 import ToolbarIcons from './Toolbar/ToolbarIcons';
 import _ from 'underscore';
 
@@ -24,9 +25,11 @@ export default class Toolkit extends Component {
     constructor(props) {
         super(props);
 
-        this.content    = null;
-        this.togglePref = this.togglePref.bind(this);
-        this.state      = { ...this.props };
+        this.content        = null;
+        this.settings       = null;
+        this.togglePref     = this.togglePref.bind(this);
+        this.toggleSettings = this.toggleSettings.bind(this);
+        this.state          = { ...this.props };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -44,11 +47,12 @@ export default class Toolkit extends Component {
     onButtonClick(e, data) {
         let { type } = e;
 
-        console.log('Toolkit.onButtonClick(',type,')');
+        //console.log('Toolkit.onButtonClick(',type,')');
 
         this.togglePref({type, data});
         this.toggleFilter({type, data});
         this.toggleFullscreen({type, data, e});
+        this.toggleSettings({type});
     }
 
     onFilterClick(e, filter) {
@@ -132,8 +136,7 @@ export default class Toolkit extends Component {
 
     toggleSettings({type, data}) {
         if (type !== 'toolbar-toggle-settings') { return; }
-
-        let { manifest = {} } = this.state;
+        this.settings.open();
     }
 
     getElements({ menu, group, element }) {
@@ -155,15 +158,23 @@ export default class Toolkit extends Component {
         let { manifest = {}, prefs = {}, group, element, filters = [] } = this.state;
         let { menu = {}, toolbar = {}, sidebar = {}, overview } = manifest;
 
-
         let elements  = this.getElements({ menu, group, element });
         let groupName = (group) ? menu[group]['label'] : 'Reactium';
 
         return (
             <Fragment>
+                <Helmet titleTemplate="%s | Style Guide">
+                    <title>{groupName}</title>
+                    <html lang="en" />
+                    <body className="re-toolkit" />
+                </Helmet>
+
                 <ToolbarIcons />
+
                 <Header />
+
                 <main className={'re-toolkit-container'}>
+
                     <Sidebar
                         {...sidebar}
                         menu={menu}
@@ -173,6 +184,7 @@ export default class Toolkit extends Component {
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
                         onFilterClick={this.onFilterClick.bind(this)}
                     />
+
                     <Content
                         group={group}
                         prefs={prefs}
@@ -185,11 +197,8 @@ export default class Toolkit extends Component {
                         onCrumbClick={this.onMenuItemClick.bind(this)}
                     />
                 </main>
-                <Helmet titleTemplate="%s | Style Guide">
-                    <title>{groupName}</title>
-                    <html lang="en" />
-                    <body className="re-toolkit" />
-                </Helmet>
+                
+                <Settings ref={(elm) => { this.settings = elm; }} />
             </Fragment>
         );
     }

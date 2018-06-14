@@ -99,6 +99,7 @@
     }
 
     &.fixed {
+        position: absolute;
         overflow-y: auto;
         z-index: 100000;
         min-height: calc(100vh - 80px);
