@@ -88,7 +88,11 @@ export default class Settings extends Component {
 
     onSwitchClick(e) {
         e.target.classList.toggle('active');
+
+        // TODO: ADD action that saves the pref to the Toolkit.state
     }
+
+    // TODO: Create function to list options and render them as switch list elements. 
 
     render() {
 
@@ -111,7 +115,8 @@ export default class Settings extends Component {
                     <ul className={'re-toolkit-card-list'}>
                         <li className={'re-toolkit-card-list-item'}>
                             <div className={'re-toolkit-card-list-text'}>
-                                Lorem Ipsum Dolor Sit
+                                <div>Lorem Ipsum Dolor Sit</div>
+                                <small>Lorem Ipsum Dolor Sit Lorem Ipsum</small>
                             </div>
                             <div>
                                 <button type={'button'} className={'re-toolkit-switch'} onClick={this.onSwitchClick.bind(this)}>

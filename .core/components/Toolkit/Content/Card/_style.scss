@@ -89,6 +89,14 @@
             color: $gray;
             align-items: center;
             background-color: darken($white, 1%);
+            line-height: 1.5;
+
+            small {
+                width: 100%;
+                display: block;
+                font-size: 11px;
+                margin-top: -2px;
+            }
 
             > *:first-child {
                 flex-grow: 1;
