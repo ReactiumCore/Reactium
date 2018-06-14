@@ -7,6 +7,7 @@
 import React, { Component, Fragment } from 'react';
 import Toolbar from '../Toolbar';
 import Menu from '../Menu';
+import op from 'object-path';
 
 
 /**
@@ -38,19 +39,20 @@ export default class Sidebar extends Component {
 
     render() {
         let {
-            closed,
             menu,
             onFilterClick,
             onMenuItemClick,
             onToolbarItemClick,
             position,
             filters = [],
-            toolbar = {}
+            toolbar = {},
+            prefs   = {},
         } = this.state;
 
-        let cls = (closed === true) ? 're-toolkit-sidebar-closed' : '';
+        position = op.get(prefs, 'sidebar.position', position);
+
         return (
-            <aside className={`re-toolkit-sidebar ${cls} ${position}`}>
+            <aside className={`re-toolkit-sidebar ${position}`}>
                 <Toolbar {...toolbar} onToolbarItemClick={onToolbarItemClick} />
                 <Menu data={menu} onFilterClick={onFilterClick} onItemClick={onMenuItemClick} filters={filters} />
             </aside>
@@ -59,12 +61,12 @@ export default class Sidebar extends Component {
 }
 
 Sidebar.defaultProps = {
-    toolbar: {},
-    menu: {},
-    filters: [],
-    closed: false,
-    position: 'left',
-    onFilterClick: null,
-    onMenuItemClick: null,
-    onToolbarItemClick: null,
+    prefs              : {},
+    toolbar            : {},
+    menu               : {},
+    filters            : [],
+    onFilterClick      : null,
+    onMenuItemClick    : null,
+    onToolbarItemClick : null,
+    position           : 'left',
 };

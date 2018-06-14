@@ -54,7 +54,7 @@ export default class Preview extends Component {
         this.iframe = elm;
     }
 
-    renderCmp({ cname, cpath }) {
+    renderCmp({ cname, cpath, style }) {
         return (`
             <html>
                 <head>
@@ -76,7 +76,7 @@ export default class Preview extends Component {
 
 
     render() {
-        let { component:Component, group, id, visible } = this.state;
+        let { component:Component, group, id, visible, style } = this.state;
 
         if (!Component || !group || !id) { return null; }
 
@@ -99,7 +99,7 @@ export default class Preview extends Component {
             case 'function': {
                 let cname  = getDisplayName(Component);
                 let cpath  = `${group}/elements/${cname}`;
-                let markup = this.renderCmp({cname, cpath});
+                let markup = this.renderCmp({cname, cpath, style});
 
                 return (
                     <iframe
@@ -124,4 +124,5 @@ Preview.defaultProps = {
     component : null,
     group     : null,
     id        : null,
+    style     : '/assets/style/style.css',
 };

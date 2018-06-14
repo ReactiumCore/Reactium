@@ -7,6 +7,8 @@
 import React, { Component, Fragment } from 'react';
 import { TweenMax, Power2 } from 'gsap';
 import Card from '../Content/Card';
+import op from 'object-path';
+
 
 /**
  * -----------------------------------------------------------------------------
@@ -34,10 +36,10 @@ export default class Settings extends Component {
         }));
     }
 
-    close() {
+    close(callback) {
         if (!this.cont) { return; }
 
-        let { speed = 0.25 } = this.state;
+        let { speed = 0.25, onSettingsClose } = this.state;
 
         let _self = this;
 
@@ -46,14 +48,22 @@ export default class Settings extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 this.setState({visible: false});
+
+                if (typeof callback === 'function') {
+                    callback();
+                }
+
+                if (typeof onSettingsClose === 'function') {
+                    onSettingsClose();
+                }
             }
         });
     }
 
-    open() {
+    open(callback) {
         if (!this.cont) { return; }
 
-        let { speed = 0.25 } = this.state;
+        let { speed = 0.25, onSettingsOpen } = this.state;
 
         let _self = this;
 
@@ -64,6 +74,14 @@ export default class Settings extends Component {
             onComplete: () => {
                 this.cont.focus();
                 this.setState({visible: true});
+
+                if (typeof callback === 'function') {
+                    callback();
+                }
+
+                if (typeof onSettingsOpen === 'function') {
+                    onSettingsOpen();
+                }
             }
         });
     }
@@ -86,13 +104,60 @@ export default class Settings extends Component {
         }
     }
 
-    onSwitchClick(e) {
+    onSwitchClick(e, {pref, other}) {
+        let { onSwitchClick } = this.state;
+
         e.target.classList.toggle('active');
+
+        if (typeof onSwitchClick === 'function') {
+            onSwitchClick({pref, value: other});
+        }
 
         // TODO: ADD action that saves the pref to the Toolkit.state
     }
 
-    // TODO: Create function to list options and render them as switch list elements. 
+    renderSettings() {
+
+        let { settings = [], prefs = {} } = this.state;
+
+        return settings.map((item, i) => {
+            let { text = [], values = [], labels = [], help, pref } = item;
+
+            let value = op.get(prefs, pref);
+            let idx   = values.indexOf(value);
+                idx   = (idx == -1) ? 0 : idx;
+
+            let active = (idx === 1) ? 'active' : '';
+            let other = (idx === 0 && values.length > 1) ? values[1] : values[0];
+
+            return (
+                <li className={'re-toolkit-card-list-item'} key={`setting-${i}`}>
+                    {(text.length > 0)
+                        ? (
+                            <div className={'re-toolkit-card-list-text'}>
+                                <div>{text[idx]}</div>
+                                {(help) ? (<small>{help}</small>) : null}
+                            </div>
+                        )
+                        : null
+                    }
+                    <div>
+                        <button
+                            type={'button'}
+                            className={`re-toolkit-switch ${active}`}
+                            onClick={(e) => {
+                                this.onSwitchClick(e, {pref, other});
+                             }}>
+                            {(labels.length > 0)
+                                ? labels.map((label, l) => { return (<span key={`label-${l}`}>{label}</span>); })
+                                : null
+                            }
+                        </button>
+                    </div>
+                </li>
+            )
+        });
+    }
 
     render() {
 
@@ -113,26 +178,13 @@ export default class Settings extends Component {
                     onButtonClick={this.close}
                     buttons={buttons}>
                     <ul className={'re-toolkit-card-list'}>
-                        <li className={'re-toolkit-card-list-item'}>
-                            <div className={'re-toolkit-card-list-text'}>
-                                <div>Lorem Ipsum Dolor Sit</div>
-                                <small>Lorem Ipsum Dolor Sit Lorem Ipsum</small>
-                            </div>
-                            <div>
-                                <button type={'button'} className={'re-toolkit-switch'} onClick={this.onSwitchClick.bind(this)}>
-                                    <span>L</span><span>R</span>
-                                </button>
-                            </div>
-                        </li>
-                        <li className={'re-toolkit-card-list-item'}>
-                            <div className={'re-toolkit-card-list-text'}>
-                                Lorem Ipsum Dolor Sit Lorem Ipsum Dolor Sit Lorem Ipsum Dolor Sit Lorem Ipsum Dolor Sit
-                            </div>
-                            <div>
-                                <button type={'button'} className={'re-toolkit-switch active'} onClick={this.onSwitchClick.bind(this)} />
-                            </div>
-                        </li>
+                        {this.renderSettings()}
                     </ul>
+                    <div className={'re-toolkit-card-footer'}>
+                        <button type={'button'} className={'re-toolkit-btn re-toolkit-btn-primary'}>
+                            Restore Defaults
+                        </button>
+                    </div>
                 </Card>
             </div>
         );
@@ -140,9 +192,14 @@ export default class Settings extends Component {
 }
 
 Settings.defaultProps = {
-    visible: false,
-    speed: 0.125,
-    buttons: {
+    onSettingsClose : null,
+    onSettingsOpen  : null,
+    onSwitchClick   : null,
+    visible         : false,
+    speed           : 0.125,
+    manifest        : {},
+    prefs           : {},
+    buttons         : {
         header: [
             {name: 'toggle-settings', title: 'close', icon: '#re-icon-close'}
         ]

@@ -34,8 +34,8 @@ export default {
     set: ({key, value}) => (dispatch) => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_PREF,
+            value,
             key,
-            value
         });
     },
 };

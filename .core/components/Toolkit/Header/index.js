@@ -35,13 +35,37 @@ export default class Header extends Component {
     }
 
     render() {
+        let { logo, title, version } = this.state;
+
         return (
             <header className={'re-toolkit-header'}>
-                <img className={'re-toolkit-header-logo'} src={'/assets/images/logo.png'} />
-                <h1>Style Guide</h1>
+                {(logo)
+                    ? (
+                        <a href={'/toolkit'}>
+                            <img className={'re-toolkit-header-logo'} src={logo} />
+                        </a>
+                    )
+                    : null
+                }
+                {(title)
+                    ? (
+                        <h1 style={{flexGrow: 1}}>{title}</h1>
+                    )
+                    : null
+                }
+                {(version)
+                    ? (
+                        <small>{version}</small>
+                    )
+                    : null
+                }
             </header>
         );
     }
 }
 
-Header.defaultProps = {};
+Header.defaultProps = {
+    logo    : null,
+    title   : null,
+    version : '0.0.1',
+};

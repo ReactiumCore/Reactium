@@ -20,7 +20,13 @@ export default (state = {}, action) => {
 
         case deps.actionTypes.TOOLKIT_PREF:
             newState = { ...state };
+            let karry = action.key.split('.');
+
+            let all = karry.pop();
+            if (all === 'all') { op.empty(newState, karry.join('.'), null); }
+
             op.set(newState, action.key, action.value);
+
             return newState;
 
         default:

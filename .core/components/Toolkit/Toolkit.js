@@ -26,6 +26,7 @@ export default class Toolkit extends Component {
         super(props);
 
         this.content        = null;
+        this.sidebar        = null;
         this.settings       = null;
         this.togglePref     = this.togglePref.bind(this);
         this.toggleSettings = this.toggleSettings.bind(this);
@@ -48,7 +49,6 @@ export default class Toolkit extends Component {
         let { type } = e;
 
         //console.log('Toolkit.onButtonClick(',type,')');
-
         this.togglePref({type, data});
         this.toggleFilter({type, data});
         this.toggleFullscreen({type, data, e});
@@ -139,6 +139,23 @@ export default class Toolkit extends Component {
         this.settings.open();
     }
 
+    onSettingsOpen() {
+        this.setState({showSettings: true});
+    }
+
+    onSettingsClose() {
+        this.setState({showSettings: false});
+    }
+
+    onSettingSwitchClick({pref, value}) {
+        let { set } = this.state;
+        let key = `prefs.${pref}`;
+
+        set({key, value});
+
+        this.setState({update: Date.now()});
+    }
+
     getElements({ menu, group, element }) {
         let elements = {};
 
@@ -155,11 +172,31 @@ export default class Toolkit extends Component {
     }
 
     render() {
-        let { manifest = {}, prefs = {}, group, element, filters = [] } = this.state;
-        let { menu = {}, toolbar = {}, sidebar = {}, overview } = manifest;
+        let {
+            manifest = {},
+            prefs = {},
+            group,
+            element,
+            filters = [],
+            showSettings,
+            showMenu,
+            update = Date.now(),
+        } = this.state;
+
+        let {
+            menu = {},
+            toolbar = {},
+            sidebar = {},
+            overview,
+            header = {},
+            themes = [],
+            settings = []
+        } = manifest;
 
         let elements  = this.getElements({ menu, group, element });
         let groupName = (group) ? menu[group]['label'] : 'Reactium';
+        let theme     = _.findWhere(themes, {selected: true});
+        let style     = (theme) ? theme.css : null;
 
         return (
             <Fragment>
@@ -171,7 +208,7 @@ export default class Toolkit extends Component {
 
                 <ToolbarIcons />
 
-                <Header />
+                <Header {...header} />
 
                 <main className={'re-toolkit-container'}>
 
@@ -180,31 +217,47 @@ export default class Toolkit extends Component {
                         menu={menu}
                         toolbar={toolbar}
                         filters={filters}
-                        onToolbarItemClick={this.onButtonClick.bind(this)}
-                        onMenuItemClick={this.onMenuItemClick.bind(this)}
+                        prefs={prefs}
+                        update={update}
+                        ref={(elm) => { this.sidebar = elm; }}
                         onFilterClick={this.onFilterClick.bind(this)}
+                        onMenuItemClick={this.onMenuItemClick.bind(this)}
+                        onToolbarItemClick={this.onButtonClick.bind(this)}
                     />
 
                     <Content
                         group={group}
                         prefs={prefs}
+                        style={style}
                         data={elements}
                         title={groupName}
                         element={element}
+                        update={update}
                         defaultComponent={overview}
                         ref={(elm) => { this.content = elm; }}
                         onButtonClick={this.onButtonClick.bind(this)}
                         onCrumbClick={this.onMenuItemClick.bind(this)}
                     />
                 </main>
-                
-                <Settings ref={(elm) => { this.settings = elm; }} />
+
+                <Settings
+                    onSwitchClick={this.onSettingSwitchClick.bind(this)}
+                    onSettingsClose={this.onSettingsClose.bind(this)}
+                    onSettingsOpen={this.onSettingsOpen.bind(this)}
+                    ref={(elm) => { this.settings = elm; }}
+                    visible={showSettings}
+                    settings={settings}
+                    update={update}
+                    prefs={prefs}
+                />
             </Fragment>
         );
     }
 }
 
 Toolkit.defaultProps = {
+    update: Date.now(),
     prefs: {},
     filters: [],
+    showSettings: false,
 };

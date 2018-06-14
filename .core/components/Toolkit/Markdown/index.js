@@ -20,11 +20,24 @@ import marked from 'marked';
 export default class Markdown extends Component {
     constructor(props) {
         super(props);
+        this.state        = { ...this.props };
     }
 
-    markedRenderer() {
+    componentWillReceiveProps(nextProps) {
+        this.setState((prevState) => {
+            let newState = {
+                ...prevState,
+                ...nextProps,
+            };
+            return newState;
+        });
+    }
+
+
+    markedRenderer(theme = 'dark') {
+        let style = (theme === 'dark') ? vs2015 : vs;
+
         let rndr = new marked.Renderer();
-        let style = vs2015;
 
         rndr.code = function (markup, lang) {
 
@@ -44,19 +57,23 @@ export default class Markdown extends Component {
         return rndr;
     }
 
-    parseMarkdown(md) {
+    parseMarkdown(md, theme = 'dark') {
         marked.setOptions({
             xhtml: true,
             gfm: true,
             breaks: true,
         });
 
-        md = marked(md, {renderer: this.markedRenderer()});
+        md = marked(md, {renderer: this.markedRenderer(theme)});
         return {__html: md};
     }
 
     render() {
-        let { children } = this.props;
-        return <div className={'markdown'} dangerouslySetInnerHTML={this.parseMarkdown(children)} />;
+        let { children, theme } = this.state;
+        return <div className={'markdown'} dangerouslySetInnerHTML={this.parseMarkdown(children, theme)} />;
     }
 }
+
+Markdown.defaultProps = {
+    theme: 'dark',
+};

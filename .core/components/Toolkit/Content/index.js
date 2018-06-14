@@ -107,7 +107,7 @@ export default class Content extends Component {
     // Renderers
     renderCards({ data, card, group }) {
 
-        let { onButtonClick, prefs } = this.state;
+        let { onButtonClick, prefs, update } = this.state;
 
         this.cards    = {};
         this.codes    = {};
@@ -152,6 +152,7 @@ export default class Content extends Component {
                     <Preview
                         ref={(elm) => { this.registerPreview({elm, id}); }}
                         component={component}
+                        update={update}
                         group={group}
                         id={id}
                     />
@@ -162,6 +163,7 @@ export default class Content extends Component {
                                 ref={(elm) => { this.registerCode({elm, id}); }}
                                 onButtonClick={onButtonClick}
                                 component={component}
+                                update={update}
                                 prefs={prefs}
                                 group={group}
                                 id={id}
@@ -176,6 +178,7 @@ export default class Content extends Component {
                                 ref={(elm) => { this.registerDocs({elm, id}); }}
                                 title={'Documentation'}
                                 component={readme}
+                                update={update}
                                 prefs={prefs}
                                 id={id}
                             />
@@ -205,7 +208,7 @@ export default class Content extends Component {
     }
 
     render() {
-        let { card, title, data, element, group, defaultComponent } = this.state;
+        let { card, title, data, element, group, defaultComponent, update } = this.state;
 
 
         if (!data) {
@@ -247,6 +250,7 @@ Content.defaultProps = {
     onButtonClick : null,
     onCrumbClick  : null,
     title         : null,
+    update        : null,
     watchTimer    : 200,
     data          : {},
     prefs         : {},

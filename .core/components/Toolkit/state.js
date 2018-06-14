@@ -3,15 +3,21 @@
 */
 
 export default {
-    // do not persist to local storage (default)
-    // see https://www.npmjs.com/package/redux-local-persist
-    persist: ['prefs'],
+    persist: ['prefs', 'version'],
+    version: '2.0.1',
     prefs: {
         code: {
             all: true,
         },
         codeColor: {
             all: 'dark',
+        },
+        docs: {
+            all: true,
+        },
+        sidebar: {
+            position: 'left',
+            expanded: true,
         }
     }
 };

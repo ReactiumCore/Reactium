@@ -1,5 +1,13 @@
 export default {
+    header: {
+        logo    : '/assets/images/logo.png',
+        title   : 'Style Guide',
+        version : 'ver 2.0.1',
+    },
     overview: require('appdir/toolkit/overview').default,
+    themes: [
+        {name: 'Default', css: '/assets/style/style.css', selected: true},
+    ],
     sidebar: {
         closed   : false,
         position : 'left',
@@ -84,4 +92,34 @@ export default {
         //     }
         // }
     },
+    settings: [
+        {
+            text: ['Sidebar position: left', 'Sidebar position: right'],
+            values: ['left', 'right'],
+            pref: 'sidebar.position',
+            labels: ['R', 'L'],
+            default: 'left',
+        },
+        {
+            text: ['Expand documentation', 'Collapse documentation'],
+            values: [false, true],
+            pref: 'docs.all',
+            help: 'Expand or collapse all documentation',
+            default: false,
+        },
+        {
+            text: ['Expand code view', 'Collapse code view'],
+            values: [false, true],
+            pref: 'code.all',
+            help: 'Expand or collapse all code views',
+            default: false,
+        },
+        {
+            text: ['Syntax highlighting: light', 'Syntax highlighting: dark'],
+            values: ['light', 'dark'],
+            pref: 'codeColor.all',
+            help: 'Switch the code view syntax highlighting',
+            default: 'dark',
+        },
+    ]
 }

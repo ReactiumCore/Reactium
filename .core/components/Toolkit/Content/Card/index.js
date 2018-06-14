@@ -135,7 +135,7 @@ export default class Card extends Component {
         return buttons.map((item, i) => {
             let { title, name, icon } = item;
             return (
-                <button onClick={(e) => { onClick(e, this); }} type={'button'} title={title} key={`button-${i}`} id={name}>
+                <button className={'re-toolkit-card-btn-icon'} onClick={(e) => { onClick(e, this); }} type={'button'} title={title} key={`button-${i}`} id={name}>
                     <svg>
                         <use xlinkHref={icon}></use>
                     </svg>

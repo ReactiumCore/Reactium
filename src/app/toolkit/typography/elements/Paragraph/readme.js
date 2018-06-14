@@ -39,5 +39,5 @@ ${'```'}
  * DO NOT EDIT BELOW HERE
  * -----------------------------------------------------------------------------
  */
-const readme = () => <Markdown>{content}</Markdown>;
+const readme = (props) => <Markdown {...props}>{content}</Markdown>;
 export default readme;

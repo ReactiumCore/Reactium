@@ -1,3 +1,31 @@
+.re-toolkit-btn {
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    padding         : 7px 16px 6px 16px;
+    line-height     : 1;
+    border-radius   : 1px;
+    font-size       : 9px;
+    text-transform  : uppercase;
+    border-width    : 1px;
+    border-style    : solid;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &-default {
+        border-color: $grey;
+        background-color: $grey-light;
+        color: $gray;
+    }
+
+    &-primary {
+        border-color: $blue;
+        background-color: lighten($blue, 10%);
+        color: $white;
+    }
+}
 
 .re-toolkit-card {
     width: 100%;
@@ -14,7 +42,7 @@
         margin-bottom: 60px;
     }
 
-    button {
+    .re-toolkit-card-btn-icon {
         width: 40px;
         height: 40px;
         display: flex;
@@ -84,12 +112,13 @@
     &-list {
 
         &-item {
-            display: flex;
-            padding: 15px 22px;
-            color: $gray;
-            align-items: center;
-            background-color: darken($white, 1%);
-            line-height: 1.5;
+            display          : flex;
+            padding          : 15px 22px 15px 24px;
+            color            : $gray;
+            align-items      : center;
+            background-color : darken($white, 1%);
+            line-height      : 1.5;
+            min-height       : 70px;
 
             small {
                 width: 100%;
@@ -103,12 +132,17 @@
                 padding-right: 18px;
             }
 
-            border-bottom: 1px solid $grey-light;
+            &:not(:last-child) {
+                border-bottom: 1px solid $grey-light;
+            }
         }
     }
 
     button.re-toolkit-switch {
 
+        display: flex;
+        justify-content: center;
+        align-items: center;
         transition       : background-color .25s ease-in-out;
         border           : 1px solid darken($grey-light, 10%);
         border-radius    : 20px;
@@ -128,6 +162,7 @@
             color          : $gray;
             text-transform : uppercase;
             line-height: 1.5;
+            margin-top: 1px;
         }
 
         &:hover {
@@ -138,7 +173,7 @@
             content          : '';
             border-radius    : 100%;
             background-color : $white;
-            box-shadow       : 0 0 8px 1px rgba(0,0,0,.1);
+            box-shadow       : 0 0 1px 1px rgba(0,0,0,.2);
             width            : 22px;
             height           : 22px;
             left             : -1px;
@@ -150,16 +185,19 @@
         }
 
         &.active {
-            background-color: lighten($blue, 10%);
+            background-color: lighten($blue, 15%);
             border: 1px solid $blue;
-            span {
+
+            > * {
                 color: $white;
+                text-shadow: 1px 1px 3px $gray;
             }
+
             &:after {
                 content          : '';
                 border-radius    : 100%;
                 background-color : $white;
-                box-shadow       : 0 0 8px 1px rgba(0,0,0,.1);
+                box-shadow       : 0 0 1px 1px rgba(0,0,0,.1);
                 width            : 22px;
                 height           : 22px;
                 right            : -1;

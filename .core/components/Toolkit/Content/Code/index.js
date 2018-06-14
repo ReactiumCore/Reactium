@@ -30,13 +30,13 @@ export default class Code extends Component {
         this.open         = this.open.bind(this);
         this.close        = this.close.bind(this);
         this.toggle       = this.toggle.bind(this);
+        this.getPref      = this.getPref.bind(this);
         this.onCopyClick  = this.onCopyClick.bind(this);
         this.onThemeClick = this.onThemeClick.bind(this);
     }
 
     componentDidMount() {
         this.applyPrefs();
-
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
@@ -50,6 +50,8 @@ export default class Code extends Component {
             };
             return newState;
         });
+
+        this.applyPrefs();
     }
 
     getPref(newState = {}, key, vals) {
@@ -79,20 +81,18 @@ export default class Code extends Component {
 
         let vals = [
             op.get(prefs, `codeColor.${id}`),
-            op.get(prefs, `codeColor.all`),
-            theme,
+            op.get(prefs, `codeColor.all`, theme),
         ];
 
         return this.getPref(newState, 'theme', vals);
     }
 
     applyVisiblePref(newState = {}) {
-        let { prefs = {}, visible, id } = this.state;
+        let { prefs = {}, visible = false, id } = this.state;
 
         let vals = [
             op.get(prefs, `code.${id}`),
-            op.get(prefs, 'code.all'),
-            visible,
+            op.get(prefs, 'code.all', visible),
         ];
 
         return this.getPref(newState, 'visible', vals);
@@ -186,6 +186,7 @@ export default class Code extends Component {
     }
 
     render() {
+
         let { component:Component, visible, height, beauty = {}, theme = 'dark' } = this.state;
 
         if (!Component) { return null; }
