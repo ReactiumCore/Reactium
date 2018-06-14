@@ -180,11 +180,6 @@ export default class Settings extends Component {
                     <ul className={'re-toolkit-card-list'}>
                         {this.renderSettings()}
                     </ul>
-                    <div className={'re-toolkit-card-footer'}>
-                        <button type={'button'} className={'re-toolkit-btn re-toolkit-btn-primary'}>
-                            Restore Defaults
-                        </button>
-                    </div>
                 </Card>
             </div>
         );
