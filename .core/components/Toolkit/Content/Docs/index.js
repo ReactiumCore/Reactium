@@ -137,8 +137,6 @@ export default class Docs extends Component {
     render() {
         let { component:Component, visible, height, title, update, theme = 'dark' } = this.state;
 
-        console.log('Docs:', theme);
-
         let display = (visible === true) ? 'block' : 'none';
 
         return (!Component) ? null : (
