@@ -81,6 +81,90 @@
         }
     }
 
+    &-list {
+
+        &-item {
+            display: flex;
+            padding: 15px 22px;
+            color: $gray;
+            align-items: center;
+            background-color: darken($white, 1%);
+
+            > *:first-child {
+                flex-grow: 1;
+                padding-right: 18px;
+            }
+
+            border-bottom: 1px solid $grey-light;
+        }
+    }
+
+    button.re-toolkit-switch {
+
+        transition       : background-color .25s ease-in-out;
+        border           : 1px solid darken($grey-light, 10%);
+        border-radius    : 20px;
+        position         : relative;
+        background-color : $grey-light;
+        height           : 19px;
+        width            : 40px;
+        flex-wrap        : nowrap;
+        align-items      : center;
+        justify-content: space-between;
+
+        * {
+            pointer-events : none;
+            flex           : 1;
+            text-align     : center;
+            font-size      : 9px;
+            color          : $gray;
+            text-transform : uppercase;
+            line-height: 1.5;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &:after {
+            content          : '';
+            border-radius    : 100%;
+            background-color : $white;
+            box-shadow       : 0 0 8px 1px rgba(0,0,0,.1);
+            width            : 22px;
+            height           : 22px;
+            left             : -1px;
+            top              : 50%;
+            margin           : 0 -1px;
+            position         : absolute;
+            transform        : translateY(-50%);
+            transition       : left .75s ease-in-out;
+        }
+
+        &.active {
+            background-color: lighten($blue, 10%);
+            border: 1px solid $blue;
+            span {
+                color: $white;
+            }
+            &:after {
+                content          : '';
+                border-radius    : 100%;
+                background-color : $white;
+                box-shadow       : 0 0 8px 1px rgba(0,0,0,.1);
+                width            : 22px;
+                height           : 22px;
+                right            : -1;
+                left: auto;
+                top              : 50%;
+                margin           : 0 -1px;
+                position         : absolute;
+                transform        : translateY(-50%);
+                transition       : left .75s ease-in-out;
+            }
+        }
+    }
+
     &-footer {
         padding: 2px 8px 2px 24px;
         background-color: $white;

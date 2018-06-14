@@ -60,13 +60,12 @@ export default class Settings extends Component {
         TweenMax.set(this.cont, {display: 'block', opacity: 0});
         TweenMax.to(this.cont, speed, {
             opacity: 1,
-            ease: Power2.easeInOut,
+            //ease: Power2.easeInOut,
             onComplete: () => {
                 this.cont.focus();
                 this.setState({visible: true});
             }
         });
-
     }
 
     toggle() {
@@ -87,6 +86,10 @@ export default class Settings extends Component {
         }
     }
 
+    onSwitchClick(e) {
+        e.target.classList.toggle('active');
+    }
+
     render() {
 
         let { buttons = {}, visible = false } = this.state;
@@ -105,7 +108,26 @@ export default class Settings extends Component {
                     title={'Settings'}
                     onButtonClick={this.close}
                     buttons={buttons}>
-                    CONTENT
+                    <ul className={'re-toolkit-card-list'}>
+                        <li className={'re-toolkit-card-list-item'}>
+                            <div className={'re-toolkit-card-list-text'}>
+                                Lorem Ipsum Dolor Sit
+                            </div>
+                            <div>
+                                <button type={'button'} className={'re-toolkit-switch'} onClick={this.onSwitchClick.bind(this)}>
+                                    <span>L</span><span>R</span>
+                                </button>
+                            </div>
+                        </li>
+                        <li className={'re-toolkit-card-list-item'}>
+                            <div className={'re-toolkit-card-list-text'}>
+                                Lorem Ipsum Dolor Sit Lorem Ipsum Dolor Sit Lorem Ipsum Dolor Sit Lorem Ipsum Dolor Sit
+                            </div>
+                            <div>
+                                <button type={'button'} className={'re-toolkit-switch active'} onClick={this.onSwitchClick.bind(this)} />
+                            </div>
+                        </li>
+                    </ul>
                 </Card>
             </div>
         );
@@ -114,7 +136,7 @@ export default class Settings extends Component {
 
 Settings.defaultProps = {
     visible: false,
-    speed: 0.5,
+    speed: 0.125,
     buttons: {
         header: [
             {name: 'toggle-settings', title: 'close', icon: '#re-icon-close'}
