@@ -55,10 +55,11 @@ export default class Preview extends Component {
     }
 
     renderCmp({ cname, cpath, style }) {
+        
         return (`
             <html>
                 <head>
-                    <link rel="stylesheet" href="/assets/style/style.css">
+                    <link rel="stylesheet" href="${style}">
                 </head>
                 <body style="padding: 25px;">
                     <Component type="${cname}" path="${cpath}"></Component>

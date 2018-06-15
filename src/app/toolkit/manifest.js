@@ -7,6 +7,7 @@ export default {
     overview: require('appdir/toolkit/overview').default,
     themes: [
         {name: 'Default', css: '/assets/style/style.css', selected: true},
+        {name: 'Test', css: '/assets/style/style-test.css'},
     ],
     sidebar: {
         closed   : false,

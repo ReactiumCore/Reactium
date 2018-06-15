@@ -65,7 +65,6 @@ export default class Card extends Component {
     }
 
     toggleFullScreen(e) {
-        console.log('Card.toggleFullScreen()');
 
         let { anchor, cont } = this;
         let { fullscreen, speed = 0.125, buttons } = this.state;

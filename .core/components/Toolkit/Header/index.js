@@ -5,7 +5,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-
+import _ from 'underscore';
 
 /**
  * -----------------------------------------------------------------------------
@@ -35,7 +35,14 @@ export default class Header extends Component {
     }
 
     render() {
-        let { logo, title, version } = this.state;
+        let { logo, title, version, themes = [], onThemeChange = null } = this.state;
+
+        let selected = (themes.length > 1) ? _.findWhere(themes, {selected: true}) : null;
+        if (selected) {
+            selected = selected.css
+        } else {
+            selected = null;
+        }
 
         return (
             <header className={'re-toolkit-header'}>
@@ -59,13 +66,28 @@ export default class Header extends Component {
                     )
                     : null
                 }
+                {(themes.length > 1)
+                    ? (
+                        <div style={{marginLeft: 10}}>
+                            <select className={'re-toolkit-select'} defaultValue={selected} onChange={onThemeChange}>
+                                {themes.map((item, i) => {
+                                    let { css, name } = item;
+                                    return (<option key={i} value={css}>{name}</option>);
+                                })}
+                            </select>
+                        </div>
+                    )
+                    : null
+                }
             </header>
         );
     }
 }
 
 Header.defaultProps = {
-    logo    : null,
-    title   : null,
-    version : '0.0.1',
+    themes        : [],
+    logo          : null,
+    title         : null,
+    onThemeChange : null,
+    version       : '0.0.1',
 };

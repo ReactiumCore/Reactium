@@ -29,6 +29,12 @@ export default (state = {}, action) => {
 
             return newState;
 
+        case deps.actionTypes.TOOLKIT_THEME:
+
+            newState = { ...state, style: action.theme };
+
+            return newState;
+
         default:
             return state;
     }

@@ -38,4 +38,11 @@ export default {
             key,
         });
     },
+
+    setTheme: (theme) => (dispatch) => {
+        return dispatch({
+            type: deps.actionTypes.TOOLKIT_THEME,
+            theme,
+        });
+    },
 };

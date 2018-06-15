@@ -107,7 +107,7 @@ export default class Content extends Component {
     // Renderers
     renderCards({ data, card, group }) {
 
-        let { onButtonClick, prefs, update } = this.state;
+        let { onButtonClick, prefs, update, style } = this.state;
 
         this.cards    = {};
         this.codes    = {};
@@ -154,6 +154,7 @@ export default class Content extends Component {
                         component={component}
                         update={update}
                         group={group}
+                        style={style}
                         id={id}
                     />
                     {
@@ -210,7 +211,6 @@ export default class Content extends Component {
     render() {
         let { card, title, data, element, group, defaultComponent, update } = this.state;
 
-
         if (!data) {
             if (!defaultComponent) { return null; }
 
@@ -251,6 +251,7 @@ Content.defaultProps = {
     onCrumbClick  : null,
     title         : null,
     update        : null,
+    style         : null,
     watchTimer    : 200,
     data          : {},
     prefs         : {},

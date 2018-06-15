@@ -25,19 +25,20 @@ export default class Toolkit extends Component {
     constructor(props) {
         super(props);
 
+        this.state          = { ...this.props };
+
         this.content        = null;
         this.sidebar        = null;
         this.settings       = null;
         this.togglePref     = this.togglePref.bind(this);
         this.toggleSettings = this.toggleSettings.bind(this);
-        this.state          = { ...this.props };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
+        this.setState(prevState => {
+            let newState = Object.assign({}, this.state, nextProps);
+            return newState;
+        });
     }
 
     onMenuItemClick(e) {
@@ -48,7 +49,6 @@ export default class Toolkit extends Component {
     onButtonClick(e, data) {
         let { type } = e;
 
-        //console.log('Toolkit.onButtonClick(',type,')');
         this.togglePref({type, data});
         this.toggleFilter({type, data});
         this.toggleFullscreen({type, data, e});
@@ -156,6 +156,10 @@ export default class Toolkit extends Component {
         this.setState({update: Date.now()});
     }
 
+    onThemeChange(e) { // TODO: on theme change
+        this.state.setTheme(e.target.value);
+    }
+
     getElements({ menu, group, element }) {
         let elements = {};
 
@@ -173,30 +177,41 @@ export default class Toolkit extends Component {
 
     render() {
         let {
+            update   = Date.now(),
+            filters  = [],
             manifest = {},
-            prefs = {},
+            prefs    = {},
             group,
             element,
-            filters = [],
             showSettings,
             showMenu,
-            update = Date.now(),
+            style,
         } = this.state;
 
         let {
-            menu = {},
-            toolbar = {},
-            sidebar = {},
+            themes   = [],
+            settings = [],
+            menu     = {},
+            toolbar  = {},
+            sidebar  = {},
+            header   = {},
             overview,
-            header = {},
-            themes = [],
-            settings = []
         } = manifest;
 
         let elements  = this.getElements({ menu, group, element });
         let groupName = (group) ? menu[group]['label'] : 'Reactium';
         let theme     = _.findWhere(themes, {selected: true});
-        let style     = (theme) ? theme.css : null;
+
+        if (!style) {
+            style = (theme) ? theme.css : null;
+        }
+
+        // update manifest to have the selected style
+        themes = themes.map((item) => {
+            let { css } = item;
+            item['selected'] = (css === style);
+            return item;
+        });
 
         return (
             <Fragment>
@@ -208,17 +223,20 @@ export default class Toolkit extends Component {
 
                 <ToolbarIcons />
 
-                <Header {...header} />
+                <Header
+                    {...header}
+                    themes={themes}
+                    onThemeChange={this.onThemeChange.bind(this)}
+                />
 
                 <main className={'re-toolkit-container'}>
-
                     <Sidebar
                         {...sidebar}
                         menu={menu}
-                        toolbar={toolbar}
-                        filters={filters}
                         prefs={prefs}
                         update={update}
+                        toolbar={toolbar}
+                        filters={filters}
                         ref={(elm) => { this.sidebar = elm; }}
                         onFilterClick={this.onFilterClick.bind(this)}
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
@@ -230,9 +248,9 @@ export default class Toolkit extends Component {
                         prefs={prefs}
                         style={style}
                         data={elements}
+                        update={update}
                         title={groupName}
                         element={element}
-                        update={update}
                         defaultComponent={overview}
                         ref={(elm) => { this.content = elm; }}
                         onButtonClick={this.onButtonClick.bind(this)}
@@ -259,5 +277,6 @@ Toolkit.defaultProps = {
     update: Date.now(),
     prefs: {},
     filters: [],
+    style: null,
     showSettings: false,
 };

@@ -22,6 +22,7 @@ const mapDispatchToProps = (dispatch) => ({
     mount: () => dispatch(deps.actions.Toolkit.mount()),
     menuItemClick: (url) => dispatch(deps.actions.Toolkit.menuItemClick(url)),
     set: (data) => dispatch(deps.actions.Toolkit.set(data)),
+    setTheme: (data) => dispatch(deps.actions.Toolkit.setTheme(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Toolkit);
