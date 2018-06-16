@@ -15,6 +15,8 @@ import React, { Component } from 'react';
  * -----------------------------------------------------------------------------
  */
 export default class TextLink extends Component {
+    static dependencies() { return module.children; }
+    
     constructor(props) {
         super(props);
         this.state = Object.assign({}, this.props);

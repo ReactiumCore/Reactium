@@ -49,8 +49,6 @@ export default class Toolkit extends Component {
     onButtonClick(e, data) {
         let { type } = e;
 
-        console.log(type);
-
         this.togglePref({type, data});
         this.toggleFilter({type, data});
         this.toggleFullscreen({type, data, e});

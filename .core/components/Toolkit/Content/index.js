@@ -144,7 +144,7 @@ export default class Content extends Component {
                 buttons.footer.splice(idx, 1);
             }
 
-            if (!dna) {
+            if (!dna || typeof component === 'string') {
                 let idx = _.indexOf(_.pluck(buttons.footer, 'name'), 'toggle-link');
                 buttons.footer.splice(idx, 1);
             }

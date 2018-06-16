@@ -6,7 +6,6 @@
  */
 import React, { Component, Fragment } from 'react';
 
-
 /**
  * -----------------------------------------------------------------------------
  * React Component: Lists
@@ -14,6 +13,8 @@ import React, { Component, Fragment } from 'react';
  */
 
 export default class Lists extends Component {
+    static dependencies() { return module.children; }
+
     constructor(props) {
         super(props);
         this.state = {

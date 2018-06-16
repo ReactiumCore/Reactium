@@ -36,6 +36,7 @@ export default {
                 'paragraph': {
                     type      : 'atom',
                     label     : 'Paragraph',
+                    cname     : require('appdir/toolkit/typography/elements/Paragraph').default.name,
                     route     : '/toolkit/typography/paragraph',
                     dna       : '/toolkit/typography/elements/Paragraph',
                     component : require('appdir/toolkit/typography/elements/Paragraph').default,
@@ -44,6 +45,7 @@ export default {
                 'headings': {
                     type      : 'atom',
                     label     : 'Headings',
+                    cname     : require('appdir/toolkit/typography/elements/Headings').default.name,
                     route     : '/toolkit/typography/headings',
                     dna       : '/toolkit/typography/elements/Headings',
                     component : require('appdir/toolkit/typography/elements/Headings').default,
@@ -51,6 +53,7 @@ export default {
                 'text-link': {
                     type      : 'atom',
                     label     : 'Text Link',
+                    cname     : require('appdir/toolkit/typography/elements/TextLink').default.name,
                     route     : '/toolkit/typography/text-link',
                     dna       : '/toolkit/typography/elements/TextLink',
                     component : require('appdir/toolkit/typography/elements/TextLink').default,
@@ -58,6 +61,7 @@ export default {
                 'lists': {
                     type      : 'molecule',
                     label     : 'Lists',
+                    cname     : require('appdir/toolkit/typography/elements/Lists').default.name,
                     route     : '/toolkit/typography/lists',
                     dna       : '/toolkit/typography/elements/Lists',
                     component : require('appdir/toolkit/typography/elements/Lists').default,
@@ -65,6 +69,7 @@ export default {
                 'article': {
                     type      : 'organism',
                     label     : 'Article',
+                    cname     : require('appdir/toolkit/typography/elements/Article').default.name,
                     route     : '/toolkit/typography/article',
                     dna       : '/toolkit/typography/elements/Article',
                     component : require('appdir/toolkit/typography/elements/Article').default,
@@ -87,6 +92,7 @@ export default {
         custom: {
             type      : 'organism',
             label     : 'Custom View',
+            cname     : require('appdir/toolkit/typography').default.name,
             route     : '/toolkit/custom',
             dna       : '/toolkit/typography',
             component : require('appdir/toolkit/typography').default,

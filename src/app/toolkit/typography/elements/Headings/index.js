@@ -19,6 +19,8 @@ import H6 from './H6';
  */
 
 export default class Headings extends Component {
+    static dependencies() { return module.children; }
+    
     constructor(props) {
         super(props);
         this.state = {
