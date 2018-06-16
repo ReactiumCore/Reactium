@@ -55,7 +55,7 @@ export default class Preview extends Component {
     }
 
     renderCmp({ cname, cpath, style }) {
-        
+
         return (`
             <html>
                 <head>
@@ -77,7 +77,7 @@ export default class Preview extends Component {
 
 
     render() {
-        let { component:Component, group, id, visible, style } = this.state;
+        let { component:Component, group, id, visible, style, path } = this.state;
 
         if (!Component || !group || !id) { return null; }
 
@@ -98,7 +98,7 @@ export default class Preview extends Component {
             }
 
             case 'function': {
-                let cname  = getDisplayName(Component);
+                let cname  = path || getDisplayName(Component);
                 let cpath  = `${group}/elements/${cname}`;
                 let markup = this.renderCmp({cname, cpath, style});
 

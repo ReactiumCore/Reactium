@@ -1,3 +1,5 @@
+
+
 export default {
     header: {
         logo    : '/assets/images/logo.png',
@@ -35,14 +37,37 @@ export default {
                     type      : 'atom',
                     label     : 'Paragraph',
                     route     : '/toolkit/typography/paragraph',
+                    dna       : '/toolkit/typography/elements/Paragraph',
                     component : require('appdir/toolkit/typography/elements/Paragraph').default,
                     readme    : require('appdir/toolkit/typography/elements/Paragraph/readme').default,
+                },
+                'headings': {
+                    type      : 'atom',
+                    label     : 'Headings',
+                    route     : '/toolkit/typography/headings',
+                    dna       : '/toolkit/typography/elements/Headings',
+                    component : require('appdir/toolkit/typography/elements/Headings').default,
                 },
                 'text-link': {
                     type      : 'atom',
                     label     : 'Text Link',
                     route     : '/toolkit/typography/text-link',
+                    dna       : '/toolkit/typography/elements/TextLink',
                     component : require('appdir/toolkit/typography/elements/TextLink').default,
+                },
+                'lists': {
+                    type      : 'molecule',
+                    label     : 'Lists',
+                    route     : '/toolkit/typography/lists',
+                    dna       : '/toolkit/typography/elements/Lists',
+                    component : require('appdir/toolkit/typography/elements/Lists').default,
+                },
+                'article': {
+                    type      : 'organism',
+                    label     : 'Article',
+                    route     : '/toolkit/typography/article',
+                    dna       : '/toolkit/typography/elements/Article',
+                    component : require('appdir/toolkit/typography/elements/Article').default,
                 },
             },
         },
@@ -54,6 +79,7 @@ export default {
                     type      : 'organism',
                     label     : 'Test Component',
                     route     : '/toolkit/components/test-component',
+                    dna       : '/components/Test',
                     component : '/test',
                 },
             }
@@ -62,6 +88,7 @@ export default {
             type      : 'organism',
             label     : 'Custom View',
             route     : '/toolkit/custom',
+            dna       : '/toolkit/typography',
             component : require('appdir/toolkit/typography').default,
         },
         // navaway: {
@@ -106,6 +133,13 @@ export default {
             values: [false, true],
             pref: 'docs.all',
             help: 'Expand or collapse all documentation',
+            default: false,
+        },
+        {
+            text: ['Expand DNA', 'Collapse DNA'],
+            values: [false, true],
+            pref: 'link.all',
+            help: 'Expand or collapse all DNA views',
             default: false,
         },
         {

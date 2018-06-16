@@ -49,6 +49,8 @@ export default class Toolkit extends Component {
     onButtonClick(e, data) {
         let { type } = e;
 
+        console.log(type);
+
         this.togglePref({type, data});
         this.toggleFilter({type, data});
         this.toggleFullscreen({type, data, e});
@@ -107,6 +109,7 @@ export default class Toolkit extends Component {
             'toggle-code',
             'toggle-codeColor',
             'toggle-docs',
+            'toggle-link',
         ];
 
         if (toggles.indexOf(type) < 0) { return; }
@@ -117,11 +120,15 @@ export default class Toolkit extends Component {
         let key = type.split('toggle-').join('');
             key = `prefs.${key}.${data.state.id}`;
 
+
         switch (type) {
+            case 'toggle-link':
             case 'toggle-docs':
             case 'toggle-code': {
                 let k = (type === 'toggle-code') ? 'codes' : 'docs';
+                    k = (type === 'toggle-link') ? 'link' : k;
                 value = !op.get(this.content, `${k}.${data.state.id}.state.visible`);
+
                 break;
             }
 
@@ -246,6 +253,7 @@ export default class Toolkit extends Component {
                     <Content
                         group={group}
                         prefs={prefs}
+                        menu={menu}
                         style={style}
                         data={elements}
                         update={update}

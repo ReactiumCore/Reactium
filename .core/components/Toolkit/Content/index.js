@@ -4,6 +4,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
+
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Preview from './Preview';
@@ -12,6 +13,7 @@ import _ from 'underscore';
 import Card from './Card';
 import Code from './Code';
 import Docs from './Docs';
+import Dna from './Dna';
 
 
 /**
@@ -27,6 +29,7 @@ export default class Content extends Component {
         this.cards             = {};
         this.codes             = {};
         this.docs              = {};
+        this.link              = {};
         this.previews          = {};
         this.watcher           = null;
         this.state             = { ...this.props };
@@ -59,11 +62,14 @@ export default class Content extends Component {
         let evtdata = card;
 
         switch(action) {
+            case 'toggle-link':
             case 'toggle-docs':
             case 'toggle-code': {
 
                 if (op.has(card, 'state.id')) {
                     let k = (action === 'toggle-code') ? 'codes' : 'docs';
+                        k = ('toggle-link') ? 'link' : k;
+
                     let cmp = this[k][card.state.id];
                     if (cmp) { cmp.toggle(); }
                 }
@@ -99,6 +105,11 @@ export default class Content extends Component {
         this.docs[id] = elm;
     }
 
+    registerDnas({ elm, id }) {
+        if (!elm) { return; }
+        this.link[id] = elm;
+    }
+
     registerPreview({ elm, id }) {
         if (!elm) { return; }
         this.previews[id] = elm;
@@ -107,22 +118,25 @@ export default class Content extends Component {
     // Renderers
     renderCards({ data, card, group }) {
 
-        let { onButtonClick, prefs, update, style } = this.state;
+        let { onButtonClick, prefs, update, style, menu } = this.state;
 
         this.cards    = {};
         this.codes    = {};
         this.docs     = {};
+        this.link     = {};
         this.previews = {};
 
         return Object.keys(data).map((key, k) => {
             let id   = [group, key].join('_');
             let item = data[key];
 
-            let { label, component, readme, dna } = item;
+            let { label, component, readme, dna, path } = item;
             let { buttons = {} } = card;
 
             buttons = JSON.stringify(buttons);
             buttons = JSON.parse(buttons);
+
+            const Cmp = component;
 
             let noCode = Boolean(typeof component === 'string');
             if (noCode === true) {
@@ -155,6 +169,7 @@ export default class Content extends Component {
                         update={update}
                         group={group}
                         style={style}
+                        path={path}
                         id={id}
                     />
                     {
@@ -186,6 +201,14 @@ export default class Content extends Component {
                         )
                         : null
                     }
+                    <Dna
+                        ref={(elm) => { this.registerDnas({elm, id}); }}
+                        component={component}
+                        update={update}
+                        prefs={prefs}
+                        menu={menu}
+                        id={id}
+                    />
                 </Card>
             );
         });
@@ -255,6 +278,7 @@ Content.defaultProps = {
     watchTimer    : 200,
     data          : {},
     prefs         : {},
+    menu          : {},
     card          : {
         buttons: {
             header: [

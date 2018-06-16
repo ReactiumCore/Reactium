@@ -16,6 +16,9 @@ export default {
         docs: {
             all: false,
         },
+        dna: {
+            all: false,
+        },
         sidebar: {
             position: 'left',
             expanded: true,
