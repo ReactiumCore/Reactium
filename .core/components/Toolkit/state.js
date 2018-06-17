@@ -11,7 +11,7 @@ export default {
             all: false,
         },
         codeColor: {
-            all: 'dark',
+            all: 'light',
         },
         docs: {
             all: false,

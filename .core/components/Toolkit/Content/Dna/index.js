@@ -177,7 +177,6 @@ export default class Dna extends Component {
         return output;
     }
 
-
     getDependency(str) {
         let { menu } = this.state;
 
@@ -188,7 +187,14 @@ export default class Dna extends Component {
 
         if (item) {
             let { route, label } = item;
-            return (route && label) ? () => (<Link to={route}>{label}</Link>) : null;
+            return (route && label) ? () => (<Link to={route} title={str}><svg><use xlinkHref={'#re-icon-link'}></use></svg>{label}</Link>) : null;
+        } else {
+            let exp = new RegExp('^.\/node_modules\/', 'i');
+            if (exp.test(str)) { return; }
+
+            let cmp = str.split('/').pop().split('.js').join('');
+            //re-icon-notes
+            return () => (<span><svg><use xlinkHref={'#re-icon-docs'}></use></svg>{cmp} &ndash; {str.split('./src/app').join('')}</span>);
         }
     }
 
@@ -327,5 +333,5 @@ Dna.defaultProps = {
     prefs: {},
     speed: 0.2,
     id: null,
-    visible: true,
+    visible: false,
 };
