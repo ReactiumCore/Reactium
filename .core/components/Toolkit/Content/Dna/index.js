@@ -161,9 +161,9 @@ export default class Dna extends Component {
                 let cmp = _.findWhere(elements, {dna: p});
 
                 if (!cmp) { return; }
-                if (!op.has(cmp, 'cname')) { return; }
 
-                if (cmp.cname === component.name) {
+                let cname = cmp.name;
+                if (cname === component.name) {
                     results.push(item);
                 }
             });
@@ -198,6 +198,10 @@ export default class Dna extends Component {
 
         let elements = [];
         let pkg = str.split('./node_modules/').join('').split('/').shift();
+
+        let exclude = ['webpack', 'react'];
+        if (exclude.indexOf(pkg) > -1) { return; }
+
         let url = `https://www.npmjs.com/package/${pkg}`;
 
         return () => (<a href={url} target={'_blank'}>{pkg}</a>);
@@ -219,6 +223,27 @@ export default class Dna extends Component {
         let npm          = _.compact(deps.map((item) => this.getNPM(item, deps)));
         let dependencies = _.compact(deps.map((item) => this.getDependency(item)));
         let dependents   = this.getDependents(component);
+
+        let count = npm.length + dependencies.length + dependents.length;
+
+        if (count < 1) {
+            return (
+                <div
+                    ref={(elm) => { this.cont = elm; }}
+                    className={'re-toolkit-dna-view'}
+                    style={{height, display}} >
+                    <div className={'re-toolkit-card-heading thin'}>
+                        DNA
+                    </div>
+                    <div className={'re-toolkit-card-body'}>
+                        <div className={'re-toolkit-card-body-pad'}>
+                            <h3>No DNA Found</h3>
+                            <p>Be sure to add the dna property to the manifest entry for this element and include the static function <code>dependencies</code> to your class.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
 
         return (
             <div
