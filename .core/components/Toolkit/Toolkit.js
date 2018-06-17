@@ -125,6 +125,7 @@ export default class Toolkit extends Component {
             case 'toggle-code': {
                 let k = (type === 'toggle-code') ? 'codes' : 'docs';
                     k = (type === 'toggle-link') ? 'link' : k;
+
                 value = !op.get(this.content, `${k}.${data.state.id}.state.visible`);
 
                 break;

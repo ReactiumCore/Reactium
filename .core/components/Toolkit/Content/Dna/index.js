@@ -193,7 +193,6 @@ export default class Dna extends Component {
             if (exp.test(str)) { return; }
 
             let cmp = str.split('/').pop().split('.js').join('');
-            //re-icon-notes
             return () => (<span><svg><use xlinkHref={'#re-icon-docs'}></use></svg>{cmp} &ndash; {str.split('./src/app').join('')}</span>);
         }
     }

@@ -68,7 +68,7 @@ export default class Content extends Component {
 
                 if (op.has(card, 'state.id')) {
                     let k = (action === 'toggle-code') ? 'codes' : 'docs';
-                        k = ('toggle-link') ? 'link' : k;
+                        k = (action === 'toggle-link') ? 'link' : k;
 
                     let cmp = this[k][card.state.id];
                     if (cmp) { cmp.toggle(); }

@@ -5,6 +5,8 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import LI from './LI';
+import UL from './UL';
 
 /**
  * -----------------------------------------------------------------------------
@@ -35,13 +37,33 @@ export default class Lists extends Component {
         }));
     }
 
+    renderDefault() {
+        let items = [
+            (<LI key={`li-1`}>Item 1</LI>),
+            (<LI key={`li-2`}>Item 2</LI>),
+            (<LI key={`li-3`}>Item 3</LI>),
+            (<LI key={`li-4`}>Item 4</LI>),
+            (<LI key={`li-5`}>Item 5</LI>),
+        ];
+
+        return items.map((item) => item);
+    }
+
     render() {
+        let { children, className, style } = this.state;
+        children = (!children) ? this.renderDefault() : children;
+
         return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
+            <ul className={className} style={style}>
+                {children}
+            </ul>
         );
     }
+}
+
+export {
+    LI,
+    UL,
 }
 
 Lists.defaultProps = {};
