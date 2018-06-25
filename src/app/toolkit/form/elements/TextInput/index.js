@@ -9,11 +9,11 @@ import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Inputs
+ * React Component: TextIput
  * -----------------------------------------------------------------------------
  */
 
-class Inputs extends Component {
+class TextInput extends Component {
 
     static dependencies() { return module.children; }
 
@@ -35,15 +35,14 @@ class Inputs extends Component {
     }
 
     render() {
-        return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
-        );
+        return (<input {...this.state} />);
     }
 }
 
 // Default properties
-Inputs.defaultProps = {};
+TextInput.defaultProps = {
+    type: 'text',
+    value: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit ipsum tortor, finibus aliquet sem volutpat at. Duis pretium eros sed lacus luctus, non sagittis leo vestibulum. Donec libero sapien, auctor sit amet vulputate a, efficitur ut elit. Etiam feugiat ornare metus'
+};
 
-export default Inputs;
+export default TextInput;

@@ -3,7 +3,7 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
 
 /**
  * -----------------------------------------------------------------------------
- * Inputs Readme
+ * RadioInput Readme
  * -----------------------------------------------------------------------------
  */
 
