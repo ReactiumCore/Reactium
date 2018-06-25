@@ -66,7 +66,7 @@ module.exports = (gulpConfig, type = 'app') => {
                     ]
                 },
                 {
-                    test : [/.css$/, /.sass$/, /.scss$/, /.less$/],
+                    test : [/.css$/, /.sass$/, /.scss$/, /.less$/, /.BACKUP$/,],
                     use  : [
                         {
                             loader: 'ignore-loader',

@@ -4,7 +4,7 @@ module.exports = {
         "title": "Style Guide",
         "version": "ver 2.0.1"
     },
-    "overview": require('appdir/toolkit/overview').default,
+    "overview": "require('appdir/toolkit/overview').default",
     "themes": [{
         "name": "Default",
         "css": "/assets/style/style.css",
@@ -64,36 +64,36 @@ module.exports = {
                     "label": "Paragraph",
                     "route": "/toolkit/typography/paragraph",
                     "dna": "/toolkit/typography/elements/Paragraph",
-                    "component": require('appdir/toolkit/typography/elements/Paragraph').default,
-                    "readme": require('appdir/toolkit/typography/elements/Paragraph/readme').default
+                    "component": "require('appdir/toolkit/typography/elements/Paragraph').default",
+                    "readme": "require('appdir/toolkit/typography/elements/Paragraph/readme').default"
                 },
                 "headings": {
                     "type": "atom",
                     "label": "Headings",
                     "route": "/toolkit/typography/headings",
                     "dna": "/toolkit/typography/elements/Headings",
-                    "component": require('appdir/toolkit/typography/elements/Headings').default
+                    "component": "require('appdir/toolkit/typography/elements/Headings').default"
                 },
                 "text-link": {
                     "type": "atom",
                     "label": "Text Link",
                     "route": "/toolkit/typography/text-link",
                     "dna": "/toolkit/typography/elements/TextLink",
-                    "component": require('appdir/toolkit/typography/elements/TextLink').default
+                    "component": "require('appdir/toolkit/typography/elements/TextLink').default"
                 },
                 "lists": {
                     "type": "molecule",
                     "label": "Lists",
                     "route": "/toolkit/typography/lists",
                     "dna": "/toolkit/typography/elements/Lists",
-                    "component": require('appdir/toolkit/typography/elements/Lists').default
+                    "component": "require('appdir/toolkit/typography/elements/Lists').default"
                 },
                 "article": {
                     "type": "organism",
                     "label": "Article",
                     "route": "/toolkit/typography/article",
                     "dna": "/toolkit/typography/elements/Article",
-                    "component": require('appdir/toolkit/typography/elements/Article').default
+                    "component": "require('appdir/toolkit/typography/elements/Article').default"
                 }
             }
         },
@@ -116,41 +116,38 @@ module.exports = {
             "elements": {}
         },
         "form": {
-            "label": "Form Elements",
-            "route": "/toolkit/form",
             "elements": {
                 "inputs": {
                     "type": "atom",
                     "label": "Inputs",
                     "route": "/toolkit/form/inputs",
                     "dna": "/toolkit/form/elements/Inputs",
-                    "component": require('appdir/toolkit/form/elements/Inputs').default,
-                    "readme": require('appdir/toolkit/form/elements/Inputs/readme').default
+                    "component": "require('appdir/toolkit/form/elements/Inputs').default",
+                    "readme": "require('appdir/toolkit/form/elements/Inputs/readme').default"
+                },
+                "text-iput": {
+                    "type": "atom",
+                    "label": "Text Input",
+                    "route": "/toolkit/form/text-iput",
+                    "dna": "/toolkit/form/elements/TextIput",
+                    "component": "require('appdir/toolkit/form/elements/TextIput').default",
+                    "readme": "require('appdir/toolkit/form/elements/TextIput/readme').default"
                 },
                 "text-area": {
                     "type": "atom",
                     "label": "Text Area",
                     "route": "/toolkit/form/text-area",
                     "dna": "/toolkit/form/elements/TextArea",
-                    "component": require('appdir/toolkit/form/elements/TextArea').default,
-                    "readme": require('appdir/toolkit/form/elements/TextArea/readme').default
+                    "component": "require('appdir/toolkit/form/elements/TextArea').default",
+                    "readme": "require('appdir/toolkit/form/elements/TextArea/readme').default"
                 },
                 "number-input": {
                     "type": "atom",
                     "label": "Number Input",
                     "route": "/toolkit/form/number-input",
                     "dna": "/toolkit/form/elements/NumberInput",
-                    "component": require('appdir/toolkit/form/elements/NumberInput').default,
-                    "readme": require('appdir/toolkit/form/elements/NumberInput/readme').default
-                },
-                "checkbox": {
-                    "type": "atom",
-                    "hidden": true,
-                    "label": "Checkbox",
-                    "route": "/toolkit/form/checkbox",
-                    "dna": "/toolkit/form/elements/Checkbox",
-                    "component": require('appdir/toolkit/form/elements/Checkbox').default,
-                    "readme": require('appdir/toolkit/form/elements/Checkbox/readme').default
+                    "component": "require('appdir/toolkit/form/elements/NumberInput').default",
+                    "readme": "require('appdir/toolkit/form/elements/NumberInput/readme').default"
                 }
             }
         }

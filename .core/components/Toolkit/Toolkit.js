@@ -4,15 +4,15 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import { Helmet } from 'react-helmet';
+import _ from 'underscore';
 import op from 'object-path';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import Settings from './Settings';
+import { Helmet } from 'react-helmet';
 import ToolbarIcons from './Toolbar/ToolbarIcons';
-import _ from 'underscore';
+import React, { Component, Fragment } from 'react';
 
 
 /**
@@ -181,6 +181,30 @@ export default class Toolkit extends Component {
         return elements;
     }
 
+    filterMenu(menu) {
+
+        // Loop through menu items and if the group has hidden === true -> remove it
+        Object.keys(menu).forEach((k) => {
+            if (op.get(menu, 'hidden', false) === true) {
+                delete menu[k];
+                return;
+            }
+
+            let elements = op.get(menu, `${k}.elements`, {});
+
+            Object.keys(elements).forEach((e) => {
+                if (op.get(elements, `${e}.hidden`, false) === true) {
+                    delete elements[e];
+                }
+            });
+
+            menu[k]['elements'] = elements;
+        });
+
+        console.log({ menu });
+        return menu;
+    }
+
     render() {
         let {
             update   = Date.now(),
@@ -203,6 +227,8 @@ export default class Toolkit extends Component {
             header   = {},
             overview,
         } = manifest;
+
+        menu = this.filterMenu(menu);
 
         let elements  = this.getElements({ menu, group, element });
         let groupName = (group) ? menu[group]['label'] : 'Reactium';
