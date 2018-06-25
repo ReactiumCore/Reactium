@@ -1,0 +1,13 @@
+.re-toolkit-settings {
+    > .re-toolkit-card {
+        width      : 25%;
+        min-width  : 320px;
+        max-width  : 480px;
+        top        : 75px;
+        left       : 50%;
+        display    : block;
+        position   : absolute;
+        transform  : translateX(-50%);
+        box-shadow : 0 0 15px 1px rgba(0,0,0, 0.5);
+    }
+}

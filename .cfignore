@@ -17,3 +17,5 @@ node_modules
 # Ignore src
 src/assets
 src/index.js
+src/app/toolkit/.backup
+src/app/toolkit/.tmp

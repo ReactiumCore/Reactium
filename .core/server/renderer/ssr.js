@@ -14,7 +14,7 @@ const template = (content, helmet, store, req, res) => {
             ${helmet.title.toString()}
             ${helmet.meta.toString()}
             ${helmet.link.toString()}
-            <link rel="stylesheet" href="/assets/style/style.css" />
+            ${req.styles}
         </head>
         <body ${helmet.bodyAttributes.toString()}>
             <Component type="DevTools"></Component>
@@ -51,15 +51,15 @@ module.exports = (req, res, context) => {
 
     // Wait for all loaders or go ahead and render on error
     return new Promise(resolve => {
-        console.log('Loading page data...');
+        console.log('[Reactium] Loading page data...');
 
         Promise.all(loaders)
             .then(() => {
-                console.log('Page data loading complete.')
+                console.log('[Reactium] Page data loading complete.')
                 resolve();
             })
             .catch(error => {
-                console.error('Page data loading error.', error);
+                console.error('[Reactium] Page data loading error.', error);
                 resolve();
             })
     }).then(() => {

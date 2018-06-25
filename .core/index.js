@@ -28,7 +28,9 @@ const adminURL    = process.env.ACTINIUM_ADMIN_URL || false;
 app.set('x-powered-by', false);
 
 // logging
-app.use(morgan('combined'));
+if (process.env.DEBUG !== 'off') {
+    app.use(morgan('combined'));
+}
 
 // apply cross site scripting
 app.use(cors());
@@ -87,7 +89,7 @@ app.use(router);
 app.listen(port, '0.0.0.0', function() {
     app.dependencies.init();
 
-    console.log(`[00:00:00] Server running on port ${port}...`);
+    console.log(`[00:00:00] [Reactium] Server running on port ${port}...`);
 });
 
 app.dependencies = global.dependencies = require('dependencies').default;

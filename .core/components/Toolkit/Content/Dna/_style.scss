@@ -1,0 +1,44 @@
+.re-toolkit-dna-view {
+
+    ul {
+        li {
+            > * {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+            }
+
+            a,
+            > span {
+                padding: 15px 30px;
+                font-family: monospace;
+                font-size: 14px;
+                text-decoration: none;
+                color: $blue;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: $black;
+                }
+            }
+
+            > span {
+                color: $black;
+                &:hover {
+                    text-decoration: none;
+                    color: $black;
+                }
+            }
+
+            svg {
+                margin-top: 1px;
+                margin-right: 10px;
+                width: 12px;
+                height: 12px;
+            }
+        }
+        li:nth-child(odd) {
+            background-color: darken($white, 2%);
+        }
+    }
+}

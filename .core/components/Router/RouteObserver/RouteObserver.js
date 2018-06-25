@@ -21,7 +21,11 @@ export default class RouteObserver extends Component {
             });
 
             if ( location ) {
-                let routeParams = matchPath(location.pathname, route).params;
+                let routeParams = {};
+
+                if (route) {
+                    routeParams = matchPath(location.pathname, route).params;
+                }
 
                 updateRoute(
                     location,

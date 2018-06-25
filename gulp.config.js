@@ -34,6 +34,7 @@ module.exports = () => {
                 "src/assets/**/*.scss",
                 "src/assets/**/*.sass",
                 "src/assets/design-system/src/assets/toolkit/styles/**/*.scss",
+                ".core/components/**/*.scss"
             ],
             assets: [
                 "src/assets/**/*",

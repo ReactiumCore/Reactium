@@ -1,0 +1,74 @@
+
+.re-toolkit-code {
+    overflow-x : auto;
+    font-size  : 13px;
+    border-radius: 0;
+
+    pre {
+        border-radius: 0px !important;
+    }
+
+    * {
+        font-family : monospace;
+        font-size   : 16px;
+        line-height : 2;
+    }
+
+    .react-syntax-highlighter-line-number {
+        margin-left  : -5px;
+        margin-right : 10px;
+    }
+
+    &.inline {
+        margin: 0 -26px;
+    }
+}
+
+.re-toolkit-code-view {
+    overflow: hidden;
+}
+
+.theme-btn {
+    position: relative;
+
+    span {
+        position      : absolute;
+        display       : block;
+        width         : 13px;
+        height        : 13px;
+        content       : '';
+        top           : 50%;
+        left          : 50%;
+        border-radius : 1px;
+    }
+
+    &.dark {
+        span {
+            &:first-child {
+                background-color : $white;
+                border           : 1px solid $grey;
+                transform        : translate(-60%, -60%);
+            }
+            &:last-child {
+                background-color : $black;
+                border           : 1px solid $grey;
+                transform        : translate(-25%, -25%);
+            }
+        }
+    }
+
+    &.light {
+        span {
+            &:first-child {
+                background-color : $black;
+                border           : 1px solid $grey;
+                transform        : translate(-60%, -60%);
+            }
+            &:last-child {
+                background-color : $white;
+                border           : 1px solid $grey;
+                transform        : translate(-25%, -25%);
+            }
+        }
+    }
+}

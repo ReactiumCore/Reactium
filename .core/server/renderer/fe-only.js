@@ -1,7 +1,7 @@
 module.exports = (req, res, context) => {
     return `<html>
         <head>
-            <link rel="stylesheet" href="/assets/style/style.css" />
+            ${req.styles}
         </head>
         <body>
             <Component type="DevTools"></Component>
@@ -10,7 +10,7 @@ module.exports = (req, res, context) => {
             <script>
                 window.ssr = false;
                 window.restAPI = '/api';
-                window.parseAppId = '${parseAppId}'
+                window.parseAppId = '${parseAppId}';
             </script>
             ${req.scripts}
         </body>

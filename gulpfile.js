@@ -148,7 +148,7 @@ gulp.task('serve', (done) => {
         });
 
         done();
-    }, 2000);
+    }, 5000);
 });
 
 // Build

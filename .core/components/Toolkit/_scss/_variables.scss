@@ -1,0 +1,12 @@
+@import 'colors';
+
+$header-height: 80px;
+$toolbar-width: 72px;
+$sidebar-width: 320px;
+$search-height: 64px;
+$menu-width: $sidebar-width - $toolbar-width;
+$menu-height-offset: $header-height + $search-height;
+
+$z-top    : 100000;
+$z-middle : 50000;
+$z-bottom : 25000;

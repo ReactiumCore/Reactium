@@ -2,17 +2,16 @@
 
 const path    = require('path');
 const webpack = require('webpack');
-const _       = require('underscore');
 const env     = process.env.NODE_ENV || 'development';
 
 module.exports = (gulpConfig, type = 'app') => {
-    let config    = gulpConfig;
     let plugins   = [];
+    let externals = [];
     let target    = 'web';
+    let config    = gulpConfig;
     let filename  = '[name].js';
     let entries   = config.entries;
     let dest      = config.dest.js;
-    let externals = [];
     let tools     = (env === 'development') ? 'source-map' : '';
 
     // Only override process.env on client side
@@ -22,6 +21,9 @@ module.exports = (gulpConfig, type = 'app') => {
         };
     }
     plugins.push(new webpack.DefinePlugin(config.defines));
+    plugins.push(new webpack.ContextReplacementPlugin(/^toolkit/, context => {
+        context.request = path.resolve('./src/app/toolkit');
+    }));
     plugins.push(new webpack.ContextReplacementPlugin(/^components/, context => {
         context.request = path.resolve('./src/app/components');
     }));
@@ -30,24 +32,24 @@ module.exports = (gulpConfig, type = 'app') => {
     }));
 
     return {
-        target: target,
-        entry: entries,
-        devtool: tools,
-        plugins: plugins,
-        externals: externals,
-        mode: env,
-        output:  {
+        target    : target,
+        entry     : entries,
+        devtool   : tools,
+        plugins   : plugins,
+        externals : externals,
+        mode      : env,
+        output    :  {
             path: path.resolve(__dirname, dest),
             filename,
         },
         optimization: {
             minimize: Boolean(env !== 'development'),
             splitChunks: {
-                cacheGroups: Object.assign({
-                    vendors: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: "vendors",
-                        chunks: "all",
+                cacheGroups : Object.assign({
+                    vendors : {
+                        test   : /[\\/]node_modules[\\/]/,
+                        name   : "vendors",
+                        chunks : "all",
                     },
                 }),
             },
@@ -55,11 +57,19 @@ module.exports = (gulpConfig, type = 'app') => {
         module:  {
             rules: [
                 {
-                    test: [/.js$/],
-                    exclude: /node_modules/,
-                    use: [
+                    test    : [/.js$/],
+                    exclude : /node_modules/,
+                    use     : [
                         {
                             loader: 'babel-loader',
+                        }
+                    ]
+                },
+                {
+                    test : [/.css$/, /.sass$/, /.scss$/, /.less$/, /.BACKUP$/,],
+                    use  : [
+                        {
+                            loader: 'ignore-loader',
                         }
                     ]
                 }

@@ -1,0 +1,61 @@
+.re-toolkit-search {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid lighten($border-color, 5%);
+    height: $search-height;
+    min-height: $search-height;
+    width: 248px;
+    overflow: hidden;
+    background-color: $white;
+    position: relative;
+
+    input {
+        width: 100%;
+        border-radius: 50px;
+        background-color: $grey-light;
+        color: $gray;
+        font-size: 14px;
+        padding: 7px 32px 7px 15px;
+        outline: none;
+        border: 1px solid $border-color;
+    }
+
+    &-clear {
+        background-color: $white;
+        border: 1px solid $border-color;
+        border-radius: 100%;
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        width: 24px;
+        height: 24px;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 9px;
+            height: 9px;
+            fill: $gray;
+        }
+
+        &:hover {
+            opacity: 0.75;
+        }
+
+        &:active,
+        &:focus {
+            border: 1px solid $grey;
+            opacity: 1;
+
+            svg {
+                fill: $blue;
+            }
+        }
+
+
+    }
+}

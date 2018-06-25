@@ -1,0 +1,130 @@
+.re-toolkit-menu {
+    width: $menu-width;
+    display: flex;
+    align-items: stretch;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow: hidden;
+
+    .filters {
+        padding: 8px 12px 4px 12px;
+        border-bottom: 1px solid $grey-light;
+
+        &-remove-btn {
+            font-size        : 11px;
+            padding          : 4px 8px;
+            color            : $white;
+            background-color : $blue;
+            text-transform   : lowercase;
+            margin-right     : 5px;
+            margin-bottom    : 4px;
+            border-radius    : 2px;
+            transition       : opacity .2s ease-in-out;
+
+            svg {
+                width        : 8px;
+                height       : 8px;
+                margin-right : 6px;
+                fill         : $white;
+            }
+
+            &:hover {
+                opacity: 0.75;
+            }
+        }
+    }
+
+    ul {
+        li {
+            a {
+                display: block;
+                text-decoration: none;
+                color: $gray;
+                position: relative;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+
+                &.link {
+                    padding: 15px 25px 15px 45px;
+                    font-size: 12px;
+
+                    &:hover,
+                    &:focus,
+                    &.active {
+                        color: darken($gray, 10%);
+                    }
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        width: 8px;
+                        height: 8px;
+                        transition: transform 1s ease-in-out;
+                        transform: translateY(-50%) translateX(-150%) rotate(45deg);
+                        background-color: $blue;
+                    }
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        width: 92%;
+                        height: 1px;
+                        background-color: $grey;
+                        opacity: 0.25;
+                    }
+
+                    &.active {
+                        &:before {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            width: 8px;
+                            height: 8px;
+                            transition: transform 1s ease-in-out;
+                            transform: translateY(-50%) translateX(-50%) rotate(45deg);
+                            background-color: $blue;
+                        }
+                    }
+                }
+
+                &.heading {
+                    @extend h1;
+
+                    padding: 15px 24px;
+                    font-size: 11px;
+                    font-weight: bold;
+
+                    border-left: 2px solid transparent;
+                    color: lighten($black, 20%);
+
+                    &:after {
+                        content: '';
+                        width: 100%;
+                        height: 1px;
+                        bottom: 0;
+                        left: 0;
+                        position: absolute;
+                        background-color: lighten($border-color, 5%);
+                    }
+
+                    &.active {
+                        border-left: 2px solid $blue;
+                    }
+                }
+            }
+        }
+    }
+
+    &-middle {
+        flex-grow: 1;
+        flex-wrap: wrap;
+        overflow-y: auto;
+    }
+}

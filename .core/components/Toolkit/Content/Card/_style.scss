@@ -1,0 +1,251 @@
+.re-toolkit-btn {
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    padding         : 7px 16px 6px 16px;
+    line-height     : 1;
+    border-radius   : 1px;
+    font-size       : 9px;
+    text-transform  : uppercase;
+    border-width    : 1px;
+    border-style    : solid;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &-default {
+        border-color: $grey;
+        background-color: $grey-light;
+        color: $gray;
+    }
+
+    &-primary {
+        border-color: $blue;
+        background-color: lighten($blue, 10%);
+        color: $white;
+    }
+}
+
+.re-toolkit-card {
+    width: 100%;
+    box-shadow: $drop-shadow;
+    overflow-x: hidden;
+    min-width: 320px;
+    display: block;
+    z-index: 1;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+
+    &:not(:last-child) {
+        margin-bottom: 60px;
+    }
+
+    .re-toolkit-card-btn-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 5px;
+
+        &:hover {
+            opacity: 0.5;
+        }
+
+        svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        padding: 0;
+        margin: 0;
+    }
+
+    &-heading {
+        display: flex;
+        background-color: $white;
+        padding: 12px 8px 12px 24px;
+        color: $black;
+        border-radius: 4px 4px 0 0;
+        align-items: center;
+        border-bottom: 1px solid $border-color;
+        min-height: 65px;
+
+        *:first-child {
+            flex-grow: 1;
+        }
+
+        &.thin {
+            padding: 6px 8px 6px 24px;
+            border-top: 1px solid $border-color;
+            border-radius: 0;
+            min-height: 38px;
+
+            h1,h2,h3,h4 {
+                font-size: 14px;
+            }
+
+            button {
+                width: 40px;
+                height: 24px;
+                svg {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+        }
+    }
+
+    &-body {
+        background-color: $white;
+        flex-grow: 1;
+
+        &-wrap {
+            display: block;
+            iframe {
+                display: block;
+                width: 100%;
+                min-height: 70px;
+            }
+        }
+
+        &-pad {
+            padding: 25px;
+        }
+    }
+
+    &-list {
+
+        &-item {
+            display          : flex;
+            padding          : 15px 22px 15px 24px;
+            color            : $gray;
+            align-items      : center;
+            background-color : darken($white, 1%);
+            line-height      : 1.5;
+            min-height       : 70px;
+
+            small {
+                width: 100%;
+                display: block;
+                font-size: 11px;
+                margin-top: -2px;
+            }
+
+            > *:first-child {
+                flex-grow: 1;
+                padding-right: 18px;
+            }
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $grey-light;
+            }
+        }
+    }
+
+    button.re-toolkit-switch {
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition       : background-color .25s ease-in-out;
+        border           : 1px solid darken($grey-light, 10%);
+        border-radius    : 20px;
+        position         : relative;
+        background-color : $grey-light;
+        height           : 19px;
+        width            : 40px;
+        flex-wrap        : nowrap;
+        align-items      : center;
+        justify-content: space-between;
+
+        * {
+            pointer-events : none;
+            flex           : 1;
+            text-align     : center;
+            font-size      : 9px;
+            color          : $gray;
+            text-transform : uppercase;
+            line-height: 1.5;
+            margin-top: 1px;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &:after {
+            content          : '';
+            border-radius    : 100%;
+            background-color : $white;
+            box-shadow       : 0 0 1px 1px rgba(0,0,0,.2);
+            width            : 22px;
+            height           : 22px;
+            left             : -1px;
+            top              : 50%;
+            margin           : 0 -1px;
+            position         : absolute;
+            transform        : translateY(-50%);
+            transition       : left .75s ease-in-out;
+        }
+
+        &.active {
+            background-color: lighten($blue, 15%);
+            border: 1px solid $blue;
+
+            > * {
+                color: $white;
+                text-shadow: 1px 1px 3px $gray;
+            }
+
+            &:after {
+                content          : '';
+                border-radius    : 100%;
+                background-color : $white;
+                box-shadow       : 0 0 1px 1px rgba(0,0,0,.1);
+                width            : 22px;
+                height           : 22px;
+                right            : -1;
+                left: auto;
+                top              : 50%;
+                margin           : 0 -1px;
+                position         : absolute;
+                transform        : translateY(-50%);
+                transition       : left .75s ease-in-out;
+            }
+        }
+    }
+
+    &-footer {
+        padding: 2px 8px 2px 24px;
+        background-color: $white;
+        border-top: 1px solid $border-color;
+        border-radius: 0 0 2px 2px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 45px;
+
+        button svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &.fixed {
+        position: absolute;
+        overflow-y: auto;
+        z-index: 100000;
+        min-height: calc(100vh - 80px);
+
+        .re-toolkit-card-heading {
+            border-radius: 0;
+        }
+    }
+
+}
