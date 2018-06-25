@@ -35,15 +35,13 @@ class Checkbox extends Component {
     }
 
     render() {
-        return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
-        );
+        return (<input {...this.state} />);
     }
 }
 
 // Default properties
-Checkbox.defaultProps = {};
+Checkbox.defaultProps = {
+    type: 'checkbox',
+};
 
 export default Checkbox;
