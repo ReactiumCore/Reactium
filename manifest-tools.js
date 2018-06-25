@@ -37,7 +37,7 @@ const find = (searches = [], sourcePaths) => {
             .reduce((mappings, file) => {
                 searches.forEach(({name, pattern}) => {
                     if ( pattern.test(file) ) {
-                        mappings[name].imports.push(file.replace(sourcePath.from, sourcePath.to).replace(/.js$/, ''));
+                        mappings[name].imports.push(file.replace(/\\/g, '/').replace(sourcePath.from, sourcePath.to).replace(/.js$/, ''));
                     }
                 })
 
@@ -133,7 +133,7 @@ module.exports = {
             return (
                 `          ${key}: {\n` +
                 imports.map(file => {
-                    const found = file.match(new RegExp(`\/([A-Za-z_0-9]+?)\/${type}$`))
+                    const found = file.replace(/\\/g, '/').match(new RegExp(`\/([A-Za-z_0-9]+?)\/${type}$`))
                     let [ ,domain ] = found;
                     return `            ${domain}: require('${file}').default,\n`;
                 }).join('') +
