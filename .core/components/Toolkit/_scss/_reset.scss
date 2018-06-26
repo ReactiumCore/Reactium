@@ -1,42 +1,66 @@
 * {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  box-sizing: border-box;
-  vertical-align: baseline; }
-
+    margin: 0;
+    padding: 0;
+    border: 0;
+    // font-size: 100%;
+    // font: inherit;
+    box-sizing: border-box;
+    vertical-align: baseline;
+}
 /* HTML5 display-role reset for older browsers */
-
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-  display: block; }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
 
 body {
-  line-height: 1; }
+    line-height: 1;
+}
 
-ol, ul, li {
-  list-style: none; }
+li,
+ol,
+ul {
+    list-style: none;
+}
 
-blockquote, q {
-  quotes: none; }
+blockquote,
+q {
+    quotes: none;
+}
 
 blockquote {
-  &:before, &:after {
-    content: '';
-    content: none; } }
+    &:after,
+    &:before {
+        content: '';
+        content: none;
+    }
+}
 
 q {
-  &:before, &:after {
-    content: '';
-    content: none; } }
+    &:after,
+    &:before {
+        content: '';
+        content: none;
+    }
+}
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0; }
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 
- button {
-  background-color: transparent;
-  outline: none;
-  border: 0;
-  cursor: pointer; }
+button {
+    background-color: transparent;
+    outline: none;
+    border: 0;
+    cursor: pointer;
+}

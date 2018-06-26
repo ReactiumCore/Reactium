@@ -1,6 +1,6 @@
 module.exports = {
     "header": {
-        "logo": "/assets/images/logo.png",
+        "logo": "/assets/images/atomic-reactor-logo.svg",
         "title": "Style Guide",
         "version": "ver 2.0.1"
     },
@@ -121,6 +121,8 @@ module.exports = {
             "elements": {}
         },
         "form": {
+            "label": "Form Elements",
+            "route": "/toolkit/form",
             "elements": {
                 "text-input": {
                     "type": "atom",
