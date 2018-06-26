@@ -1,6 +1,6 @@
 module.exports = {
     "header": {
-        "logo": "/assets/images/logo.png",
+        "logo": "/assets/images/atomic-reactor-logo.svg",
         "title": "Style Guide",
         "version": "ver 2.0.1"
     },

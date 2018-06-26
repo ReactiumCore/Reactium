@@ -124,205 +124,73 @@ export default class ToolbarIcons extends Component {
                 <symbol id="re-icon-search" viewBox="0 0 476 512">
                     <path d="M329.143 237.714c0-70.572-57.428-128-128-128s-128 57.428-128 128 57.428 128 128 128 128-57.428 128-128zM475.428 475.428c0 20-16.572 36.572-36.572 36.572-9.714 0-19.143-4-25.714-10.857l-98-97.714c-33.428 23.143-73.428 35.428-114 35.428-111.143 0-201.143-90-201.143-201.143s90-201.143 201.143-201.143 201.143 90 201.143 201.143c0 40.571-12.286 80.571-35.428 114l98 98c6.572 6.572 10.572 16 10.572 25.714z" />
                 </symbol>
-                <symbol id="re-icon-catalyst" viewBox="0 0 260 257.54">
+                <symbol id="re-icon-catalyst" viewBox="0 0 70 70">
                     <title>Catalysts</title>
-                    <g>
-                        <g>
-                            <path className="cls-1" d="M22.12,136.41a1.28,1.28,0,0,0-.3-.95A9.05,9.05,0,0,0,22.12,136.41Z" />
-                            <path className="cls-1" d="M123.46,87.14C117.57,156.71,30,157.49,22.12,136.41c.44,8.66-22.49,70.14,48,100.7,46.23,18.65,90-1.41,101.65-48.32C185.34,134.33,159.34,87.93,123.46,87.14Zm-71.61,95.5a11.06,11.06,0,1,1,11.06-11.06A11.06,11.06,0,0,1,51.85,182.65Zm38.26,30.41a10.78,10.78,0,1,1,10.78-10.78A10.78,10.78,0,0,1,90.11,213.05Zm46.67-25.79a19.4,19.4,0,1,1,19.4-19.4A19.4,19.4,0,0,1,136.78,187.26Z" />
-                            <path d="M97,63.52a97,97,0,1,0,97,97A97,97,0,0,0,97,63.52Zm0,172.83a75.82,75.82,0,1,1,75.82-75.82A75.82,75.82,0,0,1,97,236.35Z" />
-                            <path className="cls-1" d="M188,6.72,118.43,76.3,110.71,84c3.62-.15,13.07.55,12.55,5.23-.9,7.93,17.58,14.12,25.24,23.91,6.48,8.28,14.76,16,20.4,24.82a20,20,0,0,1,3.46,10.49l78.71-78.71Z" />
-                            <path d="M257,75,185,3a10.35,10.35,0,0,0-14.63,14.63L173.72,21,118.43,76.3,110.71,84c3.62-.15,6.4,3.13,10.82,4.73a57,57,0,0,1,9.65,4.07L188,36,221.8,69.76l-56.5,56.5-.43.43a56.38,56.38,0,0,1,4.3,10.47A70.36,70.36,0,0,1,172,149.3l7.93-8.42,56.82-56.82,5.58,5.58A10.35,10.35,0,0,0,257,75Z" />
-                        </g>
+                    <g fill="#FFF" stroke="#000" stroke-width="4">
+                        <circle cx="29" cy="41" r="23" />
+                        <path d="M35 20L50 5l15 15-15 15" />
+                        <path stroke-linecap="round" d="M67 22L48 3" />
+                    </g>
+                    <path fill="currentColor" d="M46 41c0-6-5-11-11-11-9 0-11 7-22 6l-1 5a17 17 0 0 0 34 1v-1z" />
+                    <g fill="#FFF">
+                        <circle cx="35" cy="41" r="5" />
+                        <circle cx="22" cy="45" r="4" />
+                        <circle cx="31" cy="52" r="3" />
                     </g>
                 </symbol>
-                <symbol id="re-icon-dna" viewBox="0 0 260 260">
-                    <title>DNA</title>
-                    <g>
-                        <g>
-                            <rect className="cls-1" x="45.7" y="145.36" width="19.42" height="110.96" transform="translate(-125.78 98.01) rotate(-45)" />
-                            <rect className="cls-1" x="68.11" y="122.95" width="19.42" height="110.96" transform="translate(-103.38 107.29) rotate(-45)" />
-                            <rect className="cls-1" x="94.43" y="113.97" width="19.42" height="83.27" transform="translate(-79.52 119.21) rotate(-45)" />
-                            <rect className="cls-1" x="194.6" y="3.69" width="19.42" height="110.96" transform="translate(18 161.8) rotate(-45)" />
-                            <rect className="cls-1" x="172.19" y="26.09" width="19.42" height="110.97" transform="translate(-4.41 152.52) rotate(-45)" />
-                            <rect className="cls-1" x="147.32" y="61.33" width="19.42" height="83.27" transform="translate(-26.81 141.2) rotate(-45)" />
-                            <path d="M81.34,260a10.14,10.14,0,0,1-2.56-20c2.48-.68,61.86-18.07,41.92-108.32-12.49-56.56,2.73-89.18,17.7-106.59C155.06,5.79,175.07.53,175.92.31A10.14,10.14,0,0,1,181,20c-2.58.69-60.35,17.35-40.45,107.4,12.5,56.59-3.14,89.47-18.47,107.08-17,19.52-37.27,25-38.13,25.23A10.17,10.17,0,0,1,81.34,260Z" />
-                            <path d="M10.15,188.79A10.15,10.15,0,0,1,.33,176.09C.56,175.23,6,154.94,25.56,138c17.62-15.32,50.5-31,107.08-18.47C222.79,139.4,239.38,81.5,240,79a10.14,10.14,0,1,1,19.64,5.05c-.21.84-5.47,20.85-24.83,37.51-17.41,15-50,30.19-106.59,17.7-38.81-8.57-68.89-3.87-89.4,14a64,64,0,0,0-18.92,28A10.14,10.14,0,0,1,10.15,188.79Z" />
-                        </g>
-                    </g>
+                <symbol id="re-icon-dna" viewBox="0 0 70 70">
+                    <title>All Elements</title>
+                    <rect x="2" y="2" width="66" height="66" fill="currentColor" stroke="#000" stroke-width="4" rx="10" />
+                    <rect x="7" y="7" width="56" height="56" fill="none" stroke="#fff" stroke-width="6" rx="5" />
+                    <text transform="translate(14 50)" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="33">Re</text>
+                    <path fill="#FFF" d="M43 27l6-11 2 3 6-6-6 10-2-3-6 7z" />
                 </symbol>
-                <symbol id="re-icon-atom" viewBox="0 0 260 260">
+
+                <symbol id="re-icon-atom" viewBox="0 0 70 70">
                     <title>Atoms</title>
-                    <g>
-                        <g>
-                            <path d="M130,0A130,130,0,1,0,260,130,130,130,0,0,0,130,0Zm0,231.61A101.61,101.61,0,1,1,231.61,130,101.61,101.61,0,0,1,130,231.61Z" />
-                            <circle className="cls-1" cx="130" cy="130" r="66.3" />
-                            <circle className="cls-1" cx="219.96" cy="56.43" r="29.05" />
-                        </g>
-                    </g>
+                    <circle cx="35" cy="35" r="33" fill="#fff" stroke="#000" stroke-width="4"/>
+                    <circle cx="58" cy="58" r="7" stroke="#fff" stroke-width="4"/>
+                    <circle cx="35" cy="35" r="23" fill="currentColor" />
                 </symbol>
-                <symbol id="re-icon-molecule" viewBox="0 0 260 239.88">
+                <symbol id="re-icon-molecule" viewBox="0 0 70 70">
                     <title>Molecules</title>
-                    <g>
-                        <g>
-                            <path d="M194.54,64.36a64.36,64.36,0,1,0-64.36,64.36A64.36,64.36,0,0,0,194.54,64.36Zm-114.67,0a50.31,50.31,0,1,1,50.31,50.31A50.31,50.31,0,0,1,79.87,64.36Z" />
-                            <circle className="cls-1" cx="130.17" cy="64.36" r="32.83" />
-                            <circle className="cls-1" cx="161.24" cy="112.31" r="14.38" />
-                            <circle className="cls-1" cx="101.62" cy="112.31" r="14.38" />
-                            <path d="M163.64,231.36a64.36,64.36,0,1,0-23.87-87.84A64.36,64.36,0,0,0,163.64,231.36Zm57-99.51A50.31,50.31,0,1,1,152,150.51,50.31,50.31,0,0,1,220.62,131.85Z" />
-                            <circle className="cls-1" cx="195.63" cy="175.5" r="32.83" transform="translate(-53.88 258.07) rotate(-60.21)" />
-                            <circle className="cls-1" cx="138.58" cy="178.64" r="14.38" transform="translate(-85.3 210.14) rotate(-60.21)" />
-                            <circle className="cls-1" cx="168.2" cy="126.9" r="14.38" transform="translate(-25.5 209.82) rotate(-60.21)" />
-                            <path d="M34.41,118.54a64.36,64.36,0,1,0,86.93,27A64.36,64.36,0,0,0,34.41,118.54ZM87.8,220a50.31,50.31,0,1,1,21.1-67.94A50.31,50.31,0,0,1,87.8,220Z" />
-                            <circle className="cls-1" cx="64.38" cy="175.5" r="32.83" transform="translate(-74.31 50.15) rotate(-27.75)" />
-                            <circle className="cls-1" cx="92.35" cy="125.69" r="14.38" transform="translate(-47.9 57.45) rotate(-27.75)" />
-                            <circle className="cls-1" cx="120.1" cy="178.45" r="14.38" transform="translate(-69.27 76.44) rotate(-27.75)" />
-                        </g>
+                    <circle cx="35" cy="32" r="30" />
+                    <circle cx="15" cy="53" r="15" />
+                    <circle cx="55" cy="53" r="15" />
+                    <circle cx="35" cy="32" r="22" fill="currentColor" stroke="#fff" stroke-width="8" />
+                    <g fill="currentColor" stroke="#fff" stroke-width="4">
+                        <circle cx="15" cy="53" r="9" />
+                        <circle cx="55" cy="53" r="9" />
                     </g>
                 </symbol>
-                <symbol id="re-icon-organism" viewBox="0 0 260 260">
+                <symbol id="re-icon-organism" viewBox="0 0 70 70">
                     <title>Organisms</title>
-                    <g>
-                        <g>
-                            <path d="M260,216a44,44,0,1,0-44,44A44,44,0,0,0,260,216Zm-78.32,0A34.36,34.36,0,1,1,216,250.4,34.36,34.36,0,0,1,181.68,216Z" />
-                            <ellipse className="cls-1" cx="216.04" cy="216.03" rx="22.42" ry="22.43" />
-                            <path d="M174,216a44,44,0,1,0-44,44A44,44,0,0,0,174,216Zm-78.32,0A34.36,34.36,0,1,1,130,250.4,34.36,34.36,0,0,1,95.64,216Z" />
-                            <ellipse className="cls-1" cx="130" cy="216.03" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="173.15" cy="216.03" r="11.83" />
-                            <path d="M87.92,216a44,44,0,1,0-44,44A44,44,0,0,0,87.92,216ZM9.6,216A34.36,34.36,0,1,1,44,250.4,34.36,34.36,0,0,1,9.6,216Z" />
-                            <ellipse className="cls-1" cx="43.96" cy="216.03" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="87.11" cy="216.03" r="11.83" />
-                            <path d="M260,130a44,44,0,1,0-44,44A44,44,0,0,0,260,130Zm-78.32,0A34.36,34.36,0,1,1,216,164.34,34.36,34.36,0,0,1,181.68,130Z" />
-                            <ellipse className="cls-1" cx="216.04" cy="129.97" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="216.17" cy="173.06" r="11.83" />
-                            <path d="M174,130a44,44,0,1,0-44,44A44,44,0,0,0,174,130Zm-78.32,0A34.36,34.36,0,1,1,130,164.34,34.36,34.36,0,0,1,95.64,130Z" />
-                            <ellipse className="cls-1" cx="130" cy="129.97" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="173.15" cy="129.97" r="11.83" />
-                            <circle className="cls-1" cx="130.13" cy="173.06" r="11.83" />
-                            <path d="M87.92,130a44,44,0,1,0-44,44A44,44,0,0,0,87.92,130ZM9.6,130A34.36,34.36,0,1,1,44,164.34,34.36,34.36,0,0,1,9.6,130Z" />
-                            <ellipse className="cls-1" cx="43.96" cy="129.97" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="87.11" cy="129.97" r="11.83" />
-                            <circle className="cls-1" cx="44.1" cy="173.06" r="11.83" />
-                            <path d="M260,44a44,44,0,1,0-44,44A44,44,0,0,0,260,44Zm-78.32,0A34.36,34.36,0,1,1,216,78.34,34.36,34.36,0,0,1,181.68,44Z" />
-                            <ellipse className="cls-1" cx="216.04" cy="43.97" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="216.17" cy="87.07" r="11.83" />
-                            <path d="M174,44a44,44,0,1,0-44,44A44,44,0,0,0,174,44ZM95.64,44A34.36,34.36,0,1,1,130,78.34,34.36,34.36,0,0,1,95.64,44Z" />
-                            <ellipse className="cls-1" cx="130" cy="43.97" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="173.15" cy="43.97" r="11.83" />
-                            <circle className="cls-1" cx="130.13" cy="87.07" r="11.83" />
-                            <path d="M87.92,44a44,44,0,1,0-44,44A44,44,0,0,0,87.92,44ZM9.6,44A34.36,34.36,0,1,1,44,78.34,34.36,34.36,0,0,1,9.6,44Z" />
-                            <ellipse className="cls-1" cx="43.96" cy="43.97" rx="22.42" ry="22.43" />
-                            <circle className="cls-1" cx="87.11" cy="43.97" r="11.83" />
-                            <circle className="cls-1" cx="44.1" cy="87.07" r="11.83" />
-                        </g>
+                    <path fill="#fff" stroke="#000" stroke-width="4" d="M58 13.2c-4.7-3.4-10.3-4-15.3-2.4-2.8.9-5.8.2-7.9-1.9-2.1-2-4.8-3.5-8.1-3.9-6-.8-11.9 2.5-14.4 7.9-1.6 3.4-1.7 6.9-.7 10 .8 2.6.1 5.3-1.7 7.4-4.7 5.6-6.4 13.5-3.6 21C10 61 20.1 66.6 30 64.6c8.3-1.6 14.4-7.9 16.3-15.4.7-2.9 3-5 5.9-5.7 4.5-1.2 8.6-4.2 10.9-8.7A17.2 17.2 0 0 0 58 13.2z"/>
+                    <circle cx="48" cy="27" r="7"/>
+                    <g fill="currentColor">
+                      <circle cx="25" cy="19" r="4"/>
+                      <circle cx="26" cy="44" r="11"/>
+                      <circle cx="35" cy="25" r="2"/>
+                      <circle cx="42" cy="38" r="2"/>
+                      <circle cx="48" cy="27" r="7"/>
+                    </g>
+                    <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" d="M30 6l1-3m7 8l1-3m9 2V7m10 6l2-3m4 11l3-1m-2 11l3 1m-6 10l-2-3m-9 5l2 3m-8 5l4 2m-10 6l3 3m-11 5l-1-3m-10-1l-1 4m-10-6l3-3m-6-7l-3 1m2-12H2m8-10l-4-1m6-7l-4-1m4-9l-3-1m11-6l-2-3"/>
+                </symbol>
+                <symbol id="re-icon-template" viewBox="0 0 70 70">
+                    <title>Templates</title>
+                    <g stroke-width="4" stroke="#000">
+                        <rect fill="#FFF" stroke="currentColor" x="16" y="2" width="48" height="56" stroke-dasharray="4" stroke-dashoffset="2"/>
+                        <polygon fill="#fff" points="6,12 38,12 54,28 54,68 6,68" />
+                        <polyline fill="currentColor" points="38,12 38,28 54,28" />
+                        <polygon fill="none" points="6,12 38,12 54,28 54,68 6,68" />
                     </g>
                 </symbol>
-                <symbol id="re-icon-template" viewBox="0 0 206.3 260">
-                    <circle cx="41.7" cy="18" r="5.8" className="st0" />
-                    <circle cx="53.9" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="66.1" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="78.3" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="90.5" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="102.7" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="115" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="127.2" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="139.4" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="151.6" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="163.8" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="176" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="188.2" cy="5.8" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="17.6" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="29.5" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="41.3" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="53.1" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="64.9" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="76.8" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="88.6" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="100.4" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="112.2" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="124" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="135.9" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="147.7" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="159.5" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="171.3" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="183.1" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="195" r="5.8" className="st0" />
-                    <circle cx="200.5" cy="206.8" r="5.8" className="st0" />
-                    <circle cx="187.7" cy="218.6" r="5.8" className="st0" />
-                    <path d="M35.8 5.6V6c.1 3.1 2.6 5.5 5.6 5.6h.4c3.1-.1 5.6-2.7 5.6-5.8 0-3.2-2.6-5.8-5.8-5.8-3.1 0-5.6 2.5-5.8 5.6zM200.5 0c-3.1 0-5.7 2.5-5.8 5.6V6c.1 3.1 2.6 5.5 5.6 5.6h.4c3.1-.1 5.6-2.7 5.6-5.8 0-3.2-2.6-5.8-5.8-5.8zm.2 212.8h-.4c-3.1.1-5.5 2.6-5.6 5.6v.4c.1 3.1 2.7 5.6 5.8 5.6 3.2 0 5.8-2.6 5.8-5.8 0-3.1-2.5-5.7-5.6-5.8z" className="st0" />
-                    <circle cx="5.8" cy="242.4" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="230.6" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="218.8" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="207.1" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="195.3" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="183.5" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="171.7" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="160" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="148.2" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="136.4" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="124.6" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="112.8" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="101" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="89.3" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="77.5" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="65.7" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="53.9" r="5.8" className="st0" />
-                    <circle cx="5.8" cy="42.2" r="5.8" className="st0" />
-                    <circle cx="17.9" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="30" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="42.1" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="54.2" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="66.4" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="78.5" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="90.6" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="102.7" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="114.8" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="126.9" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="139" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="151.1" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="163.2" cy="30.4" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="42.2" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="53.9" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="65.7" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="77.5" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="89.3" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="101" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="112.8" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="124.6" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="136.4" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="148.2" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="160" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="171.7" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="183.5" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="195.3" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="207.1" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="218.8" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="230.6" r="5.8" className="st0" />
-                    <circle cx="175.3" cy="242.4" r="5.8" className="st0" />
-                    <circle cx="163.2" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="151.1" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="139" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="126.9" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="114.8" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="102.7" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="90.6" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="78.5" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="66.4" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="54.2" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="42.1" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="30" cy="254.2" r="5.8" className="st0" />
-                    <circle cx="17.9" cy="254.2" r="5.8" className="st0" />
-                    <path d="M5.8 36.2c3.1 0 5.7-2.5 5.8-5.6v-.4c-.1-3.1-2.6-5.5-5.6-5.6h-.4c-3.1.1-5.6 2.6-5.6 5.8 0 3.2 2.6 5.8 5.8 5.8zm169.7-11.6h-.4c-3.1.1-5.5 2.6-5.6 5.6v.4c.1 3.1 2.7 5.6 5.8 5.6 3.2 0 5.8-2.6 5.8-5.8.1-3.2-2.4-5.7-5.6-5.8zm0 223.8h-.4c-3.1.1-5.5 2.6-5.6 5.6v.4c.1 3.1 2.7 5.6 5.8 5.6 3.2 0 5.8-2.6 5.8-5.8.1-3.2-2.4-5.7-5.6-5.8zm-163.9 6v-.4c-.1-3.1-2.6-5.5-5.6-5.6h-.4c-3.1.1-5.6 2.6-5.6 5.8 0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.7-2.5 5.8-5.6z" className="st0" />
-                </symbol>
-                <svg id="re-icon-page" viewBox="0 0 210.35 260">
+                <svg id="re-icon-page" viewBox="0 0 70 70">
                     <title>Pages</title>
-                    <g>
-                        <g>
-                            <rect className="cls-2" x="30.7" y="5.88" width="173.77" height="223.42" />
-                            <path d="M210.35,235.18H24.82V0H210.35ZM36.58,223.42h162V11.76h-162Z" />
-                            <polygon className="cls-1" points="179.65 254.12 5.88 254.12 5.88 30.7 124.77 30.7 124.77 84.27 179.65 84.27 179.65 254.12" />
-                            <path d="M130.65,24.82H0V260H185.53V78.39Zm37.84,53.57H130.65V41.77Zm5.27,169.85h-162V36.58H118.89V90.15h54.87Z" />
-                        </g>
+                    <g stroke-width="4" stroke="#000" >
+                        <rect fill="currentColor" x="16" y="2" width="48" height="56" />
+                        <polygon fill="#FFF" points="6,12 38,12 54,28 54,68 6,68" />
+                        <polyline fill="none" points="38,12 38,28 54,28" />
                     </g>
                 </svg>
             </svg>
