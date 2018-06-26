@@ -16,20 +16,41 @@ import React, { Component } from 'react';
  */
 export default class TextLink extends Component {
     static dependencies() { return module.children; }
-    
+
     constructor(props) {
         super(props);
         this.state = Object.assign({}, this.props);
     }
 
     onClick(e) {
+        let { onClick } = this.state;
         e.preventDefault();
-        window.alert('LINK CLICKED');
+
+        if (typeof onClick === 'function') {
+            onClick(e);
+        } else {
+            window.alert('LINK CLICKED');
+        }
     }
 
     render() {
-        return (<a href={'#'} onClick={this.onClick.bind(this)}>Click Me</a>);
+        let { type, label } = this.state;
+
+        switch(type) {
+            case 'button': {
+                return (<button type={'button'} onClick={this.onClick.bind(this)}>{label}</button>)
+            }
+
+            default: {
+                return (<a href={'#'} onClick={this.onClick.bind(this)}>{label}</a>);
+            }
+        }
+
     }
 }
 
-TextLink.defaultProps = {};
+TextLink.defaultProps = {
+    type: 'link',
+    label: 'Click Me',
+    onClick: null,
+};

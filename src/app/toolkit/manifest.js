@@ -97,11 +97,6 @@ module.exports = {
                 }
             }
         },
-        "buttons": {
-            "label": "Buttons",
-            "route": "/toolkit/buttons",
-            "elements": {}
-        },
         "components": {
             "label": "Components",
             "route": "/toolkit/components",
@@ -121,11 +116,13 @@ module.exports = {
             "elements": {}
         },
         "form": {
+            "label": "Form Elements",
+            "route": "/toolkit/form",
             "elements": {
                 "text-input": {
                     "type": "atom",
                     "label": "Text Input",
-                    "route": "/toolkit/form/TextInput",
+                    "route": "/toolkit/form/text-input",
                     "dna": "/toolkit/form/elements/TextInput",
                     "component": require('appdir/toolkit/form/elements/TextInput').default,
                     "readme": require('appdir/toolkit/form/elements/TextInput/readme').default
@@ -162,6 +159,28 @@ module.exports = {
                     "component": require('appdir/toolkit/form/elements/RadioInput').default,
                     "readme": require('appdir/toolkit/form/elements/RadioInput/readme').default
                 },
+                "select": {
+                    "type": "atom",
+                    "label": "Select",
+                    "route": "/toolkit/form/select",
+                    "dna": "/toolkit/form/elements/Select",
+                    "component": require('appdir/toolkit/form/elements/Select').default,
+                    "readme": require('appdir/toolkit/form/elements/Select/readme').default
+                }
+            }
+        },
+        "blah": {
+            "label": "Blahs",
+            "route": "/toolkit/blah",
+            "elements": {
+                "something": {
+                    "type": "atom",
+                    "label": "Something",
+                    "route": "/toolkit/blah/something",
+                    "dna": "/toolkit/blah/elements/Something",
+                    "component": require('appdir/toolkit/blah/elements/Something').default,
+                    "readme": require('appdir/toolkit/blah/elements/Something/readme').default
+                }
             }
         }
     },

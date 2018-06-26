@@ -5,25 +5,21 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import { H1 } from '../Headings';
-import { P } from '../Paragraph';
-import TextLink from '../TextLInk';
+
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Article
+ * React Component: Something
  * -----------------------------------------------------------------------------
  */
 
-export default class Article extends Component {
+class Something extends Component {
+
     static dependencies() { return module.children; }
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            ...this.props,
-        };
+        this.state = Object.assign({}, this.props);
     }
 
     componentDidMount() {
@@ -33,18 +29,21 @@ export default class Article extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
+        this.setState((prevState) => {
+            return Object.assign({}, prevState, nextProps);
+        });
     }
 
     render() {
         return (
-            <article>
-                <H1>The quick brown fox jumps over a lazy dog</H1>
-                <P />
-            </article>
+            <Fragment>
+                COMPONENT
+            </Fragment>
         );
     }
 }
+
+// Default properties
+Something.defaultProps = {};
+
+export default Something;
