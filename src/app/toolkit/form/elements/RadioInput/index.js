@@ -9,11 +9,11 @@ import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: TextIput
+ * React Component: RadioInput
  * -----------------------------------------------------------------------------
  */
 
-class TextIput extends Component {
+class RadioInput extends Component {
 
     static dependencies() { return module.children; }
 
@@ -35,15 +35,13 @@ class TextIput extends Component {
     }
 
     render() {
-        return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
-        );
+        return (<input {...this.state} />);
     }
 }
 
 // Default properties
-TextIput.defaultProps = {};
+RadioInput.defaultProps = {
+    type: 'radio',
+};
 
-export default TextIput;
+export default RadioInput;

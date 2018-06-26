@@ -126,10 +126,10 @@ export default class ToolbarIcons extends Component {
                 </symbol>
                 <symbol id="re-icon-catalyst" viewBox="0 0 70 70">
                     <title>Catalysts</title>
-                    <g fill="#FFF" stroke="#000" stroke-width="4">
+                    <g fill="#FFF" stroke="#000" strokeWidth="4">
                         <circle cx="29" cy="41" r="23" />
                         <path d="M35 20L50 5l15 15-15 15" />
-                        <path stroke-linecap="round" d="M67 22L48 3" />
+                        <path strokeLinecap="round" d="M67 22L48 3" />
                     </g>
                     <path fill="currentColor" d="M46 41c0-6-5-11-11-11-9 0-11 7-22 6l-1 5a17 17 0 0 0 34 1v-1z" />
                     <g fill="#FFF">
@@ -140,16 +140,16 @@ export default class ToolbarIcons extends Component {
                 </symbol>
                 <symbol id="re-icon-dna" viewBox="0 0 70 70">
                     <title>All Elements</title>
-                    <rect x="2" y="2" width="66" height="66" fill="currentColor" stroke="#000" stroke-width="4" rx="10" />
-                    <rect x="7" y="7" width="56" height="56" fill="none" stroke="#fff" stroke-width="6" rx="5" />
-                    <text transform="translate(14 50)" fill="#FFF" font-family="sans-serif" font-weight="bold" font-size="33">Re</text>
+                    <rect x="2" y="2" width="66" height="66" fill="currentColor" stroke="#000" strokeWidth="4" rx="10" />
+                    <rect x="7" y="7" width="56" height="56" fill="none" stroke="#fff" strokeWidth="6" rx="5" />
+                    <text transform="translate(14 50)" fill="#FFF" fontFamily="sans-serif" fontWeight="bold" fontSize="33">Re</text>
                     <path fill="#FFF" d="M43 27l6-11 2 3 6-6-6 10-2-3-6 7z" />
                 </symbol>
 
                 <symbol id="re-icon-atom" viewBox="0 0 70 70">
                     <title>Atoms</title>
-                    <circle cx="35" cy="35" r="33" fill="#fff" stroke="#000" stroke-width="4"/>
-                    <circle cx="58" cy="58" r="7" stroke="#fff" stroke-width="4"/>
+                    <circle cx="35" cy="35" r="33" fill="#fff" stroke="#000" strokeWidth="4"/>
+                    <circle cx="58" cy="58" r="7" stroke="#fff" strokeWidth="4"/>
                     <circle cx="35" cy="35" r="23" fill="currentColor" />
                 </symbol>
                 <symbol id="re-icon-molecule" viewBox="0 0 70 70">
@@ -157,15 +157,15 @@ export default class ToolbarIcons extends Component {
                     <circle cx="35" cy="32" r="30" />
                     <circle cx="15" cy="53" r="15" />
                     <circle cx="55" cy="53" r="15" />
-                    <circle cx="35" cy="32" r="22" fill="currentColor" stroke="#fff" stroke-width="8" />
-                    <g fill="currentColor" stroke="#fff" stroke-width="4">
+                    <circle cx="35" cy="32" r="22" fill="currentColor" stroke="#fff" strokeWidth="8" />
+                    <g fill="currentColor" stroke="#fff" strokeWidth="4">
                         <circle cx="15" cy="53" r="9" />
                         <circle cx="55" cy="53" r="9" />
                     </g>
                 </symbol>
                 <symbol id="re-icon-organism" viewBox="0 0 70 70">
                     <title>Organisms</title>
-                    <path fill="#fff" stroke="#000" stroke-width="4" d="M58 13.2c-4.7-3.4-10.3-4-15.3-2.4-2.8.9-5.8.2-7.9-1.9-2.1-2-4.8-3.5-8.1-3.9-6-.8-11.9 2.5-14.4 7.9-1.6 3.4-1.7 6.9-.7 10 .8 2.6.1 5.3-1.7 7.4-4.7 5.6-6.4 13.5-3.6 21C10 61 20.1 66.6 30 64.6c8.3-1.6 14.4-7.9 16.3-15.4.7-2.9 3-5 5.9-5.7 4.5-1.2 8.6-4.2 10.9-8.7A17.2 17.2 0 0 0 58 13.2z"/>
+                    <path fill="#fff" stroke="#000" strokeWidth="4" d="M58 13.2c-4.7-3.4-10.3-4-15.3-2.4-2.8.9-5.8.2-7.9-1.9-2.1-2-4.8-3.5-8.1-3.9-6-.8-11.9 2.5-14.4 7.9-1.6 3.4-1.7 6.9-.7 10 .8 2.6.1 5.3-1.7 7.4-4.7 5.6-6.4 13.5-3.6 21C10 61 20.1 66.6 30 64.6c8.3-1.6 14.4-7.9 16.3-15.4.7-2.9 3-5 5.9-5.7 4.5-1.2 8.6-4.2 10.9-8.7A17.2 17.2 0 0 0 58 13.2z"/>
                     <circle cx="48" cy="27" r="7"/>
                     <g fill="currentColor">
                       <circle cx="25" cy="19" r="4"/>
@@ -174,12 +174,12 @@ export default class ToolbarIcons extends Component {
                       <circle cx="42" cy="38" r="2"/>
                       <circle cx="48" cy="27" r="7"/>
                     </g>
-                    <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" d="M30 6l1-3m7 8l1-3m9 2V7m10 6l2-3m4 11l3-1m-2 11l3 1m-6 10l-2-3m-9 5l2 3m-8 5l4 2m-10 6l3 3m-11 5l-1-3m-10-1l-1 4m-10-6l3-3m-6-7l-3 1m2-12H2m8-10l-4-1m6-7l-4-1m4-9l-3-1m11-6l-2-3"/>
+                    <path fill="none" stroke="#000" strokeWidth="2" strokeLinecap="round" d="M30 6l1-3m7 8l1-3m9 2V7m10 6l2-3m4 11l3-1m-2 11l3 1m-6 10l-2-3m-9 5l2 3m-8 5l4 2m-10 6l3 3m-11 5l-1-3m-10-1l-1 4m-10-6l3-3m-6-7l-3 1m2-12H2m8-10l-4-1m6-7l-4-1m4-9l-3-1m11-6l-2-3"/>
                 </symbol>
                 <symbol id="re-icon-template" viewBox="0 0 70 70">
                     <title>Templates</title>
-                    <g stroke-width="4" stroke="#000">
-                        <rect fill="#FFF" stroke="currentColor" x="16" y="2" width="48" height="56" stroke-dasharray="4" stroke-dashoffset="2"/>
+                    <g strokeWidth="4" stroke="#000">
+                        <rect fill="#FFF" stroke="currentColor" x="16" y="2" width="48" height="56" strokeDasharray="4" strokeDashoffset="2"/>
                         <polygon fill="#fff" points="6,12 38,12 54,28 54,68 6,68" />
                         <polyline fill="currentColor" points="38,12 38,28 54,28" />
                         <polygon fill="none" points="6,12 38,12 54,28 54,68 6,68" />
@@ -187,7 +187,7 @@ export default class ToolbarIcons extends Component {
                 </symbol>
                 <svg id="re-icon-page" viewBox="0 0 70 70">
                     <title>Pages</title>
-                    <g stroke-width="4" stroke="#000" >
+                    <g strokeWidth="4" stroke="#000" >
                         <rect fill="currentColor" x="16" y="2" width="48" height="56" />
                         <polygon fill="#FFF" points="6,12 38,12 54,28 54,68 6,68" />
                         <polyline fill="none" points="38,12 38,28 54,28" />

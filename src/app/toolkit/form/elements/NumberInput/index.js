@@ -35,15 +35,13 @@ class NumberInput extends Component {
     }
 
     render() {
-        return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
-        );
+        return (<input {...this.state} />);
     }
 }
 
 // Default properties
-NumberInput.defaultProps = {};
+NumberInput.defaultProps = {
+    value: 12345,
+};
 
 export default NumberInput;

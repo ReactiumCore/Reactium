@@ -97,6 +97,11 @@ module.exports = {
                 }
             }
         },
+        "buttons": {
+            "label": "Buttons",
+            "route": "/toolkit/buttons",
+            "elements": {}
+        },
         "components": {
             "label": "Components",
             "route": "/toolkit/components",
@@ -119,13 +124,13 @@ module.exports = {
             "label": "Form Elements",
             "route": "/toolkit/form",
             "elements": {
-                "inputs": {
+                "text-input": {
                     "type": "atom",
-                    "label": "Inputs",
-                    "route": "/toolkit/form/inputs",
-                    "dna": "/toolkit/form/elements/Inputs",
-                    "component": require('appdir/toolkit/form/elements/Inputs').default,
-                    "readme": require('appdir/toolkit/form/elements/Inputs/readme').default
+                    "label": "Text Input",
+                    "route": "/toolkit/form/TextInput",
+                    "dna": "/toolkit/form/elements/TextInput",
+                    "component": require('appdir/toolkit/form/elements/TextInput').default,
+                    "readme": require('appdir/toolkit/form/elements/TextInput/readme').default
                 },
                 "text-area": {
                     "type": "atom",
@@ -145,13 +150,20 @@ module.exports = {
                 },
                 "checkbox": {
                     "type": "atom",
-                    "hidden": true,
                     "label": "Checkbox",
                     "route": "/toolkit/form/checkbox",
                     "dna": "/toolkit/form/elements/Checkbox",
                     "component": require('appdir/toolkit/form/elements/Checkbox').default,
                     "readme": require('appdir/toolkit/form/elements/Checkbox/readme').default
-                }
+                },
+                "radio-input": {
+                    "type": "atom",
+                    "label": "Radio",
+                    "route": "/toolkit/form/radio-input",
+                    "dna": "/toolkit/form/elements/RadioInput",
+                    "component": require('appdir/toolkit/form/elements/RadioInput').default,
+                    "readme": require('appdir/toolkit/form/elements/RadioInput/readme').default
+                },
             }
         }
     },
