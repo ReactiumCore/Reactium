@@ -40,6 +40,7 @@ class Select extends Component {
                 <select id="test">
                     <option>1</option>
                     <option>2</option>
+                    <option>5</option>
                 </select>
             </Fragment>
         );
