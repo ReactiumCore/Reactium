@@ -58,19 +58,27 @@ app.use(cookieSession({name: 'aljtka4', keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbn
 
 // development mode
 if ( process.env.NODE_ENV === 'development' ) {
-    const webpack        = require('webpack');
-    const gulpConfig     = require('../gulp.config')();
-    const webpackConfig  = require('../webpack.config')(gulpConfig);
-    const wpMiddlware    = require('webpack-dev-middleware');
-    const wpHotMiddlware = require('webpack-hot-middleware');
+    const webpack            = require('webpack');
+    const gulpConfig         = require('../gulp.config')();
+    const webpackConfig      = require('../webpack.config')(gulpConfig);
+    const wpMiddlware        = require('webpack-dev-middleware');
+    const wpHotMiddlware     = require('webpack-hot-middleware');
+    const publicPath         = `http://localhost:${port}/`;
 
-    webpackConfig.entry.main = ['webpack-hot-middleware/client?http://localhost:3030', webpackConfig.entry.main];
+    // local development overrides for webpack config
+    webpackConfig.entry.main = [
+        `webpack-hot-middleware/client?path=/__webpack_hmr`,
+        webpackConfig.entry.main
+    ];
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+    webpackConfig.output.publicPath = publicPath;
 
     const compiler = webpack(webpackConfig);
 
     app.use(wpMiddlware(compiler, {
         serverSideRender: true,
+        path: '/',
+        publicPath,
     }));
 
     app.use(wpHotMiddlware(compiler, {
