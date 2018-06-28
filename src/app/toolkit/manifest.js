@@ -127,7 +127,7 @@ module.exports = {
                 "text-input": {
                     "type": "atom",
                     "label": "Text Input",
-                    "route": "/toolkit/form/TextInput",
+                    "route": "/toolkit/form/text-input",
                     "dna": "/toolkit/form/elements/TextInput",
                     "component": require('appdir/toolkit/form/elements/TextInput').default,
                     "readme": require('appdir/toolkit/form/elements/TextInput/readme').default
