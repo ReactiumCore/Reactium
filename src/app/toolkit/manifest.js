@@ -191,19 +191,19 @@ module.exports = {
         "labels": ["R", "L"],
         "default": "left"
     }, {
-        "text": ["Expand documentation", "Collapse documentation"],
+        "text": ["Documentation: collapsed", "Documentation: expanded"],
         "values": [false, true],
         "pref": "docs.all",
         "help": "Expand or collapse all documentation",
         "default": false
     }, {
-        "text": ["Expand DNA", "Collapse DNA"],
+        "text": ["DNA: collapsed", "DNA: expanded"],
         "values": [false, true],
         "pref": "link.all",
         "help": "Expand or collapse all DNA views",
         "default": false
     }, {
-        "text": ["Expand code view", "Collapse code view"],
+        "text": ["Code view: collapsed", "Code view: expanded"],
         "values": [false, true],
         "pref": "code.all",
         "help": "Expand or collapse all code views",
