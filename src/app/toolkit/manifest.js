@@ -169,20 +169,6 @@ module.exports = {
                 }
             }
         },
-        "blah": {
-            "label": "Blahs",
-            "route": "/toolkit/blah",
-            "elements": {
-                "something": {
-                    "type": "atom",
-                    "label": "Something",
-                    "route": "/toolkit/blah/something",
-                    "dna": "/toolkit/blah/elements/Something",
-                    "component": require('appdir/toolkit/blah/elements/Something').default,
-                    "readme": require('appdir/toolkit/blah/elements/Something/readme').default
-                }
-            }
-        }
     },
     "settings": [{
         "text": ["Sidebar position: left", "Sidebar position: right"],
@@ -213,6 +199,6 @@ module.exports = {
         "values": ["light", "dark"],
         "pref": "codeColor.all",
         "help": "Switch the code view syntax highlighting",
-        "default": "dark"
+        "default": "light"
     }]
 };
