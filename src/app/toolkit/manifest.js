@@ -8,7 +8,7 @@ module.exports = {
     "themes": [{
         "name": "Default",
         "css": "/assets/style/style.css",
-        "selected": true
+        "selected": true,
     }, {
         "name": "Test",
         "css": "/assets/style/style-test.css"
@@ -97,11 +97,6 @@ module.exports = {
                 }
             }
         },
-        "buttons": {
-            "label": "Buttons",
-            "route": "/toolkit/buttons",
-            "elements": {}
-        },
         "components": {
             "label": "Components",
             "route": "/toolkit/components",
@@ -164,8 +159,16 @@ module.exports = {
                     "component": require('appdir/toolkit/form/elements/RadioInput').default,
                     "readme": require('appdir/toolkit/form/elements/RadioInput/readme').default
                 },
+                "select": {
+                    "type": "atom",
+                    "label": "Select",
+                    "route": "/toolkit/form/select",
+                    "dna": "/toolkit/form/elements/Select",
+                    "component": require('appdir/toolkit/form/elements/Select').default,
+                    "readme": require('appdir/toolkit/form/elements/Select/readme').default
+                }
             }
-        }
+        },
     },
     "settings": [{
         "text": ["Sidebar position: left", "Sidebar position: right"],
@@ -174,19 +177,19 @@ module.exports = {
         "labels": ["R", "L"],
         "default": "left"
     }, {
-        "text": ["Expand documentation", "Collapse documentation"],
+        "text": ["Documentation: collapsed", "Documentation: expanded"],
         "values": [false, true],
         "pref": "docs.all",
         "help": "Expand or collapse all documentation",
         "default": false
     }, {
-        "text": ["Expand DNA", "Collapse DNA"],
+        "text": ["DNA: collapsed", "DNA: expanded"],
         "values": [false, true],
         "pref": "link.all",
         "help": "Expand or collapse all DNA views",
         "default": false
     }, {
-        "text": ["Expand code view", "Collapse code view"],
+        "text": ["Code view: collapsed", "Code view: expanded"],
         "values": [false, true],
         "pref": "code.all",
         "help": "Expand or collapse all code views",
@@ -196,6 +199,6 @@ module.exports = {
         "values": ["light", "dark"],
         "pref": "codeColor.all",
         "help": "Switch the code view syntax highlighting",
-        "default": "dark"
+        "default": "light"
     }]
 };

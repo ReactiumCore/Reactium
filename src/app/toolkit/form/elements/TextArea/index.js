@@ -35,9 +35,7 @@ class TextArea extends Component {
     }
 
     render() {
-        return (
-                <textarea {...this.state} />
-        );
+        return (<textarea {...this.state} />);
     }
 }
 
