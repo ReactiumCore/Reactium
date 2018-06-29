@@ -8,7 +8,7 @@ module.exports = {
     "themes": [{
         "name": "Default",
         "css": "/assets/style/style.css",
-        "selected": true,
+        "selected": true
     }, {
         "name": "Test",
         "css": "/assets/style/style-test.css"
@@ -168,7 +168,7 @@ module.exports = {
                     "readme": require('appdir/toolkit/form/elements/Select/readme').default
                 }
             }
-        },
+        }
     },
     "settings": [{
         "text": ["Sidebar position: left", "Sidebar position: right"],

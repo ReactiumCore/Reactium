@@ -41,8 +41,8 @@ arcli re:kit atom
 
 You will be prompted to input the required options if no flags are passed.
 
-
 > `arcli re:kit --help` for a list of possible flags
+
 ```
 Usage: re:kit <type> [options]
 
@@ -56,10 +56,60 @@ Usage: re:kit <type> [options]
     -i, --index [index]          the menu order index.
     -o, --overwrite [overwrite]  overwrite if the element already exists.
     -h, --hidden [hidden]        whether to display the element in the menu.
-    -h, --help                   output usage information
+    -s, --style [style]          whether to include a .scss file.
+    -h, --help                   output usage information.
+
 ```
 
 
-# Creating
+# Adding a Theme
+Reactium Design System allows for quick switching of themes. Adding a new theme is simple:
+```
+arcli re:theme
+```
 
-# Adding A Theme
+You will be prompted to input the required options if no flags are passed.
+
+```
+Usage: re:theme [options]
+
+  Create, remove, or update a Design System theme <action>: add | remove | update
+
+  Options:
+
+    -i, --index [index]        the menu order index.
+    -n, --name <name>          the display name of the theme.
+    -f, --file <file>          the path to the theme style sheet relative to the `src` directory. Example: /assets/style/style.scss
+    -s, --selected [selected]  designate the theme as the default.
+    -h, --help                 output usage information
+```
+
+# Customizing the Design System
+Knowing that the Design System can be used to express a brand vision, there are a few areas where it can be customized by editing the `~/src/app/toolkit/manifest.js` file.
+
+> __Beware:__ editing the Design System manifest.js file is risky business and should be done with care. It's recommended to backup or commit the working copy of your manifest.js before editing.
+
+## Custom Header
+You can change the log, title, and version of the toolkit by editing the `header` properties:
+
+```js
+module.exports = {
+    "header": {
+        "logo"    : "/assets/images/atomic-reactor-logo.svg",
+        "title"   : "Style Guide",
+        "version" : "ver 2.0.1"
+    },
+    ...
+};
+```
+
+## Custom Overview
+The Overview page is displayed when you navigate to the `http://localhost:3030/toolkit` page.
+You can customize it by either replacing the `required()` component or editing the default overview component located at `~/src/app/toolkit/overview/index.js`.
+
+```js
+module.exports = {
+    "overview": require('appdir/toolkit/overview').default,
+    ...
+};
+```
