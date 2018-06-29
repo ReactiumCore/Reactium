@@ -11,7 +11,7 @@ Reactium comes shipped with the ability to create a Design System of your applic
 Reactium follows the Atomic Design paradigm as outlined by [Brad Frost.](http://bradfrost.com/blog/post/atomic-web-design/)
 
 There are five distinct levels in atomic design:
-1. Atoms
+1. [Atoms](#atoms)
 2. Molecules
 3. Organisms
 4. Templates
