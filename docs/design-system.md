@@ -94,6 +94,7 @@ You can change the log, title, and version of the toolkit by editing the `header
 
 ```js
 module.exports = {
+    ...
     "header": {
         "logo"    : "/assets/images/atomic-reactor-logo.svg",
         "title"   : "Style Guide",
@@ -109,7 +110,11 @@ You can customize it by either replacing the `required()` component or editing t
 
 ```js
 module.exports = {
+    ...
     "overview": require('appdir/toolkit/overview').default,
     ...
 };
 ```
+
+## Customizing the Menu
+You can customize the Design System Menu by adding new elements, groups, and pages. 
