@@ -117,4 +117,10 @@ module.exports = {
 ```
 
 ## Customizing the Menu
-You can customize the Design System Menu by adding new elements, groups, and pages. 
+You can customize the Design System Menu by adding new elements, groups, and pages. You can also add links to other sites/pages to the menu.
+
+```
+arcli re:kit page
+
+// When prompted for the route, input a fully qualified URL or local route: http://www.somewhere.com
+```
