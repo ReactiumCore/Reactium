@@ -1,13 +1,12 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import { H1 } from '../Headings';
-import { P } from '../Paragraph';
-import TextLink from '../TextLInk';
+import React, { Component, Fragment } from "react";
+import { H1 } from "../Headings";
+import { P } from "../Paragraph";
+import TextLink from "../TextLink";
 
 /**
  * -----------------------------------------------------------------------------
@@ -16,18 +15,20 @@ import TextLink from '../TextLInk';
  */
 
 export default class Article extends Component {
-    static dependencies() { return module.children; }
+    static dependencies() {
+        return module.children;
+    }
 
     constructor(props) {
         super(props);
 
         this.state = {
-            ...this.props,
+            ...this.props
         };
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
@@ -35,7 +36,7 @@ export default class Article extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps,
+            ...nextProps
         }));
     }
 
