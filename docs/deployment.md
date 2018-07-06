@@ -6,7 +6,8 @@ If you plan to deploy a static site, simply rename the `~/public/index-static.ht
 ## Deploying to Heroku
 
 1.  Set up a [Node app on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction).
-2.
+2.  Set the deploy method to Github.
+3.  Manually deploy or turn on Enable Automatic Deploys.
 
 ## Deploying to Heroku with Server Side Rendering
 
