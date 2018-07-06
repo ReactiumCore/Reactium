@@ -24,7 +24,8 @@
     "docker:build": "docker image build -t atomicreactor/reactium:$npm_package_version .",
     "docker:push": "docker push atomicreactor/reactium:$npm_package_version",
     "deploy": "cf push",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "postinstall": "npm-run-all -s manifest build:*"
   },
   "keywords": [
     "react",
