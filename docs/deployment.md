@@ -5,6 +5,9 @@ If you plan to deploy a static site, simply rename the `~/public/index-static.ht
 
 ## Deploying to Heroku
 
+1.  Set up a [Node app on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction).
+2.
+
 ## Deploying to Heroku with Server Side Rendering
 
 1.  If you're planning to use SSR, you'll need to create an environment variable named: `SSR_MODE` and set it's value to `on`.

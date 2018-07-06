@@ -18,13 +18,24 @@ const app = express();
 let node_env = process.env.hasOwnProperty("NODE_ENV")
     ? process.env.NODE_ENV
     : "development";
+
+// PORT setup:
 let port = null;
-port = process.env.hasOwnProperty("APP_PORT") ? process.env.APP_PORT : port;
-port =
-    port === null && process.env.hasOwnProperty("PORT")
-        ? process.env.PORT
-        : port;
-port = port === null ? 3030 : port;
+
+// Get the port env variable name
+if (process.env.hasOwnProperty("PORT_VAR")) {
+    let pvar = process.env.PORT_VAR;
+    if (process.env.hasOwnProperty(pvar)) {
+        port = process.env[pvar];
+    }
+} else {
+    port = process.env.hasOwnProperty("APP_PORT") ? process.env.APP_PORT : port;
+    port =
+        port === null && process.env.hasOwnProperty("PORT")
+            ? process.env.PORT
+            : port;
+    port = port === null ? 3030 : port;
+}
 
 global.parseAppId = apiConfig.parseAppId;
 global.restAPI = apiConfig.restAPI;
