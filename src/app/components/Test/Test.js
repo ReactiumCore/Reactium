@@ -33,6 +33,7 @@ export default class Test extends Component {
     }
 
     render() {
+        
         let title = 'Test Component';
         let { count = 0, msg } = this.state;
 
