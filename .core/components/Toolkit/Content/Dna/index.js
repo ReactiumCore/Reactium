@@ -142,6 +142,8 @@ export default class Dna extends Component {
     }
 
     getDependents(component) {
+        let { dna } = this.state;
+
         let output = [];
 
         if (!op.has(component, "dependencies")) {
@@ -160,9 +162,10 @@ export default class Dna extends Component {
             if (typeof op.get(item, "component") === "string") {
                 return;
             }
-            if (!op.has(item.component, "dependencies")) {
+            if (!op.has(item, "component.dependencies")) {
                 return;
             }
+
             if (item.component.name === component.name) {
                 return;
             }
@@ -188,14 +191,7 @@ export default class Dna extends Component {
                     .split("/index.js")
                     .join("");
 
-                let cmp = _.findWhere(elements, { dna: p });
-
-                if (!cmp) {
-                    return;
-                }
-
-                let cname = cmp.name;
-                if (cname === component.name) {
+                if (p === dna) {
                     results.push(item);
                 }
             });
@@ -293,7 +289,10 @@ export default class Dna extends Component {
     }
 
     render() {
-        console.log(this.state);
+        if (process.env.NODE_ENV !== "development") {
+            return null;
+        }
+
         let { component, height, visible } = this.state;
 
         if (typeof component === "undefined" || typeof component === "string") {
@@ -327,13 +326,9 @@ export default class Dna extends Component {
                     <div className={"re-toolkit-card-heading thin"}>DNA</div>
                     <div className={"re-toolkit-card-body"}>
                         <div className={"re-toolkit-card-body-pad"}>
-                            <h3>No DNA Found</h3>
-                            <p>
-                                Be sure to add the dna property to the manifest
-                                entry for this element and include the static
-                                function <code>dependencies</code> to your
-                                class.
-                            </p>
+                            <h3 style={{ marginTop: 10, marginBottom: 10 }}>
+                                No DNA Found
+                            </h3>
                         </div>
                     </div>
                 </div>
