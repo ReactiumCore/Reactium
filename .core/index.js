@@ -15,6 +15,8 @@ import path from "path";
 
 const app = express();
 
+global.rootPath = path.resolve(__dirname, "..");
+
 let node_env = process.env.hasOwnProperty("NODE_ENV")
     ? process.env.NODE_ENV
     : "development";
