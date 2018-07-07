@@ -16,7 +16,9 @@ import TextLink from "../TextLink";
 
 export default class Article extends Component {
     static dependencies() {
-        return module.children;
+        if (module) {
+            return module.children;
+        }
     }
 
     constructor(props) {

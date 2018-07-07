@@ -137,8 +137,6 @@ export default class Content extends Component {
             let id = [group, key].join("_");
             let item = data[key];
 
-            console.log("ITEM:", item);
-
             let { label, component, readme, dna, path } = item;
             let { buttons = {} } = card;
 
@@ -227,6 +225,7 @@ export default class Content extends Component {
                         update={update}
                         prefs={prefs}
                         menu={menu}
+                        dna={dna}
                         id={id}
                     />
                 </Card>

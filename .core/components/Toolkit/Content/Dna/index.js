@@ -293,6 +293,7 @@ export default class Dna extends Component {
     }
 
     render() {
+        console.log(this.state);
         let { component, height, visible } = this.state;
 
         if (typeof component === "undefined" || typeof component === "string") {
@@ -309,6 +310,7 @@ export default class Dna extends Component {
         let dependencies = _.compact(
             deps.map(item => this.getDependency(item))
         );
+
         let dependents = this.getDependents(component);
 
         let count = npm.length + dependencies.length + dependents.length;

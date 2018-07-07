@@ -1,11 +1,9 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-
+import React, { Component, Fragment } from "react";
 
 /**
  * -----------------------------------------------------------------------------
@@ -14,8 +12,11 @@ import React, { Component, Fragment } from 'react';
  */
 
 class Select extends Component {
-
-    static dependencies() { return module.children; }
+    static dependencies() {
+        if (module) {
+            return module.children;
+        }
+    }
 
     constructor(props) {
         super(props);
@@ -23,13 +24,13 @@ class Select extends Component {
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState((prevState) => {
+        this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
     }
