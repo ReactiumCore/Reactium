@@ -1,14 +1,13 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { TweenMax, Power2 } from 'gsap';
-import React, { Component, Fragment } from 'react';
-import op from 'object-path';
-import { Link } from 'react-router-dom'
-import _ from 'underscore';
+import { TweenMax, Power2 } from "gsap";
+import React, { Component, Fragment } from "react";
+import op from "object-path";
+import { Link } from "react-router-dom";
+import _ from "underscore";
 
 /**
  * -----------------------------------------------------------------------------
@@ -22,21 +21,21 @@ export default class Dna extends Component {
 
         this.getDependents = this.getDependents.bind(this);
         this.getDependency = this.getDependency.bind(this);
-        this.getElements   = this.getElements.bind(this);
-        this.getNPM        = this.getNPM.bind(this);
-        this.open          = this.open.bind(this);
-        this.close         = this.close.bind(this);
-        this.toggle        = this.toggle.bind(this);
+        this.getElements = this.getElements.bind(this);
+        this.getNPM = this.getNPM.bind(this);
+        this.open = this.open.bind(this);
+        this.close = this.close.bind(this);
+        this.toggle = this.toggle.bind(this);
 
-        this.state   = {
-            ...this.props,
+        this.state = {
+            ...this.props
         };
     }
 
     componentDidMount() {
         this.applyPrefs();
 
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
@@ -44,7 +43,7 @@ export default class Dna extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps,
+            ...nextProps
         }));
 
         this.applyPrefs();
@@ -54,17 +53,20 @@ export default class Dna extends Component {
         let { prefs = {} } = this.state;
 
         vals.forEach((v, i) => {
-            if (op.has(newState, key)) { return; }
-            if (typeof v !== 'undefined') { newState[key] = v; }
+            if (op.has(newState, key)) {
+                return;
+            }
+            if (typeof v !== "undefined") {
+                newState[key] = v;
+            }
         });
 
         return newState;
     }
 
     applyPrefs() {
-
         let newState = {};
-            newState = this.applyVisiblePref(newState);
+        newState = this.applyVisiblePref(newState);
 
         if (Object.keys(newState).length > 0) {
             this.setState(newState);
@@ -76,41 +78,45 @@ export default class Dna extends Component {
 
         let vals = [
             op.get(prefs, `link.${id}`),
-            op.get(prefs, 'link.all', visible),
+            op.get(prefs, "link.all", visible)
         ];
 
-        return this.getPref(newState, 'visible', vals);
+        return this.getPref(newState, "visible", vals);
     }
 
     open() {
-        if (!this.cont) { return; }
+        if (!this.cont) {
+            return;
+        }
 
         let { speed } = this.state;
         let _self = this;
 
-        TweenMax.set(this.cont, {height: 'auto', display: 'block'});
+        TweenMax.set(this.cont, { height: "auto", display: "block" });
         TweenMax.from(this.cont, speed, {
             height: 0,
-            overwrite: 'all',
+            overwrite: "all",
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({visible: true, height: 'auto'});
+                _self.setState({ visible: true, height: "auto" });
             }
         });
     }
 
     close() {
-        if (!this.cont) { return; }
+        if (!this.cont) {
+            return;
+        }
 
         let { speed } = this.state;
         let _self = this;
 
-        TweenMax.to(this.cont, speed/2, {
+        TweenMax.to(this.cont, speed / 2, {
             height: 0,
-            overwrite: 'all',
+            overwrite: "all",
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({visible: false, height: 0});
+                _self.setState({ visible: false, height: 0 });
             }
         });
     }
@@ -128,7 +134,7 @@ export default class Dna extends Component {
     getElements() {
         let { menu } = this.state;
         let elements = [];
-        _.compact(_.pluck(Object.values(menu), 'elements')).forEach((item) => {
+        _.compact(_.pluck(Object.values(menu), "elements")).forEach(item => {
             elements = elements.concat(Object.values(item));
         });
 
@@ -138,29 +144,55 @@ export default class Dna extends Component {
     getDependents(component) {
         let output = [];
 
-        if (!op.has(component, 'dependencies')) { return output; }
+        if (!op.has(component, "dependencies")) {
+            return output;
+        }
 
         let elements = this.getElements();
 
-        elements.forEach((item) => {
-            if (!op.has(item, 'dna')) { return; }
-            if (!op.has(item, 'component')) { return; }
-            if (typeof op.get(item, 'component') === 'string') { return; }
-            if (!op.has(item.component, 'dependencies')) { return; }
-            if (item.component.name === component.name) { return; }
+        elements.forEach(item => {
+            if (!op.has(item, "dna")) {
+                return;
+            }
+            if (!op.has(item, "component")) {
+                return;
+            }
+            if (typeof op.get(item, "component") === "string") {
+                return;
+            }
+            if (!op.has(item.component, "dependencies")) {
+                return;
+            }
+            if (item.component.name === component.name) {
+                return;
+            }
 
             let results = [];
             let deps = item.component.dependencies();
 
-            deps.forEach((str) => {
-                let exp = new RegExp('^.\/node_modules\/', 'i');
-                if (exp.test(str)) { return; }
+            deps.forEach(str => {
+                if (typeof str !== "string") {
+                    if (op.has(str, "id")) {
+                        str = str.id;
+                    }
+                }
 
-                let p = str.split('./src/app/').join('/').split('/index.js').join('');
+                let exp = new RegExp("^./node_modules/", "i");
+                if (exp.test(str)) {
+                    return;
+                }
 
-                let cmp = _.findWhere(elements, {dna: p});
+                let p = str
+                    .split("./src/app/")
+                    .join("/")
+                    .split("/index.js")
+                    .join("");
 
-                if (!cmp) { return; }
+                let cmp = _.findWhere(elements, { dna: p });
+
+                if (!cmp) {
+                    return;
+                }
 
                 let cname = cmp.name;
                 if (cname === component.name) {
@@ -168,82 +200,138 @@ export default class Dna extends Component {
                 }
             });
 
-            if (results.length < 1) { return; }
+            if (results.length < 1) {
+                return;
+            }
 
-            results.forEach((res) => { output.push(res); });
-
+            results.forEach(res => {
+                output.push(res);
+            });
         });
 
         return output;
     }
 
     getDependency(str) {
+        str = typeof str === "string" ? str : null;
+        str = str === null && op.has(str, "id") ? str.id : str;
+        if (str === null) {
+            return;
+        }
+
         let { menu } = this.state;
 
         let elements = this.getElements();
-        let p = str.split('./src/app/').join('/').split('/index.js').join('');
 
-        let item = _.findWhere(elements, {dna: p});
+        let p = str
+            .split("./src/app/")
+            .join("/")
+            .split("/index.js")
+            .join("");
+
+        let item = _.findWhere(elements, { dna: p });
 
         if (item) {
             let { route, label } = item;
-            return (route && label) ? () => (<Link to={route} title={str}><svg><use xlinkHref={'#re-icon-link'}></use></svg>{label}</Link>) : null;
+            return route && label
+                ? () => (
+                      <Link to={route} title={str}>
+                          <svg>
+                              <use xlinkHref={"#re-icon-link"} />
+                          </svg>
+                          {label}
+                      </Link>
+                  )
+                : null;
         } else {
-            let exp = new RegExp('^.\/node_modules\/', 'i');
-            if (exp.test(str)) { return; }
+            let exp = new RegExp("^./node_modules/", "i");
+            if (exp.test(str)) {
+                return;
+            }
 
-            let cmp = str.split('/').pop().split('.js').join('');
-            return () => (<span><svg><use xlinkHref={'#re-icon-docs'}></use></svg>{cmp} &ndash; {str.split('./src/app').join('')}</span>);
+            let cmp = str
+                .split("/")
+                .pop()
+                .split(".js")
+                .join("");
+            return () => (
+                <span>
+                    <svg>
+                        <use xlinkHref={"#re-icon-docs"} />
+                    </svg>
+                    {cmp} &ndash; {str.split("./src/app").join("")}
+                </span>
+            );
         }
     }
 
-    getNPM(str, deps){
-        let exp = new RegExp('^.\/node_modules\/', 'i');
-        if (!exp.test(str)) { return; }
+    getNPM(str, deps) {
+        let exp = new RegExp("^./node_modules/", "i");
+        if (!exp.test(str)) {
+            return;
+        }
 
         let elements = [];
-        let pkg = str.split('./node_modules/').join('').split('/').shift();
+        let pkg = str
+            .split("./node_modules/")
+            .join("")
+            .split("/")
+            .shift();
 
-        let exclude = ['webpack', 'react'];
-        if (exclude.indexOf(pkg) > -1) { return; }
+        let exclude = ["webpack", "react"];
+        if (exclude.indexOf(pkg) > -1) {
+            return;
+        }
 
         let url = `https://www.npmjs.com/package/${pkg}`;
 
-        return () => (<a href={url} target={'_blank'}>{pkg}</a>);
+        return () => (
+            <a href={url} target={"_blank"}>
+                {pkg}
+            </a>
+        );
     }
 
     render() {
         let { component, height, visible } = this.state;
 
-        if (typeof component === 'undefined' || typeof component === 'string') {
+        if (typeof component === "undefined" || typeof component === "string") {
             return null;
         }
 
-        let deps = (op.has(component, 'dependencies'))
+        let deps = op.has(component, "dependencies")
             ? component.dependencies()
             : [];
 
-        let display = (visible === true) ? 'block' : 'none';
+        let display = visible === true ? "block" : "none";
 
-        let npm          = _.compact(deps.map((item) => this.getNPM(item, deps)));
-        let dependencies = _.compact(deps.map((item) => this.getDependency(item)));
-        let dependents   = this.getDependents(component);
+        let npm = _.compact(deps.map(item => this.getNPM(item, deps)));
+        let dependencies = _.compact(
+            deps.map(item => this.getDependency(item))
+        );
+        let dependents = this.getDependents(component);
 
         let count = npm.length + dependencies.length + dependents.length;
 
         if (count < 1) {
             return (
                 <div
-                    ref={(elm) => { this.cont = elm; }}
-                    className={'re-toolkit-dna-view'}
-                    style={{height, display}} >
-                    <div className={'re-toolkit-card-heading thin'}>
-                        DNA
-                    </div>
-                    <div className={'re-toolkit-card-body'}>
-                        <div className={'re-toolkit-card-body-pad'}>
+                    ref={elm => {
+                        this.cont = elm;
+                    }}
+                    className={"re-toolkit-dna-view"}
+                    style={{ height, display }}
+                >
+                    <div className={"re-toolkit-card-heading thin"}>DNA</div>
+                    <div className={"re-toolkit-card-body"}>
+                        <div className={"re-toolkit-card-body-pad"}>
                             <h3>No DNA Found</h3>
-                            <p>Be sure to add the dna property to the manifest entry for this element and include the static function <code>dependencies</code> to your class.</p>
+                            <p>
+                                Be sure to add the dna property to the manifest
+                                entry for this element and include the static
+                                function <code>dependencies</code> to your
+                                class.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -252,74 +340,64 @@ export default class Dna extends Component {
 
         return (
             <div
-                ref={(elm) => { this.cont = elm; }}
-                className={'re-toolkit-dna-view'}
-                style={{height, display}} >
+                ref={elm => {
+                    this.cont = elm;
+                }}
+                className={"re-toolkit-dna-view"}
+                style={{ height, display }}
+            >
+                {dependents.length > 0 ? (
+                    <Fragment>
+                        <div className={"re-toolkit-card-heading thin"}>
+                            Dependents
+                        </div>
+                        <ul>
+                            {dependents.map((item, i) => {
+                                let { route, label } = item;
+                                return !route ? null : (
+                                    <li key={`dep-${i}`}>
+                                        <a href={route}>{label}</a>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </Fragment>
+                ) : null}
 
-                {(dependents.length > 0)
-                    ? (
-                        <Fragment>
-                            <div className={'re-toolkit-card-heading thin'}>
-                                Dependents
-                            </div>
-                            <ul>
-                                {dependents.map((item, i) => {
-                                    let { route, label } = item;
-                                    return (!route) ? null : (
-                                        <li key={`dep-${i}`}><a href={route}>{label}</a></li>
-                                    );
-                                })}
-                            </ul>
-                        </Fragment>
-                    )
-                    : null
-                }
-
-                {(dependencies.length > 0)
-                    ? (
-                        <Fragment>
-                            <div className={'re-toolkit-card-heading thin'}>
-                                Dependencies
-                            </div>
-                            <ul>
-                                {dependencies.map((item, i) => {
-                                    const Alink = item;
-                                    return (Alink)
-                                        ? (
-                                            <li key={`dep-${i}`}>
-                                                <Alink />
-                                            </li>
-                                        )
-                                        : null
-                                })}
-                            </ul>
-                        </Fragment>
-                    )
-                    : null
-                }
-                {(npm.length > 0)
-                    ? (
-                        <Fragment>
-                            <div className={'re-toolkit-card-heading thin'}>
-                                NPM Modules
-                            </div>
-                            <ul>
-                                {npm.map((item, i) => {
-                                    const Alink = item;
-                                    return (Alink)
-                                        ? (
-                                            <li key={`dep-${i}`}>
-                                                <Alink />
-                                            </li>
-                                        )
-                                        : null
-                                })}
-                            </ul>
-                        </Fragment>
-                    )
-                    : null
-                }
-
+                {dependencies.length > 0 ? (
+                    <Fragment>
+                        <div className={"re-toolkit-card-heading thin"}>
+                            Dependencies
+                        </div>
+                        <ul>
+                            {dependencies.map((item, i) => {
+                                const Alink = item;
+                                return Alink ? (
+                                    <li key={`dep-${i}`}>
+                                        <Alink />
+                                    </li>
+                                ) : null;
+                            })}
+                        </ul>
+                    </Fragment>
+                ) : null}
+                {npm.length > 0 ? (
+                    <Fragment>
+                        <div className={"re-toolkit-card-heading thin"}>
+                            NPM Modules
+                        </div>
+                        <ul>
+                            {npm.map((item, i) => {
+                                const Alink = item;
+                                return Alink ? (
+                                    <li key={`dep-${i}`}>
+                                        <Alink />
+                                    </li>
+                                ) : null;
+                            })}
+                        </ul>
+                    </Fragment>
+                ) : null}
             </div>
         );
     }
@@ -327,10 +405,10 @@ export default class Dna extends Component {
 
 Dna.defaultProps = {
     component: null,
-    height: 'auto',
+    height: "auto",
     menu: {},
     prefs: {},
     speed: 0.2,
     id: null,
-    visible: false,
+    visible: false
 };
