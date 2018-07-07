@@ -83,7 +83,8 @@ export default class Preview extends Component {
             id,
             visible,
             style,
-            path
+            path,
+            dna
         } = this.state;
 
         if (!Component || !group || !id) {
@@ -107,8 +108,9 @@ export default class Preview extends Component {
             }
 
             case "function": {
-                let cname = path || getDisplayName(Component);
+                let cname = dna.split("/").pop();
                 let cpath = `${group}/elements/${cname}`;
+
                 let markup = this.renderCmp({ cname, cpath, style });
 
                 return (
