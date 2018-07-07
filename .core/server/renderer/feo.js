@@ -1,4 +1,5 @@
-module.exports = (req, res, context) => {
+const version = "2.1.0";
+const renderer = (req, res, context) => {
     return `<html>
         <head>
             ${req.styles}
@@ -15,4 +16,9 @@ module.exports = (req, res, context) => {
             ${req.scripts}
         </body>
     </html>`;
+};
+
+module.exports = {
+    version,
+    renderer
 };
