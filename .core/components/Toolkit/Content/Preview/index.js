@@ -1,12 +1,10 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import { getDisplayName } from 'reactium-core/components/Toolkit/_lib/tools';
-
+import React, { Component, Fragment } from "react";
+import { getDisplayName } from "reactium-core/components/Toolkit/_lib/tools";
 
 /**
  * -----------------------------------------------------------------------------
@@ -21,12 +19,12 @@ export default class Preview extends Component {
         this.resize = this.resize.bind(this);
         this.registerIframe = this.registerIframe.bind(this);
         this.state = {
-            ...this.props,
+            ...this.props
         };
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
@@ -34,20 +32,22 @@ export default class Preview extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps,
+            ...nextProps
         }));
     }
 
     resize() {
         let { visible } = this.state;
-        if (!this.iframe || visible === false) { return; }
+        if (!this.iframe || visible === false) {
+            return;
+        }
 
         try {
             let h = this.iframe.contentWindow.document.body.scrollHeight;
-                h = (h < 1) ? 100 : h;
+            h = h < 1 ? 100 : h;
 
             this.iframe.style.height = h;
-        } catch (err) { }
+        } catch (err) {}
     }
 
     registerIframe(elm) {
@@ -55,8 +55,9 @@ export default class Preview extends Component {
     }
 
     renderCmp({ cname, cpath, style }) {
+        let spath = process.env.NODE_ENV === "development" ? "" : "/assets/js";
 
-        return (`
+        return `
             <html>
                 <head>
                     <link rel="stylesheet" href="${style}">
@@ -68,28 +69,36 @@ export default class Preview extends Component {
                         window.restAPI = '/api';
                         window.parseAppId = '${parseAppId}';
                     </script>
-                    <script src="/vendors.js"></script>
-                    <script src="/main.js"></script>
+                    <script src="${spath}/vendors.js"></script>
+                    <script src="${spath}/main.js"></script>
                 </body>
             </html>
-        `);
+        `;
     }
 
-
     render() {
-        let { component:Component, group, id, visible, style, path } = this.state;
+        let {
+            component: Component,
+            group,
+            id,
+            visible,
+            style,
+            path
+        } = this.state;
 
-        if (!Component || !group || !id) { return null; }
+        if (!Component || !group || !id) {
+            return null;
+        }
 
-        let type    = typeof Component;
-        let display = (visible) ? 'block' : 'none';
+        let type = typeof Component;
+        let display = visible ? "block" : "none";
 
-        switch(type) {
-            case 'string': {
+        switch (type) {
+            case "string": {
                 return (
                     <iframe
                         src={Component}
-                        style={{display}}
+                        style={{ display }}
                         id={`iframe-${id}`}
                         onLoad={this.resize}
                         ref={this.registerIframe}
@@ -97,15 +106,15 @@ export default class Preview extends Component {
                 );
             }
 
-            case 'function': {
-                let cname  = path || getDisplayName(Component);
-                let cpath  = `${group}/elements/${cname}`;
-                let markup = this.renderCmp({cname, cpath, style});
+            case "function": {
+                let cname = path || getDisplayName(Component);
+                let cpath = `${group}/elements/${cname}`;
+                let markup = this.renderCmp({ cname, cpath, style });
 
                 return (
                     <iframe
                         srcDoc={markup}
-                        style={{display}}
+                        style={{ display }}
                         id={`iframe-${id}`}
                         onLoad={this.resize}
                         ref={this.registerIframe}
@@ -121,9 +130,9 @@ export default class Preview extends Component {
 }
 
 Preview.defaultProps = {
-    visible   : true,
-    component : null,
-    group     : null,
-    id        : null,
-    style     : '/assets/style/style.css',
+    visible: true,
+    component: null,
+    group: null,
+    id: null,
+    style: "/assets/style/style.css"
 };

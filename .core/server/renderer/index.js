@@ -79,6 +79,8 @@ export default (req, res, context) => {
         } else {
             mod = require("./ssr");
         }
+
+        renderer = mod.renderer(req, res, context);
     } else {
         if (fs.existsSync(`${rootPath}/src/app/server/renderer/feo.js`)) {
             mod = require(`${rootPath}/src/app/server/renderer/feo`);
