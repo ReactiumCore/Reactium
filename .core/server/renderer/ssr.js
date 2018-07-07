@@ -8,6 +8,8 @@ import { matchRoutes } from "react-router-config";
 import storeCreator from "reactium-core/storeCreator";
 import Router from "reactium-core/components/Router";
 
+const version = "2.1.0";
+
 const template = (content, helmet, store, req, res) => {
     return `<html ${helmet.htmlAttributes.toString()}>
         <head>
