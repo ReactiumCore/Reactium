@@ -137,8 +137,6 @@ export default class Content extends Component {
             let id = [group, key].join("_");
             let item = data[key];
 
-            console.log("ITEM:", item);
-
             let { label, component, readme, dna, path } = item;
             let { buttons = {} } = card;
 
@@ -156,7 +154,11 @@ export default class Content extends Component {
                 buttons.footer.splice(idx, 1);
             }
 
-            if (!dna || typeof component === "string") {
+            if (
+                !dna ||
+                typeof component === "string" ||
+                process.env.NODE_ENV !== "development"
+            ) {
                 let idx = _.indexOf(
                     _.pluck(buttons.footer, "name"),
                     "toggle-link"
@@ -227,6 +229,7 @@ export default class Content extends Component {
                         update={update}
                         prefs={prefs}
                         menu={menu}
+                        dna={dna}
                         id={id}
                     />
                 </Card>

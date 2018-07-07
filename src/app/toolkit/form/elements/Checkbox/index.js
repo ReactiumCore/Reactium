@@ -1,11 +1,9 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-
+import React, { Component, Fragment } from "react";
 
 /**
  * -----------------------------------------------------------------------------
@@ -14,8 +12,11 @@ import React, { Component, Fragment } from 'react';
  */
 
 class Checkbox extends Component {
-
-    static dependencies() { return module.children; }
+    static dependencies() {
+        if (module) {
+            return module.children;
+        }
+    }
 
     constructor(props) {
         super(props);
@@ -23,25 +24,25 @@ class Checkbox extends Component {
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState((prevState) => {
+        this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
     }
 
     render() {
-        return (<input {...this.state} />);
+        return <input {...this.state} />;
     }
 }
 
 // Default properties
 Checkbox.defaultProps = {
-    type: 'checkbox',
+    type: "checkbox"
 };
 
 export default Checkbox;

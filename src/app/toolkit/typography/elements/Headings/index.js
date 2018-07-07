@@ -1,16 +1,15 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import H1 from './H1';
-import H2 from './H2';
-import H3 from './H3';
-import H4 from './H4';
-import H5 from './H5';
-import H6 from './H6';
+import React, { Component, Fragment } from "react";
+import H1 from "./H1";
+import H2 from "./H2";
+import H3 from "./H3";
+import H4 from "./H4";
+import H5 from "./H5";
+import H6 from "./H6";
 
 /**
  * -----------------------------------------------------------------------------
@@ -19,17 +18,21 @@ import H6 from './H6';
  */
 
 export default class Headings extends Component {
-    static dependencies() { return module.children; }
-    
+    static dependencies() {
+        if (module) {
+            return module.children;
+        }
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            ...this.props,
+            ...this.props
         };
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
@@ -37,7 +40,7 @@ export default class Headings extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps,
+            ...nextProps
         }));
     }
 
@@ -56,14 +59,6 @@ export default class Headings extends Component {
     }
 }
 
-export {
-    H1,
-    H2,
-    H3,
-    H4,
-    H5,
-    H6
-}
-
+export { H1, H2, H3, H4, H5, H6 };
 
 Headings.defaultProps = {};
