@@ -35,15 +35,6 @@ const scripts = (req, res) => {
         .sync(path.resolve(scriptPathBase, "assets", "js", "*.js"))
         .map(script => path.parse(script).base)
         .sort(preferVendors)
-        .filter(script => {
-            if (isToolkit(`/${script}`) && !isToolkit(req.path)) {
-                return;
-            }
-            if (isToolkit(req.path) && isMain(`/${script}`)) {
-                return;
-            }
-            return script;
-        })
         .map(script => `<script src="/assets/js/${script}"></script>`)
         .join("\n");
 
@@ -58,15 +49,6 @@ const scripts = (req, res) => {
             )
             .reduce((files, chunk) => files.concat(chunk), [])
             .sort(preferVendors)
-            .filter(script => {
-                if (isToolkit(`/${script}`) && !isToolkit(req.path)) {
-                    return;
-                }
-                if (isToolkit(req.path) && isMain(`/${script}`)) {
-                    return;
-                }
-                return script;
-            })
             .map(path => `<script src="/${path}"></script>`)
             .join("\n");
     }
