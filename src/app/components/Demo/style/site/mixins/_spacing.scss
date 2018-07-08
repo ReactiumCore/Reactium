@@ -1,0 +1,112 @@
+
+
+@mixin size-factory($prefix) {
+
+    $sides: (top, left, bottom, right);
+    $letters: (t, l, b, r);
+
+    @for $i from 1 through length($sizes) {
+        $sz: px2rem(nth($sizes, $i));
+
+        @if $prefix == xs {
+            @if $i == 1 {
+                .p-0 { padding: 0; }
+            }
+
+            .p-#{$i} { padding: #{$sz}; }
+        }
+
+        @if $i == 1 {
+            .p-#{$prefix}-0 { padding: 0; }
+        }
+
+        .p-#{$prefix}-#{$i} { padding: #{$sz}; }
+
+        @for $s from 1 through length($sides) {
+            $side: nth($sides, $s);
+            $letter: nth($letters, $s);
+
+            @if $prefix == xs {
+                @if $i == 1 {
+                    .p#{$letter}-0 { padding-#{$side}: 0; }
+                }
+
+                .p#{$letter}-#{$i} {
+                    padding-#{$side}: #{$sz};
+                }
+            }
+
+            @if $i == 1 {
+                .p#{$letter}-#{$prefix}-0 { padding-#{$side}: 0; }
+            }
+
+            .p#{$letter}-#{$prefix}-#{$i} {
+                padding-#{$side}: #{$sz};
+            }
+        }
+
+
+
+
+        @if $prefix == xs {
+            @if $i == 1 {
+                .m-0 { margin: 0; }
+            }
+
+            .m-#{$i} { margin: #{$sz}; }
+        }
+
+        @if $i == 1 {
+            .m-#{$prefix}-0 { margin: 0; }
+        }
+
+        .m-#{$prefix}-#{$i} { margin: #{$sz}; }
+
+        @for $s from 1 through length($sides) {
+            $side: nth($sides, $s);
+            $letter: nth($letters, $s);
+
+            @if $prefix == xs {
+                @if $i == 1 {
+                    .m#{$letter}-0 { margin-#{$side}: 0; }
+                }
+
+                .m#{$letter}-#{$i} {
+                    margin-#{$side}: #{$sz};
+                }
+            }
+
+            @if $i == 1 {
+                .m#{$letter}-#{$prefix}-0 { margin-#{$side}: 0; }
+            }
+
+            .m#{$letter}-#{$prefix}-#{$i} {
+                margin-#{$side}: #{$sz};
+            }
+        }
+    }
+}
+
+/* spacing */
+@for $i from 1 through length($breakpoint-up-prefixes) {
+  $thisPrefix: nth($breakpoint-up-prefixes, $i);
+  @if $thisPrefix == "xs" {
+    @include size-factory($thisPrefix);
+  } @else if $thisPrefix == "sm" {
+    @media #{$breakpoint-sm-up} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "md" {
+    @media #{$breakpoint-md-up} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "lg" {
+    @media #{$breakpoint-lg-up} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "xl" {
+    @media #{$breakpoint-xl-up} {
+      @include size-factory($thisPrefix);
+    }
+  }
+}

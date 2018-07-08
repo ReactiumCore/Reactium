@@ -31,7 +31,10 @@ module.exports = () => {
                 ".core/**/*.sass"
             ],
             assets: [
+                "src/**/assets/**/*",
                 "src/assets/**/*",
+                "!{src/**/assets/style,src/**/*/assets/style/**}",
+                "!{src/**/*/assets/js,src/**/*/assets/js/**}",
                 "!{src/assets/style,src/assets/style/**}",
                 "!{src/assets/js,src/assets/js/**}"
             ],
@@ -44,7 +47,10 @@ module.exports = () => {
             markup: ["src/**/*.html"],
             style: ["src/**/*.scss", "!{src/**/_*.scss}"],
             assets: [
+                "src/**/assets/**/*",
                 "src/assets/**/*",
+                "!{src/**/assets/style,src/**/*/assets/style/**}",
+                "!{src/**/*/assets/js,src/**/*/assets/js/**}",
                 "!{src/assets/style,src/assets/style/**}",
                 "!{src/assets/js,src/assets/js/**}"
             ],

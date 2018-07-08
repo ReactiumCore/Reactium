@@ -96,8 +96,15 @@ gulp.task("styles", () => {
 });
 
 // Copy assets
+const assetPath = p => {
+    p.dirname = p.dirname.split("assets").pop();
+};
+
 gulp.task("assets", () => {
-    return gulp.src(config.src.assets).pipe(gulp.dest(config.dest.assets));
+    return gulp
+        .src(config.src.assets)
+        .pipe(rename(assetPath))
+        .pipe(gulp.dest(config.dest.assets));
 });
 
 // Copy markup

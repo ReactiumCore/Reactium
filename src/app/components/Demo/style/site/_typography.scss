@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+
+
+:root {
+    font-family: 'Open Sans', sans-serif;
+    font-size: $root-font;
+    font-weight: normal;
+    color: color(dark-grey);
+    line-height: 1;
+
+    @media (min-width: 1921px) {
+        font-size: 1.1vw;
+    }
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+
+    &, li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+        opacity: 0.8;
+    }
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+.heading {
+    font-weight: 300;
+    font-size: px2rem(18);
+    line-height: 1.5;
+
+    @media #{$breakpoint-md-up} {
+        font-size: 2.9vw;
+    }
+}
+
+.sub-heading {
+    font-size: px2rem(24);
+}
+
+.caption {
+    font-size: px2rem(18);
+}
+
+
+@mixin align-factory($prefix) {
+    @each $align in (left, right, center) {
+        @if $prefix == 'xs' {
+            .text-#{$align} {
+                text-align: #{$align};
+            }
+        }
+
+        .text-#{$prefix}-#{$align} {
+            text-align: #{$align};
+        }
+    }
+}
+
+/* text align */
+@for $i from 1 through length($breakpoint-up-prefixes) {
+  $thisPrefix: nth($breakpoint-up-prefixes, $i);
+  @if $thisPrefix == "xs" {
+    @include align-factory($thisPrefix);
+  } @else if $thisPrefix == "sm" {
+    @media #{$breakpoint-sm-up} {
+      @include align-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "md" {
+    @media #{$breakpoint-md-up} {
+      @include align-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "lg" {
+    @media #{$breakpoint-lg-up} {
+      @include align-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "xl" {
+    @media #{$breakpoint-xl-up} {
+      @include align-factory($thisPrefix);
+    }
+  }
+}
