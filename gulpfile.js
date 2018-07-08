@@ -108,8 +108,17 @@ gulp.task("assets", () => {
 });
 
 // Copy markup
+const markupPath = p => {
+    if (p.extname === ".css") {
+        p.dirname = config.dest.style.split(config.dest.markup).pop();
+    }
+};
+
 gulp.task("markup", () => {
-    return gulp.src(config.src.markup).pipe(gulp.dest(config.dest.markup));
+    return gulp
+        .src(config.src.markup)
+        .pipe(rename(markupPath))
+        .pipe(gulp.dest(config.dest.markup));
 });
 
 // Remove all distribution files

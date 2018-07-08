@@ -21,7 +21,7 @@ module.exports = () => {
         cssPreProcessor: "sass",
         watch: {
             js: ["src/app/**/*"],
-            markup: ["src/**/*.html", "src/assets/style/**/*.css"],
+            markup: ["src/**/*.html", "src/**/*.css"],
             style: [
                 "src/**/*.less",
                 "src/**/*.scss",
@@ -33,7 +33,7 @@ module.exports = () => {
             assets: [
                 "src/**/assets/**/*",
                 "src/assets/**/*",
-                "!{src/**/assets/style,src/**/*/assets/style/**}",
+                "!{src/**/*/assets/style,src/**/*/assets/style/**}",
                 "!{src/**/*/assets/js,src/**/*/assets/js/**}",
                 "!{src/assets/style,src/assets/style/**}",
                 "!{src/assets/js,src/assets/js/**}"
@@ -44,12 +44,12 @@ module.exports = () => {
         src: {
             app: "src",
             js: ["src/app/**/*"],
-            markup: ["src/**/*.html"],
+            markup: ["src/**/*.html", "src/**/*.css"],
             style: ["src/**/*.scss", "!{src/**/_*.scss}"],
             assets: [
                 "src/**/assets/**/*",
                 "src/assets/**/*",
-                "!{src/**/assets/style,src/**/*/assets/style/**}",
+                "!{src/**/*/assets/style,src/**/*/assets/style/**}",
                 "!{src/**/*/assets/js,src/**/*/assets/js/**}",
                 "!{src/assets/style,src/assets/style/**}",
                 "!{src/assets/js,src/assets/js/**}"
