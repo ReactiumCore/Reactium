@@ -9,7 +9,7 @@ Reactium will ignore any file inside a `~/style` directory with the exception of
 
 > You can modify this behavior by editing the `gulp.config.js` > `dest` properties.
 
-Given following component directory:
+Given the following component directory:
 
 ```
 ├── Demo
@@ -17,7 +17,7 @@ Given following component directory:
     ├── route.js
     └── assets
         ├── images
-        │   └── demo-site
+        │   └── demo
         │       ├── feature-01.png
         │       ├── feature-02.png
         │       ├── feature-03.png
@@ -30,4 +30,4 @@ Given following component directory:
 
 All the files in the `assets/images/demo-site` will be copied to the `~/public/assets` directory while the `~/assets/style/vendor.css` file will be copied to `~/public/assets/style`.
 
-> Be sure to namespace asset files or place in a unique sub-directory so that they don't overwrite each other once copied to the destination directory.
+> Be sure to namespace asset files or place them in unique sub-directories so that they don't overwrite each other once copied to the destination directory. In the above example, `vendor.css` should be renamed to `demo-vendor.css`
