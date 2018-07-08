@@ -1,43 +1,28 @@
-import React from 'react';
-import Markdown from 'reactium-core/components/Toolkit/Markdown';
+import React from "react";
+import Markdown from "reactium-core/components/Toolkit/Markdown";
 
 /**
  * -----------------------------------------------------------------------------
  * Readme
  * -----------------------------------------------------------------------------
  */
- const content = `
- # Testing
- _does this work?_
+const content = `
+Import the component:
 
- ## Hmmm..
- **I think so**
+${"```js"}
+import { P } from "../Paragraph";
+${"```"}
 
- <p>What about inline HTML?</p>
-
-${'`'}
-code
-${'`'}
-${'```js'}
-let inlineCode = () => {
-    console.log('Whoa dude!');
-};
-${'```'}
-
-${'```html'}
-<html>
-    <body>
-        <p>Some HTML markup</p>
-    </body>
-</html>
-${'```'}
+Usage:
+${"```html"}
+<P>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</P>
+${"```"}
 `;
-
 
 /**
  * -----------------------------------------------------------------------------
  * DO NOT EDIT BELOW HERE
  * -----------------------------------------------------------------------------
  */
-const readme = (props) => <Markdown {...props}>{content}</Markdown>;
+const readme = props => <Markdown {...props}>{content}</Markdown>;
 export default readme;
