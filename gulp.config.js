@@ -63,7 +63,8 @@ module.exports = () => {
             js: "public/assets/js",
             markup: "public",
             style: "public/assets/style",
-            assets: "public/assets"
+            assets: "public/assets",
+            static: "dist"
         }
     };
 };

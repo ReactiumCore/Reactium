@@ -181,6 +181,30 @@ gulp.task("build", done => {
     runSequence(["clean"], ["scripts", "assets", "styles"], ["markup"], done);
 });
 
+// Static Site
+gulp.task("static:copy", done => {
+    fs.copySync(config.dest.dist, config.dest.static);
+
+    let mainPage = path.normalize(`${config.dest.static}/index-static.html`);
+
+    if (fs.existsSync(mainPage)) {
+        let newName = mainPage.split("index-static.html").join("index.html");
+        fs.renameSync(mainPage, newName);
+    }
+
+    done();
+});
+
+gulp.task("static", done => {
+    runSequence(
+        ["clean"],
+        ["scripts", "assets", "styles"],
+        ["markup"],
+        ["static:copy"],
+        done
+    );
+});
+
 // The default task
 gulp.task("default", done => {
     if (env === "development") {
