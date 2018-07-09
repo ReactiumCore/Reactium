@@ -7,8 +7,8 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import { Helmet } from 'react-helmet';
+import React, { Component, Fragment } from "react";
+import { Helmet } from "react-helmet";
 
 /**
  * -----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ export default class Test extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState((prevState) => {
+        this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
     }
@@ -33,21 +33,23 @@ export default class Test extends Component {
     }
 
     render() {
-        
-        let title = 'Test Component';
+        let title = "Test Component";
         let { count = 0, msg } = this.state;
 
         return (
             <Fragment>
                 <Helmet titleTemplate="%s | Reactium">
                     <title>{title}</title>
-                    <meta name="description" content="This is an example Reactium component"/>
+                    <meta
+                        name="description"
+                        content="This is an example Reactium component"
+                    />
                     <meta property="og:title" content={title} />
                     <meta property="og:type" content="article" />
                     <html lang="en" />
                     <body className="test-component" />
                 </Helmet>
-                <div className={'test-component-wrap'}>
+                <div className={"test-component-wrap"}>
                     <div>{msg}</div>
                     <button type="button" onClick={this.onClick.bind(this)}>
                         Click Me

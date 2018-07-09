@@ -4,14 +4,16 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from "react";
+import Template from "components/Demo/Site/Template";
+import Hero from "components/Demo/Site/Hero";
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Footer
+ * React Component: Catering
  * -----------------------------------------------------------------------------
  */
 
-export default class Footer extends Component {
+export default class Catering extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,8 +35,26 @@ export default class Footer extends Component {
     }
 
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        let { hero } = this.state;
+
+        return (
+            <Template>
+                <main role="main">
+                    <Hero {...hero} />
+                </main>
+            </Template>
+        );
     }
 }
 
-Footer.defaultProps = {};
+Catering.defaultProps = {
+    hero: {
+        icon: "/assets/images/demo-site/icon-hotdog.png",
+        cta: {
+            to: "/demo/site",
+            type: "link",
+            children: ["Learn More"]
+        },
+        content: ["Catering?", "Yeah, we do that!"]
+    }
+};

@@ -31,7 +31,14 @@ module.exports = {
                     .default
             },
             allRoutes: {
-                Demo: require("components/Demo/route").default,
+                About: require("components/Demo/Site/Pages/About/route")
+                    .default,
+                Catering: require("components/Demo/Site/Pages/Catering/route")
+                    .default,
+                Contact: require("components/Demo/Site/Pages/Contact/route")
+                    .default,
+                Home: require("components/Demo/Site/Pages/Home/route").default,
+                Menu: require("components/Demo/Site/Pages/Menu/route").default,
                 Test: require("components/Test/route").default,
                 Toolkit: require("reactium-core/components/Toolkit/route")
                     .default
@@ -80,7 +87,11 @@ module.exports = {
             allRoutes: {
                 type: "route",
                 imports: [
-                    "components/Demo/route",
+                    "components/Demo/Site/Pages/About/route",
+                    "components/Demo/Site/Pages/Catering/route",
+                    "components/Demo/Site/Pages/Contact/route",
+                    "components/Demo/Site/Pages/Home/route",
+                    "components/Demo/Site/Pages/Menu/route",
                     "components/Test/route",
                     "reactium-core/components/Toolkit/route"
                 ]
