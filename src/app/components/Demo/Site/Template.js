@@ -55,6 +55,8 @@ export default class Template extends Component {
             navbarFixed,
             headerMarginBottom,
             children,
+            style,
+            description,
             header = {}
         } = this.state;
 
@@ -63,14 +65,9 @@ export default class Template extends Component {
         return (
             <Fragment>
                 <Helmet>
-                    <link rel="stylesheet" href="/assets/style/demo-site.css" />
+                    <link rel="stylesheet" href={style} />
                     <title>{title}</title>
-                    <meta
-                        name="description"
-                        content="This is an example Reactium Site"
-                    />
-                    <meta property="og:title" content={title} />
-                    <meta property="og:type" content="article" />
+                    <meta name="description" content={description} />
                     <html lang="en" />
                     <body className={bodyClass} />
                 </Helmet>
@@ -103,5 +100,7 @@ Template.defaultProps = {
     navbarFixed: false,
     headerMarginBottom: 0,
     bodyClass: "demo-site",
-    title: "Reactium"
+    title: "Reactium",
+    description: "This is an example Reactium Site",
+    style: "/assets/style/demo-site.css"
 };
