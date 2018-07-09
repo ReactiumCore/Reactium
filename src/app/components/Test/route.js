@@ -1,9 +1,9 @@
-import Test from './index';
-import deps from 'dependencies';
+import Test from "./index";
+import deps from "dependencies";
 
 export default {
     // Route pattern
-    path: ['/', '/test'],
+    path: ["/test"],
 
     // Route should be exact
     exact: true,
@@ -12,5 +12,5 @@ export default {
     component: Test,
 
     // load callback should return thunk that uses route params.
-    load: params => deps.actions.Test.mount(params),
+    load: params => deps.actions.Test.mount(params)
 };
