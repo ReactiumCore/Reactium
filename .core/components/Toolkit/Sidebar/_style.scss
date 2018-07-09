@@ -8,28 +8,18 @@
     background-color: $white;
     box-shadow: $drop-shadow;
 
-    &-closed {
-        box-shadow: none;
-        width: 0px;
-        min-width: 0px;
-    }
-
     &.right {
         order: 10;
         flex-direction: row-reverse;
-
-        .show-left {
-            display: none;
-        }
-    }
-
-    &-left {
-        .show-right {
-            display: none;
-        }
     }
 
     @include breakpoint(xs) {
         background-color: black;
+
+        &-closed {
+            box-shadow: none;
+            width: 0px;
+            min-width: 0px;
+        }
     }
 }
