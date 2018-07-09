@@ -122,7 +122,7 @@ module.exports = {
             elements: {
                 "redux-component": {
                     type: "catalyst",
-                    label: "Test Component",
+                    label: "Redux Component",
                     route: "/toolkit/components/redux-component",
                     dna: "/components/Demo/Test",
                     component: "/demo/redux"
