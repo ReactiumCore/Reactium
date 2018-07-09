@@ -1,0 +1,48 @@
+section.hero {
+    @extend .bg-tertiary;
+
+    padding: px2vw(350) px2vw(48);
+
+    transition: all .25s ease-in-out;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    @media #{$breakpoint-md-up} {
+        padding: px2vw(128) px2vw(48);
+    }
+
+    .btn {
+        @extend .mt-xs-6;
+    }
+
+    h1 {
+        color: color(dark-grey);
+        font-weight: 300;
+        font-size: px2rem(18);
+        line-height: 1.5;
+
+        @media #{$breakpoint-md-up} {
+            font-size: 2.9vw;
+        }
+    }
+
+    img.icon {
+        @extend .mb-xs-4;
+        @extend .mb-md-5;
+
+        width: px2vw(300);
+        height: auto;
+
+        @media #{$breakpoint-sm-up} {
+            width: px2vw(100);
+            height: auto;
+
+            min-width: px2rem(100);
+        }
+    }
+}
