@@ -23,15 +23,24 @@ export default class Template extends Component {
         this.navbar = null;
         this.header = null;
         this.state = { ...this.props };
+        this.onLoad = this.onLoad.bind(this);
         this.onScroll = this.onScroll.bind(this);
     }
 
     componentDidMount() {
         window.addEventListener("scroll", this.onScroll);
+        window.addEventListener("load", this.onLoad);
     }
 
     componentWillUnmount() {
         window.removeEventListener("scroll", this.onScroll);
+        this.setState({ mounted: false });
+    }
+
+    onLoad() {
+        setTimeout(() => {
+            this.setState({ mounted: true });
+        }, 100);
     }
 
     onScroll(e) {
@@ -50,6 +59,7 @@ export default class Template extends Component {
 
     render() {
         let {
+            mounted,
             title,
             bodyClass,
             navbarFixed,
@@ -61,6 +71,18 @@ export default class Template extends Component {
         } = this.state;
 
         let headerStyle = { marginBottom: headerMarginBottom };
+
+        if (mounted !== true) {
+            return (
+                <Helmet>
+                    <link rel="stylesheet" href={style} />
+                    <title>{title}</title>
+                    <meta name="description" content={description} />
+                    <html lang="en" />
+                    <body className={bodyClass} />
+                </Helmet>
+            );
+        }
 
         return (
             <Fragment>

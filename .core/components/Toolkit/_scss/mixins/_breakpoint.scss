@@ -1,0 +1,9 @@
+@mixin breakpoint($size) {
+    @if ($size == xs) {
+        @media (max-width: map-get($breaks, $size)) { @content; }
+    }
+
+    @else {
+        @media (min-width: map-get($breaks, $size)) { @content; }
+    }
+}
