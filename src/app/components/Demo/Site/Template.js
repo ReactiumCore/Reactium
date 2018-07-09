@@ -22,28 +22,35 @@ export default class Template extends Component {
         this.mb = null;
         this.navbar = null;
         this.header = null;
+        this.ival = null;
         this.state = { ...this.props };
         this.onLoad = this.onLoad.bind(this);
         this.onScroll = this.onScroll.bind(this);
     }
 
     componentDidMount() {
-        window.addEventListener("scroll", this.onScroll);
         window.addEventListener("load", this.onLoad);
+        window.addEventListener("scroll", this.onScroll);
+        this.ival = setInterval(() => {
+            this.setState({ mounted: window.templateMounted });
+        });
     }
 
     componentWillUnmount() {
+        clearInterval(this.ival);
+        this.ival = null;
         window.removeEventListener("scroll", this.onScroll);
-        this.setState({ mounted: false });
     }
 
     onLoad() {
-        setTimeout(() => {
-            this.setState({ mounted: true });
-        }, 100);
+        window.templateMounted = true;
     }
 
     onScroll(e) {
+        if (!this.navbar || !this.header) {
+            return;
+        }
+
         let {
             height: headerHeight
         } = this.header.container.getBoundingClientRect();
@@ -119,6 +126,7 @@ export default class Template extends Component {
 
 Template.defaultProps = {
     header: {},
+    mounted: false,
     navbarFixed: false,
     headerMarginBottom: 0,
     bodyClass: "demo-site",
