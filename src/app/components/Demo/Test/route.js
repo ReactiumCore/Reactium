@@ -3,7 +3,7 @@ import deps from "dependencies";
 
 export default {
     // Route pattern
-    path: ["/test"],
+    path: ["/demo/redux"],
 
     // Route should be exact
     exact: true,

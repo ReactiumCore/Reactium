@@ -33,23 +33,23 @@ export default class Test extends Component {
     }
 
     render() {
-        let title = "Test Component";
+        let title = "Redux | Reactium";
+        let style = "/assets/style/demo-redux.css";
         let { count = 0, msg } = this.state;
 
         return (
             <Fragment>
-                <Helmet titleTemplate="%s | Reactium">
+                <Helmet>
+                    <link rel="stylesheet" href={style} />
                     <title>{title}</title>
                     <meta
                         name="description"
-                        content="This is an example Reactium component"
+                        content="This is an example Reactium + Redux component"
                     />
-                    <meta property="og:title" content={title} />
-                    <meta property="og:type" content="article" />
                     <html lang="en" />
-                    <body className="test-component" />
+                    <body className="demo-redux" />
                 </Helmet>
-                <div className={"test-component-wrap"}>
+                <div className={"demo-redux-wrap"}>
                     <div>{msg}</div>
                     <button type="button" onClick={this.onClick.bind(this)}>
                         Click Me

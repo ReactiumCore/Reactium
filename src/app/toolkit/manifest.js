@@ -12,8 +12,8 @@ module.exports = {
             selected: true
         },
         {
-            name: "Test",
-            css: "/assets/style/style-test.css"
+            name: "Blue",
+            css: "/assets/style/style-blue.css"
         }
     ],
     sidebar: {
@@ -120,19 +120,27 @@ module.exports = {
             label: "Components",
             route: "/toolkit/components",
             elements: {
-                "test-component": {
+                "redux-component": {
                     type: "catalyst",
                     label: "Test Component",
-                    route: "/toolkit/components/test-component",
-                    dna: "/components/Test",
-                    component: "/test"
+                    route: "/toolkit/components/redux-component",
+                    dna: "/components/Demo/Test",
+                    component: "/demo/redux"
                 }
             }
         },
         pages: {
             label: "Pages",
             route: "/toolkit/pages",
-            elements: {}
+            elements: {
+                "demo-site": {
+                    redirect: true,
+                    label: "Demo Site",
+                    target: "_blank",
+                    route: "/demo/site",
+                    type: "page"
+                }
+            }
         },
         form: {
             label: "Form Elements",

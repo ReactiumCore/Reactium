@@ -3,28 +3,28 @@ module.exports = {
     get: () => {
         return {
             allActions: {
-                Test: require("components/Test/actions").default,
+                Test: require("components/Demo/Test/actions").default,
                 Router: require("reactium-core/components/Router/actions")
                     .default,
                 Toolkit: require("reactium-core/components/Toolkit/actions")
                     .default
             },
             allActionTypes: {
-                Test: require("components/Test/actionTypes").default,
+                Test: require("components/Demo/Test/actionTypes").default,
                 Router: require("reactium-core/components/Router/actionTypes")
                     .default,
                 Toolkit: require("reactium-core/components/Toolkit/actionTypes")
                     .default
             },
             allReducers: {
-                Test: require("components/Test/reducers").default,
+                Test: require("components/Demo/Test/reducers").default,
                 Router: require("reactium-core/components/Router/reducers")
                     .default,
                 Toolkit: require("reactium-core/components/Toolkit/reducers")
                     .default
             },
             allInitialStates: {
-                Test: require("components/Test/state").default,
+                Test: require("components/Demo/Test/state").default,
                 Router: require("reactium-core/components/Router/state")
                     .default,
                 Toolkit: require("reactium-core/components/Toolkit/state")
@@ -39,12 +39,12 @@ module.exports = {
                     .default,
                 Home: require("components/Demo/Site/Pages/Home/route").default,
                 Menu: require("components/Demo/Site/Pages/Menu/route").default,
-                Test: require("components/Test/route").default,
+                Test: require("components/Demo/Test/route").default,
                 Toolkit: require("reactium-core/components/Toolkit/route")
                     .default
             },
             allServices: {
-                Test: require("components/Test/services").default,
+                Test: require("components/Demo/Test/services").default,
                 Toolkit: require("reactium-core/components/Toolkit/services")
                     .default
             }
@@ -55,7 +55,7 @@ module.exports = {
             allActions: {
                 type: "actions",
                 imports: [
-                    "components/Test/actions",
+                    "components/Demo/Test/actions",
                     "reactium-core/components/Router/actions",
                     "reactium-core/components/Toolkit/actions"
                 ]
@@ -63,7 +63,7 @@ module.exports = {
             allActionTypes: {
                 type: "actionTypes",
                 imports: [
-                    "components/Test/actionTypes",
+                    "components/Demo/Test/actionTypes",
                     "reactium-core/components/Router/actionTypes",
                     "reactium-core/components/Toolkit/actionTypes"
                 ]
@@ -71,7 +71,7 @@ module.exports = {
             allReducers: {
                 type: "reducers",
                 imports: [
-                    "components/Test/reducers",
+                    "components/Demo/Test/reducers",
                     "reactium-core/components/Router/reducers",
                     "reactium-core/components/Toolkit/reducers"
                 ]
@@ -79,7 +79,7 @@ module.exports = {
             allInitialStates: {
                 type: "state",
                 imports: [
-                    "components/Test/state",
+                    "components/Demo/Test/state",
                     "reactium-core/components/Router/state",
                     "reactium-core/components/Toolkit/state"
                 ]
@@ -92,14 +92,14 @@ module.exports = {
                     "components/Demo/Site/Pages/Contact/route",
                     "components/Demo/Site/Pages/Home/route",
                     "components/Demo/Site/Pages/Menu/route",
-                    "components/Test/route",
+                    "components/Demo/Test/route",
                     "reactium-core/components/Toolkit/route"
                 ]
             },
             allServices: {
                 type: "services",
                 imports: [
-                    "components/Test/services",
+                    "components/Demo/Test/services",
                     "reactium-core/components/Toolkit/services"
                 ]
             }
