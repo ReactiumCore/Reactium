@@ -131,7 +131,7 @@ module.exports = {
         },
         pages: {
             label: "Pages",
-            route: "/toolkit/pages",
+            route: "#",
             elements: {
                 "demo-site": {
                     redirect: true,
