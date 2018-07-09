@@ -23,9 +23,9 @@ You can generate a static site by ensuring your project has a `~/public/index-st
 </html>
 ```
 
-## Generating a Static Site
+## Generating the Static Site
 
-1.  To generate a static site, run the following command:
+1.  Run the following command from the project root:
 
 ```
 $ npm run static
