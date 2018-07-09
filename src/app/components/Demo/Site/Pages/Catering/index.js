@@ -35,10 +35,10 @@ export default class Catering extends Component {
     }
 
     render() {
-        let { hero } = this.state;
+        let { hero, title } = this.state;
 
         return (
-            <Template>
+            <Template title={title}>
                 <main role="main">
                     <Hero {...hero} />
                 </main>
@@ -48,6 +48,7 @@ export default class Catering extends Component {
 }
 
 Catering.defaultProps = {
+    title: "Catering | Reactium",
     hero: {
         icon: "/assets/images/demo-site/icon-hotdog.png",
         cta: {

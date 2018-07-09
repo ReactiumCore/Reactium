@@ -35,10 +35,10 @@ export default class About extends Component {
     }
 
     render() {
-        let { features = {} } = this.state;
+        let { features = {}, title } = this.state;
 
         return (
-            <Template>
+            <Template title={title}>
                 <main role="main">
                     <Features {...features} />
                 </main>
@@ -48,6 +48,7 @@ export default class About extends Component {
 }
 
 About.defaultProps = {
+    title: "About | Reactium",
     features: {
         layout: ["col-xs-12 col-md-6 col-lg-5", "col-xs-12 col-md-6 col-lg-7"],
         items: [

@@ -44,10 +44,10 @@ export default class Contact extends Component {
     }
 
     render() {
-        let { features = {} } = this.state;
+        let { features = {}, title } = this.state;
 
         return (
-            <Template>
+            <Template title={title}>
                 <main role="main">
                     <Features {...features} />
                 </main>
@@ -57,6 +57,7 @@ export default class Contact extends Component {
 }
 
 Contact.defaultProps = {
+    title: "Contact | Reactium",
     features: {
         layout: ["col-xs-12 col-md-6 col-lg-5", "col-xs-12 col-md-6 col-lg-7"],
         items: [
