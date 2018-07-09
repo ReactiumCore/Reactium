@@ -4,7 +4,7 @@
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env SSR_MODE=on node build/.core/index.js",
+    "start": "node build/.core/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "manifest": "node ./createManifest.js",
     "build": "npm install --production-only && npm-run-all -s manifest build:*",
