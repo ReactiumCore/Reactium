@@ -2,38 +2,39 @@
 // node.js starter application for hosting
 //------------------------------------------------------------------------------
 
-import cors from "cors";
-import express from "express";
-import bodyParser from "body-parser";
-import router from "./server/router";
-import cookieParser from "cookie-parser";
-import cookieSession from "cookie-session";
-import proxy from "express-http-proxy";
-import morgan from "morgan";
-import apiConfig from "appdir/api/config";
-import path from "path";
+import cors from 'cors';
+import express from 'express';
+import bodyParser from 'body-parser';
+import router from './server/router';
+import cookieParser from 'cookie-parser';
+import cookieSession from 'cookie-session';
+import proxy from 'express-http-proxy';
+import morgan from 'morgan';
+import apiConfig from 'appdir/api/config';
+import path from 'path';
+import fs from 'fs';
 
 const app = express();
 
-global.rootPath = path.resolve(__dirname, "..");
+global.rootPath = path.resolve(__dirname, '..');
 
-let node_env = process.env.hasOwnProperty("NODE_ENV")
+let node_env = process.env.hasOwnProperty('NODE_ENV')
     ? process.env.NODE_ENV
-    : "development";
+    : 'development';
 
 // PORT setup:
 let port = null;
 
 // Get the port env variable name
-if (process.env.hasOwnProperty("PORT_VAR")) {
+if (process.env.hasOwnProperty('PORT_VAR')) {
     let pvar = process.env.PORT_VAR;
     if (process.env.hasOwnProperty(pvar)) {
         port = process.env[pvar];
     }
 } else {
-    port = process.env.hasOwnProperty("APP_PORT") ? process.env.APP_PORT : port;
+    port = process.env.hasOwnProperty('APP_PORT') ? process.env.APP_PORT : port;
     port =
-        port === null && process.env.hasOwnProperty("PORT")
+        port === null && process.env.hasOwnProperty('PORT')
             ? process.env.PORT
             : port;
     port = port === null ? 3030 : port;
@@ -45,49 +46,66 @@ global.restAPI = apiConfig.restAPI;
 const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
 
 // set app variables
-app.set("x-powered-by", false);
+app.set('x-powered-by', false);
 
-// logging
-if (process.env.DEBUG !== "off") {
-    app.use(morgan("combined"));
-}
+let middlewares = [
+    process.env.DEBUG !== 'off'
+        ? {
+              name: 'logging',
+              use: morgan('combined')
+          }
+        : false,
+    {
+        name: 'cors',
+        use: cors()
+    },
+    {
+        name: 'api',
+        use: [
+            ['/api', '/api/*'],
+            proxy(`${restAPI}`, {
+                proxyReqOptDecorator: req => {
+                    req.headers['x-forwarded-host'] = `localhost:${port}`;
+                    return req;
+                },
+                proxyReqPathResolver: req => {
+                    const resolvedPath = `${restAPI}${req.url}`;
+                    return resolvedPath;
+                }
+            })
+        ]
+    },
+    // parsers
+    {
+        name: 'jsonParser',
+        use: bodyParser.json()
+    },
+    {
+        name: 'urlEncoded',
+        use: bodyParser.urlencoded({ extended: true })
+    },
 
-// apply cross site scripting
-app.use(cors());
-
-// Proxy /api
-app.use(
-    ["/api", "/api/*"],
-    proxy(`${restAPI}`, {
-        proxyReqOptDecorator: req => {
-            req.headers["x-forwarded-host"] = `localhost:${port}`;
-            return req;
-        },
-        proxyReqPathResolver: req => {
-            const resolvedPath = `${restAPI}${req.url}`;
-            return resolvedPath;
-        }
-    })
-);
-
-// parsers
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(
-    cookieSession({
-        name: "aljtka4",
-        keys: ["Q2FtZXJvbiBSdWxlcw", "vT3GtyZKbnoNSdWxlcw"]
-    })
-);
+    // cookies
+    {
+        name: 'cookieParser',
+        use: cookieParser()
+    },
+    {
+        name: 'cookieSession',
+        use: cookieSession({
+            name: 'aljtka4',
+            keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbnoNSdWxlcw']
+        })
+    }
+];
 
 // development mode
-if (process.env.NODE_ENV === "development") {
-    const webpack = require("webpack");
-    const gulpConfig = require("../gulp.config")();
-    const webpackConfig = require("../webpack.config")(gulpConfig);
-    const wpMiddlware = require("webpack-dev-middleware");
-    const wpHotMiddlware = require("webpack-hot-middleware");
+if (process.env.NODE_ENV === 'development') {
+    const webpack = require('webpack');
+    const gulpConfig = require('../gulp.config')();
+    const webpackConfig = require('../webpack.config')(gulpConfig);
+    const wpMiddlware = require('webpack-dev-middleware');
+    const wpHotMiddlware = require('webpack-hot-middleware');
     const publicPath = `http://localhost:${port}/`;
 
     // local development overrides for webpack config
@@ -100,34 +118,62 @@ if (process.env.NODE_ENV === "development") {
 
     const compiler = webpack(webpackConfig);
 
-    app.use(
-        wpMiddlware(compiler, {
+    middlewares.push({
+        name: 'webpack',
+        use: wpMiddlware(compiler, {
             serverSideRender: true,
-            path: "/",
+            path: '/',
             publicPath
         })
-    );
-
-    app.use(
-        wpHotMiddlware(compiler, {
+    });
+    middlewares.push({
+        name: 'hmr',
+        use: wpHotMiddlware(compiler, {
             reload: true
         })
-    );
+    });
 }
 
 // serve the static files out of ./public or specified directory
 const staticAssets =
-    process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), "public");
-app.use(express.static(staticAssets));
+    process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), 'public');
+
+middlewares.push({
+    name: 'static',
+    use: express.static(staticAssets)
+});
 
 // default route handler
-app.use(router);
+middlewares.push({
+    name: 'router',
+    use: router
+});
+
+// Give app an opportunity to change middlewares
+if (fs.existsSync(`${rootPath}/src/app/server/middleware.js`)) {
+    middlewares = require(`${rootPath}/src/app/server/middleware.js`)(
+        middlewares
+    );
+}
+
+middlewares.filter(_ => _).forEach(({ use }) => {
+    if (Array.isArray(use)) {
+        app.use(...use);
+    } else {
+        app.use(use);
+    }
+});
 
 // start server on the specified port and binding host
-app.listen(port, "0.0.0.0", function() {
+app.listen(port, '0.0.0.0', function() {
     app.dependencies.init();
 
     console.log(`[00:00:00] [Reactium] Server running on port ${port}...`);
 });
 
-app.dependencies = global.dependencies = require("dependencies").default;
+// Provide opportunity for ssl server
+if (fs.existsSync(`${rootPath}/src/app/server/ssl.js`)) {
+    require(`${rootPath}/src/app/server/ssl.js`)(app);
+}
+
+app.dependencies = global.dependencies = require('dependencies').default;
