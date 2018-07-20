@@ -1,7 +1,8 @@
 const normalizeAssets = assets => (Array.isArray(assets) ? assets : [assets]);
-const globby = require("globby");
-const path = require("path");
-const fs = require("fs");
+const globby = require('globby');
+const path = require('path');
+const fs = require('fs');
+const semver = require('semver');
 
 const isToolkit = str => {
     let exp = /^\/toolkit/i;
@@ -14,88 +15,77 @@ const isMain = str => {
 };
 
 const styles = (req, res) => {
-    let css = isToolkit(req.path) === true ? "toolkit.css" : "style.css";
+    let css = isToolkit(req.path) === true ? 'toolkit.css' : 'style.css';
     let styles = [`<link rel="stylesheet" href="/assets/style/${css}">`];
 
-    return styles.join("\n\t");
+    return styles.join('\n\t');
 };
 
 const preferVendors = (a, b) => {
-    if (a === "vendors.js") return -1;
-    if (b === "vendors.js") return 1;
+    if (a === 'vendors.js') return -1;
+    if (b === 'vendors.js') return 1;
     return 0;
 };
 
 const scripts = (req, res) => {
-    let scripts = "";
-
     const scriptPathBase =
         process.env.PUBLIC_DIRECTORY || `${process.cwd()}/public`;
-    scripts = globby
-        .sync(path.resolve(scriptPathBase, "assets", "js", "*.js"))
+
+    let scriptTags = globby
+        .sync(path.resolve(scriptPathBase, 'assets', 'js', '*.js'))
         .map(script => path.parse(script).base)
         .sort(preferVendors)
         .map(script => `<script src="/assets/js/${script}"></script>`)
-        .join("\n");
+        .join('\n');
 
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
         const assetsByChunkName = res.locals.webpackStats.toJson()
             .assetsByChunkName;
 
-        const { vendors } = assetsByChunkName;
-        scripts = Object.values(assetsByChunkName)
+        scriptTags = Object.values(assetsByChunkName)
             .map(chunk =>
-                normalizeAssets(chunk).filter(path => path.endsWith(".js"))
+                normalizeAssets(chunk).filter(path => path.endsWith('.js'))
             )
             .reduce((files, chunk) => files.concat(chunk), [])
             .sort(preferVendors)
             .map(path => `<script src="/${path}"></script>`)
-            .join("\n");
+            .join('\n');
     }
 
-    return scripts;
+    return scriptTags;
+};
+
+const sanitizeTemplateVersion = version => {
+    if (semver.valid(version)) {
+        return version;
+    }
+
+    return semver.coerce(version);
 };
 
 export default (req, res, context) => {
-    const reactiumConfig = require(`${rootPath}/.core/reactium-config`);
-
     req.scripts = scripts(req, res);
     req.styles = styles(req, res);
 
-    let { version = "2.1.0" } = reactiumConfig;
-    version = Number(version.split(".").join(""));
+    let template,
+        renderMode =
+            'SSR_MODE' in process.env && process.env.SSR_MODE === 'on'
+                ? 'ssr'
+                : 'feo';
 
-    let mod, renderer;
+    const { semver: coreSemver } = require(`${rootPath}/.core/reactium-config`);
+    const coreTemplate = require(`../template/${renderMode}`);
 
-    if ("SSR_MODE" in process.env && process.env.SSR_MODE === "on") {
-        if (fs.existsSync(`${rootPath}/src/app/server/renderer/ssr.js`)) {
-            mod = require(`${rootPath}/src/app/server/renderer/ssr`);
-            let { version: v } = mod;
-            v = v ? Number(v.split(".").join("")) : version;
+    template = coreTemplate.template;
+    if (fs.existsSync(`${rootPath}/src/app/server/template/${renderMode}.js`)) {
+        localTemplate = require(`${rootPath}/src/app/server/template/${renderMode}`);
+        let templateVersion = sanitizeTemplateVersion(localTemplate.version);
 
-            if (version < v) {
-                mod = require("./ssr");
-            }
-        } else {
-            mod = require("./ssr");
+        // Check to see if local template should be compatible with core
+        if (semver.satisfies(templateVersion, coreSemver)) {
+            template = localTemplate.template;
         }
-
-        renderer = mod.renderer(req, res, context);
-    } else {
-        if (fs.existsSync(`${rootPath}/src/app/server/renderer/feo.js`)) {
-            mod = require(`${rootPath}/src/app/server/renderer/feo`);
-            let { version: v } = mod;
-            v = v ? Number(v.split(".").join("")) : version;
-
-            if (version < v) {
-                mod = require("./feo");
-            }
-        } else {
-            mod = require("./feo");
-        }
-
-        renderer = Promise.resolve(mod.renderer(req, res, context));
     }
 
-    return renderer;
+    return require(`./${renderMode}`)(template)(req, res, context);
 };
