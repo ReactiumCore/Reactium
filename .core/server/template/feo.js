@@ -1,5 +1,5 @@
 module.exports = {
-    version: '2.2.0',
+    version: '%TEMPLATE_VERSION%',
     template: req => {
         return `<html>
             <head>
