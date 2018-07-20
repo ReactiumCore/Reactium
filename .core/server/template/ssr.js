@@ -1,7 +1,7 @@
 import serialize from 'serialize-javascript';
 
 module.exports = {
-    version: '2.2.0',
+    version: '%TEMPLATE_VERSION%',
     template: (content, helmet, store, req, res) => {
         return `<html ${helmet.htmlAttributes.toString()}>
             <head>
