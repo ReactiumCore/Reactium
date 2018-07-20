@@ -59,7 +59,6 @@ const sanitizeTemplateVersion = version => {
     if (semver.valid(version)) {
         return version;
     }
-
     return semver.coerce(version);
 };
 
@@ -78,7 +77,7 @@ export default (req, res, context) => {
 
     template = coreTemplate.template;
     if (fs.existsSync(`${rootPath}/src/app/server/template/${renderMode}.js`)) {
-        localTemplate = require(`${rootPath}/src/app/server/template/${renderMode}`);
+        let localTemplate = require(`${rootPath}/src/app/server/template/${renderMode}`);
         let templateVersion = sanitizeTemplateVersion(localTemplate.version);
 
         // Check to see if local template should be compatible with core
