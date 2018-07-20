@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "2.1.5",
+  "version": "2.2.0",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -87,6 +87,7 @@
     "redux-devtools-log-monitor": "^1.4.0",
     "redux-local-persist": "0.0.5",
     "redux-super-thunk": "0.0.6",
+    "semver": "^5.5.0",
     "serialize-javascript": "^1.4.0",
     "slug": "^0.9.1",
     "underscore": "*"
