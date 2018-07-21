@@ -4,7 +4,7 @@ const gulp = require('gulp');
 
 /**
  Configs:
-   To customize config, load your own gulp.config.js and webpack.config.js
+   To customize config, load your own gulp.config.js and/or webpack.config.js
    files and/or edit the config and webpackConfig property after loading the defaults.
 
    @example
