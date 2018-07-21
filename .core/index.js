@@ -102,8 +102,8 @@ let middlewares = [
 // development mode
 if (process.env.NODE_ENV === 'development') {
     const webpack = require('webpack');
-    const gulpConfig = require('../gulp.config')();
-    const webpackConfig = require('../webpack.config')(gulpConfig);
+    const gulpConfig = require('./gulp.config')();
+    const webpackConfig = require('./webpack.config')(gulpConfig);
     const wpMiddlware = require('webpack-dev-middleware');
     const wpHotMiddlware = require('webpack-hot-middleware');
     const publicPath = `http://localhost:${port}/`;

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node build/.core/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "manifest": "node ./createManifest.js",
+    "manifest": "node ./.core/createManifest.js",
     "build": "npm install --production-only && npm-run-all -s manifest build:*",
     "build:gulp": "cross-env NODE_ENV=production gulp",
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",

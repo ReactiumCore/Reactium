@@ -1,41 +1,41 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const webpack = require("webpack");
-const env = process.env.NODE_ENV || "development";
+const path = require('path');
+const webpack = require('webpack');
+const env = process.env.NODE_ENV || 'development';
 
-module.exports = (gulpConfig, type = "app") => {
+module.exports = (gulpConfig, type = 'app') => {
     let plugins = [];
     let externals = [];
-    let target = "web";
+    let target = 'web';
     let config = gulpConfig;
-    let filename = "[name].js";
+    let filename = '[name].js';
     let entries = config.entries;
     let dest = config.dest.js;
-    let tools = env === "development" ? "source-map" : "";
+    let tools = env === 'development' ? 'source-map' : '';
 
     // Only override process.env on client side
-    if (type === "app") {
-        config.defines["process.env"] = {
+    if (type === 'app') {
+        config.defines['process.env'] = {
             NODE_ENV: JSON.stringify(env)
         };
     }
     plugins.push(new webpack.DefinePlugin(config.defines));
     plugins.push(
         new webpack.ContextReplacementPlugin(/^toolkit/, context => {
-            context.request = path.resolve("./src/app/toolkit");
+            context.request = path.resolve('./src/app/toolkit');
         })
     );
     plugins.push(
         new webpack.ContextReplacementPlugin(/^components/, context => {
-            context.request = path.resolve("./src/app/components");
+            context.request = path.resolve('./src/app/components');
         })
     );
     plugins.push(
         new webpack.ContextReplacementPlugin(
             /^reactium-core\/components/,
             context => {
-                context.request = path.resolve("./.core/components");
+                context.request = path.resolve('./.core/components');
             }
         )
     );
@@ -52,13 +52,13 @@ module.exports = (gulpConfig, type = "app") => {
             filename
         },
         optimization: {
-            minimize: Boolean(env !== "development"),
+            minimize: Boolean(env !== 'development'),
             splitChunks: {
                 cacheGroups: Object.assign({
                     vendors: {
                         test: /[\\/]node_modules[\\/]/,
-                        name: "vendors",
-                        chunks: "all"
+                        name: 'vendors',
+                        chunks: 'all'
                     }
                 })
             }
@@ -70,7 +70,7 @@ module.exports = (gulpConfig, type = "app") => {
                     exclude: /node_modules/,
                     use: [
                         {
-                            loader: "babel-loader"
+                            loader: 'babel-loader'
                         }
                     ]
                 },
@@ -87,7 +87,7 @@ module.exports = (gulpConfig, type = "app") => {
                     ],
                     use: [
                         {
-                            loader: "ignore-loader"
+                            loader: 'ignore-loader'
                         }
                     ]
                 }

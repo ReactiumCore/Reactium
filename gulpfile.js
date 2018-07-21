@@ -1,220 +1,51 @@
-const del = require("del");
-const fs = require("fs-extra");
-const path = require("path");
-const webpack = require("webpack");
-const browserSync = require("browser-sync");
-const runSequence = require("run-sequence");
-const gulp = require("gulp");
-const gulpif = require("gulp-if");
-const gulpwatch = require("gulp-watch");
-const prefix = require("gulp-autoprefixer");
-const sass = require("gulp-sass");
-const less = require("gulp-less");
-const csso = require("gulp-csso");
-const sourcemaps = require("gulp-sourcemaps");
-const rename = require("gulp-rename");
-const config = require("./gulp.config")();
-const chalk = require("chalk");
-const moment = require("moment");
-const regenManifest = require("./manifest-tools");
+'use strict';
 
-const env = process.env.NODE_ENV || "development";
+const gulp = require('gulp');
 
-// Update config from environment variables
-config.port.browsersync = process.env.hasOwnProperty("APP_PORT")
-    ? process.env.APP_PORT
-    : config.port.browsersync;
+/**
+ Configs:
+   To customize config, load your own gulp.config.js and webpack.config.js
+   files and/or edit the config and webpackConfig property after loading the defaults.
 
-const timestamp = () => {
-    let now = moment().format("HH:mm:ss");
-    return `[${chalk.blue(now)}]`;
-};
+   @example
+   // Load alt file
+   const config = require('../path/to/my/gulp.config');
+   const webpackConfig = require('../path/to/my/webpack.config');
 
-// Set webpack config after environment variables
-const webpackConfig = require("./webpack.config")(config);
+   // Direct property edit
+   config.port.proxy = 3030;
+   webpackConfig.output.path = path.resolve(__dirname, '/my/new/path');
+*/
+const config = require('./.core/gulp.config')();
+const webpackConfig = require('./.core/webpack.config')(config);
 
-gulp.task("manifest", done => {
-    regenManifest();
-    done();
+/**
+ Default Reactium Tasks:
+  'assets', 'build', 'clean', 'default', 'manifest', 'markup',
+  'scripts', 'serve', 'static', 'static:copy', 'styles', 'watch'
+
+  Replace a task by re-assigning the task with your own.
+
+  @example
+  tasks['default'] = (done) => {
+     if (env === "development") {
+          runSequence(["build"], ["watch"], () => {
+              gulp.start("serve");
+              done();
+          });
+      } else {
+          runSequence(["build"], () => {
+              done();
+          });
+      }
+   }
+*/
+const tasks = require('./.core/gulp.tasks')(gulp, config, webpackConfig);
+Object.keys(tasks).forEach(task => {
+    gulp.task(task, tasks[task]);
 });
 
-// Compile js
-gulp.task("scripts", done => {
-    let isDev = env === "development";
-
-    if (!isDev) {
-        webpack(webpackConfig, (err, stats) => {
-            if (err) {
-                console.log(err());
-                done();
-                return;
-            }
-
-            let result = stats.toJson();
-
-            if (result.errors.length > 0) {
-                result.errors.forEach(error => {
-                    console.log(error);
-                });
-
-                done();
-                return;
-            }
-
-            done();
-        });
-    } else {
-        done();
-    }
-});
-
-// Sass styles
-gulp.task("styles", () => {
-    let isDev = env === "development";
-    let isSass = config.cssPreProcessor === "sass";
-    let isLess = config.cssPreProcessor === "less";
-
-    return gulp
-        .src(config.src.style)
-        .pipe(gulpif(isDev, sourcemaps.init()))
-        .pipe(
-            gulpif(
-                isSass,
-                sass({ includePaths: config.src.includes }).on(
-                    "error",
-                    sass.logError
-                )
-            )
-        )
-        .pipe(gulpif(isLess, less({ paths: config.src.includes })))
-        .pipe(prefix(config.browsers))
-        .pipe(gulpif(!isDev, csso()))
-        .pipe(gulpif(isDev, sourcemaps.write()))
-        .pipe(rename({ dirname: "" }))
-        .pipe(gulp.dest(config.dest.style))
-        .pipe(gulpif(isDev, browserSync.stream()));
-});
-
-// Copy assets
-const assetPath = p => {
-    p.dirname = p.dirname.split("assets").pop();
-};
-
-gulp.task("assets", () => {
-    return gulp
-        .src(config.src.assets)
-        .pipe(rename(assetPath))
-        .pipe(gulp.dest(config.dest.assets));
-});
-
-// Copy markup
-const markupPath = p => {
-    if (p.extname === ".css") {
-        p.dirname = config.dest.style.split(config.dest.markup).pop();
-    }
-};
-
-gulp.task("markup", () => {
-    return gulp
-        .src(config.src.markup)
-        .pipe(rename(markupPath))
-        .pipe(gulp.dest(config.dest.markup));
-});
-
-// Remove all distribution files
-gulp.task("clean", done => {
-    del.sync([config.dest.dist]);
-    done();
-});
-
-// Manages changes for a single file instead of a directory
-const watcher = e => {
-    let src = path.relative(path.resolve(__dirname), e.path);
-    let fpath = `${config.dest.dist}/${path.relative(
-        path.resolve(config.src.app),
-        e.path
-    )}`;
-    let dest = path.normalize(path.dirname(fpath));
-    let ext = path.extname(src);
-
-    if (fs.existsSync(fpath)) {
-        del.sync([fpath]);
-    }
-
-    if (e.event !== "unlink") {
-        gulp.src(src).pipe(gulp.dest(dest));
-    }
-
-    console.log(`${timestamp()} File ${e.event}: ${src} -> ${fpath}`);
-};
-
-gulp.task("watching", done => {
-    gulp.watch(config.watch.style, ["styles"]);
-    gulpwatch(config.watch.markup, watcher);
-    gulpwatch(config.watch.assets, watcher);
-    const scriptWatcher = gulp.watch(config.watch.js, () => {
-        runSequence(["manifest"]);
-    });
-
-    done();
-});
-
-// Server locally
-gulp.task("serve", done => {
-    // Delay to allow server time to start
-    setTimeout(() => {
-        browserSync({
-            notify: false,
-            timestamps: true,
-            logPrefix: "00:00:00",
-            port: config.port.browsersync,
-            ui: { port: config.port.browsersync + 1 },
-            proxy: `localhost:${config.port.proxy}`
-        });
-
-        done();
-    }, 5000);
-});
-
-// Build
-gulp.task("build", done => {
-    runSequence(["clean"], ["scripts", "assets", "styles"], ["markup"], done);
-});
-
-// Static Site
-gulp.task("static:copy", done => {
-    fs.copySync(config.dest.dist, config.dest.static);
-
-    let mainPage = path.normalize(`${config.dest.static}/index-static.html`);
-
-    if (fs.existsSync(mainPage)) {
-        let newName = mainPage.split("index-static.html").join("index.html");
-        fs.renameSync(mainPage, newName);
-    }
-
-    done();
-});
-
-gulp.task("static", done => {
-    runSequence(
-        ["clean"],
-        ["scripts", "assets", "styles"],
-        ["markup"],
-        ["static:copy"],
-        done
-    );
-});
-
-// The default task
-gulp.task("default", done => {
-    if (env === "development") {
-        runSequence(["build"], ["watching"], () => {
-            gulp.start("serve");
-            done();
-        });
-    } else {
-        runSequence(["build"], () => {
-            done();
-        });
-    }
-});
+/**
+ Custom Tasks:
+   You can add your gulp.tasks() here.
+*/
