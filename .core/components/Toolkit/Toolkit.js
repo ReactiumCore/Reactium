@@ -3,15 +3,15 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import _ from "underscore";
-import op from "object-path";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
-import Content from "./Content";
-import Settings from "./Settings";
-import { Helmet } from "react-helmet";
-import ToolbarIcons from "./Toolbar/ToolbarIcons";
-import React, { Component, Fragment } from "react";
+import _ from 'underscore';
+import op from 'object-path';
+import Header from './Header';
+import Sidebar from './Sidebar';
+import Content from './Content';
+import Settings from './Settings';
+import { Helmet } from 'react-helmet';
+import ToolbarIcons from './Toolbar/ToolbarIcons';
+import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -24,7 +24,6 @@ export default class Toolkit extends Component {
         super(props);
 
         this.state = { ...this.props };
-
         this.content = null;
         this.sidebar = null;
         this.settings = null;
@@ -40,7 +39,7 @@ export default class Toolkit extends Component {
     }
 
     onMenuItemClick(e) {
-        let url = e.target.getAttribute("href");
+        let url = e.target.getAttribute('href');
         this.state.menuItemClick(url);
     }
 
@@ -58,7 +57,7 @@ export default class Toolkit extends Component {
 
         let { type } = filter;
 
-        let idx = _.indexOf(_.pluck(filters, "type"), type);
+        let idx = _.indexOf(_.pluck(filters, 'type'), type);
         if (idx > -1) {
             filters.splice(idx, 1);
         }
@@ -67,16 +66,16 @@ export default class Toolkit extends Component {
     }
 
     toggleFilter({ type, data }) {
-        let isFilter = new RegExp("^toolbar-filter").test(type);
+        let isFilter = new RegExp('^toolbar-filter').test(type);
         if (isFilter !== true) {
             return;
         }
 
         let { filters = [], manifest = {} } = this.state;
 
-        let filter = type.split("toolbar-filter-").join("");
+        let filter = type.split('toolbar-filter-').join('');
 
-        if (filter !== "all") {
+        if (filter !== 'all') {
             if (!_.findWhere(filters, { type: filter })) {
                 let { buttons } = manifest.toolbar;
                 let btn = _.findWhere(buttons, { name: `filter-${filter}` });
@@ -86,7 +85,7 @@ export default class Toolkit extends Component {
 
                 filters.push(filter);
             } else {
-                let idx = _.indexOf(_.pluck(filters, "type"), filter);
+                let idx = _.indexOf(_.pluck(filters, 'type'), filter);
                 if (idx > -1) {
                     filters.splice(idx, 1);
                 }
@@ -99,7 +98,7 @@ export default class Toolkit extends Component {
     }
 
     toggleFullscreen({ type, data, e }) {
-        if (type !== "toggle-fullscreen") {
+        if (type !== 'toggle-fullscreen') {
             return;
         }
         data.toggleFullScreen(e);
@@ -107,10 +106,10 @@ export default class Toolkit extends Component {
 
     togglePref({ type, data }) {
         let toggles = [
-            "toggle-code",
-            "toggle-codeColor",
-            "toggle-docs",
-            "toggle-link"
+            'toggle-code',
+            'toggle-codeColor',
+            'toggle-docs',
+            'toggle-link'
         ];
 
         if (toggles.indexOf(type) < 0) {
@@ -120,15 +119,15 @@ export default class Toolkit extends Component {
         let { set } = this.state;
 
         let value;
-        let key = type.split("toggle-").join("");
+        let key = type.split('toggle-').join('');
         key = `prefs.${key}.${data.state.id}`;
 
         switch (type) {
-            case "toggle-link":
-            case "toggle-docs":
-            case "toggle-code": {
-                let k = type === "toggle-code" ? "codes" : "docs";
-                k = type === "toggle-link" ? "link" : k;
+            case 'toggle-link':
+            case 'toggle-docs':
+            case 'toggle-code': {
+                let k = type === 'toggle-code' ? 'codes' : 'docs';
+                k = type === 'toggle-link' ? 'link' : k;
 
                 value = !op.get(
                     this.content,
@@ -138,7 +137,7 @@ export default class Toolkit extends Component {
                 break;
             }
 
-            case "toggle-codeColor": {
+            case 'toggle-codeColor': {
                 value = data.state.theme;
                 break;
             }
@@ -148,7 +147,7 @@ export default class Toolkit extends Component {
     }
 
     toggleSettings({ type, data }) {
-        if (type !== "toolbar-toggle-settings") {
+        if (type !== 'toolbar-toggle-settings') {
             return;
         }
         this.settings.open();
@@ -185,9 +184,9 @@ export default class Toolkit extends Component {
 
         if (!element) {
             let { component = null } = menu[group];
-            elements = component || menu[group]["elements"];
+            elements = component || menu[group]['elements'];
         } else {
-            elements[element] = menu[group]["elements"][element];
+            elements[element] = menu[group]['elements'][element];
         }
 
         return elements;
@@ -196,7 +195,7 @@ export default class Toolkit extends Component {
     filterMenu(menu) {
         // Loop through menu items and if the group has hidden === true -> remove it
         Object.keys(menu).forEach(k => {
-            if (op.get(menu, "hidden", false) === true) {
+            if (op.get(menu, 'hidden', false) === true) {
                 delete menu[k];
                 return;
             }
@@ -209,7 +208,7 @@ export default class Toolkit extends Component {
                 }
             });
 
-            menu[k]["elements"] = elements;
+            menu[k]['elements'] = elements;
         });
 
         return menu;
@@ -241,7 +240,7 @@ export default class Toolkit extends Component {
         menu = this.filterMenu(menu);
 
         let elements = this.getElements({ menu, group, element });
-        let groupName = group ? menu[group]["label"] : "Reactium";
+        let groupName = group ? menu[group]['label'] : 'Reactium';
         let theme = _.findWhere(themes, { selected: true });
 
         if (!style) {
@@ -251,7 +250,7 @@ export default class Toolkit extends Component {
         // update manifest to have the selected style
         themes = themes.map(item => {
             let { css } = item;
-            item["selected"] = css === style;
+            item['selected'] = css === style;
             return item;
         });
 
@@ -271,7 +270,7 @@ export default class Toolkit extends Component {
                     onThemeChange={this.onThemeChange.bind(this)}
                 />
 
-                <main className={"re-toolkit-container"}>
+                <main className={'re-toolkit-container'}>
                     <Sidebar
                         {...sidebar}
                         menu={menu}

@@ -131,8 +131,7 @@ export default class Menu extends Component {
                                     redirect = false,
                                     elements = {},
                                     target = null,
-                                    hidden = false,
-                                    type
+                                    hidden = false
                                 } = data[key];
 
                                 if (hidden === true) {
@@ -155,18 +154,7 @@ export default class Menu extends Component {
                                 if (Object.keys(elements).length > 0) {
                                     Object.keys(elements).forEach((elm, i) => {
                                         let item = elements[elm];
-                                        let {
-                                            label,
-                                            route,
-                                            redirect = false,
-                                            target = null,
-                                            hidden = false,
-                                            type
-                                        } = item;
-
-                                        if (hidden === true) {
-                                            return;
-                                        }
+                                        let { label, type } = item;
 
                                         if (
                                             this.searchTest(label) === true &&
@@ -221,7 +209,8 @@ export default class Menu extends Component {
                                                         label,
                                                         route,
                                                         redirect = false,
-                                                        target = null
+                                                        target = null,
+                                                        hidden = false
                                                     } = item;
 
                                                     if (
@@ -229,6 +218,9 @@ export default class Menu extends Component {
                                                             label
                                                         ) !== true
                                                     ) {
+                                                        return;
+                                                    }
+                                                    if (hidden === true) {
                                                         return;
                                                     }
 

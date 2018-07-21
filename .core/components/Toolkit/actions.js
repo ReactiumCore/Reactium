@@ -1,48 +1,46 @@
 import deps from 'dependencies';
 
-const isToolkit = (path) => {
+const isToolkit = path => {
     let exp = /^\/toolkit/i;
     return exp.test(path);
 };
 
 export default {
-    mount: (data) => (dispatch) => {
-
+    mount: data => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_MOUNT,
-            data,
+            data
         });
     },
 
-    menuItemClick: (url) => (dispatch) => {
+    menuItemClick: url => dispatch => {
         if (isToolkit(url)) {
-
             let uarr = url.split('/toolkit')[1].split('/');
-                uarr.shift();
+            uarr.shift();
 
             let group = uarr[0];
             let element = uarr[1];
-            let params = {group, element};
+            let params = { group, element };
 
             return dispatch({
                 type: deps.actionTypes.TOOLKIT_NAV,
-                params,
+                params
             });
         }
     },
 
-    set: ({key, value}) => (dispatch) => {
+    set: ({ key, value }) => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_PREF,
             value,
-            key,
+            key
         });
     },
 
-    setTheme: (theme) => (dispatch) => {
+    setTheme: theme => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_THEME,
-            theme,
+            theme
         });
-    },
+    }
 };

@@ -4,15 +4,15 @@
  * -----------------------------------------------------------------------------
  */
 
-import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
-import Preview from "./Preview";
-import op from "object-path";
-import _ from "underscore";
-import Card from "./Card";
-import Code from "./Code";
-import Docs from "./Docs";
-import Dna from "./Dna";
+import React, { Component, Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import Preview from './Preview';
+import op from 'object-path';
+import _ from 'underscore';
+import Card from './Card';
+import Code from './Code';
+import Docs from './Docs';
+import Dna from './Dna';
 
 /**
  * -----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ export default class Content extends Component {
 
     // Handlers
     componentDidMount() {
-        if (this.state.hasOwnProperty("mount")) {
+        if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
 
@@ -59,12 +59,12 @@ export default class Content extends Component {
         let evtdata = card;
 
         switch (action) {
-            case "toggle-link":
-            case "toggle-docs":
-            case "toggle-code": {
-                if (op.has(card, "state.id")) {
-                    let k = action === "toggle-code" ? "codes" : "docs";
-                    k = action === "toggle-link" ? "link" : k;
+            case 'toggle-link':
+            case 'toggle-docs':
+            case 'toggle-code': {
+                if (op.has(card, 'state.id')) {
+                    let k = action === 'toggle-code' ? 'codes' : 'docs';
+                    k = action === 'toggle-link' ? 'link' : k;
 
                     let cmp = this[k][card.state.id];
                     if (cmp) {
@@ -76,8 +76,8 @@ export default class Content extends Component {
             }
         }
 
-        if (typeof onButtonClick === "function") {
-            e["type"] = action;
+        if (typeof onButtonClick === 'function') {
+            e['type'] = action;
             onButtonClick(e, evtdata);
         }
     }
@@ -134,10 +134,19 @@ export default class Content extends Component {
         this.previews = {};
 
         return Object.keys(data).map((key, k) => {
-            let id = [group, key].join("_");
+            let id = [group, key].join('_');
             let item = data[key];
 
-            let { label, component, readme, dna, path } = item;
+            let {
+                label,
+                component,
+                readme,
+                dna,
+                path,
+                hideCode = false,
+                hideDna = false,
+                hideDocs = false
+            } = item;
             let { buttons = {} } = card;
 
             buttons = JSON.stringify(buttons);
@@ -145,31 +154,34 @@ export default class Content extends Component {
 
             const Cmp = component;
 
-            let noCode = Boolean(typeof component === "string");
+            let noCode = Boolean(typeof component === 'string');
+            noCode = hideCode === true ? hideCode : noCode;
+
             if (noCode === true) {
                 let idx = _.indexOf(
-                    _.pluck(buttons.footer, "name"),
-                    "toggle-code"
+                    _.pluck(buttons.footer, 'name'),
+                    'toggle-code'
                 );
                 buttons.footer.splice(idx, 1);
             }
 
             if (
                 !dna ||
-                typeof component === "string" ||
-                process.env.NODE_ENV !== "development"
+                hideDna == true ||
+                typeof component === 'string' ||
+                process.env.NODE_ENV !== 'development'
             ) {
                 let idx = _.indexOf(
-                    _.pluck(buttons.footer, "name"),
-                    "toggle-link"
+                    _.pluck(buttons.footer, 'name'),
+                    'toggle-link'
                 );
                 buttons.footer.splice(idx, 1);
             }
 
-            if (!readme) {
+            if (!readme || hideDocs === true) {
                 let idx = _.indexOf(
-                    _.pluck(buttons.footer, "name"),
-                    "toggle-docs"
+                    _.pluck(buttons.footer, 'name'),
+                    'toggle-docs'
                 );
                 buttons.footer.splice(idx, 1);
             }
@@ -209,29 +221,31 @@ export default class Content extends Component {
                             id={id}
                         />
                     ) : null}
-                    {readme ? (
+                    {readme && hideDocs !== true ? (
                         <Docs
                             ref={elm => {
                                 this.registerDocs({ elm, id });
                             }}
-                            title={"Documentation"}
+                            title={'Documentation'}
                             component={readme}
                             update={update}
                             prefs={prefs}
                             id={id}
                         />
                     ) : null}
-                    <Dna
-                        ref={elm => {
-                            this.registerDnas({ elm, id });
-                        }}
-                        component={component}
-                        update={update}
-                        prefs={prefs}
-                        menu={menu}
-                        dna={dna}
-                        id={id}
-                    />
+                    {hideDna !== true ? (
+                        <Dna
+                            ref={elm => {
+                                this.registerDnas({ elm, id });
+                            }}
+                            component={component}
+                            update={update}
+                            prefs={prefs}
+                            menu={menu}
+                            dna={dna}
+                            id={id}
+                        />
+                    ) : null}
                 </Card>
             );
         });
@@ -254,7 +268,7 @@ export default class Content extends Component {
         }
 
         return (
-            <div className={"re-toolkit-content-crumbs"}>
+            <div className={'re-toolkit-content-crumbs'}>
                 {elms.map(elm => elm)}
             </div>
         );
@@ -278,19 +292,19 @@ export default class Content extends Component {
 
             const Overview = defaultComponent;
             return (
-                <section className={"re-toolkit-content"}>
+                <section className={'re-toolkit-content'}>
                     <Overview />
                 </section>
             );
         }
 
-        if (typeof data !== "function") {
+        if (typeof data !== 'function') {
             element = data[element] || {};
 
             let { label = null } = element;
 
             return (
-                <section className={"re-toolkit-content"}>
+                <section className={'re-toolkit-content'}>
                     {this.renderCrumbs({ title, group, element: label })}
                     {this.renderCards({ data, card, group })}
                 </section>
@@ -298,7 +312,7 @@ export default class Content extends Component {
         } else {
             const Component = data;
             return (
-                <section className={"re-toolkit-content"}>
+                <section className={'re-toolkit-content'}>
                     {this.renderCrumbs({ title })}
                     {<Component />}
                 </section>
@@ -321,23 +335,23 @@ Content.defaultProps = {
         buttons: {
             header: [
                 {
-                    name: "toggle-fullscreen",
-                    title: "toggle fullscreen",
-                    icon: "#re-icon-fullscreen"
+                    name: 'toggle-fullscreen',
+                    title: 'toggle fullscreen',
+                    icon: '#re-icon-fullscreen'
                 }
             ],
             footer: [
                 {
-                    name: "toggle-code",
-                    title: "code view",
-                    icon: "#re-icon-markup"
+                    name: 'toggle-code',
+                    title: 'code view',
+                    icon: '#re-icon-markup'
                 },
                 {
-                    name: "toggle-link",
-                    title: "dependencies",
-                    icon: "#re-icon-link"
+                    name: 'toggle-link',
+                    title: 'dependencies',
+                    icon: '#re-icon-link'
                 },
-                { name: "toggle-docs", title: "docs", icon: "#re-icon-docs" }
+                { name: 'toggle-docs', title: 'docs', icon: '#re-icon-docs' }
             ]
         }
     }
