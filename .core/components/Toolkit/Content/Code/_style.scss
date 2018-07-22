@@ -6,6 +6,7 @@
 
     pre {
         border-radius: 0px !important;
+        font-family : monospace;
     }
 
     * {
@@ -21,6 +22,7 @@
 
     &.inline {
         margin: 0 -26px;
+        font-family : monospace;
     }
 }
 

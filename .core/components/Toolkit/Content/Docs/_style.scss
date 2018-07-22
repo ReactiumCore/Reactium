@@ -23,7 +23,6 @@
     }
 
 
-
     & > *:first-child {
       margin-top: 0 !important;
     }
@@ -365,6 +364,7 @@
       border: 1px solid #eaeaea;
       background-color: #f8f8f8;
       border-radius: 3px;
+      &, * { font-family: monospace; }
     }
 
     pre code {
