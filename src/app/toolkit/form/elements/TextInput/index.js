@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ class TextInput extends Component {
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty("mount")) {
+        if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
     }
@@ -42,9 +42,9 @@ class TextInput extends Component {
 
 // Default properties
 TextInput.defaultProps = {
-    type: "text",
-    value:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit ipsum tortor, finibus aliquet sem volutpat at. Duis pretium eros sed lacus luctus, non sagittis leo vestibulum. Donec libero sapien, auctor sit amet vulputate a, efficitur ut elit. Etiam feugiat ornare metus"
+    type: 'text',
+    defaultValue:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit ipsum tortor, finibus aliquet sem volutpat at. Duis pretium eros sed lacus luctus, non sagittis leo vestibulum. Donec libero sapien, auctor sit amet vulputate a, efficitur ut elit. Etiam feugiat ornare metus'
 };
 
 export default TextInput;
