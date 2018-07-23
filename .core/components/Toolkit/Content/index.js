@@ -138,7 +138,7 @@ export default class Content extends Component {
             let item = data[key];
 
             let {
-                label,
+                label = '',
                 component,
                 readme,
                 dna,

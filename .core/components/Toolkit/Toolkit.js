@@ -43,6 +43,25 @@ export default class Toolkit extends Component {
         this.state.menuItemClick(url);
     }
 
+    onMenuItemToggle(e) {
+        let { prefs } = this.state;
+        let target = e.currentTarget.dataset.target;
+
+        let collapseAll = op.get(prefs, 'menu.all', false);
+        let value = !op.get(prefs, `menu.${target}`, collapseAll);
+
+        let data = {
+            state: {
+                id: target,
+                value
+            }
+        };
+
+        let type = 'toggle-menu';
+
+        this.togglePref({ type, data });
+    }
+
     onButtonClick(e, data) {
         let { type } = e;
 
@@ -63,6 +82,28 @@ export default class Toolkit extends Component {
         }
 
         this.setState({ filters });
+    }
+
+    onSettingsOpen() {
+        this.setState({ showSettings: true });
+    }
+
+    onSettingsClose() {
+        this.setState({ showSettings: false });
+    }
+
+    onSettingSwitchClick({ pref, value }) {
+        let { set } = this.state;
+        let key = `prefs.${pref}`;
+
+        set({ key, value });
+
+        this.setState({ update: Date.now() });
+    }
+
+    onThemeChange(e) {
+        // TODO: on theme change
+        this.state.setTheme(e.target.value);
     }
 
     toggleFilter({ type, data }) {
@@ -109,7 +150,8 @@ export default class Toolkit extends Component {
             'toggle-code',
             'toggle-codeColor',
             'toggle-docs',
-            'toggle-link'
+            'toggle-link',
+            'toggle-menu'
         ];
 
         if (toggles.indexOf(type) < 0) {
@@ -141,9 +183,15 @@ export default class Toolkit extends Component {
                 value = data.state.theme;
                 break;
             }
+
+            case 'toggle-menu': {
+                value = data.state.value;
+                break;
+            }
         }
 
         set({ key, value });
+        this.setState({ update: Date.now() });
     }
 
     toggleSettings({ type, data }) {
@@ -151,28 +199,6 @@ export default class Toolkit extends Component {
             return;
         }
         this.settings.open();
-    }
-
-    onSettingsOpen() {
-        this.setState({ showSettings: true });
-    }
-
-    onSettingsClose() {
-        this.setState({ showSettings: false });
-    }
-
-    onSettingSwitchClick({ pref, value }) {
-        let { set } = this.state;
-        let key = `prefs.${pref}`;
-
-        set({ key, value });
-
-        this.setState({ update: Date.now() });
-    }
-
-    onThemeChange(e) {
-        // TODO: on theme change
-        this.state.setTheme(e.target.value);
     }
 
     getElements({ menu, group, element }) {
@@ -229,7 +255,6 @@ export default class Toolkit extends Component {
 
         let {
             themes = [],
-            settings = [],
             menu = {},
             toolbar = {},
             sidebar = {},
@@ -278,11 +303,13 @@ export default class Toolkit extends Component {
                         update={update}
                         toolbar={toolbar}
                         filters={filters}
+                        group={group}
                         ref={elm => {
                             this.sidebar = elm;
                         }}
                         onFilterClick={this.onFilterClick.bind(this)}
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
+                        onMenuItemToggle={this.onMenuItemToggle.bind(this)}
                         onToolbarItemClick={this.onButtonClick.bind(this)}
                     />
 
@@ -312,7 +339,6 @@ export default class Toolkit extends Component {
                         this.settings = elm;
                     }}
                     visible={showSettings}
-                    settings={settings}
                     update={update}
                     prefs={prefs}
                 />

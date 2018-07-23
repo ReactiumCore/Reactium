@@ -36,11 +36,12 @@
 
     ul {
         li {
+            position: relative;
+
             a {
                 display: block;
                 text-decoration: none;
                 color: $gray;
-                position: relative;
 
                 &:hover {
                     opacity: 0.7;
@@ -103,6 +104,7 @@
 
                     border-left: 2px solid transparent;
                     color: lighten($black, 20%);
+                    position: relative;
 
                     &:after {
                         content: '';
@@ -119,6 +121,58 @@
                     }
                 }
             }
+
+            .heading-toggle {
+                position: absolute;
+                width: 50px;
+                height: 40px;
+                top: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $grey;
+                background-color: $white;
+                transition: color .25s ease-in-out;
+                font-size: 8px;
+
+                &:focus,
+                &:hover {
+                    color: $blue;
+                }
+            }
+
+            &.expanded {
+                ul {
+                    transition: height .25s ease-in-out;
+                    height: auto;
+                    overflow: visible;
+                }
+
+                .heading-toggle {
+                    &:after {
+                        font-size: inherit;
+                        color: inherit;
+                        content: "\25B2";
+                    }
+                }
+            }
+
+            &.collapsed {
+                ul {
+                    transition: height .25s ease-in-out;
+                    height: 0%;
+                    overflow: hidden;
+                }
+
+                .heading-toggle {
+                    &:after {
+                        font-size: inherit;
+                        color: inherit;
+                        content: "\25BC";
+                    }
+                }
+            }
         }
     }
 
@@ -126,5 +180,6 @@
         flex-grow: 1;
         flex-wrap: wrap;
         overflow-y: auto;
+        padding-bottom: 40px;
     }
 }

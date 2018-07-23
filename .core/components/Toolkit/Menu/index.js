@@ -7,6 +7,7 @@ import React, { Component, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import Search from '../Search';
 import _ from 'underscore';
+import op from 'object-path';
 
 /**
  * -----------------------------------------------------------------------------
@@ -21,6 +22,22 @@ export default class Menu extends Component {
         this.state = { ...this.props };
         this.search = null;
         this.searchTest = this.searchTest.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let link = document.querySelector(
+            '.re-toolkit-menu-middle .link.active'
+        );
+        if (link) {
+            link.scrollIntoView();
+        } else {
+            let heading = document.querySelector(
+                '.re-toolkit-menu-middle .heading.active'
+            );
+            if (heading) {
+                heading.scrollIntoView();
+            }
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -104,11 +121,21 @@ export default class Menu extends Component {
     }
 
     render() {
-        let { data = {}, onItemClick, filters = [], search } = this.state;
+        let {
+            data = {},
+            onItemClick,
+            filters = [],
+            search,
+            onMenuItemToggle,
+            prefs,
+            group
+        } = this.state;
 
         if (search) {
             this.search = search;
         }
+
+        let collapseAll = op.get(prefs, 'menu.all', false);
 
         return (
             <Fragment>
@@ -181,8 +208,26 @@ export default class Menu extends Component {
                                     return;
                                 }
 
+                                let cls =
+                                    op.get(
+                                        prefs,
+                                        `menu.${key}`,
+                                        collapseAll
+                                    ) === true
+                                        ? 'collapsed'
+                                        : 'expanded';
+                                cls = group === key ? 'expanded' : cls;
+                                cls =
+                                    search || filters.length > 0
+                                        ? 'expanded'
+                                        : cls;
+
                                 return (
-                                    <li key={`group-${key}`}>
+                                    <li
+                                        key={`group-${key}`}
+                                        id={`menu-group-${key}`}
+                                        className={cls}
+                                    >
                                         {redirect === true ? (
                                             <a
                                                 className={'heading'}
@@ -202,63 +247,95 @@ export default class Menu extends Component {
                                             </NavLink>
                                         )}
                                         {childSearch.length < 1 ? null : (
-                                            <ul>
-                                                {childSearch.map((elm, i) => {
-                                                    let item = elements[elm];
-                                                    let {
-                                                        label,
-                                                        route,
-                                                        redirect = false,
-                                                        target = null,
-                                                        hidden = false
-                                                    } = item;
+                                            <Fragment>
+                                                {group !== key ? (
+                                                    <button
+                                                        type={'button'}
+                                                        className={
+                                                            'heading-toggle'
+                                                        }
+                                                        data-target={key}
+                                                        onClick={
+                                                            onMenuItemToggle
+                                                        }
+                                                    />
+                                                ) : null}
 
-                                                    if (
-                                                        this.searchTest(
-                                                            label
-                                                        ) !== true
-                                                    ) {
-                                                        return;
-                                                    }
-                                                    if (hidden === true) {
-                                                        return;
-                                                    }
+                                                <ul
+                                                    id={`menu-group-${key}-items`}
+                                                >
+                                                    {childSearch.map(
+                                                        (elm, i) => {
+                                                            let item =
+                                                                elements[elm];
+                                                            let {
+                                                                label,
+                                                                route,
+                                                                redirect = false,
+                                                                target = null,
+                                                                hidden = false
+                                                            } = item;
 
-                                                    return (
-                                                        <li
-                                                            key={`re-toolkit-menu-item-${i}`}
-                                                        >
-                                                            {redirect ===
-                                                            true ? (
-                                                                <a
-                                                                    className={
-                                                                        'link'
-                                                                    }
-                                                                    href={route}
-                                                                    target={
-                                                                        target
-                                                                    }
+                                                            if (
+                                                                this.searchTest(
+                                                                    label
+                                                                ) !== true
+                                                            ) {
+                                                                return;
+                                                            }
+                                                            if (
+                                                                hidden === true
+                                                            ) {
+                                                                return;
+                                                            }
+
+                                                            return (
+                                                                <li
+                                                                    key={`re-toolkit-menu-item-${i}`}
                                                                 >
-                                                                    {label}
-                                                                </a>
-                                                            ) : (
-                                                                <NavLink
-                                                                    className={
-                                                                        'link'
-                                                                    }
-                                                                    exact={true}
-                                                                    to={route}
-                                                                    onClick={
-                                                                        onItemClick
-                                                                    }
-                                                                >
-                                                                    {label}
-                                                                </NavLink>
-                                                            )}
-                                                        </li>
-                                                    );
-                                                })}
-                                            </ul>
+                                                                    {redirect ===
+                                                                    true ? (
+                                                                        <a
+                                                                            className={
+                                                                                'link'
+                                                                            }
+                                                                            href={
+                                                                                route
+                                                                            }
+                                                                            target={
+                                                                                target
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                label
+                                                                            }
+                                                                        </a>
+                                                                    ) : (
+                                                                        <NavLink
+                                                                            className={
+                                                                                'link'
+                                                                            }
+                                                                            exact={
+                                                                                true
+                                                                            }
+                                                                            to={
+                                                                                route
+                                                                            }
+                                                                            onClick={
+                                                                                onItemClick
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                label
+                                                                            }
+                                                                        </NavLink>
+                                                                    )}
+                                                                </li>
+                                                            );
+                                                        }
+                                                    )}
+                                                </ul>
+                                            </Fragment>
                                         )}
                                     </li>
                                 );
@@ -275,7 +352,10 @@ export default class Menu extends Component {
 Menu.defaultProps = {
     onFilterClick: null,
     onItemClick: null,
+    onMenuItemToggle: null,
     search: null,
+    prefs: {},
+    group: null,
     filters: [],
     data: {}
 };

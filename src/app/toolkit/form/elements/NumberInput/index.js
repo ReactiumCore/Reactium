@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ class NumberInput extends Component {
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty("mount")) {
+        if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
     }
@@ -42,7 +42,7 @@ class NumberInput extends Component {
 
 // Default properties
 NumberInput.defaultProps = {
-    value: 12345
+    defaultValue: 12345
 };
 
 export default NumberInput;
