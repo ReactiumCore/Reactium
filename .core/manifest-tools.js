@@ -87,6 +87,16 @@ module.exports = function() {
                 name: 'allServices',
                 type: 'services',
                 pattern: /services.js$/
+            },
+            {
+                name: 'allMiddleware',
+                type: 'middleware',
+                pattern: /middleware.js$/
+            },
+            {
+                name: 'allEnhancers',
+                type: 'enhancer',
+                pattern: /enhancer.js$/
             }
         ],
         [
@@ -103,7 +113,7 @@ module.exports = function() {
 
     let manifestFileExists = false;
     try {
-        manifestFileExists = fs.readFileSync(
+        manifestFileExists = fs.existsSync(
             path.resolve('./src/', 'manifest.js')
         );
     } catch (err) {
@@ -112,7 +122,15 @@ module.exports = function() {
 
     const manifestDiffers = (current, next) => {
         let differs = false;
-        Object.keys(current).map(type => {
+        let currentTypes = Object.keys(current);
+        let nextTypes = Object.keys(next);
+
+        // check for new core types
+        if (currentTypes.length !== nextTypes.length) {
+            return true;
+        }
+
+        _.union(currentTypes, nextTypes).forEach(type => {
             differs =
                 differs ||
                 _.difference(
