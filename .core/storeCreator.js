@@ -1,13 +1,16 @@
-
-import { save as lsSave, load as lsLoad, clear as lsClear } from 'redux-local-persist';
-
-import { createStore, combineReducers } from 'redux';
-import thunk, { applyMiddleware } from 'redux-super-thunk';
-import DevTools from 'reactium-core/components/DevTools';
+import {
+    save as lsSave,
+    load as lsLoad,
+    clear as lsClear
+} from 'redux-local-persist';
+import { createStore, combineReducers, compose } from 'redux';
+import { applyMiddleware } from 'redux-super-thunk';
 
 const {
     allInitialStates,
     allReducers,
+    allMiddleware,
+    allEnhancers
 } = require('manifest').get();
 
 /**
@@ -16,59 +19,81 @@ const {
  * -----------------------------------------------------------------------------
  */
 let localizeState = true;
-let initialState  = {};
-if ( typeof window !== 'undefined' ) {
-    if ( 'INITIAL_STATE' in window ) {
+let initialState = {};
+if (typeof window !== 'undefined') {
+    if ('INITIAL_STATE' in window) {
         initialState = window.INITIAL_STATE;
         delete window.INITIAL_STATE;
     }
 }
 
 // Make sure initial loaded state matches reducers
-const sanitizeInitialState = state => Object.keys(state)
-.filter(s => s in allReducers)
-.reduce((states, key) => ({
-    ...states,
-    [key]: state[key],
-}), {});
+const sanitizeInitialState = state =>
+    Object.keys(state)
+        .filter(s => s in allReducers)
+        .reduce(
+            (states, key) => ({
+                ...states,
+                [key]: state[key]
+            }),
+            {}
+        );
 
 let store = {};
 
-export default ({server = false} = {}) => {
-    // Load middleware
-    let middleWare = [thunk];
+const loadDependencyStack = (dependency, items, isServer) => {
+    return Object.keys(dependency).reduce(
+        (items, key) => dependency[key](items, isServer),
+        items
+    );
+};
+
+export default ({ server = false } = {}) => {
+    // Initialize middlewares and enhancers
+    let middlewares = [];
+    let enhancers = [];
 
     // Load InitialState first from modules
     let importedStates = allInitialStates;
     initialState = {
         ...sanitizeInitialState(importedStates),
-        ...initialState,
+        ...initialState
     };
 
+    middlewares = loadDependencyStack(allMiddleware, middlewares, server);
+
     // Get localized state and apply it
-    if ( ! server ) {
-        if (localizeState === true) {
-            middleWare.push(lsSave());
+    if (!server) {
+        if (middlewares.find(mw => mw.name === 'local-persist')) {
             initialState = {
                 ...initialState,
-                ...sanitizeInitialState(lsLoad({initialState: allInitialStates})),
+                ...sanitizeInitialState(
+                    lsLoad({ initialState: allInitialStates })
+                )
             };
         } else {
             lsClear();
         }
     }
 
-    const createStoreWithMiddleware = applyMiddleware(...middleWare)(createStore);
-
+    const createStoreWithMiddleware = applyMiddleware(
+        ...middlewares.sort((a, b) => a.order - b.order).map(({ mw }) => mw)
+    )(createStore);
 
     // Combine all Top-level reducers into one
     let rootReducer = combineReducers(allReducers);
 
-    // Add DevTools redux enhancer in development
-    let storeEnhancer = process.env.NODE_ENV === 'development' ? DevTools.instrument() : _=>_;
+    // add redux enhancers
+    enhancers = loadDependencyStack(allEnhancers, enhancers, server)
+        .sort((a, b) => a.order - b.order)
+        .map(({ enhancer }) => enhancer);
 
     // Create the store
-    store = createStoreWithMiddleware(rootReducer, initialState, storeEnhancer);
+    store = createStoreWithMiddleware(
+        rootReducer,
+        initialState,
+        compose(...enhancers)
+    );
 
     return store;
-}
+};
