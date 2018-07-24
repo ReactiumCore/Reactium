@@ -165,16 +165,14 @@ module.exports = {
         return {\n${Object.keys(manifest)
             .map(key => {
                 const { imports, type } = manifest[key];
+                const domainRegExp = new RegExp(`\/([A-Za-z_0-9]+?)\/${type}$`);
                 return (
                     `          ${key}: {\n` +
                     imports
+                        .map(file => file.replace(/\\/g, '/'))
+                        .filter(file => file.match(domainRegExp))
                         .map(file => {
-                            const found = file
-                                .replace(/\\/g, '/')
-                                .match(
-                                    new RegExp(`\/([A-Za-z_0-9]+?)\/${type}$`)
-                                );
-                            let [, domain] = found;
+                            let [, domain] = file.match(domainRegExp);
                             return `            ${domain}: require('${file}').default,\n`;
                         })
                         .join('') +
