@@ -3,8 +3,10 @@ import serialize from 'serialize-javascript';
 module.exports = {
     version: '%TEMPLATE_VERSION%',
     template: (content, helmet, store, req, res) => {
-        return `<html ${helmet.htmlAttributes.toString()}>
+        return `<!DOCTYPE html>
+        <html ${helmet.htmlAttributes.toString()}>
             <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 ${helmet.title.toString()}
                 ${helmet.meta.toString()}
                 ${helmet.link.toString()}
