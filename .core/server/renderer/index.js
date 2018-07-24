@@ -3,6 +3,7 @@ const globby = require('globby');
 const path = require('path');
 const fs = require('fs');
 const semver = require('semver');
+const op = require('object-path');
 
 const isToolkit = str => {
     let exp = /^\/toolkit/i;
@@ -15,8 +16,31 @@ const isMain = str => {
 };
 
 const styles = (req, res) => {
-    let css = isToolkit(req.path) === true ? 'toolkit.css' : 'style.css';
-    let styles = [`<link rel="stylesheet" href="/assets/style/${css}">`];
+    let sarr = [];
+
+    if (isToolkit(req.path)) {
+        sarr.push('/assets/style/toolkit.css');
+    } else {
+        let publicDir =
+            process.env.PUBLIC_DIRECTORY ||
+            path.resolve(process.cwd(), 'public');
+        let styleDir = path.normalize(path.join(publicDir, '/assets/style'));
+        let exclude = ['toolkit.css'];
+
+        fs.readdirSync(styleDir).forEach(item => {
+            if (exclude.indexOf(item) >= 0) {
+                return;
+            }
+            let p = path.normalize(path.join(styleDir, item));
+            if (fs.statSync(p).isFile()) {
+                sarr.push(p.split(publicDir).join(''));
+            }
+        });
+    }
+
+    let styles = sarr.map(item => {
+        return `<link rel="stylesheet" href="${item}">`;
+    });
 
     return styles.join('\n\t');
 };
@@ -83,6 +107,12 @@ export default (req, res, context) => {
         // Check to see if local template should be compatible with core
         if (semver.satisfies(templateVersion, coreSemver)) {
             template = localTemplate.template;
+
+            // Accept local styles
+            req.styles =
+                op.has(localTemplate, 'styles') && !isToolkit(req.path)
+                    ? localTemplate.styles(req)
+                    : req.styles;
         }
     }
 
