@@ -22,6 +22,7 @@ module.exports = () => {
         watch: {
             js: ['src/app/**/*'],
             markup: ['src/**/*.html', 'src/**/*.css'],
+            colors: ['src/**/*/colors.json'],
             style: [
                 'src/**/*.less',
                 'src/**/*.scss',
@@ -43,6 +44,7 @@ module.exports = () => {
         },
         src: {
             app: 'src',
+            colors: ['src/**/*/colors.json'],
             js: ['src/app/**/*'],
             markup: ['src/**/*.html', 'src/**/*.css'],
             style: ['src/**/*.scss', '!{src/**/_*.scss}'],
@@ -64,7 +66,8 @@ module.exports = () => {
             markup: 'public',
             style: 'public/assets/style',
             assets: 'public/assets',
-            static: 'dist'
+            static: 'dist',
+            colors: 'src/assets/style/scss/_colors.scss'
         }
     };
 };

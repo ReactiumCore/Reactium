@@ -117,8 +117,6 @@ export default class Settings extends Component {
         if (typeof onSwitchClick === 'function') {
             onSwitchClick({ pref, value: other });
         }
-
-        // TODO: ADD action that saves the pref to the Toolkit.state
     }
 
     renderSettings() {

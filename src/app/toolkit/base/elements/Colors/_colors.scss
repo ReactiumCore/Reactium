@@ -1,0 +1,59 @@
+
+.re-toolkit {
+
+    &-colors {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+
+        > div {
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 40px;
+
+            @media only screen and (min-width: 560px) {
+                width: 50%;
+                max-width: 50%;
+            }
+
+            @media only screen and (min-width: 768px) {
+                width: 33%;
+                max-width: 33%;
+            }
+
+            @media only screen and (min-width: 1024px) {
+                width: 25%;
+                max-width: 25%;
+            }
+
+            div:first-child {
+                width: 100%;
+                height: 100px;
+                position: relative;
+                padding: 12px;
+                color: white;
+                font-size: 10px;
+            }
+            div:last-child {
+                font-size: 10px;
+                padding: 5px 5px 0 5px;
+                display: flex;
+
+                *:first-child {
+                    flex-grow: 1;
+                }
+            }
+        }
+
+        .bg-white {
+            &:after {
+                content: "";
+                position: absolute;
+                border: 1px solid #F7F7F7;
+                top: 0; right: 0; bottom: 0; left: 0;
+            }
+        }
+    }
+}
