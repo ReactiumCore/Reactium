@@ -144,7 +144,6 @@
 
             &.expanded {
                 ul {
-                    transition: height .25s ease-in-out;
                     height: auto;
                     overflow: visible;
                 }
@@ -160,9 +159,9 @@
 
             &.collapsed {
                 ul {
-                    transition: height .25s ease-in-out;
-                    height: 0%;
+                    height: 0px;
                     overflow: hidden;
+                    display: none;
                 }
 
                 .heading-toggle {
