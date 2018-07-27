@@ -10,10 +10,6 @@ module.exports = {
             name: 'Default',
             css: '/assets/style/style.css',
             selected: true
-        },
-        {
-            name: 'Blue',
-            css: '/assets/style/style-blue.css'
         }
     ],
     sidebar: {
