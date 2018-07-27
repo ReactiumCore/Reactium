@@ -30,11 +30,6 @@ class Colors extends Component {
         });
     }
 
-    padZero(str, len = 2) {
-        let zeros = new Array(len).join('0');
-        return (zeros + str).slice(-len);
-    }
-
     invertColor(color) {
         let isHex = color.charAt(0) === '#';
         if (isHex !== true) {
