@@ -3,8 +3,8 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
-import { getDisplayName } from "reactium-core/components/Toolkit/_lib/tools";
+import React, { Component, Fragment } from 'react';
+import { getDisplayName } from 'reactium-core/components/Toolkit/_lib/tools';
 
 /**
  * -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ export default class Preview extends Component {
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty("mount")) {
+        if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
     }
@@ -46,7 +46,7 @@ export default class Preview extends Component {
             let h = this.iframe.contentWindow.document.body.scrollHeight;
             h = h < 1 ? 100 : h;
 
-            this.iframe.style.height = h;
+            this.iframe.style.height = `${h}px`;
         } catch (err) {}
     }
 
@@ -55,11 +55,13 @@ export default class Preview extends Component {
     }
 
     renderCmp({ cname, cpath, style }) {
-        let spath = process.env.NODE_ENV === "development" ? "" : "/assets/js";
+        let spath = process.env.NODE_ENV === 'development' ? '' : '/assets/js';
 
         return `
+            <!DOCTYPE html>
             <html>
                 <head>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                     <link rel="stylesheet" href="${style}">
                 </head>
                 <body style="padding: 25px;">
@@ -92,23 +94,25 @@ export default class Preview extends Component {
         }
 
         let type = typeof Component;
-        let display = visible ? "block" : "none";
+        let display = visible ? 'block' : 'none';
 
         switch (type) {
-            case "string": {
+            case 'string': {
                 return (
                     <iframe
                         src={Component}
                         style={{ display }}
                         id={`iframe-${id}`}
                         onLoad={this.resize}
+                        frameBorder={0}
+                        scrolling={'no'}
                         ref={this.registerIframe}
                     />
                 );
             }
 
-            case "function": {
-                let cname = dna.split("/").pop();
+            case 'function': {
+                let cname = dna.split('/').pop();
                 let cpath = `${group}/elements/${cname}`;
 
                 let markup = this.renderCmp({ cname, cpath, style });
@@ -119,6 +123,8 @@ export default class Preview extends Component {
                         style={{ display }}
                         id={`iframe-${id}`}
                         onLoad={this.resize}
+                        frameBorder={0}
+                        scrolling={'no'}
                         ref={this.registerIframe}
                     />
                 );
@@ -136,5 +142,5 @@ Preview.defaultProps = {
     component: null,
     group: null,
     id: null,
-    style: "/assets/style/style.css"
+    style: '/assets/style/style.css'
 };
