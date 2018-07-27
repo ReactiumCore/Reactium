@@ -10,10 +10,6 @@ module.exports = {
             name: 'Default',
             css: '/assets/style/style.css',
             selected: true
-        },
-        {
-            name: 'Blue',
-            css: '/assets/style/style-blue.css'
         }
     ],
     sidebar: {
@@ -68,6 +64,23 @@ module.exports = {
         ]
     },
     menu: {
+        base: {
+            label: 'Base Styles',
+            route: '/toolkit/base',
+            elements: {
+                colors: {
+                    type: 'atom',
+                    label: 'Colors',
+                    hideCode: true,
+                    route: '/toolkit/base/colors',
+                    dna: '/toolkit/base/elements/Colors',
+                    component: require('appdir/toolkit/base/elements/Colors')
+                        .default,
+                    readme: require('appdir/toolkit/base/elements/Colors/readme')
+                        .default
+                }
+            }
+        },
         typography: {
             label: 'Typography',
             route: '/toolkit/typography',
