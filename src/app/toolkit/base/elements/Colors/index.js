@@ -50,9 +50,11 @@ class Colors extends Component {
                     let code = String(colorProfile[k]).toUpperCase();
                     let txtColor = this.invertColor(code);
 
+                    let cls = txtColor === '#000000' ? 'color-border' : '';
+
                     return (
                         <div key={`color-${i}`}>
-                            <div className={`bg-${cname}`}>
+                            <div className={`bg-${cname} ${cls}`}>
                                 <span style={{ color: txtColor }}>{cname}</span>
                             </div>
                             <div>

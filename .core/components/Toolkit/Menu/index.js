@@ -29,13 +29,13 @@ export default class Menu extends Component {
             '.re-toolkit-menu-middle .link.active'
         );
         if (link) {
-            link.scrollIntoView();
+            link.scrollIntoView({ behavior: 'instant' });
         } else {
             let heading = document.querySelector(
                 '.re-toolkit-menu-middle .heading.active'
             );
             if (heading) {
-                heading.scrollIntoView();
+                heading.scrollIntoView({ behavior: 'instant' });
             }
         }
     }

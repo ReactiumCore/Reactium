@@ -83,6 +83,8 @@ export default class Card extends Component {
         let height =
             fullscreen === true ? coords.height : window.innerHeight - this.y;
 
+        let tk = document.querySelector('.re-toolkit-content');
+
         if (fullscreen !== true) {
             // pop out
             TweenMax.set(cont, {
@@ -118,10 +120,14 @@ export default class Card extends Component {
                         height: 'auto',
                         position: 'relative'
                     });
+                    tk.style.overflowY = 'auto';
+                    cont.scrollIntoView();
                 } else {
+                    // pop out
                     TweenMax.set(cont, {
                         width: '100%'
                     });
+                    tk.style.overflowY = 'hidden';
                 }
 
                 // Update header buttons
