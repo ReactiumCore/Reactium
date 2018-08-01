@@ -7,7 +7,7 @@
     "start": "node build/.core/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "manifest": "node ./.core/createManifest.js",
-    "build": "npm install --production-only && npm-run-all -s manifest build:*",
+    "build": "npm install --production-only",
     "build:gulp": "cross-env NODE_ENV=production gulp",
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
     "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src",
@@ -168,7 +168,8 @@
             "appdir": "./src/app",
             "components": "./src/app/components",
             "reactium-core": "./.core",
-            "dependencies": "./.core/dependencies"
+            "dependencies": "./.core/dependencies",
+            "toolkit": "./src/app/toolkit"
           }
         }
       ]

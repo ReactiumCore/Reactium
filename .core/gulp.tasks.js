@@ -19,7 +19,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 const regenManifest = require('./manifest-tools');
 
-module.exports = (gulp, config, webpackConfig) => {
+const reactium = (gulp, config, webpackConfig) => {
     const env = process.env.NODE_ENV || 'development';
     const assetPath = p => {
         p.dirname = p.dirname.split('assets').pop();
@@ -60,7 +60,8 @@ module.exports = (gulp, config, webpackConfig) => {
         console.log(`${timestamp()} File ${e.event}: ${src} -> ${fpath}`);
     };
 
-    return {
+    const tasks = {
+        local: done => {},
         assets: () => {
             // Copy assets dir
             return gulp
@@ -85,15 +86,18 @@ module.exports = (gulp, config, webpackConfig) => {
         default: done => {
             // Default gulp command
             if (env === 'development') {
-                runSequence(['build'], ['watch'], () => {
+                runSequence(['build'], ['json'], ['watch'], () => {
                     gulp.start('serve');
                     done();
                 });
             } else {
-                runSequence(['build'], () => {
+                runSequence(['build'], ['json'], () => {
                     done();
                 });
             }
+        },
+        json: () => {
+            return gulp.src(config.src.json).pipe(gulp.dest(config.dest.build));
         },
         manifest: done => {
             // Generate manifest.js file
@@ -267,4 +271,8 @@ module.exports = (gulp, config, webpackConfig) => {
             done();
         }
     };
+
+    return tasks;
 };
+
+module.exports = reactium;

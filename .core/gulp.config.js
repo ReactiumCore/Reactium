@@ -46,6 +46,7 @@ module.exports = () => {
             app: 'src',
             colors: ['src/**/*/colors.json'],
             js: ['src/app/**/*'],
+            json: ['src/**/*.json'],
             markup: ['src/**/*.html', 'src/**/*.css'],
             style: ['src/**/*.scss', '!{src/**/_*.scss}'],
             assets: [
@@ -67,6 +68,7 @@ module.exports = () => {
             style: 'public/assets/style',
             assets: 'public/assets',
             static: 'dist',
+            build: 'build/src',
             colors: 'src/assets/style/scss/_colors.scss'
         }
     };
