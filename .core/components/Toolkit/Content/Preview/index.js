@@ -66,11 +66,6 @@ export default class Preview extends Component {
                 </head>
                 <body style="padding: 25px;">
                     <Component type="${cname}" path="${cpath}"></Component>
-                    <script>
-                        window.ssr = false;
-                        window.restAPI = '/api';
-                        window.parseAppId = '${parseAppId}';
-                    </script>
                     <script src="${spath}/vendors.js"></script>
                     <script src="${spath}/main.js"></script>
                 </body>
