@@ -185,13 +185,7 @@ const reactium = (gulp, config, webpackConfig) => {
         },
         static: done => {
             // Build static site
-            runSequence(
-                ['clean'],
-                ['scripts', 'assets', 'styles'],
-                ['markup'],
-                ['static:copy'],
-                done
-            );
+            runSequence(['static:copy'], done);
         },
         'static:copy': done => {
             // Copy static files

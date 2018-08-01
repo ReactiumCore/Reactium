@@ -22,7 +22,8 @@ module.exports = {
             },
             scripts: {
                 add: {
-                    build: 'npm install --production-only'
+                    build: 'npm install --production-only',
+                    static: 'npm-run-all build:* && gulp static'
                 },
                 remove: [
                     'local-fe-start',
@@ -31,7 +32,8 @@ module.exports = {
                     'local-ssr',
                     'local-ssr-start',
                     'local-ssr:gulp',
-                    'local-ssr:babel-node'
+                    'local-ssr:babel-node',
+                    'static:build'
                 ]
             }
         }
