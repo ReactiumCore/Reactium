@@ -14,15 +14,25 @@ module.exports = {
                 add: {
                     'gulp-run': '^1.7.1'
                 },
-                remove: {}
+                remove: []
             },
             dependencies: {
                 add: {},
-                remove: {}
+                remove: []
             },
             scripts: {
-                add: {},
-                remove: {}
+                add: {
+                    build: 'npm install --production-only'
+                },
+                remove: [
+                    'local-fe-start',
+                    'local-fe:gulp',
+                    'local-fe:babel-node',
+                    'local-ssr',
+                    'local-ssr-start',
+                    'local-ssr:gulp',
+                    'local-ssr:babel-node'
+                ]
             }
         }
     }
