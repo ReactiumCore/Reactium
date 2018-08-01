@@ -170,6 +170,7 @@ const reactium = (gulp, config, webpackConfig) => {
         serve: done => {
             // Serve locally
             // Delay to allow server time to start
+
             setTimeout(() => {
                 browserSync({
                     notify: false,
@@ -177,7 +178,8 @@ const reactium = (gulp, config, webpackConfig) => {
                     logPrefix: '00:00:00',
                     port: config.port.browsersync,
                     ui: { port: config.port.browsersync + 1 },
-                    proxy: `localhost:${config.port.proxy}`
+                    proxy: `localhost:${config.port.proxy}`,
+                    open: config.open
                 });
 
                 done();
