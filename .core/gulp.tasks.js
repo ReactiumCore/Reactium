@@ -9,6 +9,7 @@ const browserSync = require('browser-sync');
 const runSequence = require('run-sequence');
 const gulpif = require('gulp-if');
 const gulpwatch = require('gulp-watch');
+const run = require('gulp-run');
 const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
 const less = require('gulp-less');
@@ -61,7 +62,32 @@ const reactium = (gulp, config, webpackConfig) => {
     };
 
     const tasks = {
-        local: done => {},
+        local: () => {
+            let watch = new run.Command(
+                'cross-env SSR_MODE=off NODE_ENV=development gulp',
+                { verbosity: 3 }
+            );
+            let babel = new run.Command(
+                'cross-env SSR_MODE=off NODE_ENV=development DEBUG=off nodemon ./.core/index.js --exec babel-node',
+                { verbosity: 0 }
+            );
+
+            watch.exec();
+            babel.exec();
+        },
+        'local:ssr': () => {
+            let watch = new run.Command(
+                'cross-env SSR_MODE=on NODE_ENV=development gulp',
+                { verbosity: 3 }
+            );
+            let babel = new run.Command(
+                'cross-env SSR_MODE=on NODE_ENV=development DEBUG=off nodemon ./.core/index.js --exec babel-node',
+                { verbosity: 0 }
+            );
+
+            watch.exec();
+            babel.exec();
+        },
         assets: () => {
             // Copy assets dir
             return gulp
@@ -73,8 +99,9 @@ const reactium = (gulp, config, webpackConfig) => {
             // Build
             runSequence(
                 ['clean'],
+                ['manifest'],
                 ['scripts', 'assets', 'styles'],
-                ['markup'],
+                ['markup', 'json'],
                 done
             );
         },
@@ -86,12 +113,12 @@ const reactium = (gulp, config, webpackConfig) => {
         default: done => {
             // Default gulp command
             if (env === 'development') {
-                runSequence(['build'], ['json'], ['watch'], () => {
+                runSequence(['build'], ['watch'], () => {
                     gulp.start('serve');
                     done();
                 });
             } else {
-                runSequence(['build'], ['json'], () => {
+                runSequence(['build'], () => {
                     done();
                 });
             }
