@@ -33,8 +33,8 @@ const reactium = (gulp, config, webpackConfig) => {
 
     // Update config from environment variables
     config.port.browsersync = process.env.hasOwnProperty('APP_PORT')
-        ? process.env.APP_PORT
-        : config.port.browsersync;
+        ? Number(process.env.APP_PORT)
+        : Number(config.port.browsersync);
 
     const timestamp = () => {
         let now = moment().format('HH:mm:ss');
