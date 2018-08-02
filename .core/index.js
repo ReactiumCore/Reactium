@@ -16,6 +16,13 @@ import fs from 'fs';
 
 const app = express();
 
+let gulpConfig;
+try {
+    gulpConfig = require('./gulp.config')();
+} catch (err) {
+    gulpConfig = { port: { proxy: 3030 } };
+}
+
 global.rootPath = path.resolve(__dirname, '..');
 
 let node_env = process.env.hasOwnProperty('NODE_ENV')
@@ -23,7 +30,7 @@ let node_env = process.env.hasOwnProperty('NODE_ENV')
     : 'development';
 
 // PORT setup:
-let port = null;
+let port = gulpConfig.port.proxy;
 
 // Get the port env variable name
 if (process.env.hasOwnProperty('PORT_VAR')) {
@@ -37,8 +44,10 @@ if (process.env.hasOwnProperty('PORT_VAR')) {
         port === null && process.env.hasOwnProperty('PORT')
             ? process.env.PORT
             : port;
-    port = port === null ? 3030 : port;
+    port = port === null ? gulpConfig.port.proxy : port;
 }
+
+port = Number(port);
 
 global.parseAppId = apiConfig.parseAppId;
 global.restAPI = apiConfig.restAPI;
