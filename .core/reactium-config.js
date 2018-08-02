@@ -23,13 +23,14 @@ module.exports = {
             scripts: {
                 add: {
                     build: 'npm install --production-only',
-                    static: 'npm-run-all build:* && gulp static'
+                    static: 'npm-run-all build:* && gulp static',
+                    local: 'cross-env APP_PORT=8000 gulp local',
+                    'local:ssr': 'cross-env APP_PORT=8000 gulp local:ssr'
                 },
                 remove: [
                     'local-fe-start',
                     'local-fe:gulp',
                     'local-fe:babel-node',
-                    'local-ssr',
                     'local-ssr-start',
                     'local-ssr:gulp',
                     'local-ssr:babel-node',
