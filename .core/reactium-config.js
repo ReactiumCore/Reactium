@@ -24,8 +24,8 @@ module.exports = {
                 add: {
                     build: 'npm install --production-only',
                     static: 'npm-run-all build:* && gulp static',
-                    local: 'cross-env APP_PORT=8000 gulp local',
-                    'local:ssr': 'cross-env APP_PORT=8000 gulp local:ssr'
+                    local: 'cross-env APP_PORT=3000 gulp local',
+                    'local:ssr': 'cross-env APP_PORT=3000 gulp local:ssr'
                 },
                 remove: [
                     'local-fe-start',
