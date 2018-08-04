@@ -64,6 +64,11 @@ module.exports = {
         ]
     },
     menu: {
+        global: {
+            label: 'Global',
+            route: '/toolkit/global',
+            elements: {}
+        },
         base: {
             label: 'Base Styles',
             route: '/toolkit/base',

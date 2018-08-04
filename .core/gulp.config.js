@@ -18,6 +18,7 @@ module.exports = () => {
             browsersync: 3000,
             proxy: 3030
         },
+        open: true,
         cssPreProcessor: 'sass',
         watch: {
             js: ['src/app/**/*'],
