@@ -1,0 +1,89 @@
+$sizing: (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32, 40, 48, 56, 64, 72, 80);
+
+$sizes: (
+    "m": (margin),
+    "mt": (margin-top),
+    "mr": (margin-right),
+    "mb": (margin-bottom),
+    "ml": (margin-left),
+    "mx": (margin-left, margin-right),
+    "my": (margin-top, margin-bottom),
+    "p": (padding),
+    "pt": (padding-top),
+    "pr": (padding-right),
+    "pb": (padding-bottom),
+    "pl": (padding-left),
+    "px": (padding-left, padding-right),
+    "py": (padding-top, padding-bottom),
+);
+
+@mixin size-factory($thisPrefix: null) {
+    @each $prop-name, $props in $sizes {
+        @each $size in $sizing {
+            @if ($thisPrefix) {
+                .#{$prop-name}-#{$thisPrefix}-#{$size} {
+                    @each $prop in $props {
+                        #{$prop}: px2rem($size);
+                    }
+                }
+                .#{$prop-name}-#{$thisPrefix}--#{$size} {
+                    @each $prop in $props {
+                        #{$prop}: px2rem(-($size));
+                    }
+                }
+            } @else {
+                .#{$prop-name}-#{$size} {
+                    @each $prop in $props {
+                        #{$prop}: px2rem($size);
+                    }
+                }
+                .#{$prop-name}--#{$size} {
+                    @each $prop in $props {
+                        #{$prop}: px2rem(-($size));
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include size-factory();
+
+@for $i from 1 through length($breakpoint-all-prefixes) {
+  $thisPrefix: nth($breakpoint-all-prefixes, $i);
+  @if $thisPrefix == "xs" {
+    @include size-factory($thisPrefix);
+  } @else if $thisPrefix == "xs-only" {
+    @media #{$breakpoint-xs-only} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "sm" {
+    @media #{$breakpoint-sm-up} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "sm-only" {
+    @media #{$breakpoint-sm-only} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "md" {
+    @media #{$breakpoint-md-up} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "md-only" {
+    @media #{$breakpoint-md-only} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "lg" {
+    @media #{$breakpoint-lg-up} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "lg-only" {
+    @media #{$breakpoint-lg-only} {
+      @include size-factory($thisPrefix);
+    }
+  } @else if $thisPrefix == "xl" {
+    @media #{$breakpoint-xl-up} {
+      @include size-factory($thisPrefix);
+    }
+  }
+}

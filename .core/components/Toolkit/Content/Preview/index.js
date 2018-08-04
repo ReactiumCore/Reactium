@@ -108,7 +108,7 @@ export default class Preview extends Component {
 
             case 'function': {
                 let cname = dna.split('/').pop();
-                let cpath = `${group}/elements/${cname}`;
+                let cpath = `${group}/${cname}`;
 
                 let markup = this.renderCmp({ cname, cpath, style });
 

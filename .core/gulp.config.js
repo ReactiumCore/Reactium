@@ -18,6 +18,7 @@ module.exports = () => {
             browsersync: 3000,
             proxy: 3030
         },
+        open: true,
         cssPreProcessor: 'sass',
         watch: {
             js: ['src/app/**/*'],
@@ -69,7 +70,7 @@ module.exports = () => {
             assets: 'public/assets',
             static: 'dist',
             build: 'build/src',
-            colors: 'src/assets/style/scss/_colors.scss'
+            colors: 'src/app/toolkit/scss/_colors.scss'
         }
     };
 };
