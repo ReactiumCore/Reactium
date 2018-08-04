@@ -70,7 +70,7 @@ module.exports = () => {
             assets: 'public/assets',
             static: 'dist',
             build: 'build/src',
-            colors: 'src/assets/style/scss/_colors.scss'
+            colors: 'src/app/toolkit/scss/_colors.scss'
         }
     };
 };

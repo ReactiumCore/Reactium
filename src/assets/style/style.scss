@@ -1,5 +1,15 @@
-@import 'scss/layout';
-@import 'scss/typography';
-@import 'scss/colors';
+// Variables
+@import '../../app/toolkit/_scss/variables';
 
-@import '../../app/toolkit/base/elements/Colors/_colors';
+// Mixins
+@import '../../app/toolkit/_scss/mixins/px2rem';
+
+// Global
+@import '../../app/toolkit/_scss/button';
+@import '../../app/toolkit/_scss/grid/grid';
+@import '../../app/toolkit/_scss/layout';
+@import '../../app/toolkit/_scss/typography';
+
+// Components
+@import '../../app/toolkit/global/Colors/_colors';
+@import '../../app/toolkit/global/Grid/_grid';

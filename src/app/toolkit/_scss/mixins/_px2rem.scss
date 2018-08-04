@@ -1,0 +1,18 @@
+
+@function strip-units($number) {
+    @return $number / ($number * 0 + 1);
+ }
+
+@function px2rem($px) {
+    $rnum: strip-units($root-font);
+    $fnum: strip-units($px);
+    $rem: $fnum / $rnum;
+    @return #{$rem}rem;
+}
+
+@function px2vw($px) {
+    $rnum: 1920;
+    $fnum: strip-units($px);
+    $vw: ($fnum / $rnum) * 100;
+    @return #{$vw}vw;
+}

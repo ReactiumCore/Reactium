@@ -1,0 +1,10 @@
+
+@mixin breakpoint($thisPrefix) {
+    $break: map-get($breakpoints, $thisPrefix);
+
+    @if ($break != null) {
+        @media #{$break} {
+            @content;
+        }
+    }
+}
