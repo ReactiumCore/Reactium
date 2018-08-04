@@ -42,7 +42,6 @@ class Colors extends Component {
     }
 
     render() {
-        console.log({ colorProfile });
         return (
             <div className="re-toolkit-colors">
                 {Object.keys(colorProfile).map((k, i) => {
