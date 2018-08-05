@@ -246,6 +246,19 @@ module.exports = {
                         .default,
                     readme: require('appdir/toolkit/typography/ListOrdered/readme')
                         .default
+                },
+                'text-align': {
+                    type: 'atom',
+                    label: 'Text Align',
+                    hideCode: true,
+                    hideDna: true,
+                    hideDocs: true,
+                    route: '/toolkit/typography/text-align',
+                    dna: '/toolkit/typography/TextAlign',
+                    component: require('appdir/toolkit/typography/TextAlign')
+                        .default,
+                    readme: require('appdir/toolkit/typography/TextAlign/readme')
+                        .default
                 }
             }
         },

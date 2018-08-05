@@ -4,7 +4,7 @@ $root-font: 16px;
 $font-family-base: Helvetica, Arial, sans-serif;
 $font-size-base: 16px;
 $font-weight-base: 400;
-$font-family-monospace: monospace;
+$font-family-monospace: 'Courier New', Courier, monospace;
 $line-height-base: 1;
 
 $headings-margin-bottom: 20px;
@@ -17,6 +17,10 @@ $table-cell-padding: 10px;
 $table-caption-color: inherit;
 
 $label-margin-bottom: 0;
+
+$sizing: (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32, 40, 48, 56, 64, 72, 80);
+
+$text-alignment: ('left', 'right', 'center', 'justify');
 
 // Color variables
 @import "colors";

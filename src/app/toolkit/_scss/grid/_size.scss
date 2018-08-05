@@ -1,5 +1,3 @@
-$sizing: (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32, 40, 48, 56, 64, 72, 80);
-
 $sizes: (
     "m": (margin),
     "mt": (margin-top),
@@ -52,5 +50,31 @@ $sizes: (
 @each $prefix in $breakpoint-all-prefixes {
     @include breakpoint($prefix) {
         @include size-factory($prefix);
+    }
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+.ml-auto {
+    margin-left: auto;
+}
+.mr-auto {
+    margin-right: auto;
+}
+
+@each $prefix in $breakpoint-all-prefixes {
+    @include breakpoint($prefix) {
+        .mx-#{$prefix}-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .ml-#{$prefix}-auto {
+            margin-left: auto;
+        }
+        .mr-#{$prefix}-auto {
+            margin-right: auto;
+        }
     }
 }

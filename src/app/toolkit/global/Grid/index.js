@@ -11,7 +11,7 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class Grid extends Component {
+export default class Grid extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
@@ -334,7 +334,7 @@ class Grid extends Component {
 
     render() {
         return (
-            <div className="re-grid-demo">
+            <div className="re-demo">
                 <section>
                     <p>
                         Responsive modifiers enable specifying different column
@@ -392,8 +392,3 @@ class Grid extends Component {
         );
     }
 }
-
-// Default properties
-Grid.defaultProps = {};
-
-export default Grid;

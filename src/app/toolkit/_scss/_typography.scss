@@ -1,26 +1,25 @@
 html, body {
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1;
+  margin: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $color-black;
+  text-align: left;
+  background-color: $color-white;
 }
 
 
-p {
+p, .p {
     line-height: 1.5;
 }
 
 .number {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: $font-family-monospace;
 }
 
-.text-center {
-    text-align: center;
+small, .small {
+    font-size: px2rem(11);
 }
 
-.text-left {
-    text-align: left;
-}
-
-.text-right {
-    text-align: right;
-}
+@include text-align();
