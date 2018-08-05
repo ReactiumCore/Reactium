@@ -301,6 +301,37 @@ class Grid extends Component {
         );
     }
 
+    gridVis() {
+        return (
+            <Fragment>
+                <div className={'row'}>
+                    <div className={'col-xs'}>
+                        <div className={'hide-xs-only re-box-row'}>
+                            .hide-xs-only
+                        </div>
+                        <div className={'hide-sm re-box-row'}>.hide-sm</div>
+                    </div>
+                </div>
+                <div className={'row'}>
+                    <div className={'col-xs'}>
+                        <div
+                            className={'show-xs-only re-box-row'}
+                            style={{ display: 'none' }}
+                        >
+                            .show-xs-only
+                        </div>
+                        <div
+                            className={'show-sm re-box-row'}
+                            style={{ display: 'none' }}
+                        >
+                            .show-sm
+                        </div>
+                    </div>
+                </div>
+            </Fragment>
+        );
+    }
+
     render() {
         return (
             <div className="re-grid-demo">
@@ -350,6 +381,12 @@ class Grid extends Component {
                     <h4>Reversing</h4>
                     <p>Reverse the order of the columns.</p>
                     {this.gridReverse()}
+                </section>
+
+                <section>
+                    <h4>Visibility</h4>
+                    <p>Responsive hide or show content.</p>
+                    {this.gridVis()}
                 </section>
             </div>
         );
