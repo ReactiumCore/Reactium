@@ -1,8 +1,10 @@
-* {
-    box-sizing: border-box;
-}
 body {
-    overflow-x: hidden;
-    padding: 0;
-    margin: 0;
+  margin: 0;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $color-black;
+  text-align: left; // 3
+  background-color: $color-white;
 }

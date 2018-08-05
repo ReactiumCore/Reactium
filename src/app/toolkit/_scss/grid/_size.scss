@@ -49,41 +49,8 @@ $sizes: (
 
 @include size-factory();
 
-@for $i from 1 through length($breakpoint-all-prefixes) {
-  $thisPrefix: nth($breakpoint-all-prefixes, $i);
-  @if $thisPrefix == "xs" {
-    @include size-factory($thisPrefix);
-  } @else if $thisPrefix == "xs-only" {
-    @media #{$breakpoint-xs-only} {
-      @include size-factory($thisPrefix);
+@each $prefix in $breakpoint-all-prefixes {
+    @include breakpoint($prefix) {
+        @include size-factory($prefix);
     }
-  } @else if $thisPrefix == "sm" {
-    @media #{$breakpoint-sm-up} {
-      @include size-factory($thisPrefix);
-    }
-  } @else if $thisPrefix == "sm-only" {
-    @media #{$breakpoint-sm-only} {
-      @include size-factory($thisPrefix);
-    }
-  } @else if $thisPrefix == "md" {
-    @media #{$breakpoint-md-up} {
-      @include size-factory($thisPrefix);
-    }
-  } @else if $thisPrefix == "md-only" {
-    @media #{$breakpoint-md-only} {
-      @include size-factory($thisPrefix);
-    }
-  } @else if $thisPrefix == "lg" {
-    @media #{$breakpoint-lg-up} {
-      @include size-factory($thisPrefix);
-    }
-  } @else if $thisPrefix == "lg-only" {
-    @media #{$breakpoint-lg-only} {
-      @include size-factory($thisPrefix);
-    }
-  } @else if $thisPrefix == "xl" {
-    @media #{$breakpoint-xl-up} {
-      @include size-factory($thisPrefix);
-    }
-  }
 }

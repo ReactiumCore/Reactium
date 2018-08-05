@@ -2,7 +2,6 @@
 
 @import 'mixins/breakpoint';
 @import 'mixins/grid-mixins';
-@import 'mixins/visibility-mixins';
 @import 'visibility';
 @import 'size';
 
@@ -35,6 +34,17 @@
 
 .col.reverse {
     @include col-reverse();
+}
+
+@each $prefix in $breakpoint-all-prefixes {
+    @include breakpoint($prefix) {
+        .col.reverse-#{$prefix} {
+            @include col-reverse();
+        }
+        .row.reverse-#{$prefix} {
+            @include row-reverse();
+        }
+    }
 }
 
 .first {
@@ -125,10 +135,9 @@
     }
 }
 // Mixin to run inside of for loop - creates col/breakpoint classes
-@for $i from 1 through length($breakpoint-up-prefixes) {
-    $thisPrefix: nth($breakpoint-up-prefixes, $i);
-    @include breakpoint($thisPrefix) {
-        @include col-factory($thisPrefix);
+@each $prefix in $breakpoint-up-prefixes {
+    @include breakpoint($prefix) {
+        @include col-factory($prefix);
     }
 }
 

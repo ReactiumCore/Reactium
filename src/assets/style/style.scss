@@ -1,6 +1,9 @@
 // Variables
 @import '../../app/toolkit/_scss/variables';
 
+// Normalize
+@import '../../app/toolkit/_scss/reboot';
+
 // Mixins
 @import '../../app/toolkit/_scss/mixins/px2rem';
 
@@ -13,3 +16,4 @@
 // Components
 @import '../../app/toolkit/global/Colors/_colors';
 @import '../../app/toolkit/global/Grid/_grid';
+@import '../../app/toolkit/typography/Headings/__headings';

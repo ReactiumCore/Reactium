@@ -1,6 +1,23 @@
 // Root font-size:
 $root-font: 16px;
 
+$font-family-base: Helvetica, Arial, sans-serif;
+$font-size-base: 16px;
+$font-weight-base: 400;
+$font-family-monospace: monospace;
+$line-height-base: 1;
+
+$headings-margin-bottom: 20px;
+
+$paragraph-margin-bottom: 15px;
+
+$dt-font-weight: 400;
+
+$table-cell-padding: 10px;
+$table-caption-color: inherit;
+
+$label-margin-bottom: 0;
+
 // Color variables
 @import "colors";
 

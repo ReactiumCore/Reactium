@@ -6,7 +6,7 @@ module.exports = {
         return `<!DOCTYPE html>
         <html ${helmet.htmlAttributes.toString()}>
             <head>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                 ${helmet.title.toString()}
                 ${helmet.meta.toString()}
                 ${helmet.link.toString()}

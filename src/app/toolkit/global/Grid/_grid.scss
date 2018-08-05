@@ -1,0 +1,24 @@
+.re-box-row {
+    background-color: $color-grey-light;
+    width: calc(100% - 10px);
+    min-height: px2rem(20);
+    margin: 5px auto;
+    border-radius: 2px;
+    padding: 5px 6px 6px 6px;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+.re-grid-demo {
+    > section {
+        h1, h2, h3, h4, h5, h6 {
+            margin: $headings-margin-bottom 0;
+        }
+        &:not(:last-child) {
+            margin-bottom: $headings-margin-bottom;
+        }
+        > .row {
+            margin: 0 -5px;
+        }
+    }
+}
