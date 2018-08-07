@@ -11,34 +11,16 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class TextLink extends Component {
+export default class TextLink extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <Fragment>
+                <a href="javascript:alert('Clicked a link!');">Click Me</a>
+            </Fragment>
+        );
     }
 }
-
-// Default properties
-TextLink.defaultProps = {};
-
-export default TextLink;

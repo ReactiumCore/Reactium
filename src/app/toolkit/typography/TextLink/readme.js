@@ -8,11 +8,19 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  */
 
 const content = `
-# Your Documentation Here
+###### SCSS
+${'```scss'}
+a {
+  color: inherit;
+  text-decoration: none;
+  background-color: transparent;
 
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
+  &:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+${'```'}
 `;
 
 /**

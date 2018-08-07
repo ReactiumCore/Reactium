@@ -1,12 +1,18 @@
+
+
 // Variables
 @import '../../app/toolkit/_scss/variables';
 
 // Normalize
 @import '../../app/toolkit/_scss/reboot';
 
+// Fonts
+@import '../../app/toolkit/typography/Fonts/_fonts';
+
 // Mixins
 @import '../../app/toolkit/_scss/mixins/px2rem';
 @import '../../app/toolkit/_scss/mixins/text-align';
+@import '../../app/toolkit/_scss/mixins/headings';
 
 // Global
 @import '../../app/toolkit/_scss/button';
@@ -17,4 +23,3 @@
 // Components
 @import '../../app/toolkit/global/Colors/_colors';
 @import '../../app/toolkit/global/Grid/_grid';
-@import '../../app/toolkit/typography/Headings/__headings';

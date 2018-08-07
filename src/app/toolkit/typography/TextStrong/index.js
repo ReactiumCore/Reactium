@@ -4,6 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Lipsum from 'toolkit/Lipsum';
 
 /**
  * -----------------------------------------------------------------------------
@@ -11,34 +12,16 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class TextStrong extends Component {
+export default class TextStrong extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <strong>
+                <Lipsum length={58} />.
+            </strong>
+        );
     }
 }
-
-// Default properties
-TextStrong.defaultProps = {};
-
-export default TextStrong;

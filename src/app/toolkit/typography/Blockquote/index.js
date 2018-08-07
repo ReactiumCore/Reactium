@@ -4,6 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Lipsum from 'toolkit/Lipsum';
 
 /**
  * -----------------------------------------------------------------------------
@@ -11,34 +12,19 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class Blockquote extends Component {
+export default class Blockquote extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <blockquote>
+                <p>
+                    <Lipsum length={58} />.
+                </p>
+                <small>&ndash; Guyus Latinacus</small>
+            </blockquote>
+        );
     }
 }
-
-// Default properties
-Blockquote.defaultProps = {};
-
-export default Blockquote;

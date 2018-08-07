@@ -145,24 +145,10 @@ dd {
   margin-left: 0; // Undo browser default
 }
 
-blockquote {
-  margin: 0 0 1rem;
-}
-
 dfn {
   font-style: italic; // Add the correct font style in Android 4.3-
 }
 
-// stylelint-disable font-weight-notation
-b,
-strong {
-  font-weight: bolder; // Add the correct font weight in Chrome, Edge, and Safari
-}
-// stylelint-enable font-weight-notation
-
-small {
-  font-size: 80%; // Add the correct font size in all browsers
-}
 
 //
 // Prevent `sub` and `sup` elements from affecting the line height in
@@ -177,8 +163,8 @@ sup {
   vertical-align: baseline;
 }
 
-sub { bottom: -.25em; }
-sup { top: -.5em; }
+sub, .sub { bottom: -.25rem; }
+sup, .sup { top: -.5rem; }
 
 
 //

@@ -43,29 +43,20 @@ class TextAlign extends Component {
                     <div className={'row'}>
                         <div className={'col-xs-12 col-sm-4'}>
                             <div className={'p-10 bg-grey-light'}>
-                                <div className={'text-left number'}>
-                                    text-left
+                                <div
+                                    className={
+                                        'text-xs-right text-sm-left number'
+                                    }
+                                >
+                                    <span className={'hide-xs-only'}>
+                                        text-sm-left
+                                    </span>
+                                    <span className={'hide-sm'}>
+                                        text-xs-right
+                                    </span>
                                 </div>
                             </div>
-                        </div>
-                        <div className={'col-xs-12 col-sm-4'}>
-                            <div className={'p-10 bg-grey-light'}>
-                                <div className={'text-center number'}>
-                                    text-center
-                                </div>
-                            </div>
-                        </div>
-                        <div className={'col-xs-12 col-sm-4'}>
-                            <div className={'p-10 bg-grey-light'}>
-                                <div className={'text-right number'}>
-                                    text-right
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={'row'}>
-                        <div className={'col-xs-12 col-sm-4'}>
-                            <p className={'p-10 text-left'}>
+                            <p className={'p-10 text-sm-left text-xs-right'}>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Sed eget odio sit amet leo
                                 faucibus sollicitudin. Fusce aliquet auctor
@@ -77,7 +68,12 @@ class TextAlign extends Component {
                             </p>
                         </div>
                         <div className={'col-xs-12 col-sm-4'}>
-                            <p className={'p-10 text-center'}>
+                            <div className={'p-10 bg-grey-light'}>
+                                <div className={'text-xs-center number'}>
+                                    text-xs-center
+                                </div>
+                            </div>
+                            <p className={'p-10 text-xs-center'}>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Sed eget odio sit amet leo
                                 faucibus sollicitudin. Fusce aliquet auctor
@@ -89,7 +85,21 @@ class TextAlign extends Component {
                             </p>
                         </div>
                         <div className={'col-xs-12 col-sm-4'}>
-                            <p className={'p-10 text-right'}>
+                            <div className={'p-10 bg-grey-light'}>
+                                <div
+                                    className={
+                                        'text-sm-right text-xs-left number'
+                                    }
+                                >
+                                    <span className={'hide-xs-only'}>
+                                        text-sm-right
+                                    </span>
+                                    <span className={'hide-sm'}>
+                                        text-xs-left
+                                    </span>
+                                </div>
+                            </div>
+                            <p className={'p-10 text-sm-right text-xs-left'}>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit. Sed eget odio sit amet leo
                                 faucibus sollicitudin. Fusce aliquet auctor
@@ -105,9 +115,7 @@ class TextAlign extends Component {
                 <div className={'row'}>
                     <div className={'col-xs-12'}>
                         <div className={'p-10 bg-grey-light'}>
-                            <div className={'text-left number'}>
-                                text-justify
-                            </div>
+                            <div className={'number'}>text-justify</div>
                         </div>
                     </div>
                 </div>

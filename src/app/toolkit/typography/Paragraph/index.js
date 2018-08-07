@@ -4,6 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Lipsum from 'toolkit/Lipsum';
 
 /**
  * -----------------------------------------------------------------------------
@@ -11,34 +12,16 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class Paragraph extends Component {
+export default class Paragraph extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <p>
+                <Lipsum />
+            </p>
+        );
     }
 }
-
-// Default properties
-Paragraph.defaultProps = {};
-
-export default Paragraph;

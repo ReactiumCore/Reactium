@@ -8,12 +8,20 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  */
 
 const content = `
-# Your Documentation Here
+ ###### SCSS
+ ${'```scss'}
+ ol {
+     margin: 0 0 0 px2rem(20);
+     padding: 0;
 
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
-`;
+     li {
+         line-height: 2;
+         padding: 0;
+         margin: 0;
+     }
+ }
+ ${'```'}
+ `;
 
 /**
  * -----------------------------------------------------------------------------

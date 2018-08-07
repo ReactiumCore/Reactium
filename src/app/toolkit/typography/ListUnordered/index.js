@@ -4,6 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import Lipsum from 'toolkit/Lipsum';
 
 /**
  * -----------------------------------------------------------------------------
@@ -11,7 +12,7 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class ListUnordered extends Component {
+export default class ListUnordered extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
@@ -21,24 +22,27 @@ class ListUnordered extends Component {
         this.state = Object.assign({}, this.props);
     }
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
     }
 
+    renderItems() {
+        let output = [];
+
+        for (let i = 0; i < 10; i++) {
+            output.push(
+                <li key={`item-${i}`}>
+                    <Lipsum length={21} />
+                </li>
+            );
+        }
+
+        return output;
+    }
+
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return <ul>{this.renderItems().map(item => item)}</ul>;
     }
 }
-
-// Default properties
-ListUnordered.defaultProps = {};
-
-export default ListUnordered;

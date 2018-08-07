@@ -8,11 +8,11 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  */
 
 const content = `
-# Your Documentation Here
-
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
+You can use ${'`.h1, .h2, .h2, .h3, .h4, .h5, .h6`'} on an element to make it appear as a different heading. This is particularlly useful when trying to keep [Semantic Document Structure](https://webaim.org/techniques/semanticstructure/).
+${'```html'}
+<h2 class='h1'>Heading 2 as a H1</h2>
+<span class='h1'>Span as a H1</span>
+${'```'}
 `;
 
 /**

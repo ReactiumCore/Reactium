@@ -112,6 +112,9 @@ module.exports = {
                     label: 'Fonts',
                     route: '/toolkit/typography/fonts',
                     dna: '/toolkit/typography/Fonts',
+                    hideDna: true,
+                    hideCode: true,
+                    hideDocs: true,
                     component: require('appdir/toolkit/typography/Fonts')
                         .default,
                     readme: require('appdir/toolkit/typography/Fonts/readme')
@@ -142,6 +145,7 @@ module.exports = {
                     label: 'Text Link',
                     route: '/toolkit/typography/text-link',
                     dna: '/toolkit/typography/TextLink',
+                    hideDna: true,
                     component: require('appdir/toolkit/typography/TextLink')
                         .default,
                     readme: require('appdir/toolkit/typography/TextLink/readme')

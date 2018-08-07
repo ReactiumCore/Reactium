@@ -17,7 +17,7 @@ $content-well-max-width: "none"; // Set the max-width of the content well
 
 // Breakpoints
 // Create breakpoint range statements to be used in media queries
-$breakpoint-xs-up: "only screen and (min-width: 0px)";
+$breakpoint-xs-up: "only screen";
 $breakpoint-xs-only: "only screen and (max-width: #{$xs-max})"; // 0 -> xs-max range
 $breakpoint-sm-up: "only screen and (min-width: #{$sm-start})"; // sm-start -> up range
 $breakpoint-sm-only: "only screen and (min-width: #{$sm-start}) and (max-width: #{$sm-max})"; // sm-start -> sm-max range
