@@ -194,26 +194,28 @@ export default class Grid extends Component {
     gridDist() {
         return (
             <Fragment>
-                <h5>Space Between</h5>
-                <div className={'mb-10 mt--12'}>
-                    <small>
-                        <kbd>.between-xs</kbd>
-                    </small>
-                </div>
-                <div className="row between-xs">
-                    <div className="col-xs-2">
-                        <div className="re-box-row" />
+                <div className={'mb-20'}>
+                    <h5>Space Between</h5>
+                    <div className={'mb-10'}>
+                        <small>
+                            <kbd>.between-xs</kbd>
+                        </small>
                     </div>
-                    <div className="col-xs-2">
-                        <div className="re-box-row" />
-                    </div>
-                    <div className="col-xs-2">
-                        <div className="re-box-row" />
+                    <div className="row between-xs">
+                        <div className="col-xs-2">
+                            <div className="re-box-row" />
+                        </div>
+                        <div className="col-xs-2">
+                            <div className="re-box-row" />
+                        </div>
+                        <div className="col-xs-2">
+                            <div className="re-box-row" />
+                        </div>
                     </div>
                 </div>
 
                 <h5>Space Around</h5>
-                <div className={'mb-10 mt--12'}>
+                <div className={'mb-10'}>
                     <small>
                         <kbd>.around-xs</kbd>
                     </small>
@@ -236,26 +238,28 @@ export default class Grid extends Component {
     gridOrder() {
         return (
             <Fragment>
-                <h5>First</h5>
-                <div className={'mb-10 mt--12'}>
-                    <small>
-                        <kbd>.first-sm</kbd>
-                    </small>
-                </div>
-                <div className="row">
-                    <div className="col-xs-4">
-                        <div className="re-box-row text-center">1</div>
+                <div className={'mb-20'}>
+                    <h5>First</h5>
+                    <div className={'mb-10'}>
+                        <small>
+                            <kbd>.first-sm</kbd>
+                        </small>
                     </div>
-                    <div className="col-xs-4">
-                        <div className="re-box-row text-center">2</div>
-                    </div>
-                    <div className="col-xs-4 first-sm text-center bg-grey">
-                        <div className="re-box-row">3</div>
+                    <div className="row">
+                        <div className="col-xs-4">
+                            <div className="re-box-row text-center">1</div>
+                        </div>
+                        <div className="col-xs-4">
+                            <div className="re-box-row text-center">2</div>
+                        </div>
+                        <div className="col-xs-4 first-sm text-center bg-grey">
+                            <div className="re-box-row">3</div>
+                        </div>
                     </div>
                 </div>
 
                 <h5>Last</h5>
-                <div className={'mb-10 mt--12'}>
+                <div className={'mb-10'}>
                     <small>
                         <kbd>.last-sm</kbd>
                     </small>
@@ -345,25 +349,33 @@ export default class Grid extends Component {
                 </section>
 
                 <section>
-                    <h4>Offsets</h4>
+                    <div className={'my-20'}>
+                        <h4>Offsets</h4>
+                    </div>
                     <p>Adjust the leading of a column in a row.</p>
                     {this.gridOffsets().map(item => item)}
                 </section>
 
                 <section>
-                    <h4>Auto Width</h4>
+                    <div className={'my-20'}>
+                        <h4>Auto Width</h4>
+                    </div>
                     <p>Automatically size the contents of a row.</p>
                     {this.gridAutoWidth()}
                 </section>
 
                 <section>
-                    <h4>Alignment</h4>
+                    <div className={'my-20'}>
+                        <h4>Alignment</h4>
+                    </div>
                     <p>Horizontally or vertically align a column.</p>
                     {this.gridAlign().map(item => item)}
                 </section>
 
                 <section>
-                    <h4>Distribution</h4>
+                    <div className={'my-20'}>
+                        <h4>Distribution</h4>
+                    </div>
                     <p>
                         Classes for distributing the contents of a row or
                         column.
@@ -372,19 +384,25 @@ export default class Grid extends Component {
                 </section>
 
                 <section>
-                    <h4>Reordering</h4>
+                    <div className={'my-20'}>
+                        <h4>Reordering</h4>
+                    </div>
                     <p>Classes to reorder columns.</p>
                     {this.gridOrder()}
                 </section>
 
                 <section>
-                    <h4>Reversing</h4>
+                    <div className={'my-20'}>
+                        <h4>Reversing</h4>
+                    </div>
                     <p>Reverse the order of the columns.</p>
                     {this.gridReverse()}
                 </section>
 
                 <section>
-                    <h4>Visibility</h4>
+                    <div className={'my-20'}>
+                        <h4>Visibility</h4>
+                    </div>
                     <p>Responsive hide or show content.</p>
                     {this.gridVis()}
                 </section>

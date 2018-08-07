@@ -133,7 +133,7 @@ export default class Spacing extends Component {
                     The classes are named using the format{' '}
                     <kbd>[property][side]-[breakpoint]-[size]</kbd>
                 </p>
-                <section>
+                <section className={'pb-20'}>
                     <div className={'row'}>
                         <div className={'col-xs-12 bg-grey-light'}>
                             <div
@@ -156,7 +156,7 @@ export default class Spacing extends Component {
                     Removing the <kbd>[breakpoint]</kbd> portion will apply the
                     size to all breakpoints.
                 </p>
-                <section>
+                <section className={'pb-20'}>
                     <div className={'row'}>
                         <div className={'col-xs-12 bg-grey-light'}>
                             <div className={'m-20 p-20 bg-blue'}>

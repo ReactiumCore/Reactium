@@ -4,7 +4,6 @@
 
     @each $prefix in $breakpoint-all-prefixes {
         @include breakpoint($prefix) {
-            @debug $prefix;
             &-#{$prefix} {
                 display: flex;
                 @include flex-factory();
