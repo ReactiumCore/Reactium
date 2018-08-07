@@ -2,19 +2,18 @@
 $buttons: (
     "primary": (lighten($color-blue, 5%), $color-blue, $color-white, rgba($color-white, 0)),
     "secondary": (lighten($color-black, 15%), $color-black, $color-grey-light, rgba($color-white, 0)),
-    "tertiary": ($color-gray-dark, $color-gray-dark, $color-white, rgba($color-white, 0))
+    "tertiary": ($color-gray, $color-gray, $color-white, rgba($color-white, 0))
 );
 
 // font-size, paddingTop, paddingRight, paddingBottom, paddingLeft
 $button-sizes: (
-    "xs": (10px, 1px, 7px, 2px, 7px),
-    "sm": (12px, 2px, 20px, 3px, 20px),
-    "md": (14px, 5px, 50px, 6px, 50px),
+    "xs": (10px, 3px, 12px, 3px, 12px),
+    "sm": (12px, 4px, 20px, 4px, 20px),
+    "md": (14px, 5px, 50px, 5px, 50px),
     "lg": (22px, 13px, 55px, 11px, 55px)
 );
 
 @mixin default-button($size, $pt, $pr, $pb, $pl) {
-    border: none;
     display         : inline-flex;
     justify-content : center;
     align-items     : center;
@@ -22,6 +21,7 @@ $button-sizes: (
     font-size       : $size;
     flex-wrap       : nowrap;
     white-space     : nowrap;
+    border          : none;
 }
 
 @mixin pill-button($size) {
@@ -53,7 +53,8 @@ $button-sizes: (
 
             @include h-gradient(nth($clr-codes, 1), nth($clr-codes, 2));
 
-            &:focus {
+            &:focus,
+            &.focus {
                 box-shadow: 0 0 10px 1px lighten(nth($clr-codes, 1), 5%);
             }
 
@@ -68,6 +69,8 @@ $button-sizes: (
             &.disabled {
                 opacity: 0.5;
                 cursor: default;
+                @include h-gradient(nth($clr-codes, 1), nth($clr-codes, 2));
+                pointer-events: none;
             }
 
             @each $size-name, $size-codes in $button-sizes {
@@ -91,11 +94,23 @@ $button-sizes: (
             color: nth($clr-codes, 2);
 
             background: transparent;
-            border: 2px solid nth($clr-codes, 2);
+            //border: 2px solid nth($clr-codes, 2) !important;
+            position: relative;
+
+            &:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 2px solid nth($clr-codes, 2) !important;
+            }
 
             &:hover,
             &:focus,
-            &.hover {
+            &.hover,
+            &.active {
                 background: nth($clr-codes, 1);
                 color: nth($clr-codes, 3);
             }
@@ -104,7 +119,8 @@ $button-sizes: (
                 background: nth($clr-codes, 2);
             }
 
-            &:focus {
+            &:focus,
+            &.focus {
                 box-shadow: 0 0 10px 1px lighten(nth($clr-codes, 1), 5%);
             }
 
@@ -112,23 +128,26 @@ $button-sizes: (
             &.disabled {
                 opacity: 0.5;
                 cursor: default;
-            }
-
-            @each $size-name, $size-codes in $button-sizes {
-                &-#{$size-name} {
-                    @extend .btn;
-                    @extend .btn-#{$clr-name}-outline;
-
-                    @include default-button(
-                        nth($size-codes, 1),
-                        nth($size-codes, 2),
-                        nth($size-codes, 3),
-                        nth($size-codes, 4),
-                        nth($size-codes, 5)
-                    );
-                }
+                background: transparent;
+                color: nth($clr-codes, 2);
+                pointer-events: none;
             }
         }
+
+        @each $size-name, $size-codes in $button-sizes {
+            &-#{$clr-name}-#{$size-name}-outline {
+                @include default-button(
+                    nth($size-codes, 1),
+                    nth($size-codes, 2),
+                    nth($size-codes, 3),
+                    nth($size-codes, 4),
+                    nth($size-codes, 5)
+                );
+
+                @extend .btn-#{$clr-name}-outline;
+            }
+        }
+
 
         &-#{$clr-name}-pill {
             @extend .btn;
@@ -142,6 +161,17 @@ $button-sizes: (
             @extend .btn-#{$clr-name}-outline;
 
             @include pill-button(14px);
+
+            &:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 2px solid nth($clr-codes, 2) !important;
+                @include pill-button(14px);
+            }
         }
 
         @each $size-name, $size-codes in $button-sizes {
@@ -164,6 +194,17 @@ $button-sizes: (
                 @extend .btn-#{$clr-name}-#{$size-name};
                 @extend .btn-#{$clr-name}-outline;
                 @include pill-button(nth($size-codes, 1));
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 2px solid nth($clr-codes, 2) !important;
+                    @include pill-button(nth($size-codes, 1));
+                }
             }
         }
     }

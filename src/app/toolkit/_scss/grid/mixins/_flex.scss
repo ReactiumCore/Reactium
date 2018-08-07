@@ -1,0 +1,33 @@
+@mixin flex-factory() {
+    display: flex;
+
+    &-top {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    &-middle {
+        display: flex;
+        align-items: center;
+    }
+
+    &-bottom {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    &-left {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    &-center {
+        display: flex;
+        justify-content: center;
+    }
+
+    &-right {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

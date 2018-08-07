@@ -1,0 +1,20 @@
+
+@mixin text-align() {
+
+    @each $align in $text-alignment {
+        .text-#{$align} {
+            text-align: #{$align};
+        }
+    }
+
+    @each $prefix in $breakpoint-all-prefixes {
+        @each $align in $text-alignment {
+
+                @include breakpoint($prefix) {
+                    .text-#{$prefix}-#{$align} {
+                        text-align: #{$align};
+                    }
+                }
+        }
+    }
+}

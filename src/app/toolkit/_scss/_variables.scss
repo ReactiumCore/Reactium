@@ -1,6 +1,39 @@
 // Root font-size:
 $root-font: 16px;
 
+$fonts: (
+    "montserrat": 'Montserrat',
+);
+$font-family-base: Helvetica, Arial, sans-serif;
+$font-size-base: 16px;
+$font-weight-base: 400;
+$font-family-monospace: 'Courier New', Courier, monospace;
+$line-height-base: 1;
+
+$headings-margin-bottom: 0;
+
+$paragraph-margin-bottom: 15px;
+
+$dt-font-weight: 400;
+
+$table-cell-padding: 10px;
+$table-caption-color: inherit;
+
+$label-margin-bottom: 0;
+
+$sizing: (0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 32, 40, 48, 56, 64, 72, 80);
+
+$text-alignment: ('left', 'right', 'center', 'justify');
+
+$headings: (
+    h1: ("'Montserrat', sans-serif", 2rem, 100),
+    h2: ("'Montserrat', sans-serif", 1.5rem, 100),
+    h3: ("'Montserrat', sans-serif", 1.17rem, 100),
+    h4: ("'Montserrat', sans-serif", 1rem, 100),
+    h5: ("'Montserrat', sans-serif", 0.83rem, 100),
+    h6: ("'Montserrat', sans-serif", 0.67rem, 100)
+);
+
 // Color variables
 @import "colors";
 
