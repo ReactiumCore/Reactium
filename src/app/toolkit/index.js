@@ -125,6 +125,7 @@ module.exports = {
                     label: 'Headings',
                     route: '/toolkit/typography/headings',
                     dna: '/toolkit/typography/Headings',
+                    hideCode: true,
                     component: require('appdir/toolkit/typography/Headings')
                         .default,
                     readme: require('appdir/toolkit/typography/Headings/readme')
@@ -146,6 +147,7 @@ module.exports = {
                     route: '/toolkit/typography/text-link',
                     dna: '/toolkit/typography/TextLink',
                     hideDna: true,
+                    hideCode: true,
                     component: require('appdir/toolkit/typography/TextLink')
                         .default,
                     readme: require('appdir/toolkit/typography/TextLink/readme')
