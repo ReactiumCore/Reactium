@@ -4,14 +4,17 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import ButtonPrimary from 'toolkit/buttons/ButtonPrimary';
+import ButtonSecondary from 'toolkit/buttons/ButtonSecondary';
+import ButtonTertiary from 'toolkit/buttons/ButtonTertiary';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Checkbox
+ * React Component: ButtonOverview
  * -----------------------------------------------------------------------------
  */
 
-export default class Checkbox extends Component {
+export default class ButtonOverview extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
@@ -19,16 +22,9 @@ export default class Checkbox extends Component {
     render() {
         return (
             <Fragment>
-                <div>
-                    <label>
-                        Check Me! <input type="checkbox" />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        And Me! <input type="checkbox" />
-                    </label>
-                </div>
+                <ButtonPrimary />
+                <ButtonSecondary />
+                <ButtonTertiary />
             </Fragment>
         );
     }

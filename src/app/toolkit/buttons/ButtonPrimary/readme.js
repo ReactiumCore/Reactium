@@ -8,11 +8,13 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  */
 
 const content = `
-# Your Documentation Here
-
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
+###### Usage
+${'```html'}
+<button type='button' class='btn-primary'>Primary Button</button>
+<button type='button' class='btn-primary-pill'>Primary Pill</button>
+<button type='button' class='btn-primary-outline'>Primary Outline</button>
+<button type='button' class='btn-primary-outline-pill'>Primary Outline Pill</button>
+${'```'}
 `;
 
 /**

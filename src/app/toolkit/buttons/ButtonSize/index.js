@@ -7,38 +7,69 @@ import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: ButtonSize
+ * React Component: ButtonSizing
  * -----------------------------------------------------------------------------
  */
 
-class ButtonSize extends Component {
+export default class ButtonSizing extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
+    renderRows() {
+        let sizes = ['lg', 'md', 'sm', 'xs'];
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
+        return sizes.map((sz, i) => {
+            return (
+                <div className={'row'} key={`row-${i}`}>
+                    <div className={'col-xs-12 col-sm text-center my-10'}>
+                        <div className={'mb-xs-8 mb-sm-10'}>
+                            <button className={`btn-primary-${sz}`}>
+                                Primary
+                            </button>
+                        </div>
+                        <small>
+                            <kbd>.btn-{sz}-primary</kbd>
+                        </small>
+                    </div>
+                    <div className={'col-xs-12 col-sm text-center my-10'}>
+                        <div className={'mb-xs-8 mb-sm-10'}>
+                            <button className={`btn-primary-${sz}-pill`}>
+                                Primary Pill
+                            </button>
+                        </div>
+                        <small>
+                            <kbd>.btn-primary-{sz}-pill</kbd>
+                        </small>
+                    </div>
+                    <div className={'col-xs-12 col-sm text-center my-10'}>
+                        <div className={'mb-xs-8 mb-sm-10'}>
+                            <button className={`btn-primary-${sz}-outline`}>
+                                Outline
+                            </button>
+                        </div>
+                        <small>
+                            <kbd>.btn-primary-{sz}-outline</kbd>
+                        </small>
+                    </div>
+                    <div className={'col-xs-12 col-sm text-center my-10'}>
+                        <div className={'mb-xs-8 mb-sm-10'}>
+                            <button
+                                className={`btn-primary-${sz}-outline-pill`}
+                            >
+                                Outline Pill
+                            </button>
+                        </div>
+                        <small>
+                            <kbd>.btn-primary-{sz}-outline-pill</kbd>
+                        </small>
+                    </div>
+                </div>
+            );
         });
     }
 
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return <Fragment>{this.renderRows().map(item => item)}</Fragment>;
     }
 }
-
-// Default properties
-ButtonSize.defaultProps = {};
-
-export default ButtonSize;

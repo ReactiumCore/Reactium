@@ -34,7 +34,11 @@ class Textfield extends Component {
     }
 
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <label>
+                Label: <input type="text" />
+            </label>
+        );
     }
 }
 

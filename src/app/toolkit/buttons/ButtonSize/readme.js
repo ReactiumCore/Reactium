@@ -8,11 +8,13 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  */
 
 const content = `
-# Your Documentation Here
+You can adjust the size of a button by adding a size: ${'`xs, sm, md, lg`'}
 
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
+###### Usage
+${'```html'}
+<button type='button' class='btn-primary-lg'>Large Primary Button</button>
+<button type='button' class='btn-primary-lg-pill'>Large Primary Pill Button</button>
+${'```'}
 `;
 
 /**

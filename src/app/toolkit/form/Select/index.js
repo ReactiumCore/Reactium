@@ -11,34 +11,31 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class Select extends Component {
+const S = props => {
+    return (
+        <select {...props} style={{ width: 200 }}>
+            <option>Item 1</option>
+            <option>Item 2</option>
+            <option>Item 3</option>
+        </select>
+    );
+};
+
+export default class Select extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <div className={'flex-sm'}>
+                <div className={'mr-xs-0 mr-sm-20 mb-xs-10 mb-sm-0'}>
+                    <S multiple />
+                </div>
+                <div>
+                    <S />
+                </div>
+            </div>
+        );
     }
 }
-
-// Default properties
-Select.defaultProps = {};
-
-export default Select;

@@ -34,7 +34,11 @@ class Textarea extends Component {
     }
 
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <label>
+                Label: <textarea />
+            </label>
+        );
     }
 }
 

@@ -3,17 +3,16 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
 
 /**
  * -----------------------------------------------------------------------------
- * ButtonTertiary Readme
+ * ButtonState Readme
  * -----------------------------------------------------------------------------
  */
 
 const content = `
-###### Usage
+For ${'`<button>`'} elements you can just set the ${'`disabled`'} attribute to make a styled button appear disabled.
+
 ${'```html'}
-<button type='button' class='btn-tertiary'>Tertiary Button</button>
-<button type='button' class='btn-tertiary-pill'>Tertiary Pill</button>
-<button type='button' class='btn-tertiary-outline'>Tertiary Outline</button>
-<button type='button' class='btn-tertiary-outline-pill'>Tertiary Outline Pill</button>
+<button type='button' disabled class='btn-primary'>Disabled Primary Button</button>
+<a href='/go/somewhere' class='btn-primary disabled'>Disabled Primary Link</a>
 ${'```'}
 `;
 

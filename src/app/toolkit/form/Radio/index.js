@@ -11,34 +11,39 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class Radio extends Component {
+export default class Radio extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <Fragment>
+                <div>
+                    <label>
+                        Radio 1{' '}
+                        <input type="radio" name={'radio-demo'} value={1} />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Radio 2{' '}
+                        <input type="radio" name={'radio-demo'} value={2} />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Radio 3{' '}
+                        <input type="radio" name={'radio-demo'} value={3} />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Radio 4{' '}
+                        <input type="radio" name={'radio-demo'} value={4} />
+                    </label>
+                </div>
+            </Fragment>
+        );
     }
 }
-
-// Default properties
-Radio.defaultProps = {};
-
-export default Radio;

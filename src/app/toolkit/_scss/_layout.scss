@@ -1,34 +1,14 @@
 
 .flex {
-    display: flex;
+    @include flex-factory();
 
-    &-top {
-        @extend .flex;
-        align-items: flex-start;
-    }
-
-    &-middle {
-        @extend .flex;
-        align-items: center;
-    }
-
-    &-bottom {
-        @extend .flex;
-        align-items: flex-end;
-    }
-
-    &-left {
-        @extend .flex;
-        justify-content: flex-start;
-    }
-
-    &-center {
-        @extend .flex;
-        justify-content: center;
-    }
-
-    &-right {
-        @extend .flex;
-        justify-content: flex-end;
+    @each $prefix in $breakpoint-all-prefixes {
+        @include breakpoint($prefix) {
+            @debug $prefix;
+            &-#{$prefix} {
+                display: flex;
+                @include flex-factory();
+            }
+        }
     }
 }

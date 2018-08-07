@@ -268,13 +268,25 @@ module.exports = {
         },
         buttons: {
             label: 'Buttons',
-            route: '/toolkit/buttons',
+            route: '/toolkit/buttons/button-overview',
             elements: {
+                'button-overview': {
+                    type: 'organism',
+                    label: 'Overview',
+                    route: '/toolkit/buttons/button-overview',
+                    dna: '/toolkit/buttons/ButtonOverview',
+                    hideCode: true,
+                    component: require('appdir/toolkit/buttons/ButtonOverview')
+                        .default
+                    //"readme": require("appdir/toolkit/buttons/ButtonOverview/readme").default
+                },
                 'button-primary': {
                     type: 'atom',
                     label: 'Primary Button',
                     route: '/toolkit/buttons/button-primary',
                     dna: '/toolkit/buttons/ButtonPrimary',
+                    hideDna: true,
+                    hideCode: true,
                     component: require('appdir/toolkit/buttons/ButtonPrimary')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonPrimary/readme')
@@ -285,6 +297,8 @@ module.exports = {
                     label: 'Secondary Button',
                     route: '/toolkit/buttons/button-secondary',
                     dna: '/toolkit/buttons/ButtonSecondary',
+                    hideDna: true,
+                    hideCode: true,
                     component: require('appdir/toolkit/buttons/ButtonSecondary')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonSecondary/readme')
@@ -295,9 +309,23 @@ module.exports = {
                     label: 'Tertiary Button',
                     route: '/toolkit/buttons/button-tertiary',
                     dna: '/toolkit/buttons/ButtonTertiary',
+                    hideDna: true,
+                    hideCode: true,
                     component: require('appdir/toolkit/buttons/ButtonTertiary')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonTertiary/readme')
+                        .default
+                },
+                'button-state': {
+                    type: 'atom',
+                    label: 'Button States',
+                    route: '/toolkit/buttons/button-state',
+                    dna: '/toolkit/buttons/ButtonState',
+                    hideDna: true,
+                    hideCode: true,
+                    component: require('appdir/toolkit/buttons/ButtonState')
+                        .default,
+                    readme: require('appdir/toolkit/buttons/ButtonState/readme')
                         .default
                 },
                 'button-size': {
@@ -305,9 +333,22 @@ module.exports = {
                     label: 'Button Sizing',
                     route: '/toolkit/buttons/button-size',
                     dna: '/toolkit/buttons/ButtonSize',
+                    hideDna: true,
+                    hideCode: true,
                     component: require('appdir/toolkit/buttons/ButtonSize')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonSize/readme')
+                        .default
+                },
+                'button-block': {
+                    type: 'atom',
+                    label: 'Button Block',
+                    route: '/toolkit/buttons/button-block',
+                    dna: '/toolkit/buttons/ButtonBlock',
+                    hideDna: true,
+                    component: require('appdir/toolkit/buttons/ButtonBlock')
+                        .default,
+                    readme: require('appdir/toolkit/buttons/ButtonBlock/readme')
                         .default
                 }
             }

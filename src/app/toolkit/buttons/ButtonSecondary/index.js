@@ -11,34 +11,53 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-class ButtonSecondary extends Component {
+export default class ButtonSecondary extends Component {
     static dependencies() {
         return typeof module !== 'undefined' ? module.children : [];
     }
 
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
     render() {
-        return <Fragment>COMPONENT</Fragment>;
+        return (
+            <div className={'row'}>
+                <div className={'col-xs-12 col-sm text-center my-10'}>
+                    <div className={'mb-xs-8 mb-sm-10'}>
+                        <button className={'btn-secondary'}>Secondary</button>
+                    </div>
+                    <small>
+                        <kbd>.btn-secondary</kbd>
+                    </small>
+                </div>
+                <div className={'col-xs-12 col-sm text-center my-10'}>
+                    <div className={'mb-xs-8 mb-sm-10'}>
+                        <button className={'btn-secondary-pill'}>
+                            Secondary Pill
+                        </button>
+                    </div>
+                    <small>
+                        <kbd>.btn-secondary-pill</kbd>
+                    </small>
+                </div>
+                <div className={'col-xs-12 col-sm text-center my-10'}>
+                    <div className={'mb-xs-8 mb-sm-10'}>
+                        <button className={'btn-secondary-outline'}>
+                            Outline
+                        </button>
+                    </div>
+                    <small>
+                        <kbd>.btn-secondary-outline</kbd>
+                    </small>
+                </div>
+                <div className={'col-xs-12 col-sm text-center my-10'}>
+                    <div className={'mb-xs-8 mb-sm-10'}>
+                        <button className={'btn-secondary-outline-pill'}>
+                            Outline Pill
+                        </button>
+                    </div>
+                    <small>
+                        <kbd>.btn-secondary-outline-pill</kbd>
+                    </small>
+                </div>
+            </div>
+        );
     }
 }
-
-// Default properties
-ButtonSecondary.defaultProps = {};
-
-export default ButtonSecondary;
