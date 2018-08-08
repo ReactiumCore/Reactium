@@ -280,7 +280,6 @@ module.exports = {
                     hideCode: true,
                     component: require('appdir/toolkit/buttons/ButtonOverview')
                         .default
-                    //"readme": require("appdir/toolkit/buttons/ButtonOverview/readme").default
                 },
                 'button-primary': {
                     type: 'atom',
@@ -386,21 +385,25 @@ module.exports = {
                     readme: require('appdir/toolkit/form/Select/readme').default
                 },
                 checkbox: {
-                    type: 'atom',
+                    type: 'catalyst',
                     label: 'Checkbox',
                     route: '/toolkit/form/checkbox',
-                    dna: '/toolkit/form/Checkbox',
-                    component: require('appdir/toolkit/form/Checkbox').default,
-                    readme: require('appdir/toolkit/form/Checkbox/readme')
+                    dna: '/toolkit/form/CompCheckbox',
+                    hideCode: true,
+                    component: require('appdir/toolkit/form/CompCheckbox')
+                        .default,
+                    readme: require('appdir/toolkit/form/CompCheckbox/readme')
                         .default
                 },
                 radio: {
-                    type: 'atom',
+                    type: 'catalyst',
                     label: 'Radio',
                     route: '/toolkit/form/radio',
-                    dna: '/toolkit/form/Radio',
-                    component: require('appdir/toolkit/form/Radio').default,
-                    readme: require('appdir/toolkit/form/Radio/readme').default
+                    dna: '/toolkit/form/CompRadio',
+                    hideCode: true,
+                    component: require('appdir/toolkit/form/CompRadio').default,
+                    readme: require('appdir/toolkit/form/CompRadio/readme')
+                        .default
                 }
             }
         },

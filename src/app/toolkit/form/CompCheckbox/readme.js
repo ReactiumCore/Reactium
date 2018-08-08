@@ -3,16 +3,30 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
 
 /**
  * -----------------------------------------------------------------------------
- * Radio Readme
+ * CompCheckbox Readme
  * -----------------------------------------------------------------------------
  */
 
 const content = `
-# Your Documentation Here
+###### Usage
+${'```html'}
+<Checkbox value={1} name={'my-checkbox'} text={'Checkbox 1'} checked />
+<Checkbox value={2} name={'my-checkbox'} text={'Checkbox 2'} align={'left'} />
+<Checkbox value={3} name={'my-checkbox'} text={'Checkbox 3'} disabled />
+${'```'}
 
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
+###### Default Props
+${'```js'}
+Checkbox.defaultProps = {
+    align    : 'right',
+    checked  : false,
+    disabled : false,
+    id       : null,
+    name     : null,
+    text     : null,
+    value    : null,
+};
+${'```'}
 `;
 
 /**

@@ -21,7 +21,9 @@
 @import '../../app/toolkit/_scss/layout';
 @import '../../app/toolkit/_scss/typography';
 @import '../../app/toolkit/_scss/form';
-
-// Components
 @import '../../app/toolkit/global/Colors/_colors';
 @import '../../app/toolkit/global/Grid/_grid';
+
+// Components
+@import '../../app/components/common-ui/form/Checkbox/checkbox';
+@import '../../app/components/common-ui/form/Radio/radio';
