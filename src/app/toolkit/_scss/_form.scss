@@ -1,17 +1,115 @@
-label {
+
+.form-group {
     display: flex;
-    align-items: center;
-    line-height: 2;
-    user-select: none;
-    cursor: pointer;
+    flex-direction: column;
+    line-height: 1.5;
+    @extend .my-20;
 
-    > input,
-    > textarea,
-    > select {
-        margin: -2px px2rem(10) 0 px2rem(10);
+    &:first-of-type {
+        @extend .mt-0;
+    }
 
-        &[type=radio] {
-            margin-top: -5px;
+    &:last-of-type {
+        @extend .mb-0;
+    }
+
+    label {
+        user-select: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        font-weight: 500;
+
+        * {
+            font-weight: normal;
+        }
+    }
+
+    &, label {
+        input,
+        textarea,
+        select {
+            @extend .p-10;
+            @extend .mt-6;
+
+            flex-grow: 1;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: 200;
+            outline: none;
+            border: 1px solid $color-grey;
+            border-radius: $input-radius;
+            line-height: 1;
+
+            &:focus,
+            &.focus {
+                box-shadow: 0 0 0 5px rgba(lighten(nth($color-blue, 1), 5%), 0.25);
+                border: 1px solid $color-blue;
+            }
+
+            &:disabled {
+                opacity: 0.8;
+            }
+
+            &:first-child {
+                &:last-child {
+                    @extend .my-0;
+                }
+            }
+        }
+
+        textarea {
+            line-height: 1.25;
+        }
+    }
+
+    .inline,
+    &.inline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row !important;
+
+    }
+
+
+    .small, small {
+        &:last-child {
+            @extend .em;
+            @extend .mt-8;
+            font-weight: normal;
+        }
+    }
+
+    &.row {
+
+        label {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        input,
+        textarea,
+        select {
+            margin: 0;
+        }
+    }
+
+    &.error {
+        input,
+        textarea,
+        select {
+            box-shadow: 0 0 0 5px rgba(lighten(nth($color-red, 1), 5%), 0.25);
+            border: 1px solid $color-red !important;
+
+            &:focus,
+            &.focus {
+                box-shadow: none;
+            }
+        }
+
+        .small, small {
+            color: $color-red;
         }
     }
 }

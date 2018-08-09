@@ -35,9 +35,49 @@ class Textarea extends Component {
 
     render() {
         return (
-            <label>
-                Label: <textarea />
-            </label>
+            <form>
+                <div className={'form-group'}>
+                    <textarea
+                        name={'textarea'}
+                        placeholder={'your message here'}
+                        autoComplete={'off'}
+                    />
+                </div>
+                <div className={'form-group'}>
+                    <textarea
+                        name={'textarea'}
+                        autoComplete={'off'}
+                        readOnly
+                        defaultValue={'read only'}
+                    />
+                </div>
+                <div className={'form-group'}>
+                    <textarea
+                        name={'textarea'}
+                        placeholder={'disabled'}
+                        autoComplete={'off'}
+                        disabled
+                    />
+                </div>
+                <div className={'form-group'}>
+                    <label>
+                        Focused:
+                        <textarea
+                            name={'textarea'}
+                            className={'focus'}
+                            autoComplete={'off'}
+                        />
+                        <small>Some small text</small>
+                    </label>
+                </div>
+                <div className={'form-group error'}>
+                    <label>
+                        Error:
+                        <textarea name={'textarea'} autoComplete={'off'} />
+                        <small>Error message yo!</small>
+                    </label>
+                </div>
+            </form>
         );
     }
 }
