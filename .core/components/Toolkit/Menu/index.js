@@ -158,8 +158,15 @@ export default class Menu extends Component {
                                     redirect = false,
                                     elements = {},
                                     target = null,
-                                    hidden = false
+                                    hidden = false,
+                                    hideEmpty = false
                                 } = data[key];
+
+                                hidden =
+                                    hideEmpty === true &&
+                                    Object.keys(elements).length < 1
+                                        ? true
+                                        : hidden;
 
                                 if (hidden === true) {
                                     return null;
