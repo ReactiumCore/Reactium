@@ -4,6 +4,11 @@
     z-index: 1;
     padding: 60px;
     padding-top: 48px;
+    position: relative;
+
+    @include breakpoint(xs) {
+        padding: 20px;
+    }
 
     &-fullscreen {
         padding: 0;
@@ -19,6 +24,9 @@
         position: relative;
         font-size: 24px;
 
+        @include breakpoint(xs) {
+            margin-bottom: 10px;
+        }
 
         * {
             font-family: inherit;

@@ -17,6 +17,7 @@ import op from 'object-path';
 export default class Sidebar extends Component {
     constructor(props) {
         super(props);
+        this.container = null;
         this.state = {
             ...this.props
         };
@@ -47,13 +48,21 @@ export default class Sidebar extends Component {
             filters = [],
             toolbar = {},
             prefs = {},
-            update
+            update,
+            expanded
         } = this.state;
 
         position = op.get(prefs, 'sidebar.position', position);
+        expanded = op.get(prefs, 'sidebar.expanded', expanded);
+        expanded = expanded === true ? 'expanded' : 'collapsed';
 
         return (
-            <aside className={`re-toolkit-sidebar ${position}`}>
+            <aside
+                className={`re-toolkit-sidebar ${position} ${expanded}`}
+                ref={elm => {
+                    this.container = elm;
+                }}
+            >
                 <Toolbar {...toolbar} onToolbarItemClick={onToolbarItemClick} />
                 <Menu
                     prefs={prefs}
@@ -80,5 +89,6 @@ Sidebar.defaultProps = {
     onMenuItemClick: null,
     onMenuItemToggle: null,
     onToolbarItemClick: null,
-    position: 'left'
+    position: 'left',
+    expanded: true
 };

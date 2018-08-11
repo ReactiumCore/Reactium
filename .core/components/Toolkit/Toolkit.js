@@ -29,6 +29,12 @@ export default class Toolkit extends Component {
         this.settings = null;
         this.togglePref = this.togglePref.bind(this);
         this.toggleSettings = this.toggleSettings.bind(this);
+        this.onResize = this.onResize.bind(this);
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount');
+        window.addEventListener('resize', this.onResize);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -36,6 +42,18 @@ export default class Toolkit extends Component {
             let newState = Object.assign({}, this.state, nextProps);
             return newState;
         });
+    }
+
+    onResize() {
+        let w = window.innerWidth;
+        if (w < 768) {
+            let { prefs } = this.state;
+            let expanded = op.get(prefs, 'sidebar.expanded', true);
+
+            if (expanded === true) {
+                this.toggleMenu();
+            }
+        }
     }
 
     onMenuItemClick(e) {
@@ -102,7 +120,6 @@ export default class Toolkit extends Component {
     }
 
     onThemeChange(e) {
-        // TODO: on theme change
         this.state.setTheme(e.target.value);
     }
 
@@ -143,6 +160,11 @@ export default class Toolkit extends Component {
             return;
         }
         data.toggleFullScreen(e);
+    }
+
+    toggleMenu() {
+        this.state.menuToggle(this.sidebar.container);
+        this.setState({ update: Date.now() });
     }
 
     togglePref({ type, data }) {
@@ -326,6 +348,7 @@ export default class Toolkit extends Component {
                         ref={elm => {
                             this.content = elm;
                         }}
+                        onMenuToggleClick={this.toggleMenu.bind(this)}
                         onButtonClick={this.onButtonClick.bind(this)}
                         onCrumbClick={this.onMenuItemClick.bind(this)}
                     />

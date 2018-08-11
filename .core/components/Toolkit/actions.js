@@ -1,4 +1,6 @@
 import deps from 'dependencies';
+import op from 'object-path';
+import Tweenmax, { Power2 } from 'gsap';
 
 const isToolkit = path => {
     let exp = /^\/toolkit/i;
@@ -27,6 +29,47 @@ export default {
                 params
             });
         }
+    },
+
+    menuToggle: elm => (dispatch, getState) => {
+        let state = getState()['Toolkit'];
+
+        let { animating = false } = state;
+
+        if (animating === true) {
+            return;
+        }
+
+        // Let the app know you're animating
+        dispatch({ type: deps.actionTypes.TOOLKIT_MENU_TOGGLE });
+
+        // Unset display: none
+        Tweenmax.set(elm, { display: 'flex' });
+
+        let expanded = op.get(state, 'prefs.sidebar.expanded', false);
+
+        let w = expanded === true ? 0 : 320;
+
+        let anime = {
+            ease: Power2.easeInOut,
+            width: `${w}px`,
+            onComplete: () => {
+                expanded = !expanded;
+
+                let display = expanded === true ? 'flex' : 'none';
+
+                Tweenmax.set(elm, { display });
+
+                dispatch({ type: deps.actionTypes.TOOLKIT_MENU_TOGGLE });
+                dispatch({
+                    type: deps.actionTypes.TOOLKIT_PREF,
+                    value: expanded,
+                    key: 'prefs.sidebar.expanded'
+                });
+            }
+        };
+
+        Tweenmax.to(elm, 0.125, anime);
     },
 
     set: ({ key, value }) => dispatch => {

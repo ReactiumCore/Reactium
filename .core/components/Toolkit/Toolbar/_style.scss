@@ -1,16 +1,19 @@
 .re-toolkit-toolbar {
     width: $toolbar-width;
+    min-width: $toolbar-width;
     overflow: hidden;
     display: flex;
     align-items: stretch;
     box-shadow: $drop-shadow;
+    flex-shrink: 0;
 
     > div {
         min-width: $toolbar-width + 40px;
-        padding-bottom: 20px;
+        padding-bottom: 40px;
         display: flex;
         flex-direction: column;
         overflow-y: auto;
+        flex-shrink: 0;
     }
 
     .spacer {

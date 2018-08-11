@@ -13,7 +13,7 @@ import React, { Component, Fragment } from 'react';
 
 const S = props => {
     return (
-        <select {...props} style={{ width: 200 }}>
+        <select {...props}>
             <option>Item 1</option>
             <option>Item 2</option>
             <option>Item 3</option>
@@ -28,14 +28,14 @@ export default class Select extends Component {
 
     render() {
         return (
-            <div className={'flex-sm'}>
-                <div className={'mr-xs-0 mr-sm-20 mb-xs-10 mb-sm-0'}>
-                    <S multiple />
-                </div>
-                <div>
+            <form>
+                <div className={'form-group'}>
                     <S />
                 </div>
-            </div>
+                <div className={'form-group'}>
+                    <S multiple />
+                </div>
+            </form>
         );
     }
 }
