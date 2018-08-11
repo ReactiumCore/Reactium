@@ -410,11 +410,13 @@ module.exports = {
         components: {
             label: 'Components',
             route: '/toolkit/components',
+            hideEmpty: true,
             elements: {}
         },
         pages: {
             label: 'Pages',
             route: '#',
+            hideEmpty: true,
             elements: {}
         }
     }
