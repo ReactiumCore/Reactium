@@ -25,7 +25,6 @@ export default (state = {}, action) => {
             }
 
             op.set(newState, action.key, action.value);
-            newState['update'] = Date.now();
 
             return newState;
 
