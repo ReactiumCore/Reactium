@@ -107,7 +107,7 @@ export default class Code extends Component {
             format: 'html'
         });
 
-        markup = HTMLtoJSX(markup);
+        //markup = HTMLtoJSX(markup);
 
         copy(markup);
 
