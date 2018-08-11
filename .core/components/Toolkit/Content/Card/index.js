@@ -121,6 +121,7 @@ export default class Card extends Component {
                         position: 'relative'
                     });
                     tk.style.overflowY = 'auto';
+                    tk.classList.remove('fullscreen');
                     cont.scrollIntoView();
                 } else {
                     // pop out
@@ -128,6 +129,7 @@ export default class Card extends Component {
                         width: '100%'
                     });
                     tk.style.overflowY = 'hidden';
+                    tk.classList.add('fullscreen');
                 }
 
                 // Update header buttons

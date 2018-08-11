@@ -21,31 +21,29 @@ $sizes: (
             @if ($thisPrefix) {
                 .#{$prop-name}-#{$thisPrefix}-#{$size} {
                     @each $prop in $props {
-                        #{$prop}: px2rem($size);
+                        #{$prop}: px2rem($size) !important;
                     }
                 }
                 .#{$prop-name}-#{$thisPrefix}--#{$size} {
                     @each $prop in $props {
-                        #{$prop}: px2rem(-($size));
+                        #{$prop}: px2rem(-($size)) !important;
                     }
                 }
             } @else {
                 .#{$prop-name}-#{$size} {
                     @each $prop in $props {
-                        #{$prop}: px2rem($size);
+                        #{$prop}: px2rem($size) !important;
                     }
                 }
                 .#{$prop-name}--#{$size} {
                     @each $prop in $props {
-                        #{$prop}: px2rem(-($size));
+                        #{$prop}: px2rem(-($size)) !important;
                     }
                 }
             }
         }
     }
 }
-
-@include size-factory();
 
 @each $prefix in $breakpoint-all-prefixes {
     @include breakpoint($prefix) {
@@ -78,3 +76,6 @@ $sizes: (
         }
     }
 }
+
+
+@include size-factory();

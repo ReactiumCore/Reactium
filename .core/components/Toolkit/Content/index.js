@@ -282,8 +282,12 @@ export default class Content extends Component {
             element,
             group,
             defaultComponent,
-            update
+            update,
+            onMenuToggleClick,
+            prefs
         } = this.state;
+
+        let pos = op.get(prefs, 'sidebar.position', 'left');
 
         if (!data) {
             if (!defaultComponent) {
@@ -294,6 +298,15 @@ export default class Content extends Component {
             return (
                 <section className={'re-toolkit-content'}>
                     <Overview />
+                    <button
+                        type={'button'}
+                        className={`re-toolkit-menu-toggle-${pos}`}
+                        onClick={onMenuToggleClick}
+                    >
+                        <svg>
+                            <use xlinkHref={'#re-icon-menu'} />
+                        </svg>
+                    </button>
                 </section>
             );
         }
@@ -307,6 +320,15 @@ export default class Content extends Component {
                 <section className={'re-toolkit-content'}>
                     {this.renderCrumbs({ title, group, element: label })}
                     {this.renderCards({ data, card, group })}
+                    <button
+                        type={'button'}
+                        className={`re-toolkit-menu-toggle-${pos}`}
+                        onClick={onMenuToggleClick}
+                    >
+                        <svg>
+                            <use xlinkHref={'#re-icon-menu'} />
+                        </svg>
+                    </button>
                 </section>
             );
         } else {
@@ -315,6 +337,15 @@ export default class Content extends Component {
                 <section className={'re-toolkit-content'}>
                     {this.renderCrumbs({ title })}
                     {<Component />}
+                    <button
+                        type={'button'}
+                        className={`re-toolkit-menu-toggle-${pos}`}
+                        onClick={onMenuToggleClick}
+                    >
+                        <svg>
+                            <use xlinkHref={'#re-icon-menu'} />
+                        </svg>
+                    </button>
                 </section>
             );
         }
@@ -324,6 +355,7 @@ export default class Content extends Component {
 Content.defaultProps = {
     onButtonClick: null,
     onCrumbClick: null,
+    onMenuToggleClick: null,
     title: null,
     update: null,
     style: null,

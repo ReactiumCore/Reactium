@@ -1,12 +1,20 @@
 .re-toolkit-sidebar {
     display: flex;
-    position: relative;
-    min-width: $sidebar-width;
+    //position: relative;
+    //min-width: $sidebar-width;
     width: $sidebar-width;
     height: calc(100vh - #{$header-height});
     overflow: hidden;
     background-color: $white;
     box-shadow: $drop-shadow;
+    flex-shrink: 0;
+    // margin-left: 0;
+    // margin-right: 0;
+
+    &.collapsed {
+        display: none;
+        width: 0px;
+    }
 
     &.right {
         order: 10;

@@ -25,11 +25,19 @@ export default (state = {}, action) => {
             }
 
             op.set(newState, action.key, action.value);
+            newState['update'] = Date.now();
 
             return newState;
 
         case deps.actionTypes.TOOLKIT_THEME:
             newState = { ...state, style: action.theme };
+
+            return newState;
+
+        case deps.actionTypes.TOOLKIT_MENU_TOGGLE:
+            let { animating = false } = state;
+
+            newState = { ...state, animating: !animating };
 
             return newState;
 
