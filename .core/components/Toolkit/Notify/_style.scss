@@ -1,0 +1,73 @@
+.re-notice {
+    position: fixed;
+    top: 0;
+    display: none;
+    background-color: $white;
+    max-width: 300px;
+    width: 100%;
+    min-height: 60px;
+    padding: 20px 0;
+    margin: 10px;
+    align-items: center;
+    box-shadow: 0 0 10px 5px $grey-light;
+    z-index: 40000;
+
+    @include breakpoint(xs) {
+        max-width: calc(100% - 20px);
+    }
+
+    > div {
+        flex-grow: 1;
+        font-size: 15px;
+    }
+
+    &-close {
+        width: 50px;
+        height: 30px;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        &:hover,
+        &:focus {
+            opacity: 0.5;
+        }
+    }
+
+    &.right {
+        right: 0;
+        border-left: 2px solid $blue;
+        justify-content: flex-start;
+
+        > div {
+            padding-left: 25px;
+        }
+    }
+
+    &.left {
+        left: 0;
+        border-right: 2px solid $blue;
+        justify-content: flex-end;
+
+        > div {
+            padding-right: 25px;
+        }
+
+        .re-notice-close {
+            order: -1;
+        }
+    }
+
+    &.visible {
+        top: $header-height;
+        display: flex;
+    }
+}

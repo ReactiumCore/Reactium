@@ -18,4 +18,19 @@
     &-shrink {
         flex-shrink: 1;
     }
+
+    &.start {
+        justify-content: flex-start
+    }
+    &.end {
+        justify-content: flex-end;
+    }
+
+    &.middle {
+        align-items: center
+    }
+
+    &.center {
+        justify-content: center;
+    }
 }

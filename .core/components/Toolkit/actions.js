@@ -72,6 +72,72 @@ export default {
         Tweenmax.to(elm, 0.125, anime);
     },
 
+    notice: {
+        hide: params => (dispatch, getState) => {
+            let state = getState()['Toolkit'];
+            let { animating = false } = op.get(state, 'notify', {});
+            let { elm } = params;
+
+            elm = elm.cont;
+
+            if (animating === true) {
+                return;
+            }
+
+            dispatch({
+                type: deps.actionTypes.TOOLKIT_NOTICE_UPDATE,
+                params: { ...state.notify, animating: true }
+            });
+
+            let h = -(elm.offsetHeight + 20);
+
+            Tweenmax.to(elm, 0.25, {
+                top: `${h}px`,
+                ease: Power2.easeInOut,
+                onComplete: () => {
+                    dispatch({
+                        type: deps.actionTypes.TOOLKIT_NOTICE_TOGGLE,
+                        visible: false
+                    });
+
+                    elm.style.display = 'none';
+                }
+            });
+        },
+
+        show: params => (dispatch, getState) => {
+            let state = getState()['Toolkit'];
+            let { animating = false } = op.get(state, 'notify', {});
+            let { autohide, dismissable, elm, message } = params;
+
+            elm = elm.cont;
+
+            if (animating === true) {
+                return;
+            }
+
+            elm.style.display = 'flex';
+
+            params['animating'] = true;
+
+            dispatch({
+                type: deps.actionTypes.TOOLKIT_NOTICE_UPDATE,
+                params
+            });
+
+            Tweenmax.to(elm, 0.25, {
+                top: '60px',
+                ease: Power2.easeInOut,
+                onComplete: () => {
+                    dispatch({
+                        type: deps.actionTypes.TOOLKIT_NOTICE_TOGGLE,
+                        visible: true
+                    });
+                }
+            });
+        }
+    },
+
     set: ({ key, value }) => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_PREF,
