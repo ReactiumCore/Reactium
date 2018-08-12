@@ -40,6 +40,27 @@ export default (state = {}, action) => {
 
             return newState;
 
+        case deps.actionTypes.TOOLKIT_NOTICE_UPDATE:
+            newState = { ...state };
+
+            delete action.params.elm;
+
+            newState['notify'] = action.params;
+
+            return newState;
+
+        case deps.actionTypes.TOOLKIT_NOTICE_TOGGLE:
+            newState = { ...state };
+
+            if (action.visible === false) {
+                newState['notify'] = {};
+            }
+
+            newState['notify']['animating'] = false;
+            newState['notify']['visible'] = action.visible;
+
+            return newState;
+
         default:
             return state;
     }

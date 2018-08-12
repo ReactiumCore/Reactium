@@ -21,6 +21,10 @@ const mapDispatchToProps = dispatch => ({
     mount: () => dispatch(deps.actions.Toolkit.mount()),
     menuItemClick: url => dispatch(deps.actions.Toolkit.menuItemClick(url)),
     menuToggle: elm => dispatch(deps.actions.Toolkit.menuToggle(elm)),
+    notice: {
+        hide: params => dispatch(deps.actions.Toolkit.notice.hide(params)),
+        show: params => dispatch(deps.actions.Toolkit.notice.show(params))
+    },
     set: data => dispatch(deps.actions.Toolkit.set(data)),
     setTheme: data => dispatch(deps.actions.Toolkit.setTheme(data))
 });

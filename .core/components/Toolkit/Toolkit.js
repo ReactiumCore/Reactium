@@ -9,6 +9,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import Settings from './Settings';
+import Notify from './Notify';
 import { Helmet } from 'react-helmet';
 import ToolbarIcons from './Toolbar/ToolbarIcons';
 import React, { Component, Fragment } from 'react';
@@ -27,13 +28,13 @@ export default class Toolkit extends Component {
         this.content = null;
         this.sidebar = null;
         this.settings = null;
+        this.notify = null;
         this.togglePref = this.togglePref.bind(this);
         this.toggleSettings = this.toggleSettings.bind(this);
         this.onResize = this.onResize.bind(this);
     }
 
     componentDidMount() {
-        console.log('componentDidMount');
         window.addEventListener('resize', this.onResize);
     }
 
@@ -42,6 +43,21 @@ export default class Toolkit extends Component {
             let newState = Object.assign({}, this.state, nextProps);
             return newState;
         });
+    }
+
+    onCopyClick() {
+        let autohide = 3000;
+        let dismissable = true;
+        let elm = this.notify;
+        let message = 'Code copied!';
+
+        this.state.notice.show({ message, autohide, dismissable, elm });
+    }
+
+    onNoticeDismiss() {
+        let elm = this.notify;
+
+        this.state.notice.hide({ elm });
     }
 
     onResize() {
@@ -272,7 +288,8 @@ export default class Toolkit extends Component {
             element,
             showSettings,
             showMenu,
-            style
+            style,
+            notify
         } = this.state;
 
         let {
@@ -351,6 +368,7 @@ export default class Toolkit extends Component {
                         onMenuToggleClick={this.toggleMenu.bind(this)}
                         onButtonClick={this.onButtonClick.bind(this)}
                         onCrumbClick={this.onMenuItemClick.bind(this)}
+                        onCopyClick={this.onCopyClick.bind(this)}
                     />
                 </main>
 
@@ -364,6 +382,15 @@ export default class Toolkit extends Component {
                     visible={showSettings}
                     update={update}
                     prefs={prefs}
+                />
+
+                <Notify
+                    prefs={prefs}
+                    ref={elm => {
+                        this.notify = elm;
+                    }}
+                    onCloseClick={this.onNoticeDismiss.bind(this)}
+                    {...notify}
                 />
             </Fragment>
         );

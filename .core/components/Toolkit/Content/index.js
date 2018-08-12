@@ -125,7 +125,14 @@ export default class Content extends Component {
 
     // Renderers
     renderCards({ data, card, group }) {
-        let { onButtonClick, prefs, update, style, menu } = this.state;
+        let {
+            onButtonClick,
+            onCopyClick,
+            prefs,
+            update,
+            style,
+            menu
+        } = this.state;
 
         this.cards = {};
         this.codes = {};
@@ -213,7 +220,7 @@ export default class Content extends Component {
                             ref={elm => {
                                 this.registerCode({ elm, id });
                             }}
-                            onButtonClick={onButtonClick}
+                            onButtonClick={onCopyClick}
                             component={component}
                             update={update}
                             prefs={prefs}
@@ -356,6 +363,7 @@ Content.defaultProps = {
     onButtonClick: null,
     onCrumbClick: null,
     onMenuToggleClick: null,
+    onCopyClick: null,
     title: null,
     update: null,
     style: null,
