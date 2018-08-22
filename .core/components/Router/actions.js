@@ -5,19 +5,27 @@ export default {
     updateRoute: (location, route = {}, params) => (dispatch, getState) => {
         const { Router } = getState();
 
-        if ( typeof window !== 'undefined' && Router.pathname !== location.pathname ) {
-            window.scrollTo(0,0);
+        if (
+            typeof window !== 'undefined' &&
+            Router.pathname !== location.pathname
+        ) {
+            window.scrollTo(0, 0);
         }
 
         dispatch({
             type: deps.actionTypes.UPDATE_ROUTE,
             location,
-            params,
+            params
         });
 
         // load route data
-        if ( 'load' in route ) {
-            dispatch(route.load(params, queryString.parse(location.search)));
+        if ('load' in route) {
+            dispatch(
+                route.load(
+                    params,
+                    queryString.parse(location.search.replace(/^\?/, ''))
+                )
+            );
         }
-    },
+    }
 };
