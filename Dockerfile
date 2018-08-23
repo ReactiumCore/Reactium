@@ -1,5 +1,7 @@
-# Stage 0
-FROM node:carbon
+# Build Stage
+FROM node:carbon as build
+
+RUN mkdir /tmp/app
 
 WORKDIR /tmp/app
 
@@ -11,20 +13,24 @@ COPY package*.json ./
 # Bundle app source
 COPY . .
 
-RUN npm rebuild node-sass --force
+RUN chown -R node ./
+
+USER node
 
 # Run App build within container context
-RUN npm run build
+RUN npm install
 
-# Stage 1
+RUN npm prune --production
+
+# Deployable Stage
 FROM node:carbon
 
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY --from=0 /tmp/app/node_modules ./node_modules
-COPY --from=0 /tmp/app/public ./public
-COPY --from=0 /tmp/app/build ./build
+COPY --from=build /tmp/app/node_modules ./node_modules
+COPY --from=build /tmp/app/public ./public
+COPY --from=build /tmp/app/build ./build
 
 EXPOSE 3030
 

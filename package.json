@@ -16,8 +16,8 @@
     "local-ssr": "gulp local:ssr",
     "clean": "gulp clean",
     "docker": "npm-run-all -s clean docker:*",
-    "docker:build": "docker image build -t atomicreactor/reactium:$npm_package_version .",
-    "docker:push": "docker push atomicreactor/reactium:$npm_package_version",
+    "docker:build": "cross-env docker image build -t $npm_package_name:$npm_package_version -t $npm_package_name:latest .",
+    "docker:push": "cross-env docker push $npm_package_name:$npm_package_version && cross-env docker push hub.reactium.io:5000/$npm_package_name:latest",
     "deploy": "cf push",
     "precommit": "lint-staged",
     "postinstall": "npm-run-all -s build:*"
