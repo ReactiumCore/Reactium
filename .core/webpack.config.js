@@ -4,7 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const env = process.env.NODE_ENV || 'development';
 
-module.exports = (gulpConfig, type = 'app') => {
+module.exports = (gulpConfig, type = 'app', overrides = {}) => {
     let plugins = [];
     let externals = [];
     let target = 'web';
@@ -40,7 +40,7 @@ module.exports = (gulpConfig, type = 'app') => {
         )
     );
 
-    return {
+    const defaultConfig = {
         target: target,
         entry: entries,
         devtool: tools,
@@ -94,4 +94,6 @@ module.exports = (gulpConfig, type = 'app') => {
             ]
         }
     };
+
+    return { ...defaultConfig, ...overrides };
 };

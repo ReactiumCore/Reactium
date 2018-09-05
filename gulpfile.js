@@ -12,9 +12,25 @@ const gulp = require('gulp');
    const config = require('../path/to/my/gulp.config');
    const webpackConfig = require('../path/to/my/webpack.config');
 
+   @example
    // Direct property edit
    config.port.proxy = 3030;
    webpackConfig.output.path = path.resolve(__dirname, '/my/new/path');
+
+   @example
+   // Injection
+   const config = require('./.core/gulp.config')({
+       defines: {
+           'process.env': {
+               NODE_ENV: JSON.stringify(env),
+               VERSION: require('./package.json').version
+            }
+        }
+    });
+
+    const webpackConfig = require('./.core/webpack.config')(config, 'app', {
+        target: 'node'
+    });
 */
 const config = require('./.core/gulp.config')();
 const webpackConfig = require('./.core/webpack.config')(config);

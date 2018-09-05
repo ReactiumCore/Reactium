@@ -3,8 +3,8 @@
 const path = require('path');
 const globby = require('globby');
 
-module.exports = () => {
-    return {
+module.exports = (overrides = {}) => {
+    const defaultConfig = {
         entries: globby
             .sync('./src/app/*.js')
             .map(p => path.resolve(p))
@@ -73,4 +73,6 @@ module.exports = () => {
             colors: 'src/app/toolkit/_scss/_colors.scss'
         }
     };
+
+    return { ...defaultConfig, ...overrides };
 };
