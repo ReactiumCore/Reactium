@@ -14,12 +14,18 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
     let dest = config.dest.js;
     let tools = env === 'development' ? 'source-map' : '';
 
+    if (typeof overrides['defines'] !== 'undefined') {
+        config['defines'] = override['defines'];
+        delete override.defines;
+    }
+
     // Only override process.env on client side
     if (type === 'app') {
         config.defines['process.env'] = {
             NODE_ENV: JSON.stringify(env)
         };
     }
+
     plugins.push(new webpack.DefinePlugin(config.defines));
     plugins.push(
         new webpack.ContextReplacementPlugin(/^toolkit/, context => {
