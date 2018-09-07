@@ -418,6 +418,22 @@ module.exports = {
             route: '#',
             hideEmpty: true,
             elements: {}
+        },
+        icons: {
+            label: 'Icons',
+            route: '/toolkit/icons',
+            elements: {
+                'linear-icons': {
+                    type: 'molecule',
+                    label: 'Linearicons',
+                    route: '/toolkit/icons/linear-icons',
+                    dna: '/toolkit/icons/LinearIcons',
+                    component: require('appdir/toolkit/icons/LinearIcons')
+                        .default,
+                    readme: require('appdir/toolkit/icons/LinearIcons/readme')
+                        .default
+                }
+            }
         }
     }
 };
