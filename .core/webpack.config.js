@@ -72,8 +72,11 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
         module: {
             rules: [
                 {
-                    test: [/.js$/],
+                    test: [/\.jsx|js($|\?)/],
                     exclude: /node_modules/,
+                    resolve: {
+                        extensions: ['.js', '.jsx', '.json']
+                    },
                     use: [
                         {
                             loader: 'babel-loader'
