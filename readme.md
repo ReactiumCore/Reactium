@@ -38,7 +38,7 @@ To run in **server side rendering** development mode from your project directory
 
 ```
 $ npm install
-$ npm run local-ssr
+$ npm run local:ssr
 ```
 
 # Development Guide
