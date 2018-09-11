@@ -9,8 +9,6 @@ import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
-import HTMLtoJSX from 'html-to-jsx';
-//import beautify from 'js-beautify';
 import beautify from 'beautify';
 import op from 'object-path';
 
@@ -102,12 +100,10 @@ export default class Code extends Component {
 
     onCopyClick(e) {
         let { beauty = {}, component: Component, onButtonClick } = this.state;
-        //let markup = beautify.html(renderToStaticMarkup(<Component />), beauty);
+
         let markup = beautify(renderToStaticMarkup(<Component />), {
             format: 'html'
         });
-
-        //markup = HTMLtoJSX(markup);
 
         copy(markup);
 
@@ -222,24 +218,21 @@ export default class Code extends Component {
                             this.cont = elm;
                         }}
                         className={'re-toolkit-code-view'}
-                        style={{ height, display }}
-                    >
+                        style={{ height, display }}>
                         <div className={'re-toolkit-card-heading thin'}>
                             <h3>Code</h3>
                             <button
                                 className={`theme-btn ${theme}`}
                                 title={`theme: ${theme}`}
                                 onClick={this.onThemeClick}
-                                type={'button'}
-                            >
+                                type={'button'}>
                                 <span />
                                 <span />
                             </button>
                             <button
                                 title={'copy to clipboard'}
                                 onClick={this.onCopyClick}
-                                type={'button'}
-                            >
+                                type={'button'}>
                                 <svg>
                                     <use xlinkHref={'#re-icon-clipboard'} />
                                 </svg>
@@ -250,8 +243,7 @@ export default class Code extends Component {
                                 showLineNumbers={true}
                                 style={style}
                                 customStyle={{ padding: '20px 30px' }}
-                                language={'HTML'}
-                            >
+                                language={'HTML'}>
                                 {this.markup(Component, beauty)}
                             </SyntaxHighlighter>
                         </div>
@@ -266,8 +258,7 @@ export default class Code extends Component {
                             this.cont = elm;
                         }}
                         className={'re-toolkit-code-view'}
-                        style={{ height, display }}
-                    >
+                        style={{ height, display }}>
                         <div className={'re-toolkit-card-heading thin'}>
                             <small>
                                 <em>
