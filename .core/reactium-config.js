@@ -6,7 +6,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.3.7',
+    version: '2.3.8',
     semver: '2.3.x',
     update: {
         package: {
@@ -24,8 +24,8 @@ module.exports = {
                 add: {
                     build: 'npm install --production-only',
                     static: 'npm-run-all build:* && gulp static',
-                    local: 'cross-env APP_PORT=3000 gulp local',
-                    'local:ssr': 'cross-env APP_PORT=3000 gulp local:ssr'
+                    local: 'gulp local',
+                    'local:ssr': 'gulp local:ssr'
                 },
                 remove: [
                     'local-fe-start',
