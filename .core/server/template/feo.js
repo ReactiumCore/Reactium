@@ -1,3 +1,5 @@
+import serialize from 'serialize-javascript';
+
 module.exports = {
     version: '%TEMPLATE_VERSION%',
     template: req => {
@@ -13,6 +15,7 @@ module.exports = {
 
                 <script>
                     window.ssr = false;
+                    window.defines = ${serialize(defines)};
                     window.restAPI = '/api';
                     window.parseAppId = '${parseAppId}';
                 </script>

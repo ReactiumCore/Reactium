@@ -13,6 +13,23 @@ import morgan from 'morgan';
 import apiConfig from 'appdir/api/config';
 import path from 'path';
 import fs from 'fs';
+global.defines = {};
+global.rootPath = path.resolve(__dirname, '..');
+global.parseAppId = apiConfig.parseAppId;
+global.restAPI = apiConfig.restAPI;
+
+// SSR Defines
+if (!'defines' in global) {
+    global.defines = {};
+}
+if (fs.existsSync(`${rootPath}/src/app/server/defines.js`)) {
+    const defs = require(`${rootPath}/src/app/server/defines.js`);
+    Object.keys(defs).forEach(key => {
+        if (key !== 'process.env') {
+            global.defines[key] = defs[key];
+        }
+    });
+}
 
 const app = express();
 
@@ -22,8 +39,6 @@ try {
 } catch (err) {
     gulpConfig = { port: { proxy: 3030 } };
 }
-
-global.rootPath = path.resolve(__dirname, '..');
 
 let node_env = process.env.hasOwnProperty('NODE_ENV')
     ? process.env.NODE_ENV
@@ -48,9 +63,6 @@ if (process.env.hasOwnProperty('PORT_VAR')) {
 }
 
 port = Number(port);
-
-global.parseAppId = apiConfig.parseAppId;
-global.restAPI = apiConfig.restAPI;
 
 const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
 

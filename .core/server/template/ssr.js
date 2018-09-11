@@ -18,6 +18,7 @@ module.exports = {
 
                 <script>
                     window.ssr = true;
+                    window.defines = ${serialize(defines)};
                     window.INITIAL_STATE = ${serialize(store.getState())}
                     window.restAPI = '/api';
                     window.parseAppId = '${parseAppId}'

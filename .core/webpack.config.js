@@ -1,8 +1,15 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const env = process.env.NODE_ENV || 'development';
+const rootPath = path.resolve(__dirname, '..');
+
+let defines = {};
+if (fs.existsSync(`${rootPath}/src/app/server/defines.js`)) {
+    defines = require(`${rootPath}/src/app/server/defines.js`);
+}
 
 module.exports = (gulpConfig, type = 'app', overrides = {}) => {
     let plugins = [];
@@ -14,16 +21,25 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
     let dest = config.dest.js;
     let tools = env === 'development' ? 'source-map' : '';
 
-    if (typeof overrides['defines'] !== 'undefined') {
-        config['defines'] = override['defines'];
-        delete override.defines;
-    }
+    Object.keys(defines).forEach(key => {
+        if (key !== 'process.env') {
+            config.defines[key] = JSON.stringify(defines[key]);
+        }
+    });
 
     // Only override process.env on client side
     if (type === 'app') {
         config.defines['process.env'] = {
             NODE_ENV: JSON.stringify(env)
         };
+
+        if ('process.env' in defines) {
+            Object.keys(defines['process.env']).forEach(key => {
+                config.defines['process.env'][key] = JSON.stringify(
+                    defines['process.env'][key]
+                );
+            });
+        }
     }
 
     plugins.push(new webpack.DefinePlugin(config.defines));
