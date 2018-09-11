@@ -81,8 +81,8 @@ const reactium = (gulp, config, webpackConfig) => {
                 { verbosity: 3 }
             );
             let babel = new run.Command(
-                'cross-env SSR_MODE=on NODE_ENV=development DEBUG=off nodemon ./.core/index.js --exec babel-node',
-                { verbosity: 0 }
+                'cross-env SSR_MODE=on NODE_ENV=development nodemon ./.core/index.js --exec babel-node',
+                { verbosity: 3 }
             );
 
             watch.exec();

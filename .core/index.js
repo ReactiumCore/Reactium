@@ -70,7 +70,7 @@ const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
 app.set('x-powered-by', false);
 
 let middlewares = [
-    process.env.DEBUG !== 'off'
+    process.env.DEBUG === 'on'
         ? {
               name: 'logging',
               use: morgan('combined')
