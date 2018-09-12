@@ -17,6 +17,7 @@ global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
 global.parseAppId = apiConfig.parseAppId;
 global.restAPI = apiConfig.restAPI;
+global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
 
 // SSR Defines
 if (!'defines' in global) {
@@ -187,7 +188,9 @@ middlewares.filter(_ => _).forEach(({ use }) => {
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {
-    app.dependencies.init();
+    if (isSSR) {
+        app.dependencies.init();
+    }
 
     console.log(`[00:00:00] [Reactium] Server running on port ${port}...`);
 });
@@ -197,4 +200,6 @@ if (fs.existsSync(`${rootPath}/src/app/server/ssl.js`)) {
     require(`${rootPath}/src/app/server/ssl.js`)(app);
 }
 
-app.dependencies = global.dependencies = require('dependencies').default;
+if (isSSR) {
+    app.dependencies = global.dependencies = require('dependencies').default;
+}

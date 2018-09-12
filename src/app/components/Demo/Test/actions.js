@@ -1,8 +1,8 @@
-import deps from "dependencies";
+import deps from 'dependencies';
 
 export default {
     mount: params => (dispatch, getState) => {
-        let state = getState()["Test"];
+        let state = getState()['Test'];
         let { loaded = false } = state;
 
         if (loaded !== true) {
@@ -12,7 +12,9 @@ export default {
                 })
                 .catch(error => console.error(error));
         } else {
-            return dispatch({ type: deps.actionTypes.TEST_MOUNT, data: state });
+            return Promise.resolve(
+                dispatch({ type: deps.actionTypes.TEST_MOUNT, data: state })
+            );
         }
     },
 

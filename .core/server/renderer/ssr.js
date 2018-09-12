@@ -7,7 +7,11 @@ import { matchRoutes } from 'react-router-config';
 import storeCreator from 'reactium-core/storeCreator';
 import Router from 'reactium-core/components/Router';
 
+const app = {};
+app.dependencies = global.dependencies = require('dependencies').default;
+
 const renderer = template => (req, res, context) => {
+    app.dependencies.init();
     const store = storeCreator({ server: true });
     const matches = matchRoutes(dependencies.routes, req.path);
     const loaders = matches

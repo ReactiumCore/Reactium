@@ -91,10 +91,7 @@ export default (req, res, context) => {
     req.styles = styles(req, res);
 
     let template,
-        renderMode =
-            'SSR_MODE' in process.env && process.env.SSR_MODE === 'on'
-                ? 'ssr'
-                : 'feo';
+        renderMode = isSSR ? 'ssr' : 'feo';
 
     const { semver: coreSemver } = require(`${rootPath}/.core/reactium-config`);
     const coreTemplate = require(`../template/${renderMode}`);
