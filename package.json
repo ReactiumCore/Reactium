@@ -67,6 +67,7 @@
     "npm-run-all": "^4.1.2",
     "object-path": "^0.11.4",
     "parse": "^1.11.0",
+    "prop-types": "^15.6.2",
     "querystring-browser": "^1.0.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
