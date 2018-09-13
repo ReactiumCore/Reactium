@@ -57,6 +57,11 @@ export default class Preview extends Component {
     }
 
     renderCmp({ style }) {
+        let browserSync;
+        if (document) {
+            browserSync = document.getElementById('__bs_script__');
+        }
+
         return `
             <!DOCTYPE html>
             <html>
@@ -66,6 +71,7 @@ export default class Preview extends Component {
                 </head>
                 <body style="padding: 25px">
                     <div id="router"></div>
+                    ${browserSync && browserSync.outerHTML}
                 </body>
             </html>
         `;
