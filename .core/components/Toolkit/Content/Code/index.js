@@ -5,12 +5,14 @@
  */
 import { TweenMax, Power2 } from 'gsap';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { Provider } from 'react-redux';
 import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
 import beautify from 'beautify';
 import op from 'object-path';
+import PropTypes from 'prop-types';
 
 /**
  * -----------------------------------------------------------------------------
@@ -101,9 +103,16 @@ export default class Code extends Component {
     onCopyClick(e) {
         let { beauty = {}, component: Component, onButtonClick } = this.state;
 
-        let markup = beautify(renderToStaticMarkup(<Component />), {
-            format: 'html'
-        });
+        let markup = beautify(
+            renderToStaticMarkup(
+                <Provider store={this.context.store}>
+                    <Component />
+                </Provider>
+            ),
+            {
+                format: 'html'
+            }
+        );
 
         copy(markup);
 
@@ -187,10 +196,16 @@ export default class Code extends Component {
     }
 
     markup(Component, beauty) {
-        //return beautify.html(renderToStaticMarkup(<Component />), beauty);
-        return beautify(renderToStaticMarkup(<Component />), {
-            format: 'html'
-        });
+        return beautify(
+            renderToStaticMarkup(
+                <Provider store={this.context.store}>
+                    <Component />
+                </Provider>
+            ),
+            {
+                format: 'html'
+            }
+        );
     }
 
     render() {
@@ -287,4 +302,8 @@ Code.defaultProps = {
     beauty: {
         wrap_line_length: 10000000000000
     }
+};
+
+Code.contextTypes = {
+    store: PropTypes.object
 };
