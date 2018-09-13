@@ -53,7 +53,7 @@ export default class Preview extends Component {
     }
 
     registerIframe(elm) {
-        this.iframe = elm.node;
+        this.iframe = elm && elm.node;
     }
 
     renderCmp({ style }) {
