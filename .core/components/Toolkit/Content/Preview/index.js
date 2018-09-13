@@ -4,14 +4,16 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
+import { Provider } from 'react-redux';
 import { getDisplayName } from 'reactium-core/components/Toolkit/_lib/tools';
+import Frame, { FrameContextConsumer } from 'react-frame-component';
+import PropTypes from 'prop-types';
 
 /**
  * -----------------------------------------------------------------------------
  * React Component: Preview
  * -----------------------------------------------------------------------------
  */
-
 export default class Preview extends Component {
     constructor(props) {
         super(props);
@@ -51,12 +53,10 @@ export default class Preview extends Component {
     }
 
     registerIframe(elm) {
-        this.iframe = elm;
+        this.iframe = elm.node;
     }
 
-    renderCmp({ cname, cpath, style }) {
-        let spath = process.env.NODE_ENV === 'development' ? '' : '/assets/js';
-
+    renderCmp({ style }) {
         return `
             <!DOCTYPE html>
             <html>
@@ -64,10 +64,8 @@ export default class Preview extends Component {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                     <link rel="stylesheet" href="${style}">
                 </head>
-                <body style="padding: 25px;">
-                    <Component type="${cname}" path="${cpath}"></Component>
-                    <script src="${spath}/vendors.js"></script>
-                    <script src="${spath}/main.js"></script>
+                <body style="padding: 25px">
+                    <div id="router"></div>
                 </body>
             </html>
         `;
@@ -88,47 +86,22 @@ export default class Preview extends Component {
             return null;
         }
 
-        let type = typeof Component;
         let display = visible ? 'block' : 'none';
+        let markup = this.renderCmp({ style });
 
-        switch (type) {
-            case 'string': {
-                return (
-                    <iframe
-                        src={Component}
-                        style={{ display }}
-                        id={`iframe-${id}`}
-                        onLoad={this.resize}
-                        frameBorder={0}
-                        scrolling={'no'}
-                        ref={this.registerIframe}
-                    />
-                );
-            }
-
-            case 'function': {
-                let cname = dna.split('/').pop();
-                let cpath = `${group}/${cname}`;
-
-                let markup = this.renderCmp({ cname, cpath, style });
-
-                return (
-                    <iframe
-                        srcDoc={markup}
-                        style={{ display }}
-                        id={`iframe-${id}`}
-                        onLoad={this.resize}
-                        frameBorder={0}
-                        scrolling={'no'}
-                        ref={this.registerIframe}
-                    />
-                );
-            }
-
-            default: {
-                return null;
-            }
-        }
+        return (
+            <Frame
+                style={{ display }}
+                id={`iframe-${id}`}
+                onLoad={this.resize}
+                frameBorder={0}
+                scrolling={'no'}
+                ref={this.registerIframe}
+                initialContent={markup}
+                mountTarget="#router">
+                <Component />
+            </Frame>
+        );
     }
 }
 
@@ -138,4 +111,8 @@ Preview.defaultProps = {
     group: null,
     id: null,
     style: '/assets/style/style.css'
+};
+
+Preview.contextTypes = {
+    store: PropTypes.object
 };
