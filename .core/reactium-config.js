@@ -17,7 +17,9 @@ module.exports = {
                 remove: []
             },
             dependencies: {
-                add: {},
+                add: {
+                    'react-frame-component': '^4.0.1'
+                },
                 remove: []
             },
             scripts: {
