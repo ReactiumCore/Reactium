@@ -36,6 +36,14 @@ export default class Preview extends Component {
             ...prevState,
             ...nextProps
         }));
+
+        const { style } = nextProps;
+        if (this.iframe && style !== this.state.style) {
+            const stylesheet = this.iframe.contentWindow.document.head.querySelector(
+                'link[rel=stylesheet]'
+            );
+            stylesheet.setAttribute('href', style);
+        }
     }
 
     resize() {
