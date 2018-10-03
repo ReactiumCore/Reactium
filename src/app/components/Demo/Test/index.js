@@ -7,11 +7,11 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { Helmet } from "react-helmet";
-import Test from "./Test";
-import deps from "dependencies";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import Test from './Test';
+import deps from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -19,13 +19,11 @@ import deps from "dependencies";
  * -----------------------------------------------------------------------------
  */
 const mapStateToProps = (state, props) => {
-    return Object.assign({}, state["Test"], props);
+    return Object.assign({}, state['Test'], props);
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
-    test: {
-        click: () => dispatch(deps.actions.Test.click())
-    }
+    click: () => dispatch(deps.actions.Test.click())
 });
 
 export default connect(
