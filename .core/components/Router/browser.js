@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
-import { renderRoutes } from 'react-router-config';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RouteObserver from './RouteObserver';
 import deps from 'dependencies';
 
@@ -11,7 +10,9 @@ export default class AppRouter extends Component {
                 <Fragment>
                     <RouteObserver />
                     <Switch>
-                        {renderRoutes(deps.routes)}
+                        {deps.routes.map(route => (
+                            <Route {...route} key="route" />
+                        ))}
                     </Switch>
                 </Fragment>
             </BrowserRouter>
