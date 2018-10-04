@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { TweenMax, Power2 } from 'gsap';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import React, { Component, Fragment } from 'react';
