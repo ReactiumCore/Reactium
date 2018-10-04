@@ -1,6 +1,6 @@
 import deps from 'dependencies';
 import op from 'object-path';
-import Tweenmax, { Power2 } from 'gsap';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 
 const isToolkit = path => {
     let exp = /^\/toolkit/i;
@@ -44,7 +44,7 @@ export default {
         dispatch({ type: deps.actionTypes.TOOLKIT_MENU_TOGGLE });
 
         // Unset display: none
-        Tweenmax.set(elm, { display: 'flex' });
+        TweenMax.set(elm, { display: 'flex' });
 
         let expanded = op.get(state, 'prefs.sidebar.expanded', false);
 
@@ -58,7 +58,7 @@ export default {
 
                 let display = expanded === true ? 'flex' : 'none';
 
-                Tweenmax.set(elm, { display });
+                TweenMax.set(elm, { display });
 
                 dispatch({ type: deps.actionTypes.TOOLKIT_MENU_TOGGLE });
                 dispatch({
@@ -69,7 +69,7 @@ export default {
             }
         };
 
-        Tweenmax.to(elm, 0.125, anime);
+        TweenMax.to(elm, 0.125, anime);
     },
 
     notice: {
@@ -91,7 +91,7 @@ export default {
 
             let h = -(elm.offsetHeight + 20);
 
-            Tweenmax.to(elm, 0.25, {
+            TweenMax.to(elm, 0.25, {
                 top: `${h}px`,
                 ease: Power2.easeInOut,
                 onComplete: () => {
@@ -125,7 +125,7 @@ export default {
                 params
             });
 
-            Tweenmax.to(elm, 0.25, {
+            TweenMax.to(elm, 0.25, {
                 top: '60px',
                 ease: Power2.easeInOut,
                 onComplete: () => {

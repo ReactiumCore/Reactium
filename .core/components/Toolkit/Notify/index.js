@@ -5,7 +5,7 @@
  */
 import React, { Component, Fragment } from 'react';
 import op from 'object-path';
-import Tweenmax, { Power2 } from 'gsap';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 
 /**
  * -----------------------------------------------------------------------------
@@ -73,15 +73,13 @@ export default class Notify extends Component {
                 className={`re-notice ${pos} ${visible}`}
                 ref={elm => {
                     this.cont = elm;
-                }}
-            >
+                }}>
                 <div>{message}</div>
                 {dismissable === true ? (
                     <button
                         type={`button`}
                         className={`re-notice-close`}
-                        onClick={onCloseClick}
-                    >
+                        onClick={onCloseClick}>
                         <svg>
                             <use xlinkHref={'#re-icon-close'} />
                         </svg>
