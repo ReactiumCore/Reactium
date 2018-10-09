@@ -21,20 +21,14 @@ export default class Preview extends Component {
         this.resize = this.resize.bind(this);
         this.registerIframe = this.registerIframe.bind(this);
         this.state = {
-            ...this.props
+            ...this.props,
         };
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps
+            ...nextProps,
         }));
 
         const { style } = nextProps;
@@ -68,6 +62,7 @@ export default class Preview extends Component {
         let browserSync;
         if (document) {
             browserSync = document.getElementById('__bs_script__');
+            browserSync = browserSync ? browserSync.outerHTML : '';
         }
 
         return `
@@ -79,7 +74,7 @@ export default class Preview extends Component {
                 </head>
                 <body style="padding: 25px">
                     <div id="router"></div>
-                    ${browserSync && browserSync.outerHTML}
+                    ${browserSync}
                 </body>
             </html>
         `;
@@ -93,7 +88,7 @@ export default class Preview extends Component {
             visible,
             style,
             path,
-            dna
+            dna,
         } = this.state;
 
         if (!Component || !group || !id) {
@@ -124,9 +119,9 @@ Preview.defaultProps = {
     component: null,
     group: null,
     id: null,
-    style: '/assets/style/style.css'
+    style: '/assets/style/style.css',
 };
 
 Preview.contextTypes = {
-    store: PropTypes.object
+    store: PropTypes.object,
 };

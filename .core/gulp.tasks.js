@@ -179,7 +179,8 @@ const reactium = (gulp, config, webpackConfig) => {
                     port: config.port.browsersync,
                     ui: { port: config.port.browsersync + 1 },
                     proxy: `localhost:${config.port.proxy}`,
-                    open: config.open
+                    open: config.open,
+                    ghostMode: false,
                 });
 
                 done();
@@ -290,7 +291,7 @@ const reactium = (gulp, config, webpackConfig) => {
             });
 
             done();
-        }
+        },
     };
 
     return tasks;
