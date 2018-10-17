@@ -85,7 +85,8 @@
     "redux-super-thunk": "0.0.6",
     "semver": "^5.5.0",
     "serialize-javascript": "^1.4.0",
-    "underscore": "*"
+    "underscore": "*",
+    "xss": "^1.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
