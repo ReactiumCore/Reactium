@@ -3,7 +3,7 @@ const router = express.Router();
 const xss = require('xss');
 
 const placeholder = (req, res) => {
-    const { width = 640, height = 480 } = req.params;
+    const { width = 640, height = 480, filename = '' } = req.params;
 
     const {
         title = '',
@@ -21,6 +21,8 @@ const placeholder = (req, res) => {
         widthPercent = 100,
         heightPercent = 100,
     ] = (region || []).split(',');
+
+    const useTitle = title === '' ? filename : title;
 
     res.set('Content-Type', 'image/svg+xml');
     res.send(`<?xml version="1.0" standalone="no"?>
@@ -83,7 +85,7 @@ const placeholder = (req, res) => {
     <text transform="translate(100,37)" text-anchor="middle" fill="${xss(
         color
     )}">
-        <tspan x="0">${xss(title)}</tspan>
+        <tspan x="0">${xss(useTitle)}</tspan>
     </text>
 </svg>
 <svg y="80%" height="20%" viewBox="0 0 200 40" preserveAspectRatio="xMidYMax" font-size="10" opacity=".5" overflow="visible">
