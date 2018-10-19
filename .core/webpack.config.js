@@ -30,7 +30,7 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
     // Only override process.env on client side
     if (type === 'app') {
         config.defines['process.env'] = {
-            NODE_ENV: JSON.stringify(env)
+            NODE_ENV: JSON.stringify(env),
         };
 
         if ('process.env' in defines) {
@@ -71,19 +71,19 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
         mode: env,
         output: {
             path: path.resolve(__dirname, dest),
-            filename
+            filename,
         },
         optimization: {
             minimize: Boolean(env !== 'development'),
             splitChunks: {
-                cacheGroups: Object.assign({
-                    vendors: {
-                        test: /[\\/]node_modules[\\/]/,
-                        name: 'vendors',
-                        chunks: 'all'
+                chunks: 'all',
+                name(module) {
+                    if (/[\\/]node_modules[\\/]/.test(module.context)) {
+                        return 'vendors';
                     }
-                })
-            }
+                    return 'main';
+                },
+            },
         },
         module: {
             rules: [
@@ -91,13 +91,13 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
                     test: [/\.jsx|js($|\?)/],
                     exclude: /node_modules/,
                     resolve: {
-                        extensions: ['.js', '.jsx', '.json']
+                        extensions: ['.js', '.jsx', '.json'],
                     },
                     use: [
                         {
-                            loader: 'babel-loader'
-                        }
-                    ]
+                            loader: 'babel-loader',
+                        },
+                    ],
                 },
                 {
                     test: [
@@ -108,16 +108,16 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
                         /.BACKUP$/,
                         /.png$/,
                         /.jpg$/,
-                        /.gif$/
+                        /.gif$/,
                     ],
                     use: [
                         {
-                            loader: 'ignore-loader'
-                        }
-                    ]
-                }
-            ]
-        }
+                            loader: 'ignore-loader',
+                        },
+                    ],
+                },
+            ],
+        },
     };
 
     return { ...defaultConfig, ...overrides };

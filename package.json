@@ -43,10 +43,13 @@
     "parse/node": false
   },
   "dependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/node": "^7.0.0",
     "ajv": "^6.5.2",
     "axios": "^0.18.0",
     "beautify": "0.0.8",
     "body-parser": "^1.18.2",
+    "@babel/polyfill": "^7.0.0",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "copy-to-clipboard": "^3.0.8",
@@ -89,13 +92,11 @@
     "xss": "^1.0.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
     "babel-plugin-module-resolver": "^3.1.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
     "browser-sync": "^2.24.5",
     "chalk": "^2.3.0",
     "del": "^3.0.0",
@@ -137,20 +138,20 @@
   },
   "babel": {
     "presets": [
-      "react",
+      "@babel/react",
       [
-        "env",
+        "@babel/env",
         {
-          "useBuiltIns": true,
+          "useBuiltIns": "usage",
           "debug": false,
           "targets": {
             "browsers": [
-              ">= 1%"
+              "> 1%",
+              "IE 11"
             ]
           }
         }
-      ],
-      "stage-2"
+      ]
     ],
     "plugins": [
       [
