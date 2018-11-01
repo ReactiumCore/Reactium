@@ -74,12 +74,16 @@ let middlewares = [
     process.env.DEBUG === 'on'
         ? {
               name: 'logging',
-              use: morgan('combined')
+              use: morgan('combined'),
           }
         : false,
     {
         name: 'cors',
-        use: cors()
+        use: cors(),
+    },
+    {
+        name: 'placeholder',
+        use: require('./server/middleware/placeholder'),
     },
     {
         name: 'api',
@@ -93,32 +97,32 @@ let middlewares = [
                 proxyReqPathResolver: req => {
                     const resolvedPath = `${restAPI}${req.url}`;
                     return resolvedPath;
-                }
-            })
-        ]
+                },
+            }),
+        ],
     },
     // parsers
     {
         name: 'jsonParser',
-        use: bodyParser.json()
+        use: bodyParser.json(),
     },
     {
         name: 'urlEncoded',
-        use: bodyParser.urlencoded({ extended: true })
+        use: bodyParser.urlencoded({ extended: true }),
     },
 
     // cookies
     {
         name: 'cookieParser',
-        use: cookieParser()
+        use: cookieParser(),
     },
     {
         name: 'cookieSession',
         use: cookieSession({
             name: 'aljtka4',
-            keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbnoNSdWxlcw']
-        })
-    }
+            keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbnoNSdWxlcw'],
+        }),
+    },
 ];
 
 // development mode
@@ -133,7 +137,7 @@ if (process.env.NODE_ENV === 'development') {
     // local development overrides for webpack config
     webpackConfig.entry.main = [
         `webpack-hot-middleware/client?path=/__webpack_hmr`,
-        webpackConfig.entry.main
+        webpackConfig.entry.main,
     ];
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
     webpackConfig.output.publicPath = publicPath;
@@ -145,14 +149,14 @@ if (process.env.NODE_ENV === 'development') {
         use: wpMiddlware(compiler, {
             serverSideRender: true,
             path: '/',
-            publicPath
-        })
+            publicPath,
+        }),
     });
     middlewares.push({
         name: 'hmr',
         use: wpHotMiddlware(compiler, {
-            reload: true
-        })
+            reload: true,
+        }),
     });
 }
 
@@ -162,13 +166,13 @@ const staticAssets =
 
 middlewares.push({
     name: 'static',
-    use: express.static(staticAssets)
+    use: express.static(staticAssets),
 });
 
 // default route handler
 middlewares.push({
     name: 'router',
-    use: router
+    use: router,
 });
 
 // Give app an opportunity to change middlewares

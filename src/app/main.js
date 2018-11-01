@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import { App } from 'reactium-core/app';
 
 /**
@@ -7,7 +6,7 @@ import { App } from 'reactium-core/app';
 App();
 
 // Can not get HMR working, so this is a cheap-out
-if ( module.hot ) {
+if (module.hot) {
     module.hot.accept('../.././.core/app.js', () => {
         window.location.reload();
     });

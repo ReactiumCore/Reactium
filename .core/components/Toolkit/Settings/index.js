@@ -4,7 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import { TweenMax, Power2 } from 'gsap';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import Card from '../Content/Card';
 import op from 'object-path';
 import state from '../state';
@@ -136,8 +136,7 @@ export default class Settings extends Component {
             return (
                 <li
                     className={'re-toolkit-card-list-item'}
-                    key={`setting-${i}`}
-                >
+                    key={`setting-${i}`}>
                     {text.length > 0 ? (
                         <div className={'re-toolkit-card-list-text'}>
                             <div>{text[idx]}</div>
@@ -150,8 +149,7 @@ export default class Settings extends Component {
                             className={`re-toolkit-switch ${active}`}
                             onClick={e => {
                                 this.onSwitchClick(e, { pref, other });
-                            }}
-                        >
+                            }}>
                             {labels.length > 0
                                 ? labels.map((label, l) => {
                                       return (
@@ -182,14 +180,12 @@ export default class Settings extends Component {
                 }}
                 onClick={this.dismiss}
                 className={'re-toolkit-settings'}
-                style={{ display, opacity }}
-            >
+                style={{ display, opacity }}>
                 <Card
                     id={'settings-card'}
                     title={'Settings'}
                     onButtonClick={this.close}
-                    buttons={buttons}
-                >
+                    buttons={buttons}>
                     <ul className={'re-toolkit-card-list'}>
                         {this.renderSettings()}
                     </ul>

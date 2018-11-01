@@ -45,9 +45,9 @@ const styles = (req, res) => {
     return styles.join('\n\t');
 };
 
-const preferVendors = (a, b) => {
-    if (a === 'vendors.js') return -1;
-    if (b === 'vendors.js') return 1;
+const prioritize = scriptName => (a, b) => {
+    if (a === scriptName) return -1;
+    if (b === scriptName) return 1;
     return 0;
 };
 
@@ -58,7 +58,8 @@ const scripts = (req, res) => {
     let scriptTags = globby
         .sync(path.resolve(scriptPathBase, 'assets', 'js', '*.js'))
         .map(script => path.parse(script).base)
-        .sort(preferVendors)
+        .sort(prioritize('vendors.js'))
+        .sort(prioritize('polyfill.js'))
         .map(script => `<script src="/assets/js/${script}"></script>`)
         .join('\n');
 
@@ -71,7 +72,8 @@ const scripts = (req, res) => {
                 normalizeAssets(chunk).filter(path => path.endsWith('.js'))
             )
             .reduce((files, chunk) => files.concat(chunk), [])
-            .sort(preferVendors)
+            .sort(prioritize('vendors.js'))
+            .sort(prioritize('polyfill.js'))
             .map(path => `<script src="/${path}"></script>`)
             .join('\n');
     }

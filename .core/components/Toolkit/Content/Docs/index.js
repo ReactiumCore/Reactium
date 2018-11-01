@@ -1,4 +1,3 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
@@ -6,9 +5,8 @@
  */
 
 import op from 'object-path';
-import { TweenMax, Power2 } from 'gsap';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import React, { Component, Fragment } from 'react';
-
 
 /**
  * -----------------------------------------------------------------------------
@@ -20,15 +18,14 @@ export default class Docs extends Component {
     constructor(props) {
         super(props);
 
-        this.cont   = null;
-        this.state  = { ...this.props };
-        this.open   = this.open.bind(this);
-        this.close  = this.close.bind(this);
+        this.cont = null;
+        this.state = { ...this.props };
+        this.open = this.open.bind(this);
+        this.close = this.close.bind(this);
         this.toggle = this.toggle.bind(this);
     }
 
     componentDidMount() {
-
         if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
@@ -37,10 +34,9 @@ export default class Docs extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps,
+            ...nextProps
         }));
 
         this.applyPrefs();
@@ -50,18 +46,21 @@ export default class Docs extends Component {
         let { prefs = {} } = this.state;
 
         vals.forEach((v, i) => {
-            if (op.has(newState, key)) { return; }
-            if (typeof v !== 'undefined') { newState[key] = v; }
+            if (op.has(newState, key)) {
+                return;
+            }
+            if (typeof v !== 'undefined') {
+                newState[key] = v;
+            }
         });
 
         return newState;
     }
 
     applyPrefs() {
-
         let newState = {};
-            newState = this.applyThemePref(newState);
-            newState = this.applyVisiblePref(newState);
+        newState = this.applyThemePref(newState);
+        newState = this.applyVisiblePref(newState);
 
         if (Object.keys(newState).length > 0) {
             this.setState(newState);
@@ -73,7 +72,7 @@ export default class Docs extends Component {
 
         let vals = [
             op.get(prefs, `docs.${id}`),
-            op.get(prefs, 'docs.all', visible),
+            op.get(prefs, 'docs.all', visible)
         ];
 
         return this.getPref(newState, 'visible', vals);
@@ -84,32 +83,35 @@ export default class Docs extends Component {
 
         let vals = [
             op.get(prefs, `codeColor.${id}`),
-            op.get(prefs, `codeColor.all`, theme),
+            op.get(prefs, `codeColor.all`, theme)
         ];
 
         return this.getPref(newState, 'theme', vals);
     }
 
-
     open() {
-        if (!this.cont) { return; }
+        if (!this.cont) {
+            return;
+        }
 
         let { speed } = this.state;
         let _self = this;
 
-        TweenMax.set(this.cont, {height: 'auto', display: 'block'});
+        TweenMax.set(this.cont, { height: 'auto', display: 'block' });
         TweenMax.from(this.cont, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({visible: true, height: 'auto'});
+                _self.setState({ visible: true, height: 'auto' });
             }
         });
     }
 
     close() {
-        if (!this.cont) { return; }
+        if (!this.cont) {
+            return;
+        }
 
         let { speed } = this.state;
         let _self = this;
@@ -119,7 +121,7 @@ export default class Docs extends Component {
             overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({visible: false, height: 0});
+                _self.setState({ visible: false, height: 0 });
             }
         });
     }
@@ -135,20 +137,29 @@ export default class Docs extends Component {
     }
 
     render() {
-        let { component:Component, visible, height, title, update, theme = 'dark' } = this.state;
+        let {
+            component: Component,
+            visible,
+            height,
+            title,
+            update,
+            theme = 'dark'
+        } = this.state;
 
-        let display = (visible === true) ? 'block' : 'none';
+        let display = visible === true ? 'block' : 'none';
 
-        return (!Component) ? null : (
-            <div ref={(elm) => { this.cont = elm; }} className={'re-toolkit-docs-view'} style={{height, display}}>
-                {(title)
-                    ? (
-                        <div className={'re-toolkit-card-heading thin'}>
-                            <h3>{title}</h3>
-                        </div>
-                    )
-                    : null
-                }
+        return !Component ? null : (
+            <div
+                ref={elm => {
+                    this.cont = elm;
+                }}
+                className={'re-toolkit-docs-view'}
+                style={{ height, display }}>
+                {title ? (
+                    <div className={'re-toolkit-card-heading thin'}>
+                        <h3>{title}</h3>
+                    </div>
+                ) : null}
 
                 <div className={'re-toolkit-card-docs'}>
                     <Component theme={theme} />
@@ -159,12 +170,12 @@ export default class Docs extends Component {
 }
 
 Docs.defaultProps = {
-    theme   : 'dark',
-    title   : null,
-    prefs   : {},
-    height  : 'auto',
-    speed   : 0.2,
-    visible : true,
-    id      : null,
-    update  : null,
+    theme: 'dark',
+    title: null,
+    prefs: {},
+    height: 'auto',
+    speed: 0.2,
+    visible: true,
+    id: null,
+    update: null
 };

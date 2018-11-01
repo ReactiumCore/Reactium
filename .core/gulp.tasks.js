@@ -19,6 +19,7 @@ const rename = require('gulp-rename');
 const chalk = require('chalk');
 const moment = require('moment');
 const regenManifest = require('./manifest-tools');
+const appRoot = path.resolve(__dirname, '..');
 
 const reactium = (gulp, config, webpackConfig) => {
     const env = process.env.NODE_ENV || 'development';
@@ -43,22 +44,32 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const watcher = e => {
         let src = path.relative(path.resolve(__dirname), e.path);
-        let fpath = `${config.dest.dist}/${path.relative(
-            path.resolve(config.src.app),
-            e.path
-        )}`;
-        let dest = path.normalize(path.dirname(fpath));
-        let ext = path.extname(src);
+        let ePathRelative = path.relative(path.resolve(config.src.app), e.path);
+        let fpath = path.resolve(
+            appRoot,
+            `${config.dest.dist}/${ePathRelative}`
+        );
+        let displaySrc = path.relative(appRoot, e.path);
+        let displayDest = path.relative(appRoot, fpath);
 
         if (fs.existsSync(fpath)) {
             del.sync([fpath]);
         }
 
         if (e.event !== 'unlink') {
-            gulp.src(src).pipe(gulp.dest(dest));
+            const destPath = path.dirname(fpath);
+            if (!fs.existsSync(destPath)) {
+                fs.mkdirSync(destPath, { recursive: true });
+            }
+
+            fs.createReadStream(e.path)
+                .pipe(fs.createWriteStream(fpath))
+                .on('error', error => console.error(timestamp(), error));
         }
 
-        console.log(`${timestamp()} File ${e.event}: ${src} -> ${fpath}`);
+        console.log(
+            `${timestamp()} File ${e.event}: ${displaySrc} -> ${displayDest}`
+        );
     };
 
     const tasks = {
@@ -179,7 +190,8 @@ const reactium = (gulp, config, webpackConfig) => {
                     port: config.port.browsersync,
                     ui: { port: config.port.browsersync + 1 },
                     proxy: `localhost:${config.port.proxy}`,
-                    open: config.open
+                    open: config.open,
+                    ghostMode: false,
                 });
 
                 done();
@@ -290,7 +302,7 @@ const reactium = (gulp, config, webpackConfig) => {
             });
 
             done();
-        }
+        },
     };
 
     return tasks;

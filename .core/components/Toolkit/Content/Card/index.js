@@ -4,7 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import { TweenMax, Power2 } from 'gsap';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import _ from 'underscore';
 
 /**
@@ -164,8 +164,7 @@ export default class Card extends Component {
                     type={'button'}
                     title={title}
                     key={`button-${i}`}
-                    id={name}
-                >
+                    id={name}>
                     <svg>
                         <use xlinkHref={icon} />
                     </svg>
@@ -200,8 +199,7 @@ export default class Card extends Component {
                     className={`re-toolkit-card${position}`}
                     ref={elm => {
                         this.cont = elm;
-                    }}
-                >
+                    }}>
                     {!title && hbuttons.length < 1 ? null : (
                         <div className={'re-toolkit-card-heading'}>
                             {!title ? <div /> : <h3>{title}</h3>}

@@ -7,8 +7,9 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
-import { Helmet } from "react-helmet";
+import React, { Component, Fragment } from 'react';
+import { Helmet } from 'react-helmet';
+import _ from 'underscore';
 
 /**
  * -----------------------------------------------------------------------------
@@ -19,23 +20,22 @@ export default class Test extends Component {
     constructor(props) {
         super(props);
 
-        this.state = Object.assign({}, this.props);
+        const { count, msg } = this.props;
+        this.state = { count, msg };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
-    onClick() {
-        this.props.test.click();
+    componentDidUpdate(prevProps, prevState = {}) {
+        if (!_.isMatch(this.props, prevState)) {
+            const { count, msg } = this.props;
+            this.setState({ count, msg });
+        }
     }
 
     render() {
-        let title = "Redux | Reactium";
-        let style = "/assets/style/demo-redux.css";
+        let title = 'Redux | Reactium';
+        let style = '/assets/style/demo-redux.css';
         let { count = 0, msg } = this.state;
+        let { click } = this.props;
 
         return (
             <Fragment>
@@ -49,9 +49,9 @@ export default class Test extends Component {
                     <html lang="en" />
                     <body className="demo-redux" />
                 </Helmet>
-                <div className={"demo-redux-wrap"}>
+                <div className={'demo-redux-wrap'}>
                     <div>{msg}</div>
-                    <button type="button" onClick={this.onClick.bind(this)}>
+                    <button type="button" onClick={click}>
                         Click Me
                     </button>
                     <div>{count}</div>
