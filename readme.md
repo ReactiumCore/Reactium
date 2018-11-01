@@ -121,8 +121,8 @@ const mapStateToProps = (state, props) => {
 // Map dispatchers to actions
 const mapDispatchToProps = (dispatch, props) => ({
     test: {
-        click: () => dispatch(deps.actions.Test.click())
-    }
+        click: () => dispatch(deps.actions.Test.click()),
+    },
 });
 
 export default connect(
@@ -207,7 +207,7 @@ export default {
 
     click: () => dispatch => {
         dispatch({ type: deps.actionTypes.TEST_CLICK });
-    }
+    },
 };
 ```
 
@@ -233,7 +233,7 @@ A typical `actionTypes.js` file may look like this:
 ```javascript
 export default {
     TEST_MOUNT: 'TEST_MOUNT',
-    TEST_CLICK: 'TEST_CLICK'
+    TEST_CLICK: 'TEST_CLICK',
 };
 ```
 
@@ -313,7 +313,7 @@ export default {
     component: MyComponent,
 
     // (optional) a Redux thunk action to load data for this component
-    load: params => deps.actions.MyComponent.mount(params)
+    load: params => deps.actions.MyComponent.mount(params),
 };
 ```
 
@@ -332,7 +332,7 @@ export default {
     // both of these will resolve to this component
     path: ['/first/path', '/second/path'],
     exact: true,
-    component: MyComponent
+    component: MyComponent,
 };
 ```
 
@@ -349,15 +349,15 @@ export default [
         path: '/base-route',
         exact: true,
         component: MyComponent,
-        load: params => deps.actions.MyComponent(params)
+        load: params => deps.actions.MyComponent(params),
     },
     {
         order: 0,
         path: '/base-route/:param',
         exact: true,
         component: MyComponent,
-        load: params => deps.actions.MyComponent(params)
-    }
+        load: params => deps.actions.MyComponent(params),
+    },
 ];
 ```
 
@@ -389,7 +389,7 @@ const fetchGoodBye = () => {
 
 export default {
     fetchHello,
-    fetchGoodBye
+    fetchGoodBye,
 };
 ```
 
@@ -404,7 +404,7 @@ export default {
         deps.services.Test.fetchHello().then(data => {
             dispatch({ type: actionTypes.TEST_MOUNT, data: data });
         });
-    }
+    },
 };
 ```
 
@@ -434,7 +434,7 @@ A typical `state.js` file may look like this:
 ```javascript
 export default {
     some: 'value',
-    another: 1
+    another: 1,
 };
 ```
 
@@ -447,7 +447,7 @@ export default {
 
     // See https://www.npmjs.com/package/redux-local-persist for additional
     // configuration options.
-    persist: true
+    persist: true,
 };
 ```
 
@@ -468,34 +468,28 @@ $ cd /MyAwesome/Project
 3.  Input the new component command:
 
 ```
-$ arcli re:gen class --open
+$ arcli component
 ```
 
 Flags:
 
 ```
-    -n, --name <name>            The name of the component.
-    -o, --overwrite [overwrite]  Overwrite if the component already exists.
-    -p, --path [path]            Absolute path to where the component is created. Default ~/src/app/components.
-    -c, --component [component]  The parent component when creating a child component.
-    -r, --route [route]          The route to associate with the component.
-    --open [open]                Open the new file(s) in the default application.
-    --no-actions [actions]       Exclude the actions.js file.
-    --no-types [types]           Exclude the actionsTypes.js file.
-    --no-reducers [reducers]     Exclude the reducers.js file.
-    --no-services [services]     Exclude the services.js file.
-    --no-route [router]         Exclude the route.js file.
-    --no-state [state]           Exclude the state.js file.
-    -h, --help                   Output usage information.
+-r, --redux-all [reduxAll]       Include all Redux files.
+-i, --ID [ID]                    Component ID.
+-n, --name [name]                Component name.
+-d, --destination [destination]  Component parent directory.
+-o, --overwrite [overwrite]      Overwrite existing component.
+-t, --type [type]                Component type: functional | class | hook.
+--route [route]                  Include route.js file.
+--redux [redux]                  Create Redux component.
+--actions [actions]              Include Redux actions.js file.
+--actionTypes [actionTypes]      Include Redux actionTypes.js file.
+--reducers [reducers]            Include Redux reducers.js file.
+--services [services]            Include services.js file.
+--stylesheet [stylesheet]        Include style.scss file.
 ```
 
-4.  Follow the prompts:
-
--   Name: The name of the component that you wish to create.
--   Route: If you're building a `Single Page App` (SPA) and your new component uses the Router class, you'll want to specify the `route` that will navigate to this component.
--   Use Redux?: Determines if your new component's state will be managed by [Redux](redux.js.org).
-
-![](https://image.ibb.co/iE8y4b/new_component_class.png)
+4.  Follow the prompts
 
 ## Using Components
 
