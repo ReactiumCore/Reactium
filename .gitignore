@@ -62,7 +62,7 @@ dist
 public
 build
 
-##### OS generated files
+# OS generated files
 .DS_Store
 .Spotlight-V100
 .Trashes
@@ -72,3 +72,6 @@ Thumbs.db
 # Toolkit hidden directories
 src/app/toolkit/.backup
 src/app/toolkit/.tmp
+
+# Backup directory
+.BACKUP/
