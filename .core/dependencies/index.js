@@ -1,7 +1,6 @@
 let NotFound = require('reactium-core/components/NotFound').default;
 
 try {
-    // console.log('components/NotFound', require.resolve('components/NotFound'));
     NotFound = require('components/NotFound').default;
 } catch (err) {}
 
