@@ -10,7 +10,12 @@ export default {
                 .then(data => {
                     dispatch({ type: deps.actionTypes.TEST_MOUNT, data });
                 })
-                .catch(error => console.error(error));
+                .catch(error => {
+                    dispatch({
+                        type: deps.actionTypes.TEST_MOUNT,
+                        data: { msg: 'Whoops!!!' },
+                    });
+                });
         } else {
             return Promise.resolve(
                 dispatch({ type: deps.actionTypes.TEST_MOUNT, data: state })
@@ -20,5 +25,5 @@ export default {
 
     click: () => dispatch => {
         dispatch({ type: deps.actionTypes.TEST_CLICK });
-    }
+    },
 };

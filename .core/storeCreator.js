@@ -1,7 +1,7 @@
 import {
     save as lsSave,
     load as lsLoad,
-    clear as lsClear
+    clear as lsClear,
 } from 'redux-local-persist';
 import { createStore, combineReducers, compose } from 'redux';
 import { applyMiddleware } from 'redux-super-thunk';
@@ -10,8 +10,10 @@ const {
     allInitialStates,
     allReducers,
     allMiddleware,
-    allEnhancers
+    allEnhancers,
 } = require('manifest').get();
+
+let store;
 
 /**
  * -----------------------------------------------------------------------------
@@ -34,12 +36,10 @@ const sanitizeInitialState = state =>
         .reduce(
             (states, key) => ({
                 ...states,
-                [key]: state[key]
+                [key]: state[key],
             }),
             {}
         );
-
-let store = {};
 
 const loadDependencyStack = (dependency, items, isServer) => {
     return Object.keys(dependency).reduce(
@@ -57,7 +57,7 @@ export default ({ server = false } = {}) => {
     let importedStates = allInitialStates;
     initialState = {
         ...sanitizeInitialState(importedStates),
-        ...initialState
+        ...initialState,
     };
 
     middlewares = loadDependencyStack(allMiddleware, middlewares, server);
@@ -69,7 +69,7 @@ export default ({ server = false } = {}) => {
                 ...initialState,
                 ...sanitizeInitialState(
                     lsLoad({ initialState: allInitialStates })
-                )
+                ),
             };
         } else {
             lsClear();
@@ -87,6 +87,9 @@ export default ({ server = false } = {}) => {
     enhancers = loadDependencyStack(allEnhancers, enhancers, server)
         .sort((a, b) => a.order - b.order)
         .map(({ enhancer }) => enhancer);
+
+    // Avoid replacing existing store.
+    if (store) return store;
 
     // Create the store
     store = createStoreWithMiddleware(
