@@ -1,7 +1,4 @@
 /**
- * Currently, this file is used by Atomic-Reactor/CLI to determine version of core
- * being used.
- *
  * Use liberally for additional core configuration.
  * @type {Object}
  */
@@ -12,22 +9,23 @@ module.exports = {
         package: {
             devDependencies: {
                 add: {
-                    'gulp-run': '^1.7.1'
+                    'gulp-run': '^1.7.1',
+                    'atomic-reactor-cli': '^2.0.6',
                 },
-                remove: []
+                remove: [],
             },
             dependencies: {
                 add: {
-                    'react-frame-component': '^4.0.1'
+                    'react-frame-component': '^4.0.1',
                 },
-                remove: []
+                remove: [],
             },
             scripts: {
                 add: {
                     build: 'npm install --production-only',
                     static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
-                    'local:ssr': 'gulp local:ssr'
+                    'local:ssr': 'gulp local:ssr',
                 },
                 remove: [
                     'local-fe-start',
@@ -36,9 +34,9 @@ module.exports = {
                     'local-ssr-start',
                     'local-ssr:gulp',
                     'local-ssr:babel-node',
-                    'static:build'
-                ]
-            }
-        }
-    }
+                    'static:build',
+                ],
+            },
+        },
+    },
 };
