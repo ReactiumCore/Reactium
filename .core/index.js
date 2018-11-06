@@ -136,7 +136,7 @@ if (process.env.NODE_ENV === 'development') {
 
     // local development overrides for webpack config
     webpackConfig.entry.main = [
-        `webpack-hot-middleware/client?path=/__webpack_hmr`,
+        `webpack-hot-middleware/client?path=/__webpack_hmr&quiet=true`,
         webpackConfig.entry.main,
     ];
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());

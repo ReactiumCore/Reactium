@@ -11,6 +11,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import Router from 'reactium-core/components/Router';
 import storeCreator from 'reactium-core/storeCreator';
+import deps from 'dependencies';
 
 // Placeholder for the bindable elements
 const bindPoints = [];
@@ -130,13 +131,12 @@ if (elements.length > 0) {
  * inside of them.
  * -----------------------------------------------------------------------------
  */
+// Create the Redux store
+const store = storeCreator();
+deps.init();
+
 export const App = () => {
-    require('dependencies').default.init();
-
     if (typeof document !== 'undefined') {
-        // Create the Redux store
-        const store = storeCreator();
-
         // Render the React Components
         if (bindPoints.length > 0) {
             bindPoints.forEach(item => {
@@ -184,5 +184,20 @@ export const App = () => {
                 );
             }
         }
+    }
+};
+
+export const AppError = error => {
+    const RedBox = require('redbox-react');
+
+    ReactDOM.render(
+        <RedBox error={error} />,
+        document.getElementById('router')
+    );
+};
+
+export const updateReducer = rootReducer => {
+    if (module.hot) {
+        store.replaceReducer(rootReducer);
     }
 };
