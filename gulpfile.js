@@ -4,35 +4,15 @@ const gulp = require('gulp');
 
 /**
  Configs:
-   To customize config, load your own gulp.config.js and/or webpack.config.js
-   files and/or edit the config and webpackConfig property after loading the defaults.
+    If you wish to override gulp config settings for both local dev and build,
+    create a gulp.config.override.js file in this directory.
+    (see gulp.config.override.example.js)
 
-   @example
-   // Load alt file
-   const config = require('../path/to/my/gulp.config');
-   const webpackConfig = require('../path/to/my/webpack.config');
-
-   @example
-   // Direct property edit
-   config.port.proxy = 3030;
-   webpackConfig.output.path = path.resolve(__dirname, '/my/new/path');
-
-   @example
-   // Injection
-   const config = require('./.core/gulp.config')({
-       defines: {
-           'process.env': {
-               NODE_ENV: JSON.stringify(env),
-               VERSION: require('./package.json').version
-            }
-        }
-    });
-
-    const webpackConfig = require('./.core/webpack.config')(config, 'app', {
-        target: 'node'
-    });
+    If you wish to override webpack configuration used for local dev and build,
+    create a webpack.override.js file in this directory.
+    (see webpack.override.example.js)
 */
-const config = require('./.core/gulp.config')();
+const config = require('./.core/gulp.config');
 const webpackConfig = require('./.core/webpack.config')(config);
 
 /**

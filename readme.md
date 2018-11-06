@@ -710,11 +710,11 @@ By default, the following Gulp Tasks are defined:
 
 ### scripts
 
-Compiles javascript using Webpack. If `config.env` is `production`, the output files are optimized and minified.
+Compiles javascript using Webpack. If the `NODE_ENV` environment variable is `production`, the output files are optimized and minified.
 
 ### styles
 
-Compiles `.scss` files into `.css` files by default. If `config.env` is `production`, the output files are optimized and minified.
+Compiles `.scss` files into `.css` files by default. If the `NODE_ENV` environment variable is `production`, the output files are optimized and minified.
 
 You can switch this to `.less` by specifying 'less' as the Gulp Config `cssPreProcessor` value.
 
