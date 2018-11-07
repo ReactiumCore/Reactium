@@ -1,80 +1,83 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const globby = require('globby');
-const tasks = require('./gulp.tasks.js');
+const rootPath = path.resolve(__dirname, '..');
 
-module.exports = (overrides = {}) => {
-    const defaultConfig = {
-        tasks,
-        entries: globby
-            .sync('./src/app/*.js')
-            .map(p => path.resolve(p))
-            .reduce((entries, entry) => {
-                entries[path.parse(entry).name] = entry;
-                return entries;
-            }, {}),
-        defines: {},
-        browsers: 'last 1 version',
-        port: {
-            browsersync: 3000,
-            proxy: 3030,
-        },
-        open: true,
-        cssPreProcessor: 'sass',
-        watch: {
-            js: ['src/app/**/*'],
-            markup: ['src/**/*.html', 'src/**/*.css'],
-            colors: ['src/**/*/colors.json'],
-            style: [
-                'src/**/*.less',
-                'src/**/*.scss',
-                'src/**/*.sass',
-                '.core/**/*.less',
-                '.core/**/*.scss',
-                '.core/**/*.sass',
-            ],
-            assets: [
-                'src/**/assets/**/*',
-                'src/assets/**/*',
-                '!{src/**/*/assets/style,src/**/*/assets/style/**}',
-                '!{src/**/*/assets/js,src/**/*/assets/js/**}',
-                '!{src/assets/style,src/assets/style/**}',
-                '!{src/assets/js,src/assets/js/**}',
-            ],
-            server: ['src/index.js', 'src/server/**/*.js'],
-            templates: ['src/server/**/*.hbs'],
-        },
-        src: {
-            app: 'src',
-            colors: ['src/**/*/colors.json'],
-            js: ['src/app/**/*'],
-            json: ['src/**/*.json'],
-            markup: ['src/**/*.html', 'src/**/*.css'],
-            style: ['src/**/*.scss', '!{src/**/_*.scss}'],
-            assets: [
-                'src/**/assets/**/*',
-                'src/assets/**/*',
-                '!{src/**/*/assets/style,src/**/*/assets/style/**}',
-                '!{src/**/*/assets/js,src/**/*/assets/js/**}',
-                '!{src/assets/style,src/assets/style/**}',
-                '!{src/assets/js,src/assets/js/**}',
-            ],
-            includes: ['./node_modules'],
-            appdir: path.resolve(__dirname, 'src/app'),
-            rootdir: path.resolve(__dirname),
-        },
-        dest: {
-            dist: 'public',
-            js: '../public/assets/js',
-            markup: 'public',
-            style: 'public/assets/style',
-            assets: 'public/assets',
-            static: 'dist',
-            build: 'build/src',
-            colors: 'src/app/toolkit/_scss/_colors.scss',
-        },
-    };
-
-    return { ...defaultConfig, ...overrides };
+const defaultConfig = {
+    entries: globby
+        .sync('./src/app/*.js')
+        .map(p => path.resolve(p))
+        .reduce((entries, entry) => {
+            entries[path.parse(entry).name] = entry;
+            return entries;
+        }, {}),
+    defines: {},
+    browsers: 'last 1 version',
+    port: {
+        browsersync: 3000,
+        proxy: 3030,
+    },
+    open: true,
+    cssPreProcessor: 'sass',
+    watch: {
+        js: ['src/app/**/*'],
+        markup: ['src/**/*.html', 'src/**/*.css'],
+        colors: ['src/**/*/colors.json'],
+        style: [
+            'src/**/*.less',
+            'src/**/*.scss',
+            'src/**/*.sass',
+            '.core/**/*.less',
+            '.core/**/*.scss',
+            '.core/**/*.sass',
+        ],
+        assets: [
+            'src/**/assets/**/*',
+            'src/assets/**/*',
+            '!{src/**/*/assets/style,src/**/*/assets/style/**}',
+            '!{src/**/*/assets/js,src/**/*/assets/js/**}',
+            '!{src/assets/style,src/assets/style/**}',
+            '!{src/assets/js,src/assets/js/**}',
+        ],
+        server: ['src/index.js', 'src/server/**/*.js'],
+        templates: ['src/server/**/*.hbs'],
+    },
+    src: {
+        app: 'src',
+        colors: ['src/**/*/colors.json'],
+        js: ['src/app/**/*'],
+        json: ['src/**/*.json'],
+        markup: ['src/**/*.html', 'src/**/*.css'],
+        style: ['src/**/*.scss', '!{src/**/_*.scss}'],
+        assets: [
+            'src/**/assets/**/*',
+            'src/assets/**/*',
+            '!{src/**/*/assets/style,src/**/*/assets/style/**}',
+            '!{src/**/*/assets/js,src/**/*/assets/js/**}',
+            '!{src/assets/style,src/assets/style/**}',
+            '!{src/assets/js,src/assets/js/**}',
+        ],
+        includes: ['./node_modules'],
+        appdir: path.resolve(__dirname, 'src/app'),
+        rootdir: path.resolve(__dirname),
+    },
+    dest: {
+        dist: 'public',
+        js: '../public/assets/js',
+        markup: 'public',
+        style: 'public/assets/style',
+        assets: 'public/assets',
+        static: 'dist',
+        build: 'build/src',
+        colors: 'src/app/toolkit/_scss/_colors.scss',
+    },
 };
+
+let gulpConfigOverride = _ => _;
+if (fs.existsSync(`${rootPath}/gulp.config.override.js`)) {
+    gulpConfigOverride = require(`${rootPath}/gulp.config.override.js`);
+}
+
+module.exports = gulpConfigOverride(defaultConfig);

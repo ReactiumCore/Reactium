@@ -1,4 +1,5 @@
 let NotFound = require('reactium-core/components/NotFound').default;
+
 try {
     NotFound = require('components/NotFound').default;
 } catch (err) {}
@@ -9,9 +10,17 @@ class ReactiumDependencies {
         this.actions = {};
         this.actionTypes = {};
         this.services = {};
+        this.reducers = {};
+    }
+
+    update() {
+        dependencies.manifest = require('manifest').get();
+        dependencies.init();
+        console.log('[Reactium HMR] - Refreshing dependencies');
     }
 
     init() {
+        this.reducers = this.manifest.allReducers;
         this.actions = this.manifest.allActions;
         this.actionTypes = Object.keys(this.manifest.allActionTypes).reduce(
             (types, key) => ({

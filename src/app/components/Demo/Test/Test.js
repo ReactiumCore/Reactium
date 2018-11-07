@@ -52,7 +52,7 @@ export default class Test extends Component {
                 <div className={'demo-redux-wrap'}>
                     <div>{msg}</div>
                     <button type="button" onClick={click}>
-                        Click Me
+                        Click It
                     </button>
                     <div>{count}</div>
                 </div>

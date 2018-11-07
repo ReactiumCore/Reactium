@@ -1,13 +1,26 @@
-import { App } from 'reactium-core/app';
+import { App, AppError } from 'reactium-core/app';
+import { combineReducers } from 'redux';
+
+let render = App;
 
 /**
  * @description Initialize the app.
  */
-App();
-
-// Can not get HMR working, so this is a cheap-out
 if (module.hot) {
-    module.hot.accept('../.././.core/app.js', () => {
-        window.location.reload();
-    });
+    render = () => {
+        try {
+            App();
+        } catch (error) {
+            AppError(error);
+        }
+    };
+
+    module.hot.accept(
+        ['../.././.core/dependencies/index.js', '../.././.core/app.js'],
+        (...params) => {
+            window.location.reload();
+        }
+    );
 }
+
+render();

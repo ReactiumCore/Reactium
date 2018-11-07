@@ -11,11 +11,10 @@ if (fs.existsSync(`${rootPath}/src/app/server/defines.js`)) {
     defines = require(`${rootPath}/src/app/server/defines.js`);
 }
 
-module.exports = (gulpConfig, type = 'app', overrides = {}) => {
+module.exports = config => {
     let plugins = [];
     let externals = [];
     let target = 'web';
-    let config = gulpConfig;
     let filename = '[name].js';
     let entries = config.entries;
     let dest = config.dest.js;
@@ -27,19 +26,16 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
         }
     });
 
-    // Only override process.env on client side
-    if (type === 'app') {
-        config.defines['process.env'] = {
-            NODE_ENV: JSON.stringify(env),
-        };
+    config.defines['process.env'] = {
+        NODE_ENV: JSON.stringify(env),
+    };
 
-        if ('process.env' in defines) {
-            Object.keys(defines['process.env']).forEach(key => {
-                config.defines['process.env'][key] = JSON.stringify(
-                    defines['process.env'][key]
-                );
-            });
-        }
+    if ('process.env' in defines) {
+        Object.keys(defines['process.env']).forEach(key => {
+            config.defines['process.env'][key] = JSON.stringify(
+                defines['process.env'][key]
+            );
+        });
     }
 
     plugins.push(new webpack.DefinePlugin(config.defines));
@@ -120,5 +116,10 @@ module.exports = (gulpConfig, type = 'app', overrides = {}) => {
         },
     };
 
-    return { ...defaultConfig, ...overrides };
+    let webPackOverride = _ => _;
+    if (fs.existsSync(`${rootPath}/webpack.override.js`)) {
+        webPackOverride = require(`${rootPath}/webpack.override.js`);
+    }
+
+    return webPackOverride(defaultConfig);
 };

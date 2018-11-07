@@ -13,6 +13,8 @@ import morgan from 'morgan';
 import apiConfig from 'appdir/api/config';
 import path from 'path';
 import fs from 'fs';
+import op from 'object-path';
+
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
 global.parseAppId = apiConfig.parseAppId;
@@ -47,20 +49,13 @@ let node_env = process.env.hasOwnProperty('NODE_ENV')
 
 // PORT setup:
 let port = gulpConfig.port.proxy;
+let pvar = op.get(process.env, 'PORT_VAR', false);
 
-// Get the port env variable name
-if (process.env.hasOwnProperty('PORT_VAR')) {
-    let pvar = process.env.PORT_VAR;
-    if (process.env.hasOwnProperty(pvar)) {
-        port = process.env[pvar];
-    }
+if (pvar) {
+    port = op.get(process.env, pvar, port);
 } else {
-    port = process.env.hasOwnProperty('APP_PORT') ? process.env.APP_PORT : port;
-    port =
-        port === null && process.env.hasOwnProperty('PORT')
-            ? process.env.PORT
-            : port;
-    port = port === null ? gulpConfig.port.proxy : port;
+    port = op.get(process.env, 'APP_PORT', port);
+    port = op.get(process.env, 'PORT', port);
 }
 
 port = Number(port);
@@ -128,7 +123,7 @@ let middlewares = [
 // development mode
 if (process.env.NODE_ENV === 'development') {
     const webpack = require('webpack');
-    const gulpConfig = require('./gulp.config')();
+    const gulpConfig = require('./gulp.config');
     const webpackConfig = require('./webpack.config')(gulpConfig);
     const wpMiddlware = require('webpack-dev-middleware');
     const wpHotMiddlware = require('webpack-hot-middleware');
@@ -136,7 +131,7 @@ if (process.env.NODE_ENV === 'development') {
 
     // local development overrides for webpack config
     webpackConfig.entry.main = [
-        `webpack-hot-middleware/client?path=/__webpack_hmr`,
+        `webpack-hot-middleware/client?path=/__webpack_hmr&quiet=true`,
         webpackConfig.entry.main,
     ];
     webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
