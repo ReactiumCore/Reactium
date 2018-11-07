@@ -17,11 +17,24 @@ import deps from 'dependencies';
 
 export default class Plugins extends Component {
     render() {
-        const { zone, children, pluginFilter, ...otherProps } = this.props;
+        const {
+            zone,
+            children,
+            filter: localFilter,
+            ...otherProps
+        } = this.props;
 
         return (
             <Context.Consumer>
-                {plugins => {
+                {({ plugins, filter }) => {
+                    let pluginFilter = _ => true;
+                    if (typeof filter === 'function') {
+                        pluginFilter = filter;
+                    }
+                    if (typeof localFilter === 'function') {
+                        pluginFilter = localFilter;
+                    }
+
                     return (
                         <Fragment>
                             {op
@@ -52,5 +65,4 @@ export default class Plugins extends Component {
 
 Plugins.defaultProps = {
     zone: '',
-    pluginFilter: _ => _,
 };

@@ -10,7 +10,7 @@ import op from 'object-path';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Plugable
+ * React Component: PlugableProvider
  * -----------------------------------------------------------------------------
  */
 
@@ -28,7 +28,8 @@ export default class PlugableProvider extends Component {
 
     render() {
         return (
-            <PlugableContext.Provider value={this.allPlugins}>
+            <PlugableContext.Provider
+                value={{ plugins: this.allPlugins, filter: this.props.filter }}>
                 {this.props.children}
             </PlugableContext.Provider>
         );
@@ -36,4 +37,5 @@ export default class PlugableProvider extends Component {
 }
 PlugableProvider.defaultProps = {
     plugins: [],
+    filter: _ => true,
 };
