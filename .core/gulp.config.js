@@ -2,9 +2,11 @@
 
 const path = require('path');
 const globby = require('globby');
+const tasks = require('./gulp.tasks.js');
 
 module.exports = (overrides = {}) => {
     const defaultConfig = {
+        tasks,
         entries: globby
             .sync('./src/app/*.js')
             .map(p => path.resolve(p))
@@ -16,7 +18,7 @@ module.exports = (overrides = {}) => {
         browsers: 'last 1 version',
         port: {
             browsersync: 3000,
-            proxy: 3030
+            proxy: 3030,
         },
         open: true,
         cssPreProcessor: 'sass',
@@ -30,7 +32,7 @@ module.exports = (overrides = {}) => {
                 'src/**/*.sass',
                 '.core/**/*.less',
                 '.core/**/*.scss',
-                '.core/**/*.sass'
+                '.core/**/*.sass',
             ],
             assets: [
                 'src/**/assets/**/*',
@@ -38,10 +40,10 @@ module.exports = (overrides = {}) => {
                 '!{src/**/*/assets/style,src/**/*/assets/style/**}',
                 '!{src/**/*/assets/js,src/**/*/assets/js/**}',
                 '!{src/assets/style,src/assets/style/**}',
-                '!{src/assets/js,src/assets/js/**}'
+                '!{src/assets/js,src/assets/js/**}',
             ],
             server: ['src/index.js', 'src/server/**/*.js'],
-            templates: ['src/server/**/*.hbs']
+            templates: ['src/server/**/*.hbs'],
         },
         src: {
             app: 'src',
@@ -56,11 +58,11 @@ module.exports = (overrides = {}) => {
                 '!{src/**/*/assets/style,src/**/*/assets/style/**}',
                 '!{src/**/*/assets/js,src/**/*/assets/js/**}',
                 '!{src/assets/style,src/assets/style/**}',
-                '!{src/assets/js,src/assets/js/**}'
+                '!{src/assets/js,src/assets/js/**}',
             ],
             includes: ['./node_modules'],
             appdir: path.resolve(__dirname, 'src/app'),
-            rootdir: path.resolve(__dirname)
+            rootdir: path.resolve(__dirname),
         },
         dest: {
             dist: 'public',
@@ -70,8 +72,8 @@ module.exports = (overrides = {}) => {
             assets: 'public/assets',
             static: 'dist',
             build: 'build/src',
-            colors: 'src/app/toolkit/_scss/_colors.scss'
-        }
+            colors: 'src/app/toolkit/_scss/_colors.scss',
+        },
     };
 
     return { ...defaultConfig, ...overrides };
