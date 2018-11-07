@@ -1,5 +1,4 @@
 import { App, AppError } from 'reactium-core/app';
-import { combineReducers } from 'redux';
 
 let render = App;
 
@@ -17,7 +16,7 @@ if (module.hot) {
 
     module.hot.accept(
         ['../.././.core/dependencies/index.js', '../.././.core/app.js'],
-        (...params) => {
+        () => {
             window.location.reload();
         }
     );
