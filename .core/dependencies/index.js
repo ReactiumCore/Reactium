@@ -1,3 +1,5 @@
+import op from 'object-path';
+
 let NotFound = require('reactium-core/components/NotFound').default;
 
 try {
@@ -11,6 +13,7 @@ class ReactiumDependencies {
         this.actionTypes = {};
         this.services = {};
         this.reducers = {};
+        this.plugins = {};
     }
 
     update() {
@@ -69,6 +72,17 @@ class ReactiumDependencies {
             }, [])
             .sort((a, b) => a.order - b.order)
             .concat([{ component: NotFound }]);
+
+        this.plugins = Object.entries(this.manifest.allPlugins).reduce(
+            (plugins, [domain, plugin]) => {
+                const zone = op.get(plugins, plugin.zone, []);
+                plugins[plugin.zone] = zone
+                    .concat([plugin])
+                    .sort((a, b) => a.order - b.order);
+                return plugins;
+            },
+            {}
+        );
     }
 }
 

@@ -13,7 +13,7 @@ export default {
                 .catch(error => {
                     dispatch({
                         type: deps.actionTypes.TEST_MOUNT,
-                        data: { msg: 'Whoops!!!' },
+                        data: { msg: '' },
                     });
                 });
         } else {

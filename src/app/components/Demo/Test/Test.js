@@ -10,6 +10,7 @@
 import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import _ from 'underscore';
+import { PlugableProvider, Plugins } from 'reactium-core/components/Plugable';
 
 /**
  * -----------------------------------------------------------------------------
@@ -38,7 +39,15 @@ export default class Test extends Component {
         let { click } = this.props;
 
         return (
-            <Fragment>
+            <PlugableProvider
+                plugins={[
+                    {
+                        zone: 'demo-test-nested-example',
+                        id: 'inline-plugin-example',
+                        component: () => <small>Nested Inline Plugin</small>,
+                        order: 0,
+                    },
+                ]}>
                 <Helmet>
                     <link rel="stylesheet" href={style} />
                     <title>{title}</title>
@@ -50,13 +59,14 @@ export default class Test extends Component {
                     <body className="demo-redux" />
                 </Helmet>
                 <div className={'demo-redux-wrap'}>
+                    <Plugins zone="demo-test" count={count} />
+
                     <div>{msg}</div>
                     <button type="button" onClick={click}>
                         Click It
                     </button>
-                    <div>{count}</div>
                 </div>
-            </Fragment>
+            </PlugableProvider>
         );
     }
 }

@@ -20,7 +20,7 @@ const jsSources = sourcePath =>
     flattenRegistry(
         tree(sourcePath, {
             extensions: /\.js$/,
-            exclude: /.ds_store/i
+            exclude: /.ds_store/i,
         })
     );
 
@@ -28,7 +28,7 @@ const find = (searches = [], sourcePaths) => {
     let mappings = searches.reduce((mappings, { name, type }) => {
         mappings[name] = {
             type,
-            imports: []
+            imports: [],
         };
         return mappings;
     }, {});
@@ -61,53 +61,58 @@ module.exports = function() {
             {
                 name: 'allActions',
                 type: 'actions',
-                pattern: /actions.js$/
+                pattern: /actions.js$/,
             },
             {
                 name: 'allActionTypes',
                 type: 'actionTypes',
-                pattern: /actionTypes.js$/
+                pattern: /actionTypes.js$/,
             },
             {
                 name: 'allReducers',
                 type: 'reducers',
-                pattern: /reducers.js$/
+                pattern: /reducers.js$/,
             },
             {
                 name: 'allInitialStates',
                 type: 'state',
-                pattern: /state.js$/
+                pattern: /state.js$/,
             },
             {
                 name: 'allRoutes',
                 type: 'route',
-                pattern: /route.js$/
+                pattern: /route.js$/,
             },
             {
                 name: 'allServices',
                 type: 'services',
-                pattern: /services.js$/
+                pattern: /services.js$/,
             },
             {
                 name: 'allMiddleware',
                 type: 'middleware',
-                pattern: /middleware.js$/
+                pattern: /middleware.js$/,
             },
             {
                 name: 'allEnhancers',
                 type: 'enhancer',
-                pattern: /enhancer.js$/
-            }
+                pattern: /enhancer.js$/,
+            },
+            {
+                name: 'allPlugins',
+                type: 'plugin',
+                pattern: /plugin.js$/,
+            },
         ],
         [
             {
                 from: 'src/app/',
-                to: ''
+                to: '',
             },
             {
                 from: '.core/',
-                to: 'reactium-core/'
-            }
+                to: 'reactium-core/',
+            },
         ]
     );
 

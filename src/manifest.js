@@ -7,28 +7,28 @@ module.exports = {
                 Router: require('reactium-core/components/Router/actions')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/actions')
-                    .default
+                    .default,
             },
             allActionTypes: {
                 Test: require('components/Demo/Test/actionTypes').default,
                 Router: require('reactium-core/components/Router/actionTypes')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/actionTypes')
-                    .default
+                    .default,
             },
             allReducers: {
                 Test: require('components/Demo/Test/reducers').default,
                 Router: require('reactium-core/components/Router/reducers')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/reducers')
-                    .default
+                    .default,
             },
             allInitialStates: {
                 Test: require('components/Demo/Test/state').default,
                 Router: require('reactium-core/components/Router/state')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/state')
-                    .default
+                    .default,
             },
             allRoutes: {
                 About: require('components/Demo/Site/Pages/About/route')
@@ -41,19 +41,23 @@ module.exports = {
                 Menu: require('components/Demo/Site/Pages/Menu/route').default,
                 Test: require('components/Demo/Test/route').default,
                 Toolkit: require('reactium-core/components/Toolkit/route')
-                    .default
+                    .default,
             },
             allServices: {
                 Test: require('components/Demo/Test/services').default,
                 Toolkit: require('reactium-core/components/Toolkit/services')
-                    .default
+                    .default,
             },
             allMiddleware: {
-                redux: require('reactium-core/redux/middleware').default
+                redux: require('reactium-core/redux/middleware').default,
             },
             allEnhancers: {
-                redux: require('reactium-core/redux/enhancer').default
-            }
+                redux: require('reactium-core/redux/enhancer').default,
+            },
+            allPlugins: {
+                TestPlugin: require('components/Demo/Test/TestPlugin/plugin')
+                    .default,
+            },
         };
     },
     list: () => {
@@ -63,32 +67,32 @@ module.exports = {
                 imports: [
                     'components/Demo/Test/actions',
                     'reactium-core/components/Router/actions',
-                    'reactium-core/components/Toolkit/actions'
-                ]
+                    'reactium-core/components/Toolkit/actions',
+                ],
             },
             allActionTypes: {
                 type: 'actionTypes',
                 imports: [
                     'components/Demo/Test/actionTypes',
                     'reactium-core/components/Router/actionTypes',
-                    'reactium-core/components/Toolkit/actionTypes'
-                ]
+                    'reactium-core/components/Toolkit/actionTypes',
+                ],
             },
             allReducers: {
                 type: 'reducers',
                 imports: [
                     'components/Demo/Test/reducers',
                     'reactium-core/components/Router/reducers',
-                    'reactium-core/components/Toolkit/reducers'
-                ]
+                    'reactium-core/components/Toolkit/reducers',
+                ],
             },
             allInitialStates: {
                 type: 'state',
                 imports: [
                     'components/Demo/Test/state',
                     'reactium-core/components/Router/state',
-                    'reactium-core/components/Toolkit/state'
-                ]
+                    'reactium-core/components/Toolkit/state',
+                ],
             },
             allRoutes: {
                 type: 'route',
@@ -99,24 +103,28 @@ module.exports = {
                     'components/Demo/Site/Pages/Home/route',
                     'components/Demo/Site/Pages/Menu/route',
                     'components/Demo/Test/route',
-                    'reactium-core/components/Toolkit/route'
-                ]
+                    'reactium-core/components/Toolkit/route',
+                ],
             },
             allServices: {
                 type: 'services',
                 imports: [
                     'components/Demo/Test/services',
-                    'reactium-core/components/Toolkit/services'
-                ]
+                    'reactium-core/components/Toolkit/services',
+                ],
             },
             allMiddleware: {
                 type: 'middleware',
-                imports: ['reactium-core/redux/middleware']
+                imports: ['reactium-core/redux/middleware'],
             },
             allEnhancers: {
                 type: 'enhancer',
-                imports: ['reactium-core/redux/enhancer']
-            }
+                imports: ['reactium-core/redux/enhancer'],
+            },
+            allPlugins: {
+                type: 'plugin',
+                imports: ['components/Demo/Test/TestPlugin/plugin'],
+            },
         };
-    }
+    },
 };
