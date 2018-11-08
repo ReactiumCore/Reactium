@@ -55,4 +55,63 @@ module.exports = {
             },
         },
     },
+    manifest: {
+        patterns: [
+            {
+                name: 'allActions',
+                type: 'actions',
+                pattern: /actions.js$/,
+            },
+            {
+                name: 'allActionTypes',
+                type: 'actionTypes',
+                pattern: /actionTypes.js$/,
+            },
+            {
+                name: 'allReducers',
+                type: 'reducers',
+                pattern: /reducers.js$/,
+            },
+            {
+                name: 'allInitialStates',
+                type: 'state',
+                pattern: /state.js$/,
+            },
+            {
+                name: 'allRoutes',
+                type: 'route',
+                pattern: /route.js$/,
+            },
+            {
+                name: 'allServices',
+                type: 'services',
+                pattern: /services.js$/,
+            },
+            {
+                name: 'allMiddleware',
+                type: 'middleware',
+                pattern: /middleware.js$/,
+            },
+            {
+                name: 'allEnhancers',
+                type: 'enhancer',
+                pattern: /enhancer.js$/,
+            },
+            {
+                name: 'allPlugins',
+                type: 'plugin',
+                pattern: /plugin.js$/,
+            },
+        ],
+        sourceMappings: [
+            {
+                from: 'src/app/',
+                to: '',
+            },
+            {
+                from: '.core/',
+                to: 'reactium-core/',
+            },
+        ],
+    },
 };

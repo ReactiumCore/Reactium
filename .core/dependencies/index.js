@@ -61,11 +61,33 @@ class ReactiumDependencies {
         this.services = {};
         this.reducers = {};
         this.plugins = {};
+        this.coreTypes = [
+            'allActions',
+            'allActionTypes',
+            'allReducers',
+            'allInitialStates',
+            'allRoutes',
+            'allServices',
+            'allMiddleware',
+            'allEnhancers',
+            'allPlugins',
+        ];
+    }
+
+    setManifest(manifest) {
+        this.manifest = manifest;
+
+        // Provide placeholder for non-core types
+        Object.keys(this.manifest).forEach(type => {
+            if (!this.coreTypes.find(coreType => coreType === type)) {
+                this[type] = {};
+            }
+        });
     }
 
     update() {
-        dependencies.manifest = require('manifest').get();
-        dependencies.init();
+        this.setManifest(require('manifest').get());
+        this.init();
         console.log('[Reactium HMR] - Refreshing dependencies');
     }
 
@@ -130,6 +152,13 @@ class ReactiumDependencies {
             },
             {}
         );
+
+        // Resolve non-core types as dependencies
+        Object.keys(this.manifest).forEach(type => {
+            if (!this.coreTypes.find(coreType => coreType === type)) {
+                this[type] = this.manifest[type];
+            }
+        });
     }
 }
 
@@ -142,4 +171,4 @@ export const restHeaders = () => {
 };
 
 // File scoped
-dependencies.manifest = require('manifest').get();
+dependencies.setManifest(require('manifest').get());

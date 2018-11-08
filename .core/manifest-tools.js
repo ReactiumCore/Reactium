@@ -2,7 +2,8 @@ const tree = require('directory-tree');
 const path = require('path');
 const fs = require('fs');
 const _ = require('underscore');
-
+const reactiumConfig = require('./reactium-config');
+const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
 const manifestFilePath = path.resolve('./src/', 'manifest.js');
 
 const flattenRegistry = (registry = { children: [] }, manifest = []) =>
@@ -19,12 +20,12 @@ const flattenRegistry = (registry = { children: [] }, manifest = []) =>
 const jsSources = sourcePath =>
     flattenRegistry(
         tree(sourcePath, {
-            extensions: /\.js$/,
+            extensions: /\.jsx?$/,
             exclude: /.ds_store/i,
         })
     );
 
-const find = (searches = [], sourcePaths) => {
+const find = (searches = [], sourceMappings) => {
     let mappings = searches.reduce((mappings, { name, type }) => {
         mappings[name] = {
             type,
@@ -33,8 +34,8 @@ const find = (searches = [], sourcePaths) => {
         return mappings;
     }, {});
 
-    sourcePaths.forEach(sourcePath => {
-        mappings = jsSources(sourcePath.from)
+    sourceMappings.forEach(sourceMapping => {
+        mappings = jsSources(sourceMapping.from)
             .map(file => file.path)
             .reduce((mappings, file) => {
                 searches.forEach(({ name, pattern }) => {
@@ -42,8 +43,8 @@ const find = (searches = [], sourcePaths) => {
                         mappings[name].imports.push(
                             file
                                 .replace(/\\/g, '/')
-                                .replace(sourcePath.from, sourcePath.to)
-                                .replace(/.js$/, '')
+                                .replace(sourceMapping.from, sourceMapping.to)
+                                .replace(/.jsx?$/, '')
                         );
                     }
                 });
@@ -57,70 +58,13 @@ const find = (searches = [], sourcePaths) => {
 
 module.exports = function() {
     const manifest = find(
-        [
-            {
-                name: 'allActions',
-                type: 'actions',
-                pattern: /actions.js$/,
-            },
-            {
-                name: 'allActionTypes',
-                type: 'actionTypes',
-                pattern: /actionTypes.js$/,
-            },
-            {
-                name: 'allReducers',
-                type: 'reducers',
-                pattern: /reducers.js$/,
-            },
-            {
-                name: 'allInitialStates',
-                type: 'state',
-                pattern: /state.js$/,
-            },
-            {
-                name: 'allRoutes',
-                type: 'route',
-                pattern: /route.js$/,
-            },
-            {
-                name: 'allServices',
-                type: 'services',
-                pattern: /services.js$/,
-            },
-            {
-                name: 'allMiddleware',
-                type: 'middleware',
-                pattern: /middleware.js$/,
-            },
-            {
-                name: 'allEnhancers',
-                type: 'enhancer',
-                pattern: /enhancer.js$/,
-            },
-            {
-                name: 'allPlugins',
-                type: 'plugin',
-                pattern: /plugin.js$/,
-            },
-        ],
-        [
-            {
-                from: 'src/app/',
-                to: '',
-            },
-            {
-                from: '.core/',
-                to: 'reactium-core/',
-            },
-        ]
+        manifestConfig.patterns,
+        manifestConfig.sourceMappings
     );
 
     let manifestFileExists = false;
     try {
-        manifestFileExists = fs.existsSync(
-            path.resolve('./src/', 'manifest.js')
-        );
+        manifestFileExists = fs.existsSync(manifestFilePath);
     } catch (err) {
         // swallow
     }
