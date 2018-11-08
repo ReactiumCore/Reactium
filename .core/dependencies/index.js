@@ -94,5 +94,57 @@ export const restHeaders = () => {
     return {};
 };
 
+export const getComponents = (elms = []) => {
+    const contexts = {
+        components: require.context('components', true, /\.jsx?$/),
+        common: require.context('components/common-ui/', true, /\.jsx?$/),
+        toolkit: require.context('toolkit', true, /\.jsx?$/),
+        core: require.context('reactium-core/components', true, /\.jsx?$/),
+    };
+
+    let cmps = {};
+
+    // Traverse the Array of bindable elements and require the components for them
+    elms.forEach(elm => {
+        let req;
+        let { type, path } = elm;
+
+        // The path to the component
+        path = !path ? type : path;
+        Object.entries(contexts).forEach(([name, context]) => {
+            [
+                `./${path}/index.js`,
+                `./${path}/index.jsx`,
+                `./${path}.js`,
+                `./${path}.jsx`,
+            ].forEach(attempt => {
+                // Exit if the component has already been defined
+                if (cmps[type]) {
+                    return;
+                }
+
+                const found = context.keys().find(key => key === attempt);
+
+                if (found) {
+                    const id = context.resolve(attempt);
+
+                    req = context(attempt);
+
+                    // Check if the component has a .default
+                    // -> if so: set that as the component constructor
+                    req = 'default' in req ? req.default : req;
+                }
+
+                if (req) {
+                    cmps[type] = req;
+                }
+            });
+        });
+    });
+
+    // Output the Components Object
+    return cmps;
+};
+
 // File scoped
 dependencies.manifest = require('manifest').get();

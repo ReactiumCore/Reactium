@@ -7,7 +7,7 @@ import React, { Component, Fragment } from 'react';
 import Context from './Context';
 import { matchPath } from 'react-router';
 import op from 'object-path';
-import deps from 'dependencies';
+import deps, { getComponents } from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -40,20 +40,28 @@ export default class Plugins extends Component {
                             {op
                                 .get(plugins, zone, [])
                                 .filter(pluginFilter)
-                                .map(
-                                    ({
-                                        id,
-                                        component: Component,
-                                        ...pluginProps
-                                    }) => (
-                                        <Component
-                                            id={id}
-                                            key={id}
-                                            {...pluginProps}
-                                            {...otherProps}
-                                        />
-                                    )
-                                )}
+                                .map(({ id, component, ...pluginProps }) => {
+                                    let Component = component;
+                                    if (typeof component === 'string') {
+                                        const found = getComponents([
+                                            { type: component },
+                                        ]);
+                                        Component = null;
+                                        if (found) {
+                                            Component = found[component];
+                                        }
+                                    }
+                                    return (
+                                        Component && (
+                                            <Component
+                                                id={id}
+                                                key={id}
+                                                {...pluginProps}
+                                                {...otherProps}
+                                            />
+                                        )
+                                    );
+                                })}
                             {children}
                         </Fragment>
                     );

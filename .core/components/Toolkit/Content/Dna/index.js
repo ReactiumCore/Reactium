@@ -3,11 +3,11 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { TweenMax, Power2 } from "gsap";
-import React, { Component, Fragment } from "react";
-import op from "object-path";
-import { Link } from "react-router-dom";
-import _ from "underscore";
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
+import React, { Component, Fragment } from 'react';
+import op from 'object-path';
+import { Link } from 'react-router-dom';
+import _ from 'underscore';
 
 /**
  * -----------------------------------------------------------------------------
@@ -28,14 +28,14 @@ export default class Dna extends Component {
         this.toggle = this.toggle.bind(this);
 
         this.state = {
-            ...this.props
+            ...this.props,
         };
     }
 
     componentDidMount() {
         this.applyPrefs();
 
-        if (this.state.hasOwnProperty("mount")) {
+        if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
     }
@@ -43,7 +43,7 @@ export default class Dna extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps
+            ...nextProps,
         }));
 
         this.applyPrefs();
@@ -56,7 +56,7 @@ export default class Dna extends Component {
             if (op.has(newState, key)) {
                 return;
             }
-            if (typeof v !== "undefined") {
+            if (typeof v !== 'undefined') {
                 newState[key] = v;
             }
         });
@@ -78,10 +78,10 @@ export default class Dna extends Component {
 
         let vals = [
             op.get(prefs, `link.${id}`),
-            op.get(prefs, "link.all", visible)
+            op.get(prefs, 'link.all', visible),
         ];
 
-        return this.getPref(newState, "visible", vals);
+        return this.getPref(newState, 'visible', vals);
     }
 
     open() {
@@ -92,14 +92,14 @@ export default class Dna extends Component {
         let { speed } = this.state;
         let _self = this;
 
-        TweenMax.set(this.cont, { height: "auto", display: "block" });
+        TweenMax.set(this.cont, { height: 'auto', display: 'block' });
         TweenMax.from(this.cont, speed, {
             height: 0,
-            overwrite: "all",
+            overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({ visible: true, height: "auto" });
-            }
+                _self.setState({ visible: true, height: 'auto' });
+            },
         });
     }
 
@@ -113,11 +113,11 @@ export default class Dna extends Component {
 
         TweenMax.to(this.cont, speed / 2, {
             height: 0,
-            overwrite: "all",
+            overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ visible: false, height: 0 });
-            }
+            },
         });
     }
 
@@ -134,7 +134,7 @@ export default class Dna extends Component {
     getElements() {
         let { menu } = this.state;
         let elements = [];
-        _.compact(_.pluck(Object.values(menu), "elements")).forEach(item => {
+        _.compact(_.pluck(Object.values(menu), 'elements')).forEach(item => {
             elements = elements.concat(Object.values(item));
         });
 
@@ -146,23 +146,23 @@ export default class Dna extends Component {
 
         let output = [];
 
-        if (!op.has(component, "dependencies")) {
+        if (!op.has(component, 'dependencies')) {
             return output;
         }
 
         let elements = this.getElements();
 
         elements.forEach(item => {
-            if (!op.has(item, "dna")) {
+            if (!op.has(item, 'dna')) {
                 return;
             }
-            if (!op.has(item, "component")) {
+            if (!op.has(item, 'component')) {
                 return;
             }
-            if (typeof op.get(item, "component") === "string") {
+            if (typeof op.get(item, 'component') === 'string') {
                 return;
             }
-            if (!op.has(item, "component.dependencies")) {
+            if (!op.has(item, 'component.dependencies')) {
                 return;
             }
 
@@ -174,22 +174,22 @@ export default class Dna extends Component {
             let deps = item.component.dependencies();
 
             deps.forEach(str => {
-                if (typeof str !== "string") {
-                    if (op.has(str, "id")) {
+                if (typeof str !== 'string') {
+                    if (op.has(str, 'id')) {
                         str = str.id;
                     }
                 }
 
-                let exp = new RegExp("^./node_modules/", "i");
+                let exp = new RegExp('^./node_modules/', 'i');
                 if (exp.test(str)) {
                     return;
                 }
 
                 let p = str
-                    .split("./src/app/")
-                    .join("/")
-                    .split("/index.js")
-                    .join("");
+                    .split('./src/app/')
+                    .join('/')
+                    .split('/index.js')
+                    .join('');
 
                 if (p === dna) {
                     results.push(item);
@@ -209,8 +209,8 @@ export default class Dna extends Component {
     }
 
     getDependency(str) {
-        str = typeof str === "string" ? str : null;
-        str = str === null && op.has(str, "id") ? str.id : str;
+        str = typeof str === 'string' ? str : null;
+        str = str === null && op.has(str, 'id') ? str.id : str;
         if (str === null) {
             return;
         }
@@ -220,10 +220,10 @@ export default class Dna extends Component {
         let elements = this.getElements();
 
         let p = str
-            .split("./src/app/")
-            .join("/")
-            .split("/index.js")
-            .join("");
+            .split('./src/app/')
+            .join('/')
+            .split('/index.js')
+            .join('');
 
         let item = _.findWhere(elements, { dna: p });
 
@@ -233,48 +233,48 @@ export default class Dna extends Component {
                 ? () => (
                       <Link to={route} title={str}>
                           <svg>
-                              <use xlinkHref={"#re-icon-link"} />
+                              <use xlinkHref={'#re-icon-link'} />
                           </svg>
                           {label}
                       </Link>
                   )
                 : null;
         } else {
-            let exp = new RegExp("^./node_modules/", "i");
+            let exp = new RegExp('^./node_modules/', 'i');
             if (exp.test(str)) {
                 return;
             }
 
             let cmp = str
-                .split("/")
+                .split('/')
                 .pop()
-                .split(".js")
-                .join("");
+                .split('.js')
+                .join('');
             return () => (
                 <span>
                     <svg>
-                        <use xlinkHref={"#re-icon-docs"} />
+                        <use xlinkHref={'#re-icon-docs'} />
                     </svg>
-                    {cmp} &ndash; {str.split("./src/app").join("")}
+                    {cmp} &ndash; {str.split('./src/app').join('')}
                 </span>
             );
         }
     }
 
     getNPM(str, deps) {
-        let exp = new RegExp("^./node_modules/", "i");
+        let exp = new RegExp('^./node_modules/', 'i');
         if (!exp.test(str)) {
             return;
         }
 
         let elements = [];
         let pkg = str
-            .split("./node_modules/")
-            .join("")
-            .split("/")
+            .split('./node_modules/')
+            .join('')
+            .split('/')
             .shift();
 
-        let exclude = ["webpack", "react"];
+        let exclude = ['webpack', 'react'];
         if (exclude.indexOf(pkg) > -1) {
             return;
         }
@@ -282,28 +282,28 @@ export default class Dna extends Component {
         let url = `https://www.npmjs.com/package/${pkg}`;
 
         return () => (
-            <a href={url} target={"_blank"}>
+            <a href={url} target={'_blank'}>
                 {pkg}
             </a>
         );
     }
 
     render() {
-        if (process.env.NODE_ENV !== "development") {
+        if (process.env.NODE_ENV !== 'development') {
             return null;
         }
 
         let { component, height, visible } = this.state;
 
-        if (typeof component === "undefined" || typeof component === "string") {
+        if (typeof component === 'undefined' || typeof component === 'string') {
             return null;
         }
 
-        let deps = op.has(component, "dependencies")
+        let deps = op.has(component, 'dependencies')
             ? component.dependencies()
             : [];
 
-        let display = visible === true ? "block" : "none";
+        let display = visible === true ? 'block' : 'none';
 
         let npm = _.compact(deps.map(item => this.getNPM(item, deps)));
         let dependencies = _.compact(
@@ -320,12 +320,11 @@ export default class Dna extends Component {
                     ref={elm => {
                         this.cont = elm;
                     }}
-                    className={"re-toolkit-dna-view"}
-                    style={{ height, display }}
-                >
-                    <div className={"re-toolkit-card-heading thin"}>DNA</div>
-                    <div className={"re-toolkit-card-body"}>
-                        <div className={"re-toolkit-card-body-pad"}>
+                    className={'re-toolkit-dna-view'}
+                    style={{ height, display }}>
+                    <div className={'re-toolkit-card-heading thin'}>DNA</div>
+                    <div className={'re-toolkit-card-body'}>
+                        <div className={'re-toolkit-card-body-pad'}>
                             <h3 style={{ marginTop: 10, marginBottom: 10 }}>
                                 No DNA Found
                             </h3>
@@ -340,12 +339,11 @@ export default class Dna extends Component {
                 ref={elm => {
                     this.cont = elm;
                 }}
-                className={"re-toolkit-dna-view"}
-                style={{ height, display }}
-            >
+                className={'re-toolkit-dna-view'}
+                style={{ height, display }}>
                 {dependents.length > 0 ? (
                     <Fragment>
-                        <div className={"re-toolkit-card-heading thin"}>
+                        <div className={'re-toolkit-card-heading thin'}>
                             Dependents
                         </div>
                         <ul>
@@ -363,7 +361,7 @@ export default class Dna extends Component {
 
                 {dependencies.length > 0 ? (
                     <Fragment>
-                        <div className={"re-toolkit-card-heading thin"}>
+                        <div className={'re-toolkit-card-heading thin'}>
                             Dependencies
                         </div>
                         <ul>
@@ -380,7 +378,7 @@ export default class Dna extends Component {
                 ) : null}
                 {npm.length > 0 ? (
                     <Fragment>
-                        <div className={"re-toolkit-card-heading thin"}>
+                        <div className={'re-toolkit-card-heading thin'}>
                             NPM Modules
                         </div>
                         <ul>
@@ -402,10 +400,10 @@ export default class Dna extends Component {
 
 Dna.defaultProps = {
     component: null,
-    height: "auto",
+    height: 'auto',
     menu: {},
     prefs: {},
     speed: 0.2,
     id: null,
-    visible: false
+    visible: false,
 };

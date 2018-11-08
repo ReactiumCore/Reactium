@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import Router from 'reactium-core/components/Router';
 import storeCreator from 'reactium-core/storeCreator';
-import deps from 'dependencies';
+import deps, { getComponents } from 'dependencies';
 
 // Placeholder for the bindable elements
 const bindPoints = [];
@@ -21,63 +21,6 @@ const elements =
     typeof document !== 'undefined'
         ? Array.prototype.slice.call(document.querySelectorAll('component'))
         : [];
-
-export const getComponents = (elms = []) => {
-    let cmps = {};
-
-    // Traverse the Array of bindable elements and require the components for them
-    elms.forEach(elm => {
-        let req;
-        let { type, path } = elm;
-
-        // The path to the component
-        path = !path ? type : path;
-
-        // Force webpack to include the components we need.
-        // The order of this Array is SUPER important.
-
-        // Q: Why?
-        // A: As we traverse the array, the first match of the `path` is used as the component.
-        //    Keeping this hierarchy insures that user created components
-        //    will supercede .core and /toolkit components.
-        let paths = [
-            () => require(`components/${path}`),
-            () => require(`components/${path}/index`),
-            () => require(`components/common-ui/${path}`),
-            () => require(`components/common-ui/${path}/index`),
-            () => require(`toolkit/${path}`),
-            () => require(`toolkit/${path}/index`),
-            () => require(`reactium-core/components/${path}`),
-            () => require(`reactium-core/components/${path}/index`),
-            () => require(`reactium-core/components/common-ui/${path}`),
-            () => require(`reactium-core/components/common-ui/${path}/index`),
-        ];
-
-        // Aggregate the required components into the `cmps` Object;
-        paths.forEach((cmp, i) => {
-            // Exit if the component has already been defined
-            if (cmps[type]) {
-                return;
-            }
-
-            // Construct the component
-            try {
-                req = cmp();
-
-                // Check if the component has a .default
-                // -> if so: set that as the component constructor
-                req = 'default' in req ? req.default : req;
-            } catch (err) {}
-        });
-
-        if (req) {
-            cmps[type] = req;
-        }
-    });
-
-    // Output the Components Object
-    return cmps;
-};
 
 if (elements.length > 0) {
     let types = [];

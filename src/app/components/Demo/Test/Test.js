@@ -44,6 +44,15 @@ export default class Test extends Component {
                     {
                         zone: 'demo-test-nested-example',
                         id: 'inline-plugin-example',
+                        component: 'form/Checkbox',
+                        order: 0,
+                        name: 'inline-plugin-example2',
+                        text: 'Test Checkbox Plugin',
+                        value: 'inline-plugin-example',
+                    },
+                    {
+                        zone: 'demo-test-nested-example',
+                        id: 'inline-plugin-example2',
                         component: () => <small>Nested Inline Plugin</small>,
                         order: 0,
                     },
