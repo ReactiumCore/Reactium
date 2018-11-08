@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Context from './Context';
 import { matchPath } from 'react-router';
 import op from 'object-path';
@@ -17,57 +17,81 @@ import deps, { getComponents } from 'dependencies';
 
 export default class Plugins extends Component {
     render() {
+        const { children } = this.props;
+
+        return (
+            <>
+                <Context.Consumer>
+                    {context => this.renderPlugins(context)}
+                </Context.Consumer>
+                {children}
+            </>
+        );
+    }
+
+    renderPlugins({ plugins, filter: providedFilter }) {
         const {
+            children, // to discard
             zone,
-            children,
-            filter: localFilter,
+            filter: localFilterOverride,
             ...otherProps
         } = this.props;
 
-        return (
-            <Context.Consumer>
-                {({ plugins, filter }) => {
-                    let pluginFilter = _ => true;
-                    if (typeof filter === 'function') {
-                        pluginFilter = filter;
-                    }
-                    if (typeof localFilter === 'function') {
-                        pluginFilter = localFilter;
-                    }
+        let pluginFilter = _ => true;
+        if (typeof providedFilter === 'function') {
+            pluginFilter = providedFilter;
+        }
+        if (typeof localFilterOverride === 'function') {
+            pluginFilter = localFilterOverride;
+        }
 
-                    return (
-                        <Fragment>
-                            {op
-                                .get(plugins, zone, [])
-                                .filter(pluginFilter)
-                                .map(({ id, component, ...pluginProps }) => {
-                                    let Component = component;
-                                    if (typeof component === 'string') {
-                                        const found = getComponents([
-                                            { type: component },
-                                        ]);
-                                        Component = null;
-                                        if (found) {
-                                            Component = found[component];
-                                        }
-                                    }
-                                    return (
-                                        Component && (
-                                            <Component
-                                                id={id}
-                                                key={id}
-                                                {...pluginProps}
-                                                {...otherProps}
-                                            />
-                                        )
-                                    );
-                                })}
-                            {children}
-                        </Fragment>
-                    );
-                }}
-            </Context.Consumer>
-        );
+        const PluginComponents = op
+            .get(plugins, zone, [])
+            .filter(pluginFilter)
+            .map(({ id, component, path, paths, ...pluginProps }) => {
+                let Component = component;
+                if (typeof component === 'string') {
+                    Component = Plugins.findComponent();
+                }
+                return (
+                    Component && (
+                        <Component
+                            id={id}
+                            key={id}
+                            {...pluginProps}
+                            {...otherProps}
+                        />
+                    )
+                );
+            });
+
+        return PluginComponents;
+    }
+
+    static findComponent(type, path, paths) {
+        let search = [
+            {
+                type,
+                path,
+            },
+        ];
+
+        if (Array.isArray(paths)) {
+            search = search.concat(
+                paths.map(path => ({
+                    type,
+                    path,
+                }))
+            );
+        }
+
+        const found = getComponents(search);
+        let Component = null;
+        if (found) {
+            Component = found[type];
+        }
+
+        return Component;
     }
 }
 
