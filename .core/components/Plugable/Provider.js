@@ -29,7 +29,11 @@ export default class PlugableProvider extends Component {
     render() {
         return (
             <PlugableContext.Provider
-                value={{ plugins: this.allPlugins, filter: this.props.filter }}>
+                value={{
+                    plugins: this.allPlugins,
+                    filter: this.props.filter,
+                    mapper: this.props.mapper,
+                }}>
                 {this.props.children}
             </PlugableContext.Provider>
         );
@@ -38,4 +42,5 @@ export default class PlugableProvider extends Component {
 PlugableProvider.defaultProps = {
     plugins: [],
     filter: _ => true,
+    mapper: _ => _,
 };

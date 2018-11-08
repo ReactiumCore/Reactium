@@ -29,11 +29,12 @@ export default class Plugins extends Component {
         );
     }
 
-    renderPlugins({ plugins, filter: providedFilter }) {
+    renderPlugins({ plugins, filter: providedFilter, mapper: providedMapper }) {
         const {
             children, // to discard
             zone,
             filter: localFilterOverride,
+            mapper: localMapperOverride,
             ...otherProps
         } = this.props;
 
@@ -45,9 +46,18 @@ export default class Plugins extends Component {
             pluginFilter = localFilterOverride;
         }
 
+        let pluginMapper = _ => true;
+        if (typeof providedMapper === 'function') {
+            pluginMapper = providedMapper;
+        }
+        if (typeof localMapperOverride === 'function') {
+            pluginMapper = localMapperOverride;
+        }
+
         const PluginComponents = op
             .get(plugins, zone, [])
             .filter(pluginFilter)
+            .map(pluginMapper)
             .map(({ id, component, path, paths, ...pluginProps }) => {
                 let Component = component;
                 if (typeof component === 'string') {
@@ -72,7 +82,7 @@ export default class Plugins extends Component {
         let search = [
             {
                 type,
-                path,
+                path: `${path}${type}`,
             },
         ];
 
@@ -80,7 +90,7 @@ export default class Plugins extends Component {
             search = search.concat(
                 paths.map(path => ({
                     type,
-                    path,
+                    path: `${path}${type}`,
                 }))
             );
         }
