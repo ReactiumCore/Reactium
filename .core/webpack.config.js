@@ -45,6 +45,16 @@ module.exports = config => {
         })
     );
     plugins.push(
+        new webpack.ContextReplacementPlugin(
+            /^components\/common-ui/,
+            context => {
+                context.request = path.resolve(
+                    './src/app/components/common-ui'
+                );
+            }
+        )
+    );
+    plugins.push(
         new webpack.ContextReplacementPlugin(/^components/, context => {
             context.request = path.resolve('./src/app/components');
         })

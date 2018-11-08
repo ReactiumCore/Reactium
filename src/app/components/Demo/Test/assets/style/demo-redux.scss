@@ -53,4 +53,11 @@
 
         transition: background-color .25s, color .25s;
     }
+
+    .plugins {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 }
