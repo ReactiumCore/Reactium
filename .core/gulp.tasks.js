@@ -157,16 +157,22 @@ const reactium = (gulp, config, webpackConfig) => {
                 .pipe(rename(assetPath))
                 .pipe(gulp.dest(config.dest.assets));
         },
+        // stub task to provide sequenced override for application
+        preBuild: done => done(),
         build: done => {
             // Build
             runSequence(
+                ['preBuild'],
                 ['clean'],
                 ['manifest'],
                 ['scripts', 'assets', 'styles'],
                 ['markup', 'json'],
+                ['postBuild'],
                 done
             );
         },
+        // stub task to provide sequenced override for application
+        postBuild: done => done(),
         clean: done => {
             // Remove build files
             del.sync([config.dest.dist]);
