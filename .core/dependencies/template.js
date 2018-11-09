@@ -3,58 +3,51 @@ module.exports = contexts =>
 
 import op from 'object-path';
 
-if (typeof window === 'undefined') {
-    require['context'] = function(prefix) {
-        const context = function(suffix) {
-            return () => null;
-        };
-
-        context.keys = () => ({
-            find: cb => true
-        });
-        return context;
-    };
-}
-
 export const getComponents = (elms = []) => {
-    ${contexts}
-
     let cmps = {};
+    if (typeof window !== 'undefined') {
+        ${contexts}
 
-    // Traverse the Array of bindable elements and require the components for them
-    elms.forEach(elm => {
-        let req;
-        let { type, path } = elm;
+        // Traverse the Array of bindable elements and require the components for them
+        elms.forEach(({type, path}) => {
+            let req;
 
-        // The path to the component
-        path = !path ? type : path;
-        Object.entries(contexts).forEach(([name, context]) => {
-            [
-                ${'`./${path}/index.js`'},
-                ${'`./${path}/index.jsx`'},
-                ${'`./${path}.js`'},
-                ${'`./${path}.jsx`'},
-            ].forEach(attempt => {
-                // Exit if the component has already been defined
-                if (cmps[type]) {
-                    return;
-                }
+            // The path to the component
+            path = !path ? type : path;
+            Object.entries(contexts).forEach(([name, context]) => {
+                [
+                    ${'`./${path}/index.js`'},
+                    ${'`./${path}/index.jsx`'},
+                    ${'`./${path}.js`'},
+                    ${'`./${path}.jsx`'},
+                ].forEach(attempt => {
+                    // Exit if the component has already been defined
+                    if (cmps[type]) {
+                        return;
+                    }
 
-                const found = context.keys().find(key => key === attempt);
-                if (found) {
-                    req = context(attempt);
+                    const found = context.keys().find(key => key === attempt);
+                    if (found) {
+                        req = context(attempt);
 
-                    // Check if the component has a .default
-                    // -> if so: set that as the component constructor
-                    req = 'default' in req ? req.default : req;
-                }
+                        // Check if the component has a .default
+                        // -> if so: set that as the component constructor
+                        req = 'default' in req ? req.default : req;
+                    }
 
-                if (req) {
-                    cmps[type] = req;
-                }
+                    if (req) {
+                        cmps[type] = req;
+                    }
+                });
             });
         });
-    });
+    } else {
+        // handle SSR case
+        cmps = elms.reduce((cmps, {type}) => {
+            cmps[type] = () => null;
+            return cmps;
+        }, {})
+    }
 
     // Output the Components Object
     return cmps;
