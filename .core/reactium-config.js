@@ -60,47 +60,47 @@ module.exports = {
             {
                 name: 'allActions',
                 type: 'actions',
-                pattern: /actions.js$/,
+                pattern: /actions.jsx?$/,
             },
             {
                 name: 'allActionTypes',
                 type: 'actionTypes',
-                pattern: /actionTypes.js$/,
+                pattern: /actionTypes.jsx?$/,
             },
             {
                 name: 'allReducers',
                 type: 'reducers',
-                pattern: /reducers.js$/,
+                pattern: /reducers.jsx?$/,
             },
             {
                 name: 'allInitialStates',
                 type: 'state',
-                pattern: /state.js$/,
+                pattern: /state.jsx?$/,
             },
             {
                 name: 'allRoutes',
                 type: 'route',
-                pattern: /route.js$/,
+                pattern: /route.jsx?$/,
             },
             {
                 name: 'allServices',
                 type: 'services',
-                pattern: /services.js$/,
+                pattern: /services.jsx?$/,
             },
             {
                 name: 'allMiddleware',
                 type: 'middleware',
-                pattern: /middleware.js$/,
+                pattern: /middleware.jsx?$/,
             },
             {
                 name: 'allEnhancers',
                 type: 'enhancer',
-                pattern: /enhancer.js$/,
+                pattern: /enhancer.jsx?$/,
             },
             {
                 name: 'allPlugins',
                 type: 'plugin',
-                pattern: /plugin.js$/,
+                pattern: /plugin.jsx?$/,
             },
         ],
         sourceMappings: [
@@ -113,5 +113,23 @@ module.exports = {
                 to: 'reactium-core/',
             },
         ],
+        contexts: {
+            components: {
+                modulePath: 'components',
+                filePattern: '.jsx?$',
+            },
+            common: {
+                modulePath: 'components/common-ui/',
+                filePattern: '.jsx?$',
+            },
+            toolkit: {
+                modulePath: 'toolkit',
+                filePattern: '.jsx?$',
+            },
+            core: {
+                modulePath: 'reactium-core/components',
+                filePattern: '.jsx?$',
+            },
+        },
     },
 };
