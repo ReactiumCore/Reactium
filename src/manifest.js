@@ -49,6 +49,13 @@ module.exports = {
 
         }
     },
+    contexts: {
+        'components': typeof window !== 'undefined' && require.context('components', true, /.jsx?$/),
+        'common': typeof window !== 'undefined' && require.context('components/common-ui/', true, /.jsx?$/),
+        'toolkit': typeof window !== 'undefined' && require.context('toolkit', true, /.jsx?$/),
+        'core': typeof window !== 'undefined' && require.context('reactium-core/components', true, /.jsx?$/),
+
+    },
     listContexts: () => {
         return {
   "components": {
