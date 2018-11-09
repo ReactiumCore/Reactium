@@ -19,7 +19,8 @@ const rename = require('gulp-rename');
 const chalk = require('chalk');
 const moment = require('moment');
 const regenManifest = require('./manifest-tools');
-const appRoot = path.resolve(__dirname, '..');
+const rootPath = path.resolve(__dirname, '..');
+const { fork } = require('child_process');
 
 const reactium = (gulp, config, webpackConfig) => {
     const env = process.env.NODE_ENV || 'development';
@@ -46,11 +47,11 @@ const reactium = (gulp, config, webpackConfig) => {
         let src = path.relative(path.resolve(__dirname), e.path);
         let ePathRelative = path.relative(path.resolve(config.src.app), e.path);
         let fpath = path.resolve(
-            appRoot,
+            rootPath,
             `${config.dest.dist}/${ePathRelative}`
         );
-        let displaySrc = path.relative(appRoot, e.path);
-        let displayDest = path.relative(appRoot, fpath);
+        let displaySrc = path.relative(rootPath, e.path);
+        let displayDest = path.relative(rootPath, fpath);
 
         if (fs.existsSync(fpath)) {
             del.sync([fpath]);
@@ -70,6 +71,52 @@ const reactium = (gulp, config, webpackConfig) => {
         console.log(
             `${timestamp()} File ${e.event}: ${displaySrc} -> ${displayDest}`
         );
+    };
+
+    const serve = (done, open = config.open) => {
+        // Serve locally
+        // Delay to allow server time to start
+
+        setTimeout(() => {
+            browserSync({
+                notify: false,
+                timestamps: true,
+                logPrefix: '00:00:00',
+                port: config.port.browsersync,
+                ui: { port: config.port.browsersync + 1 },
+                proxy: `localhost:${config.port.proxy}`,
+                open: open,
+                ghostMode: false,
+            });
+
+            done();
+        }, 5000);
+    };
+
+    const watch = (done, restart = false) => {
+        let watchProcess = fork(path.resolve(__dirname, './gulp.watch.js'), {
+            stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+        });
+        watchProcess.send({ config, webpackConfig, restart });
+        watchProcess.on('message', message => {
+            switch (message) {
+                case 'build-started': {
+                    console.log(
+                        '================ BUILD STARTED ================'
+                    );
+                    done();
+                    return;
+                }
+                case 'restart-watches': {
+                    console.log(
+                        '================ RESTARTING WATCH ================'
+                    );
+                    watchProcess.kill();
+                    watch(_ => _, true);
+                    return;
+                }
+            }
+        });
     };
 
     const tasks = {
@@ -124,8 +171,7 @@ const reactium = (gulp, config, webpackConfig) => {
         default: done => {
             // Default gulp command
             if (env === 'development') {
-                runSequence(['build'], ['watch'], () => {
-                    gulp.start('serve');
+                runSequence(['watch'], () => {
                     done();
                 });
             } else {
@@ -179,23 +225,10 @@ const reactium = (gulp, config, webpackConfig) => {
             }
         },
         serve: done => {
-            // Serve locally
-            // Delay to allow server time to start
-
-            setTimeout(() => {
-                browserSync({
-                    notify: false,
-                    timestamps: true,
-                    logPrefix: '00:00:00',
-                    port: config.port.browsersync,
-                    ui: { port: config.port.browsersync + 1 },
-                    proxy: `localhost:${config.port.proxy}`,
-                    open: config.open,
-                    ghostMode: false,
-                });
-
-                done();
-            }, 5000);
+            serve(done);
+        },
+        'serve-restart': done => {
+            serve(done, false);
         },
         static: done => {
             // Build static site
@@ -291,7 +324,8 @@ const reactium = (gulp, config, webpackConfig) => {
         styles: done => {
             runSequence(['styles:colors'], ['styles:compile'], done);
         },
-        watch: done => {
+        watch,
+        watchFork: done => {
             // Watch for file changes
             gulp.watch(config.watch.colors, ['styles']);
             gulp.watch(config.watch.style, ['styles']);
@@ -305,7 +339,12 @@ const reactium = (gulp, config, webpackConfig) => {
         },
     };
 
-    return tasks;
+    let tasksOverride = _ => _;
+    if (fs.existsSync(`${rootPath}/gulp.tasks.override.js`)) {
+        tasksOverride = require(`${rootPath}/gulp.tasks.override.js`);
+    }
+
+    return tasksOverride(tasks);
 };
 
 module.exports = reactium;

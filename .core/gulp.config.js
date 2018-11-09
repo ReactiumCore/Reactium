@@ -25,6 +25,12 @@ const defaultConfig = {
         js: ['src/app/**/*'],
         markup: ['src/**/*.html', 'src/**/*.css'],
         colors: ['src/**/*/colors.json'],
+        restartWatches: [
+            'src/**/assets/style/*.less',
+            'src/**/assets/style/*.scss',
+            'src/**/assets/style/*.sass',
+            '.core/components/Toolkit/style.scss',
+        ],
         style: [
             'src/**/*.less',
             'src/**/*.scss',
