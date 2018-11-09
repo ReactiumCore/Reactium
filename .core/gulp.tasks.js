@@ -48,8 +48,12 @@ const reactium = (gulp, config, webpackConfig) => {
         let ePathRelative = path.relative(path.resolve(config.src.app), e.path);
         let fpath = path.resolve(
             rootPath,
-            `${config.dest.dist}/${ePathRelative}`
+            `${config.dest.dist}/${ePathRelative.replace(
+                /^.*?\/assets/,
+                'assets'
+            )}`
         );
+
         let displaySrc = path.relative(rootPath, e.path);
         let displayDest = path.relative(rootPath, fpath);
 
