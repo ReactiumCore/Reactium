@@ -7,7 +7,7 @@ process.on('message', ({ config, webpackConfig, restart }) => {
     const tasks = gulpTasks(gulp, config, webpackConfig);
     Object.entries(tasks).forEach(([name, task]) => gulp.task(name, task));
 
-    console.log('================ STARTING BUILD ================');
+    console.log("[00:00:00] Starting 'build'...");
     runSequence(
         ['build'],
         ['watchFork'],

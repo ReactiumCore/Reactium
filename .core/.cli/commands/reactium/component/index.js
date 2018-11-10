@@ -39,8 +39,10 @@ const formatDestination = (val, props) => {
 };
 
 const formatName = val => {
-    val = String(val).replace(/[^a-zA-Z\s]/gm, '');
-    val = camelCase(val, { pascalCase: true });
+    if (val) {
+        val = String(val).replace(/[^a-zA-Z\s]/gm, '');
+        //val = camelCase(String(val), { pascalCase: true });
+    }
 
     return val;
 };
@@ -315,7 +317,7 @@ const SCHEMA = ({ props }) => {
             },
             destination: {
                 description: chalk.white('Destination:'),
-                default: `~${defaultDirectory}`,
+                default: defaultDirectory,
                 required: true,
                 message: ' Input component destination',
             },
