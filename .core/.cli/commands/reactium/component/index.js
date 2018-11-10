@@ -41,7 +41,7 @@ const formatDestination = (val, props) => {
 const formatName = val => {
     if (val) {
         val = String(val).replace(/[^a-zA-Z\s]/gm, '');
-        //val = camelCase(String(val), { pascalCase: true });
+        val = camelCase(val, { pascalCase: true });
     }
 
     return val;
