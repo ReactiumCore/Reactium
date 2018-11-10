@@ -1,0 +1,42 @@
+
+/**
+ * -----------------------------------------------------------------------------
+ * Imports
+ * -----------------------------------------------------------------------------
+ */
+import React, { Component, Fragment } from 'react';
+
+
+/**
+ * -----------------------------------------------------------------------------
+ * React Component: {{name}}
+ * -----------------------------------------------------------------------------
+ */
+
+export default class {{name}} extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+    {{#unless route}}
+    {{#if actions}}
+
+    componentDidMount() {
+        try {
+            const { mount } = this.props;
+            mount();
+        } catch (err) {}
+    }
+
+    {{/if}}
+    {{/unless}}
+    render() {
+        return (
+            <Fragment>
+                COMPONENT
+            </Fragment>
+        );
+    }
+}
+
+{{name}}.defaultProps = {};
