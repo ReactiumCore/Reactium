@@ -10,9 +10,11 @@ import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import copy from 'copy-to-clipboard';
-import beautify from 'beautify';
 import op from 'object-path';
 import PropTypes from 'prop-types';
+import prettier from 'prettier/standalone';
+import parserBabylon from 'prettier/parser-babylon';
+import parserHtml from 'prettier/parser-html';
 
 /**
  * -----------------------------------------------------------------------------
@@ -32,6 +34,16 @@ export default class Code extends Component {
         this.getPref = this.getPref.bind(this);
         this.onCopyClick = this.onCopyClick.bind(this);
         this.onThemeClick = this.onThemeClick.bind(this);
+        this.prettierOptions = {
+            parser: 'angular',
+            singleQuote: true,
+            tabWidth: 4,
+            printWidth: 200000000,
+            jsxSingleQuote: true,
+            jsxBracketSameLine: true,
+            trailingComma: 'es5',
+            plugins: [parserBabylon, parserHtml],
+        };
     }
 
     componentDidMount() {
@@ -45,7 +57,7 @@ export default class Code extends Component {
         this.setState(prevState => {
             let newState = {
                 ...prevState,
-                ...nextProps
+                ...nextProps,
             };
             return newState;
         });
@@ -55,6 +67,8 @@ export default class Code extends Component {
 
     getPref(newState = {}, key, vals) {
         let { prefs = {} } = this.state;
+
+        vals = !Array.isArray(vals) ? [vals] : vals;
 
         vals.forEach((v, i) => {
             if (op.has(newState, key)) {
@@ -72,10 +86,15 @@ export default class Code extends Component {
         let newState = {};
         newState = this.applyVisiblePref(newState);
         newState = this.applyThemePref(newState);
+        newState = this.applyWrapPref(newState);
 
         if (Object.keys(newState).length > 0) {
             this.setState(newState);
         }
+
+        const { wrap } = newState;
+        const w = wrap === true ? 80 : 200000000;
+        op.set(this.prettierOptions, 'printWidth', w);
     }
 
     applyThemePref(newState = {}) {
@@ -83,10 +102,20 @@ export default class Code extends Component {
 
         let vals = [
             op.get(prefs, `codeColor.${id}`),
-            op.get(prefs, `codeColor.all`, theme)
+            op.get(prefs, `codeColor.all`, theme),
         ];
 
         return this.getPref(newState, 'theme', vals);
+    }
+
+    applyWrapPref(newState = {}) {
+        let { prefs = {} } = this.state;
+
+        return this.getPref(
+            newState,
+            'wrap',
+            op.get(prefs, `syntax.wrap`, false)
+        );
     }
 
     applyVisiblePref(newState = {}) {
@@ -94,24 +123,22 @@ export default class Code extends Component {
 
         let vals = [
             op.get(prefs, `code.${id}`),
-            op.get(prefs, 'code.all', visible)
+            op.get(prefs, 'code.all', visible),
         ];
 
         return this.getPref(newState, 'visible', vals);
     }
 
     onCopyClick(e) {
-        let { beauty = {}, component: Component, onButtonClick } = this.state;
+        let { component: Component, onButtonClick } = this.state;
 
-        let markup = beautify(
+        let markup = prettier.format(
             renderToStaticMarkup(
                 <Provider store={this.context.store}>
                     <Component />
                 </Provider>
             ),
-            {
-                format: 'html'
-            }
+            this.prettierOptions
         );
 
         copy(markup);
@@ -154,7 +181,7 @@ export default class Code extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ visible: true, height: 'auto' });
-            }
+            },
         });
     }
 
@@ -172,7 +199,7 @@ export default class Code extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ visible: false, height: 0 });
-            }
+            },
         });
     }
 
@@ -189,23 +216,20 @@ export default class Code extends Component {
     themes(theme = 'dark') {
         let thms = {
             dark: vs2015,
-            light: vs
+            light: vs,
         };
 
         return op.has(thms, theme) ? thms[theme] : thms.dark;
     }
 
-    markup(Component, beauty) {
-        return beautify(
-            renderToStaticMarkup(
-                <Provider store={this.context.store}>
-                    <Component />
-                </Provider>
-            ),
-            {
-                format: 'html'
-            }
+    markup(Component) {
+        const html = renderToStaticMarkup(
+            <Provider store={this.context.store}>
+                <Component />
+            </Provider>
         );
+
+        return prettier.format(html, this.prettierOptions);
     }
 
     render() {
@@ -213,8 +237,7 @@ export default class Code extends Component {
             component: Component,
             visible,
             height,
-            beauty = {},
-            theme = 'dark'
+            theme = 'dark',
         } = this.state;
 
         if (!Component) {
@@ -259,7 +282,7 @@ export default class Code extends Component {
                                 style={style}
                                 customStyle={{ padding: '20px 30px' }}
                                 language={'HTML'}>
-                                {this.markup(Component, beauty)}
+                                {this.markup(Component)}
                             </SyntaxHighlighter>
                         </div>
                     </div>
@@ -299,11 +322,9 @@ Code.defaultProps = {
     group: null,
     id: null,
     theme: 'light',
-    beauty: {
-        wrap_line_length: 10000000000000
-    }
+    wrap: false,
 };
 
 Code.contextTypes = {
-    store: PropTypes.object
+    store: PropTypes.object,
 };

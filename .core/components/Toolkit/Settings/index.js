@@ -31,7 +31,7 @@ export default class Settings extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps
+            ...nextProps,
         }));
     }
 
@@ -57,7 +57,7 @@ export default class Settings extends Component {
                 if (typeof onSettingsClose === 'function') {
                     onSettingsClose();
                 }
-            }
+            },
         });
     }
 
@@ -85,7 +85,7 @@ export default class Settings extends Component {
                 if (typeof onSettingsOpen === 'function') {
                     onSettingsOpen();
                 }
-            }
+            },
         });
     }
 
@@ -137,12 +137,12 @@ export default class Settings extends Component {
                 <li
                     className={'re-toolkit-card-list-item'}
                     key={`setting-${i}`}>
-                    {text.length > 0 ? (
+                    {text.length > 0 && (
                         <div className={'re-toolkit-card-list-text'}>
                             <div>{text[idx]}</div>
                             {help ? <small>{help}</small> : null}
                         </div>
-                    ) : null}
+                    )}
                     <div>
                         <button
                             type={'button'}
@@ -205,7 +205,7 @@ Settings.defaultProps = {
     prefs: {},
     buttons: {
         header: [
-            { name: 'toggle-settings', title: 'close', icon: '#re-icon-close' }
-        ]
-    }
+            { name: 'toggle-settings', title: 'close', icon: '#re-icon-close' },
+        ],
+    },
 };

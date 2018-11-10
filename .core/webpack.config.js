@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
 const env = process.env.NODE_ENV || 'development';
 const rootPath = path.resolve(__dirname, '..');
 
@@ -66,6 +67,11 @@ module.exports = config => {
                 context.request = path.resolve('./.core/components');
             }
         )
+    );
+    plugins.push(
+        new FilterWarningsPlugin({
+            exclude: /Critical dependency: the request of a dependency is an expression/i,
+        })
     );
 
     const defaultConfig = {

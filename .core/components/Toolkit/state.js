@@ -8,24 +8,24 @@ export default {
     style: '/assets/style/style.css',
     prefs: {
         code: {
-            all: false
+            all: false,
         },
         codeColor: {
-            all: 'light'
+            all: 'light',
         },
         docs: {
-            all: false
+            all: false,
         },
         dna: {
-            all: false
+            all: false,
         },
         sidebar: {
             position: 'left',
-            expanded: true
+            expanded: true,
         },
         menu: {
-            all: false
-        }
+            all: false,
+        },
     },
     settings: [
         {
@@ -33,42 +33,49 @@ export default {
             values: ['left', 'right'],
             pref: 'sidebar.position',
             labels: ['R', 'L'],
-            default: 'left'
+            default: 'left',
         },
         {
             text: ['Menu: expanded', 'Menu: collapsed'],
             values: [false, true],
             pref: 'menu.all',
             help: 'Expand or collapse all menu items',
-            default: false
+            default: false,
         },
         {
             text: ['Documentation: collapsed', 'Documentation: expanded'],
             values: [false, true],
             pref: 'docs.all',
             help: 'Expand or collapse all documentation',
-            default: false
+            default: false,
         },
         {
             text: ['DNA: collapsed', 'DNA: expanded'],
             values: [false, true],
             pref: 'link.all',
             help: 'Expand or collapse all DNA views',
-            default: false
+            default: false,
         },
         {
             text: ['Code view: collapsed', 'Code view: expanded'],
             values: [false, true],
             pref: 'code.all',
             help: 'Expand or collapse all code views',
-            default: false
+            default: false,
         },
         {
             text: ['Syntax highlighting: light', 'Syntax highlighting: dark'],
             values: ['light', 'dark'],
             pref: 'codeColor.all',
             help: 'Switch the code view syntax highlighting',
-            default: 'light'
-        }
-    ]
+            default: 'light',
+        },
+        {
+            text: ['Syntax wrap text: no', 'Syntax wrap text: yes'],
+            values: [false, true],
+            pref: 'syntax.wrap',
+            help: 'Wrap code view lines at 80 columns',
+            default: false,
+        },
+    ],
 };
