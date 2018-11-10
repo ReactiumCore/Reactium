@@ -15,6 +15,7 @@ module.exports = {
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
                     'babel-loader': '^8.0.4',
+                    'webpack-filter-warnings-plugin': '^1.2.0',
                 },
                 remove: [
                     'babel-cli',
@@ -34,7 +35,7 @@ module.exports = {
                     'react-frame-component': '^4.0.1',
                     xss: '^1.0.3',
                 },
-                remove: [],
+                remove: ['beautify'],
             },
             scripts: {
                 add: {
