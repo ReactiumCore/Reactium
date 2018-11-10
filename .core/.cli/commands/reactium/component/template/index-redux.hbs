@@ -1,0 +1,27 @@
+
+/**
+ * -----------------------------------------------------------------------------
+ * Imports
+ * -----------------------------------------------------------------------------
+ */
+import { connect } from 'react-redux';
+import {{name}} from './{{name}}';
+import deps from 'dependencies';
+
+/**
+ * -----------------------------------------------------------------------------
+ * Inject Redux State and Actions into React Component: {{name}}
+ * -----------------------------------------------------------------------------
+ */
+const mapStateToProps = (state, props) => ({
+    ...state.{{name}},
+    ...props,
+});
+
+const mapDispatchToProps = dispatch => ({
+    {{#if actions}}
+    mount: (data) => dispatch(deps.actions.{{name}}.mount(data)),
+    {{/if}}
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)({{name}});

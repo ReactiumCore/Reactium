@@ -1,0 +1,6 @@
+{
+    "reactium": {
+        "repo": "https://github.com/Atomic-Reactor/Reactium/archive/master.zip",
+        "types": ["class", "functional"]
+    }
+}

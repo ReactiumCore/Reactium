@@ -101,7 +101,7 @@ module.exports = config => {
             rules: [
                 {
                     test: [/\.jsx|js($|\?)/],
-                    exclude: /node_modules/,
+                    exclude: [/node_modules/],
                     resolve: {
                         extensions: ['.js', '.jsx', '.json'],
                     },
@@ -113,6 +113,7 @@ module.exports = config => {
                 },
                 {
                     test: [
+                        /.hbs$/,
                         /.css$/,
                         /.sass$/,
                         /.scss$/,
@@ -121,6 +122,8 @@ module.exports = config => {
                         /.png$/,
                         /.jpg$/,
                         /.gif$/,
+                        /\.core\/.cli\//,
+                        /\.cli/,
                     ],
                     use: [
                         {

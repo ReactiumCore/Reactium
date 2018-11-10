@@ -105,16 +105,12 @@ const reactium = (gulp, config, webpackConfig) => {
         watchProcess.on('message', message => {
             switch (message) {
                 case 'build-started': {
-                    console.log(
-                        '================ BUILD STARTED ================'
-                    );
+                    console.log("[00:00:00] Starting 'build'...");
                     done();
                     return;
                 }
                 case 'restart-watches': {
-                    console.log(
-                        '================ RESTARTING WATCH ================'
-                    );
+                    console.log("[00:00:00] Restarting 'watch'...");
                     watchProcess.kill();
                     watch(_ => _, true);
                     return;

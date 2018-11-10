@@ -1,0 +1,12 @@
+
+import {{name}} from './index';
+import deps from 'dependencies';
+
+export default {
+    path: {{{route}}},
+    exact: true,
+    component: {{name}},
+    {{#if actions}}
+    load: (params, search) => deps.actions.{{name}}.mount({ params, search }),
+    {{/if}}
+};

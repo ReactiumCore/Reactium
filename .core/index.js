@@ -177,13 +177,15 @@ if (fs.existsSync(`${rootPath}/src/app/server/middleware.js`)) {
     );
 }
 
-middlewares.filter(_ => _).forEach(({ use }) => {
-    if (Array.isArray(use)) {
-        app.use(...use);
-    } else {
-        app.use(use);
-    }
-});
+middlewares
+    .filter(_ => _)
+    .forEach(({ use }) => {
+        if (Array.isArray(use)) {
+            app.use(...use);
+        } else {
+            app.use(use);
+        }
+    });
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {
@@ -191,7 +193,7 @@ app.listen(port, '0.0.0.0', function() {
         app.dependencies.init();
     }
 
-    console.log(`[00:00:00] [Reactium] Server running on port ${port}...`);
+    console.log(`[00:00:00] Reactium Server running on port '${port}'...`);
 });
 
 // Provide opportunity for ssl server
