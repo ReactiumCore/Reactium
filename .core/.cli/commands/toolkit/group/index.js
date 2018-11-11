@@ -79,7 +79,7 @@ const NAME = 'group [action]';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC = 'Manage a new toolkit group.';
+const DESC = 'Toolkit:  Manage a new toolkit group.';
 
 /**
  * CANCELED String
