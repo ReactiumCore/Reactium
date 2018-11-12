@@ -10,11 +10,19 @@ module.exports = {
             devDependencies: {
                 add: {
                     'gulp-run': '^1.7.1',
-                    'atomic-reactor-cli': '^2.0.6',
+                    'atomic-reactor-cli': '^2.0.21',
                     '@babel/core': '^7.1.2',
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
                     'babel-loader': '^8.0.4',
+                    camelcase: '^5.0.0',
+                    'cli-spinners': '^1.3.1',
+                    decamelize: '^2.0.0',
+                    'fs-extra': '^7.0.1',
+                    'fs-readdir-recursive': '^1.1.0',
+                    handlebars: '^4.0.12',
+                    ora: '^3.0.0',
+                    slugify: '^1.3.3',
                     'webpack-filter-warnings-plugin': '^1.2.0',
                 },
                 remove: [
