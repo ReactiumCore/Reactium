@@ -33,6 +33,7 @@ module.exports = {
                     '@babel/polyfill': '^7.0.0',
                     gsap: '^2.0.2',
                     'react-frame-component': '^4.0.1',
+                    'redbox-react': '^1.6.0',
                     xss: '^1.0.3',
                 },
                 remove: ['beautify'],
