@@ -49,10 +49,29 @@ const actionBefore = ({ val, actions, defaultAction = 'create' }) => {
     }
 };
 
+const themeBefore = ({ val, themes }) => {
+    let theme = {};
+
+    if (isNaN(val) && val !== '0') {
+        val = _.findIndex(themes, { name: val });
+        if (val < 0) {
+            return;
+        }
+
+        theme = themes[val];
+    } else {
+        val = Number(val) - 1;
+        theme = themes[val];
+    }
+
+    return op.get(theme, 'name');
+};
+
 const mapOverrides = ({ keys, opt }) => {
     return keys.reduce((obj, key) => {
         let val = opt[key];
         val = typeof val === 'function' ? null : val;
+        val = val === 0 ? '0' : val;
         if (val) {
             obj[key] = val;
         }
@@ -105,17 +124,19 @@ const CANCELED = 'Theme action canceled!';
  * @description Prompts the user to confirm the operation
  * @since 2.0.0
  */
-const CONFIRM = ({ props, params }) => {
+const CONFIRM = ({ props, params, msg }) => {
     const { prompt } = props;
+
+    if (!msg) {
+        msg = `${chalk.white('Proceed?')} ${chalk.cyan('(Y/N):')}`;
+    }
 
     return new Promise((resolve, reject) => {
         prompt.get(
             {
                 properties: {
                     confirmed: {
-                        description: `${chalk.white('Proceed?')} ${chalk.cyan(
-                            '(Y/N):'
-                        )}`,
+                        description: msg,
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
@@ -172,7 +193,7 @@ const CONFORM = ({ input, props }) => {
             case 'menuOrder':
                 val = formatMenuOrder(val);
 
-                if (val && !isNaN(val)) {
+                if ((val && !isNaN(val)) || val === '0') {
                     val = Number(val);
                     val = Math.max(0, val);
                     val = Math.min(themes.length, val);
@@ -181,6 +202,7 @@ const CONFORM = ({ input, props }) => {
                         output[key] = val;
                     }
                 }
+
                 break;
             default:
                 output[key] = val;
@@ -249,6 +271,33 @@ const SCHEMA_ACTION = ({ props }) => {
                     'Action:'
                 )} ${actionList}\n    ${chalk.white('Select:')}`,
                 before: val => actionBefore({ val, actions }),
+            },
+        },
+    };
+};
+
+const SCHEMA_SELECT = ({ props }) => {
+    const themes = op.get(m, 'themes', []);
+
+    const themeList = _.pluck(themes, 'name')
+        .map((item, index) =>
+            listItem({
+                item,
+                index,
+                padding: String(themes.length).length,
+            })
+        )
+        .join('');
+
+    return {
+        properties: {
+            name: {
+                required: true,
+                message: 'Select the theme.',
+                description: `${chalk.white(
+                    'Theme:'
+                )} ${themeList}\n    ${chalk.white('Select:')}`,
+                before: val => themeBefore({ val, themes }),
             },
         },
     };
@@ -338,6 +387,48 @@ const SCHEMA_CREATE = ({ props, params }) => {
     };
 };
 
+const SCHEMA_UPDATE = ({ props, params }) => {
+    const { cwd, prompt } = props;
+    const { name } = params;
+
+    const themes = op.get(m, 'themes', []);
+    const menuOrder = _.findIndex(themes, { name });
+    const theme = themes[menuOrder] || {};
+
+    const { css = null, selected = null } = theme;
+
+    return {
+        properties: {
+            newName: {
+                description: chalk.white('Name:'),
+                default: name,
+            },
+            stylesheet: {
+                description: chalk.white('Stylesheet:'),
+                default: css,
+            },
+            menuOrder: {
+                description: `${chalk.white('Menu Order')} ${chalk.cyan(
+                    `[0-${themes.length}]:`
+                )}`,
+                default: String(menuOrder),
+                before: val => formatMenuOrder(val),
+            },
+            active: {
+                description: `${chalk.white('Selected?')} ${chalk.cyan(
+                    '(Y/N):'
+                )}`,
+                pattern: /^y|n|Y|N/,
+                message: ` `,
+                default: selected === true ? 'y' : 'n',
+                before: val => {
+                    return String(val).toLowerCase() === 'y';
+                },
+            },
+        },
+    };
+};
+
 /**
  * ACTION Function
  * @description Function used as the commander.action() callback.
@@ -368,6 +459,14 @@ const ACTION = ({ action, opt, props }) => {
             case 'create':
                 ACTION_CREATE({ opt, props });
                 break;
+
+            case 'update':
+                ACTION_UPDATE({ opt, props });
+                break;
+
+            case 'remove':
+                ACTION_REMOVE({ opt, props });
+                break;
         }
     }
 };
@@ -388,7 +487,7 @@ const ACTION_CREATE = ({ opt, props }) => {
     };
 
     if (menuOrder) {
-        ovr['menuOrder'] = formatMenuOrder(menuOrder);
+        ovr['menuOrder'] = String(formatMenuOrder(menuOrder));
     }
 
     if (inactive === true) {
@@ -441,7 +540,7 @@ const ACTION_CREATE = ({ opt, props }) => {
 
             message(`A new theme will be created with the following options:`);
             const preflight = { ...params };
-            preflight['menuOrder'] = input['menuOrder'];
+            preflight['menuOrder'] = Number(input['menuOrder']);
 
             console.log(
                 prettier.format(JSON.stringify(preflight), {
@@ -452,17 +551,197 @@ const ACTION_CREATE = ({ opt, props }) => {
             return CONFIRM({ props, params });
         })
         .then(params => {
-            console.log('');
+            let { menuOrder, name, overwrite } = params;
 
-            // generator({ params, props }).then(success => {
-            //     console.log('');
-            // });
+            const reducedParams = {
+                menuOrder,
+                name: params.name,
+                css: path.normalize(
+                    params.stylesheet
+                        .replace(`${cwd}/src`, '')
+                        .replace('.scss', '.css')
+                ),
+            };
+
+            if (params.active === true) {
+                reducedParams['selected'] = true;
+            }
+
+            const action = overwrite === true ? 'update' : 'create';
+
+            if (action === 'update') {
+                reducedParams['newName'] = name;
+                const themes = op.get(m, 'themes', []);
+
+                if (!menuOrder && menuOrder !== 0) {
+                    menuOrder = _.findIndex(themes, { name });
+                    reducedParams['menuOrder'] = menuOrder;
+                }
+            }
+
+            generator({ action, params: reducedParams, props }).then(
+                success => {
+                    console.log('');
+                }
+            );
         })
         .catch(err => {
             if (err) {
                 error(`${NAME} ${err.message}`);
             }
         });
+};
+
+const ACTION_UPDATE = ({ opt, props }) => {
+    console.log('');
+
+    const { cwd, prompt } = props;
+
+    const { inactive, menuOrder, name, overwrite } = opt;
+
+    let schema = SCHEMA_SELECT({ props });
+    let schemaUpdate = SCHEMA_UPDATE({ props, params: opt });
+
+    const ovr = {
+        ...mapOverrides({ keys: Object.keys(schema.properties), opt }),
+        ...mapOverrides({ keys: Object.keys(schemaUpdate.properties), opt }),
+    };
+
+    if (menuOrder) {
+        ovr['menuOrder'] = String(formatMenuOrder(menuOrder));
+    }
+
+    if (inactive === true) {
+        ovr['inactive'] = true;
+        ovr['active'] = false;
+    }
+
+    prompt.override = ovr;
+    prompt.start();
+
+    const act = new Promise((resolve, reject) => {
+        prompt.get(schema, (err, input) => {
+            // Keep this conditional as the first line in this function.
+            // Why? because you will get a js error if you try to set or use anything related to the input object.
+            if (err) {
+                prompt.stop();
+                reject(err);
+                return;
+            }
+
+            let params = CONFORM({ input, props });
+            const { overwrite } = params;
+
+            // Exit if overwrite or confirm !== true
+            if (typeof overwrite === 'boolean' && !overwrite) {
+                prompt.stop();
+                reject({ message: CANCELED });
+                return;
+            }
+
+            resolve(params);
+        });
+    })
+        .then(params => {
+            return new Promise((resolve, reject) => {
+                schemaUpdate = SCHEMA_UPDATE({ params, props });
+
+                prompt.get(schemaUpdate, (err, input) => {
+                    if (err) {
+                        prompt.stop();
+                        reject(err);
+                        return;
+                    }
+                    resolve({ ...params, ...input });
+                });
+            });
+        })
+        .then(input => {
+            let params = CONFORM({ input, props });
+
+            message(
+                `The ${
+                    params.name
+                } theme will be updated with the following options:`
+            );
+            const preflight = { ...params };
+            preflight['menuOrder'] = Number(input['menuOrder']);
+
+            console.log(
+                prettier.format(JSON.stringify(preflight), {
+                    parser: 'json-stringify',
+                })
+            );
+
+            return CONFIRM({ props, params });
+        })
+        .then(params => {
+            let { menuOrder, name, overwrite } = params;
+
+            const reducedParams = {
+                menuOrder,
+                name: params.name,
+                newName: params.newName,
+                css: path.normalize(
+                    params.stylesheet
+                        .replace(`${cwd}/src`, '')
+                        .replace('.scss', '.css')
+                ),
+            };
+
+            if (params.active === true) {
+                reducedParams['selected'] = true;
+            }
+
+            generator({ action: 'update', params: reducedParams, props }).then(
+                success => {
+                    console.log('');
+                }
+            );
+        })
+        .catch(err => {
+            if (err) {
+                error(`${NAME} ${err.message}`);
+            }
+        });
+};
+
+const ACTION_REMOVE = ({ opt, props }) => {
+    console.log('');
+
+    const { cwd, prompt } = props;
+
+    let schema = SCHEMA_SELECT({ props });
+
+    prompt.override = mapOverrides({
+        keys: Object.keys(schema.properties),
+        opt,
+    });
+    prompt.start();
+
+    const act = new Promise((resolve, reject) => {
+        prompt.get(schema, (err, params) => {
+            // Keep this conditional as the first line in this function.
+            // Why? because you will get a js error if you try to set or use anything related to the input object.
+            if (err) {
+                prompt.stop();
+                reject(err.message);
+                return;
+            } else {
+                resolve(params);
+            }
+        });
+    })
+        .then(params =>
+            CONFIRM({
+                params,
+                props,
+                msg: `${chalk.white('Are you sure?')} ${chalk.cyan('(Y/N):')}`,
+            })
+        )
+        .then(params => generator({ action: 'remove', params, props }))
+        .then(() => console.log(''))
+        .catch(err => error(err.message));
 };
 
 /**
@@ -479,6 +758,7 @@ const COMMAND = ({ program, props }) =>
         .option('-a, --active [active]', 'Activate the theme.')
         .option('-i, --inactive [inactive]', 'Deactivate the theme.')
         .option('-m, --menu-order [menuOrder]', 'Theme menu order index.')
+        .option('-N, --new-name [newName]', 'Rename to.')
         .on('--help', HELP);
 
 /**

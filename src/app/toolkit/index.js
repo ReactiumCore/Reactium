@@ -2,66 +2,66 @@ module.exports = {
     header: {
         logo: '/assets/images/atomic-reactor-logo.svg',
         title: 'Style Guide',
-        version: 'ver 2.1.1'
+        version: '2.1.1',
     },
     overview: require('appdir/toolkit/overview').default,
     themes: [
         {
             name: 'Default',
             css: '/assets/style/style.css',
-            selected: true
-        }
+            selected: true,
+        },
     ],
     sidebar: {
         closed: false,
-        position: 'left'
+        position: 'left',
     },
     toolbar: {
         buttons: [
             {
                 icon: '#re-icon-dna',
                 name: 'filter-all',
-                label: 'All Elements'
+                label: 'All Elements',
             },
             {
                 icon: '#re-icon-atom',
                 name: 'filter-atom',
-                label: 'Atoms'
+                label: 'Atoms',
             },
             {
                 icon: '#re-icon-molecule',
                 name: 'filter-molecule',
-                label: 'Molecules'
+                label: 'Molecules',
             },
             {
                 icon: '#re-icon-organism',
                 name: 'filter-organism',
-                label: 'Organisms'
+                label: 'Organisms',
             },
             {
                 icon: '#re-icon-catalyst',
                 name: 'filter-catalyst',
-                label: 'Catalyst'
+                label: 'Catalyst',
             },
             {
                 icon: '#re-icon-page',
                 name: 'filter-page',
-                label: 'Pages'
+                label: 'Pages',
             },
             {
                 icon: '#re-icon-template',
                 name: 'filter-template',
-                label: 'Templates'
+                label: 'Templates',
             },
             {
-                name: 'spacer'
+                name: 'spacer',
             },
             {
                 icon: '#re-icon-settings',
                 name: 'toggle-settings',
-                cls: 'toggle'
-            }
-        ]
+                cls: 'toggle',
+            },
+        ],
     },
     menu: {
         global: {
@@ -76,7 +76,7 @@ module.exports = {
                     dna: '/toolkit/global/Colors',
                     component: require('appdir/toolkit/global/Colors').default,
                     readme: require('appdir/toolkit/global/Colors/readme')
-                        .default
+                        .default,
                 },
                 grid: {
                     type: 'atom',
@@ -87,7 +87,8 @@ module.exports = {
                     hideDna: true,
                     hideDocs: true,
                     component: require('appdir/toolkit/global/Grid').default,
-                    readme: require('appdir/toolkit/global/Grid/readme').default
+                    readme: require('appdir/toolkit/global/Grid/readme')
+                        .default,
                 },
                 spacing: {
                     type: 'atom',
@@ -99,9 +100,9 @@ module.exports = {
                     hideDocs: true,
                     component: require('appdir/toolkit/global/Spacing').default,
                     readme: require('appdir/toolkit/global/Spacing/readme')
-                        .default
-                }
-            }
+                        .default,
+                },
+            },
         },
         typography: {
             label: 'Typography',
@@ -118,7 +119,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/Fonts')
                         .default,
                     readme: require('appdir/toolkit/typography/Fonts/readme')
-                        .default
+                        .default,
                 },
                 headings: {
                     type: 'atom',
@@ -129,7 +130,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/Headings')
                         .default,
                     readme: require('appdir/toolkit/typography/Headings/readme')
-                        .default
+                        .default,
                 },
                 paragraph: {
                     type: 'atom',
@@ -139,7 +140,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/Paragraph')
                         .default,
                     readme: require('appdir/toolkit/typography/Paragraph/readme')
-                        .default
+                        .default,
                 },
                 'text-link': {
                     type: 'atom',
@@ -151,7 +152,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextLink')
                         .default,
                     readme: require('appdir/toolkit/typography/TextLink/readme')
-                        .default
+                        .default,
                 },
                 'text-strong': {
                     type: 'atom',
@@ -161,7 +162,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextStrong')
                         .default,
                     readme: require('appdir/toolkit/typography/TextStrong/readme')
-                        .default
+                        .default,
                 },
                 'text-italic': {
                     type: 'atom',
@@ -171,7 +172,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextItalic')
                         .default,
                     readme: require('appdir/toolkit/typography/TextItalic/readme')
-                        .default
+                        .default,
                 },
                 'text-underline': {
                     type: 'atom',
@@ -181,7 +182,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextUnderline')
                         .default,
                     readme: require('appdir/toolkit/typography/TextUnderline/readme')
-                        .default
+                        .default,
                 },
                 'text-strike': {
                     type: 'atom',
@@ -191,7 +192,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextStrike')
                         .default,
                     readme: require('appdir/toolkit/typography/TextStrike/readme')
-                        .default
+                        .default,
                 },
                 'text-super': {
                     type: 'atom',
@@ -201,7 +202,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextSuper')
                         .default,
                     readme: require('appdir/toolkit/typography/TextSuper/readme')
-                        .default
+                        .default,
                 },
                 'text-sub': {
                     type: 'atom',
@@ -211,7 +212,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextSub')
                         .default,
                     readme: require('appdir/toolkit/typography/TextSub/readme')
-                        .default
+                        .default,
                 },
                 'text-small': {
                     type: 'atom',
@@ -221,7 +222,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextSmall')
                         .default,
                     readme: require('appdir/toolkit/typography/TextSmall/readme')
-                        .default
+                        .default,
                 },
                 blockquote: {
                     type: 'atom',
@@ -231,7 +232,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/Blockquote')
                         .default,
                     readme: require('appdir/toolkit/typography/Blockquote/readme')
-                        .default
+                        .default,
                 },
                 'list-unordered': {
                     type: 'atom',
@@ -241,7 +242,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/ListUnordered')
                         .default,
                     readme: require('appdir/toolkit/typography/ListUnordered/readme')
-                        .default
+                        .default,
                 },
                 'list-ordered': {
                     type: 'atom',
@@ -251,7 +252,7 @@ module.exports = {
                     component: require('appdir/toolkit/typography/ListOrdered')
                         .default,
                     readme: require('appdir/toolkit/typography/ListOrdered/readme')
-                        .default
+                        .default,
                 },
                 'text-align': {
                     type: 'atom',
@@ -264,9 +265,9 @@ module.exports = {
                     component: require('appdir/toolkit/typography/TextAlign')
                         .default,
                     readme: require('appdir/toolkit/typography/TextAlign/readme')
-                        .default
-                }
-            }
+                        .default,
+                },
+            },
         },
         buttons: {
             label: 'Buttons',
@@ -279,7 +280,7 @@ module.exports = {
                     dna: '/toolkit/buttons/ButtonOverview',
                     hideCode: true,
                     component: require('appdir/toolkit/buttons/ButtonOverview')
-                        .default
+                        .default,
                 },
                 'button-primary': {
                     type: 'atom',
@@ -291,7 +292,7 @@ module.exports = {
                     component: require('appdir/toolkit/buttons/ButtonPrimary')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonPrimary/readme')
-                        .default
+                        .default,
                 },
                 'button-secondary': {
                     type: 'atom',
@@ -303,7 +304,7 @@ module.exports = {
                     component: require('appdir/toolkit/buttons/ButtonSecondary')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonSecondary/readme')
-                        .default
+                        .default,
                 },
                 'button-tertiary': {
                     type: 'atom',
@@ -315,7 +316,7 @@ module.exports = {
                     component: require('appdir/toolkit/buttons/ButtonTertiary')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonTertiary/readme')
-                        .default
+                        .default,
                 },
                 'button-state': {
                     type: 'atom',
@@ -327,7 +328,7 @@ module.exports = {
                     component: require('appdir/toolkit/buttons/ButtonState')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonState/readme')
-                        .default
+                        .default,
                 },
                 'button-size': {
                     type: 'atom',
@@ -339,7 +340,7 @@ module.exports = {
                     component: require('appdir/toolkit/buttons/ButtonSize')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonSize/readme')
-                        .default
+                        .default,
                 },
                 'button-block': {
                     type: 'atom',
@@ -350,9 +351,9 @@ module.exports = {
                     component: require('appdir/toolkit/buttons/ButtonBlock')
                         .default,
                     readme: require('appdir/toolkit/buttons/ButtonBlock/readme')
-                        .default
-                }
-            }
+                        .default,
+                },
+            },
         },
         form: {
             label: 'Form Elements',
@@ -365,7 +366,7 @@ module.exports = {
                     dna: '/toolkit/form/Textfield',
                     component: require('appdir/toolkit/form/Textfield').default,
                     readme: require('appdir/toolkit/form/Textfield/readme')
-                        .default
+                        .default,
                 },
                 textarea: {
                     type: 'atom',
@@ -374,7 +375,7 @@ module.exports = {
                     dna: '/toolkit/form/Textarea',
                     component: require('appdir/toolkit/form/Textarea').default,
                     readme: require('appdir/toolkit/form/Textarea/readme')
-                        .default
+                        .default,
                 },
                 select: {
                     type: 'atom',
@@ -382,7 +383,8 @@ module.exports = {
                     route: '/toolkit/form/select',
                     dna: '/toolkit/form/Select',
                     component: require('appdir/toolkit/form/Select').default,
-                    readme: require('appdir/toolkit/form/Select/readme').default
+                    readme: require('appdir/toolkit/form/Select/readme')
+                        .default,
                 },
                 checkbox: {
                     type: 'catalyst',
@@ -393,7 +395,7 @@ module.exports = {
                     component: require('appdir/toolkit/form/CompCheckbox')
                         .default,
                     readme: require('appdir/toolkit/form/CompCheckbox/readme')
-                        .default
+                        .default,
                 },
                 radio: {
                     type: 'catalyst',
@@ -403,21 +405,21 @@ module.exports = {
                     hideCode: true,
                     component: require('appdir/toolkit/form/CompRadio').default,
                     readme: require('appdir/toolkit/form/CompRadio/readme')
-                        .default
-                }
-            }
+                        .default,
+                },
+            },
         },
         components: {
             label: 'Components',
             route: '/toolkit/components',
             hideEmpty: true,
-            elements: {}
+            elements: {},
         },
         pages: {
             label: 'Pages',
             route: '#',
             hideEmpty: true,
-            elements: {}
+            elements: {},
         },
         icons: {
             label: 'Icons',
@@ -431,9 +433,9 @@ module.exports = {
                     component: require('appdir/toolkit/icons/LinearIcons')
                         .default,
                     readme: require('appdir/toolkit/icons/LinearIcons/readme')
-                        .default
-                }
-            }
-        }
-    }
+                        .default,
+                },
+            },
+        },
+    },
 };

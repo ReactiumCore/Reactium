@@ -10,7 +10,7 @@ module.exports = {
             devDependencies: {
                 add: {
                     'gulp-run': '^1.7.1',
-                    'atomic-reactor-cli': '^2.0.6',
+                    'atomic-reactor-cli': '^2.0.21',
                     '@babel/core': '^7.1.2',
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
@@ -18,6 +18,7 @@ module.exports = {
                     'webpack-filter-warnings-plugin': '^1.2.0',
                 },
                 remove: [
+                    'atomic-reactor-cli',
                     'babel-cli',
                     'babel-core',
                     'babel-loader',

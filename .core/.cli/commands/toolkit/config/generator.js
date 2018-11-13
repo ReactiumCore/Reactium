@@ -6,12 +6,12 @@ const spinner = ora({
     color: 'cyan',
 });
 
-module.exports = ({ action, params, props }) => {
+const actions = require('./actions')(spinner);
+
+module.exports = ({ params, props }) => {
     console.log('');
 
     spinner.start();
-
-    const actions = require(`./actions/${action}`)(spinner);
 
     return ActionSequence({
         actions,
