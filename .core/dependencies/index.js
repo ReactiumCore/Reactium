@@ -38,13 +38,14 @@ export const getComponents = (elms = []) => {
                 });
             });
         });
-    } else {
-        // handle SSR case
-        cmps = elms.reduce((cmps, { type }) => {
-            cmps[type] = () => null;
-            return cmps;
-        }, {});
     }
+
+    // SSR and not found component cases
+    elms.forEach(({ type, path }) => {
+        if (!cmps[type]) {
+            cmps[type] = () => null;
+        }
+    });
 
     // Output the Components Object
     return cmps;

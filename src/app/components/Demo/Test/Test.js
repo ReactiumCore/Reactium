@@ -44,7 +44,8 @@ export default class Test extends Component {
                     {
                         zone: 'demo-test-nested-example',
                         id: 'inline-plugin-example',
-                        component: 'form/Checkbox',
+                        component: 'Checkbox',
+                        path: 'form/',
                         order: 0,
                         name: 'inline-plugin-example2',
                         text: 'Test Checkbox Plugin',
@@ -58,20 +59,20 @@ export default class Test extends Component {
                     },
                 ]}>
                 <Helmet>
-                    <link rel="stylesheet" href={style} />
+                    <link rel='stylesheet' href={style} />
                     <title>{title}</title>
                     <meta
-                        name="description"
-                        content="This is an example Reactium + Redux component"
+                        name='description'
+                        content='This is an example Reactium + Redux component'
                     />
-                    <html lang="en" />
-                    <body className="demo-redux" />
+                    <html lang='en' />
+                    <body className='demo-redux' />
                 </Helmet>
                 <div className={'demo-redux-wrap'}>
-                    <Plugins zone="demo-test" count={count} />
+                    <Plugins zone='demo-test' count={count} />
 
                     <div>{msg}</div>
-                    <button type="button" onClick={click}>
+                    <button type='button' onClick={click}>
                         Click It
                     </button>
                 </div>

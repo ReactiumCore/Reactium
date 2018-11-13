@@ -17,21 +17,59 @@ import deps, { getComponents } from 'dependencies';
 
 export default class Plugins extends Component {
     render() {
-        const { children } = this.props;
-
+        const { children, passThrough = false } = this.props;
         return (
             <>
                 <Context.Consumer>
-                    {context => this.renderPlugins(context)}
+                    {context => {
+                        const plugins = this.getPlugins(context);
+                        const components = Object.entries(plugins).reduce(
+                            (cmps, [name, plugin]) => {
+                                const { Component, ...pluginProps } = plugin;
+                                cmps[name] = props => {
+                                    return (
+                                        Component && (
+                                            <Component
+                                                {...pluginProps}
+                                                {...props}
+                                            />
+                                        )
+                                    );
+                                };
+                                return cmps;
+                            },
+                            {}
+                        );
+
+                        return (
+                            <>
+                                {!passThrough
+                                    ? this.renderPlugins(plugins)
+                                    : null}
+                                {React.Children.map(children, Child => {
+                                    return React.cloneElement(Child, {
+                                        components,
+                                    });
+                                })}
+                            </>
+                        );
+                    }}
                 </Context.Consumer>
-                {children}
             </>
         );
     }
 
-    renderPlugins({ plugins, filter: providedFilter, mapper: providedMapper }) {
+    renderPlugins(plugins) {
+        return Object.values(plugins).map(plugin => {
+            const { Component, ...props } = plugin;
+            return Component && <Component {...props} />;
+        });
+    }
+
+    getPlugins({ plugins, filter: providedFilter, mapper: providedMapper }) {
         const {
             children, // to discard
+            passThrough, // to discard
             zone,
             filter: localFilterOverride,
             mapper: localMapperOverride,
@@ -58,22 +96,31 @@ export default class Plugins extends Component {
             .get(plugins, zone, [])
             .filter(pluginFilter)
             .map(pluginMapper)
-            .map(({ id, component, path, paths, ...pluginProps }) => {
-                let Component = component;
-                if (typeof component === 'string') {
-                    Component = Plugins.findComponent();
-                }
-                return (
-                    Component && (
-                        <Component
-                            id={id}
-                            key={id}
-                            {...pluginProps}
-                            {...otherProps}
-                        />
-                    )
-                );
-            });
+            .reduce(
+                (
+                    PluginComponents,
+                    { id, component, path, paths, ...pluginProps }
+                ) => {
+                    let Component = component;
+                    if (typeof component === 'string') {
+                        Component = Plugins.findComponent(
+                            component,
+                            path,
+                            paths
+                        );
+                    }
+                    PluginComponents[component] = {
+                        Component,
+                        id,
+                        key: id,
+                        ...pluginProps,
+                        ...otherProps,
+                    };
+
+                    return PluginComponents;
+                },
+                {}
+            );
 
         return PluginComponents;
     }
@@ -95,6 +142,7 @@ export default class Plugins extends Component {
             );
         }
 
+        // console.log({type, path, paths, search});
         const found = getComponents(search);
         let Component = null;
         if (found) {
@@ -107,4 +155,5 @@ export default class Plugins extends Component {
 
 Plugins.defaultProps = {
     zone: '',
+    passThrough: false,
 };
