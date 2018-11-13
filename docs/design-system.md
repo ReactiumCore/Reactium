@@ -2,21 +2,20 @@
 
 A design system unites product teams around a common visual language. It reduces design debt, accelerates the design process, and builds bridges between teams working in concert to bring products to life.
 
-![alt text](https://image.ibb.co/fzm3po/design_systems.png 'A UI audit collects the many permutations of simple UI elements to illustrate how deep in design debt your team is.')
+![design system](https://image.ibb.co/fzm3po/design_systems.png 'A UI audit collects the many permutations of simple UI elements to illustrate how deep in design debt your team is.')
 
-Reactium comes shipped with the ability to create a Design System of your application elements and components. Simply fire up the local instance and navigate to `http://localhost:3030/toolkit` to view the default elements.
+Reactium ships with the ability to create a Design System for your application elements and components. Simply fire up the local instance and navigate to `http://localhost:3030/toolkit` to view the default elements.
 
 # Atomic Design
 
 Reactium follows the Atomic Design paradigm as outlined by [Brad Frost.](http://bradfrost.com/blog/post/atomic-web-design/)
 
-There are five distinct levels in atomic design:
+There are 4 distinct levels in atomic design:
 
 1.  [Atoms](#atoms)
 2.  [Molecules](#molecules)
 3.  [Organisms](#organisms)
 4.  [Templates](templates)
-5.  [Pages](#pages)
 
 ### Atoms
 
@@ -43,28 +42,30 @@ Pages are specific instances of templates. Here, placeholder content is replaced
 Using the [Atomic Reactor CLI](https://www.npmjs.com/package/atomic-reactor-cli) you can easily add new elements and menu items to the Design System.
 
 ```
-arcli re:kit atom
+$ arcli element create
 ```
 
 You will be prompted to input the required options if no flags are passed.
 
-> `arcli re:kit --help` for a list of possible flags
+> `arcli element --help` for a list of possible flags
 
 ```
-Usage: re:kit <type> [options]
+Usage: element [options] [action]
 
-  Generate Design System element <type> atom | molecule | organism | catalyst | page | template | group | style
+Toolkit:  Manage toolkit elements. Available actions: create | updated | remove.
 
-  Options:
-
-    --id <id>                    the id of the element.
-    -n, --name <name>            the display name of the element.
-    -g, --group <group>          the menu group id.
-    -i, --index [index]          the menu order index.
-    -o, --overwrite [overwrite]  overwrite if the element already exists.
-    -h, --hidden [hidden]        whether to display the element in the menu.
-    -s, --style [style]          whether to include a .scss file.
-    -h, --help                   output usage information.
+Options:
+  -o, --overwrite [overwrite]      Overwrite existing element.
+  -i, --id [id]                    The element ID.
+  --name [name]                    The element name.
+  --group [group]                  The menu group to add the element to.
+  --label [label]                  The menu link text.
+  --menu-order [menuOrder]         The menu link index.
+  --stylesheet [stylesheet]        Add a stylesheet.
+  --documentation [documentation]  Show readme.
+  --code [code]                    Show Code view.
+  --dna [dna]                      Show DNA info.
+  -h, --help                       output usage information
 ```
 
 # Adding a Theme

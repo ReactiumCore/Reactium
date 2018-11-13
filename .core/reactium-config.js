@@ -26,6 +26,7 @@ module.exports = {
                     'webpack-filter-warnings-plugin': '^1.2.0',
                 },
                 remove: [
+                    'atomic-reactor-cli',
                     'babel-cli',
                     'babel-core',
                     'babel-loader',

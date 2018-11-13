@@ -35,7 +35,7 @@ export default class Code extends Component {
         this.onCopyClick = this.onCopyClick.bind(this);
         this.onThemeClick = this.onThemeClick.bind(this);
         this.prettierOptions = {
-            parser: 'angular',
+            parser: 'html',
             singleQuote: true,
             tabWidth: 4,
             printWidth: 200000000,

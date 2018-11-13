@@ -197,8 +197,7 @@ const NAME = 'element [action]';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC =
-    'Toolkit:  Manage toolkit elements. Available actions: create | updated | remove.';
+const DESC = 'Toolkit:  Create/Update/Remove a toolkit element.';
 
 /**
  * CANCELED String
