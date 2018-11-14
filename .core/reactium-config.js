@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.3.9',
+    version: '2.3.10',
     semver: '2.3.x',
     update: {
         package: {
@@ -14,6 +14,7 @@ module.exports = {
                     '@babel/core': '^7.1.2',
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
+                    '@babel/plugin-proposal-class-properties': '^7.1.0',
                     'babel-loader': '^8.0.4',
                     camelcase: '^5.0.0',
                     'cli-spinners': '^1.3.1',
