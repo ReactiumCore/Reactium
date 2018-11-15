@@ -38,7 +38,7 @@ const app = express();
 
 let gulpConfig;
 try {
-    gulpConfig = require('./gulp.config')();
+    gulpConfig = require('./gulp.config');
 } catch (err) {
     gulpConfig = { port: { proxy: 3030 } };
 }
