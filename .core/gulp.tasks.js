@@ -99,6 +99,7 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const watch = (done, restart = false) => {
         let watchProcess = fork(path.resolve(__dirname, './gulp.watch.js'), {
+            env: process.env,
             stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
         });
         watchProcess.send({ config, webpackConfig, restart });
