@@ -9,13 +9,21 @@ const path = require('path');
  * @param  {Object} gulpConfig the .core gulp configuration
  * @return {Object} your gulp configuration override
  */
-module.exports = gulpConfig => {
-    const gulpConfigOverride = Object.assign({}, gulpConfig);
+module.exports = config => {
+    const configOverride = {};
 
     /**
      * @example
-     * gulpConfigOverride.port.proxy = 3030;
+     * configOverride.port = {
+     *     // nodejs serving on port 8080 (default 3030)
+     *     proxy: 8080,
+     *     // browsersync proxying on 8081 (default 3000)
+     *     browsersync: 8081,
+     * };
      */
 
-    return gulpConfigOverride;
+    return {
+        ...config,
+        ...configOverride,
+    };
 };
