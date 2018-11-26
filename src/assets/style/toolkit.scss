@@ -1,2 +1,9 @@
 
-@import '../../../.core/components/Toolkit/_scss/style';
+
+// Styles
+@import './style';
+
+
+// Toolkit only
+@import '../../app/toolkit/global/Grid/grid';
+@import '../../app/toolkit/global/Colors/colors';

@@ -107,7 +107,7 @@ export default class Preview extends Component {
                 scrolling={'no'}
                 ref={this.registerIframe}
                 initialContent={markup}
-                mountTarget="#router">
+                mountTarget='#router'>
                 <Component />
             </Frame>
         );
@@ -119,7 +119,7 @@ Preview.defaultProps = {
     component: null,
     group: null,
     id: null,
-    style: '/assets/style/style.css',
+    style: '/assets/style/toolkit.css',
 };
 
 Preview.contextTypes = {

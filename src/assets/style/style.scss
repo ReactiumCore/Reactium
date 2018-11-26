@@ -1,31 +1,31 @@
 
 
 // Variables
-@import '../../app/toolkit/_scss/variables';
+@import './_scss/variables';
+
+// Colors
+@import './_scss/colors';
 
 // Normalize
-@import '../../app/toolkit/_scss/reboot';
+@import './_scss/reboot';
 
 // Fonts
-@import '../../app/toolkit/typography/Fonts/_fonts';
+@import './_scss/_fonts';
 
 // Mixins
-@import '../../app/toolkit/_scss/mixins/px2rem';
-@import '../../app/toolkit/_scss/mixins/text-align';
-@import '../../app/toolkit/_scss/mixins/headings';
+@import './_scss/mixins/px2rem';
+@import './_scss/mixins/text-align';
+@import './_scss/mixins/headings';
 
 
 // Global
-@import '../../app/toolkit/_scss/button';
-@import '../../app/toolkit/_scss/grid/grid';
-@import '../../app/toolkit/_scss/layout';
-@import '../../app/toolkit/_scss/typography';
-@import '../../app/toolkit/_scss/form';
-@import '../../app/toolkit/global/Colors/_colors';
-@import '../../app/toolkit/global/Grid/_grid';
+@import './_scss/button';
+@import './_scss/grid/grid';
+@import './_scss/layout';
+@import './_scss/typography';
+@import './_scss/form';
+
 
 // Components
 @import '../../app/components/common-ui/form/Checkbox/checkbox';
 @import '../../app/components/common-ui/form/Radio/radio';
-
-@import '../../app/toolkit/icons/LinearIcons/_icons';
