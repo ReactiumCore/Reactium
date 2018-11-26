@@ -3,9 +3,9 @@
 */
 
 export default {
-    persist: ['prefs', 'version', 'style'],
+    persist: ['prefs', 'style'],
     version: '2.0.2',
-    style: '/assets/style/style.css',
+    style: '/assets/style/toolkit.css',
     prefs: {
         code: {
             all: false,

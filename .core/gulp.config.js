@@ -56,7 +56,12 @@ const defaultConfig = {
         js: ['src/app/**/*'],
         json: ['src/**/*.json'],
         markup: ['src/**/*.html', 'src/**/*.css'],
-        style: ['src/**/*.scss', '!{src/**/_*.scss}'],
+        style: [
+            'src/**/*.scss',
+            '.core/**/*.scss',
+            '!{src/**/_*.scss}',
+            '!{.core/**/_*.scss}',
+        ],
         assets: [
             'src/**/assets/**/*',
             'src/assets/**/*',
@@ -77,7 +82,7 @@ const defaultConfig = {
         assets: 'public/assets',
         static: 'dist',
         build: 'build/src',
-        colors: 'src/app/toolkit/_scss/_colors.scss',
+        colors: 'public/assets/style/_scss/_colors.scss',
     },
 };
 

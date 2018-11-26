@@ -19,13 +19,13 @@ const styles = (req, res) => {
     let sarr = [];
 
     if (isToolkit(req.path)) {
-        sarr.push('/assets/style/toolkit.css');
+        sarr.push('/assets/style/core.css');
     } else {
         let publicDir =
             process.env.PUBLIC_DIRECTORY ||
             path.resolve(process.cwd(), 'public');
         let styleDir = path.normalize(path.join(publicDir, '/assets/style'));
-        let exclude = ['toolkit.css'];
+        let exclude = ['core.css', 'toolkit.css'];
 
         fs.readdirSync(styleDir).forEach(item => {
             if (exclude.indexOf(item) >= 0) {
