@@ -66,13 +66,19 @@ export default class Plugins extends Component {
         });
     }
 
-    getPlugins({ plugins, filter: providedFilter, mapper: providedMapper }) {
+    getPlugins({
+        plugins,
+        filter: providedFilter,
+        mapper: providedMapper,
+        sort: providedSort,
+    }) {
         const {
             children, // to discard
             passThrough, // to discard
             zone,
             filter: localFilterOverride,
             mapper: localMapperOverride,
+            sort: localSortOverride,
             ...otherProps
         } = this.props;
 
@@ -84,7 +90,7 @@ export default class Plugins extends Component {
             pluginFilter = localFilterOverride;
         }
 
-        let pluginMapper = _ => true;
+        let pluginMapper = _ => _;
         if (typeof providedMapper === 'function') {
             pluginMapper = providedMapper;
         }
@@ -92,10 +98,19 @@ export default class Plugins extends Component {
             pluginMapper = localMapperOverride;
         }
 
+        let pluginSort = _ => 0;
+        if (typeof providedSort === 'function') {
+            pluginSort = providedSort;
+        }
+        if (typeof localSortOverride === 'function') {
+            pluginSort = localSortOverride;
+        }
+
         const PluginComponents = op
             .get(plugins, zone, [])
             .filter(pluginFilter)
             .map(pluginMapper)
+            .sort(pluginSort)
             .reduce(
                 (
                     PluginComponents,

@@ -17,22 +17,44 @@ import op from 'object-path';
 export default class PlugableProvider extends Component {
     constructor(props) {
         super(props);
-        this.allPlugins = [].concat(props.plugins).reduce((plugins, plugin) => {
-            const zone = op.get(plugins, plugin.zone, []);
-            plugins[plugin.zone] = zone
-                .concat([plugin])
-                .sort((a, b) => a.order - b.order);
-            return plugins;
-        }, deps.plugins);
+        this.allPlugins = Object.values(deps.plugins)
+            .concat(props.plugins)
+            .reduce((allPlugins, plugin) => {
+                // support multi-use plugin
+                if (Array.isArray(plugin)) {
+                    return allPlugins.concat(plugin);
+                }
+
+                // support multi-zone plugin
+                if (Array.isArray(plugin.zone)) {
+                    return allPlugins.concat(
+                        plugin.zone.map(zone => ({
+                            ...plugin,
+                            zone,
+                        }))
+                    );
+                }
+
+                allPlugins.push(plugin);
+                return allPlugins;
+            }, [])
+            .reduce((plugins, plugin) => {
+                const zone = op.get(plugins, plugin.zone, []);
+                plugins[plugin.zone] = zone.concat([plugin]);
+                return plugins;
+            }, {});
     }
 
     render() {
+        const { filter, sort, mapper } = this.props;
+
         return (
             <PlugableContext.Provider
                 value={{
                     plugins: this.allPlugins,
-                    filter: this.props.filter,
-                    mapper: this.props.mapper,
+                    filter: filter,
+                    sort: sort,
+                    mapper: mapper,
                 }}>
                 {this.props.children}
             </PlugableContext.Provider>
@@ -43,4 +65,10 @@ PlugableProvider.defaultProps = {
     plugins: [],
     filter: _ => true,
     mapper: _ => _,
+    sort: (a, b) => {
+        const aOrder = op.get(a, 'order', 0);
+        const bOrder = op.get(b, 'order', 0);
+
+        return aOrder - bOrder;
+    },
 };

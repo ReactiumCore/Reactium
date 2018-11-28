@@ -142,16 +142,7 @@ class ReactiumDependencies {
             .sort((a, b) => a.order - b.order)
             .concat([{ component: NotFound }]);
 
-        this.plugins = Object.entries(this.manifest.allPlugins).reduce(
-            (plugins, [domain, plugin]) => {
-                const zone = op.get(plugins, plugin.zone, []);
-                plugins[plugin.zone] = zone
-                    .concat([plugin])
-                    .sort((a, b) => a.order - b.order);
-                return plugins;
-            },
-            {}
-        );
+        this.plugins = this.manifest.allPlugins;
 
         // Resolve non-core types as dependencies
         Object.keys(this.manifest).forEach(type => {
