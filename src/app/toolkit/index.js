@@ -8,7 +8,7 @@ module.exports = {
     themes: [
         {
             name: 'Default',
-            css: '/assets/style/toolkit.css',
+            css: '/assets/style/style.css',
             selected: true,
         },
     ],

@@ -1,9 +1,9 @@
+// Variables
+@import './_scss/variables';
 
+// Colors
+@import './_scss/colors';
 
-// Styles
-@import './style';
-
-
-// Toolkit only
+// Toolkit only styles
 @import '../../app/toolkit/global/Grid/grid';
 @import '../../app/toolkit/global/Colors/colors';

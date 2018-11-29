@@ -58,7 +58,7 @@ export default class Preview extends Component {
         this.iframe = elm && elm.node;
     }
 
-    renderCmp({ style }) {
+    renderCmp({ style, toolkit }) {
         let browserSync;
         if (document) {
             browserSync = document.getElementById('__bs_script__');
@@ -71,6 +71,7 @@ export default class Preview extends Component {
                 <head>
                     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                     <link rel="stylesheet" href="${style}">
+                    <link rel="stylesheet" href="${toolkit}">
                 </head>
                 <body style="padding: 25px">
                     <div id="router"></div>
@@ -96,7 +97,7 @@ export default class Preview extends Component {
         }
 
         let display = visible ? 'block' : 'none';
-        let markup = this.renderCmp({ style });
+        let markup = this.renderCmp(this.state);
 
         return (
             <Frame
@@ -119,7 +120,8 @@ Preview.defaultProps = {
     component: null,
     group: null,
     id: null,
-    style: '/assets/style/toolkit.css',
+    style: '/assets/style/style.css',
+    toolkit: '/assets/style/toolkit.css',
 };
 
 Preview.contextTypes = {
