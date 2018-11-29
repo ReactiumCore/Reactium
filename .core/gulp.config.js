@@ -82,7 +82,7 @@ const defaultConfig = {
         assets: 'public/assets',
         static: 'dist',
         build: 'build/src',
-        colors: 'public/assets/style/_scss/_colors.scss',
+        colors: 'src/assets/style/_scss/_colors.scss',
     },
 };
 
