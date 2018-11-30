@@ -28,34 +28,29 @@ module.exports = spinner => {
         const quick_scan = /\<Plugins/;
 
         return globby(globs).then(files => {
-            const zones = _.sortBy(
-                files
-                    .filter(file => quick_scan.test(fs.readFileSync(file)))
-                    .reduce((z, file) => {
-                        const reg_find = /<Plugins[\s\S](.*?)[\s\S]\/>/g;
-                        const match = reg_find.exec(
-                            String(fs.readFileSync(file)).replace(
-                                /["'\s+]/g,
-                                ' '
-                            )
-                        );
+            const zones = files.reduce((z, file) => {
+                const contents = fs.readFileSync(file);
+                if (!quick_scan.test(contents)) {
+                    return z;
+                }
 
-                        if (match) {
-                            const zone = String(match[0]).match(
-                                /zone= (.*?) /i
-                            );
-                            if (Array.isArray(zone) && zone.length > 1) {
-                                z.push({
-                                    zone: zone[1],
-                                    file: file.replace(path.normalize(cwd), ''),
-                                });
-                            }
-                        }
+                const reg_find = /<Plugins[\s\S](.*?)[\s\S]\/>/g;
+                const match = reg_find.exec(
+                    String(fs.readFileSync(file)).replace(/["'\s+]/g, ' '),
+                );
 
-                        return z;
-                    }, []),
-                'zone'
-            );
+                if (match) {
+                    const zone = String(match[0]).match(/zone= (.*?) /i);
+                    if (Array.isArray(zone) && zone.length > 1) {
+                        z.push({
+                            zone: zone[1],
+                            file: file.replace(path.normalize(cwd), ''),
+                        });
+                    }
+                }
+
+                return z;
+            }, []);
 
             if (action) {
                 results[action] = zones;

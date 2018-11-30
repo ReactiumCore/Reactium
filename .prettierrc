@@ -2,6 +2,6 @@
   "singleQuote": true,
   "jsxSingleQuote": true,
   "jsxBracketSameLine": true,
-  "trailingComma": "es5",
+  "trailingComma": "all",
   "tabWidth": 4
 }
