@@ -75,3 +75,6 @@ src/app/toolkit/.tmp
 
 # Backup directory
 .BACKUP/
+
+# CLI
+.cli-cache
