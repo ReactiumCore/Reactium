@@ -1,17 +1,8 @@
 const ActionSequence = require('action-sequence');
 const prettier = require('prettier');
+const op = require('object-path');
+const _ = require('underscore');
 
-/**
- params: {
-   node: true,              // Boolean - Scan node_modules.
-   activity: true,          // Boolean - Show activity spinner.
-   save: true,              // Boolean - Execute save action.
- }
-
- props: {
-   cwd: proccess.cwd(),    // String - The process.cwd() value.
- }
-*/
 module.exports = ({ action, params, props }) => {
     const { activity, cache } = params;
 
@@ -25,19 +16,47 @@ module.exports = ({ action, params, props }) => {
     const allActions = require('./actions')(spinner);
 
     if (spinner) {
+        console.log('');
         spinner.start();
     }
 
-    let success;
     let acts = [];
     switch (action) {
-        case 'scan':
-            acts.push('scan');
+        case 'list':
+            if (op.has(params, 'json')) {
+                acts.push('object');
+            } else {
+                acts.push('list');
+            }
+            break;
 
+        case 'add':
+        case 'update':
+            acts.push('create');
             if (cache) {
                 acts.push('cache');
             }
+            break;
 
+        case 'remove':
+            acts.push('remove');
+            if (cache) {
+                acts.push('cache');
+            }
+            break;
+
+        case 'purge':
+            acts.push('purge');
+            if (cache) {
+                acts.push('cache');
+            }
+            break;
+
+        case 'scan':
+            acts.push('scan');
+            if (cache) {
+                acts.push('cache');
+            }
             break;
     }
 
@@ -45,10 +64,12 @@ module.exports = ({ action, params, props }) => {
         return Promise.resolve([]);
     }
 
-    const actions = acts.reduce((obj, act) => {
-        obj[act] = allActions[act];
-        return obj;
-    }, {});
+    acts.push('result');
+    const actions = _.pick(allActions, ...acts);
+
+    if (actions.length < 1) {
+        return Promise.resolve([]);
+    }
 
     return ActionSequence({
         actions,
@@ -58,14 +79,7 @@ module.exports = ({ action, params, props }) => {
             if (spinner) {
                 spinner.succeed(`${action} complete!`);
             }
-
-            if (success.length === 1) {
-                return prettier.format(JSON.stringify(success[0]['zones']), {
-                    parser: 'babylon',
-                });
-            } else {
-                return success;
-            }
+            return success;
         })
         .catch(error => {
             if (spinner) {
