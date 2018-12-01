@@ -12,8 +12,8 @@ const prettier = require('prettier');
    cwd: proccess.cwd(),    // String - The process.cwd() value.
  }
 */
-module.exports = ({ params, props }) => {
-    const { activity = false, save = false } = params;
+module.exports = ({ action, params, props }) => {
+    const { activity, cache } = params;
 
     const spinner = activity
         ? require('ora')({
@@ -22,15 +22,33 @@ module.exports = ({ params, props }) => {
           })
         : null;
 
-    const actions = require('./actions')(spinner);
+    const allActions = require('./actions')(spinner);
 
     if (spinner) {
         spinner.start();
     }
 
-    if (!save) {
-        delete actions.save;
+    let success;
+    let acts = [];
+    switch (action) {
+        case 'scan':
+            acts.push('scan');
+
+            if (cache) {
+                acts.push('cache');
+            }
+
+            break;
     }
+
+    if (acts.length < 1) {
+        return Promise.resolve([]);
+    }
+
+    const actions = acts.reduce((obj, act) => {
+        obj[act] = allActions[act];
+        return obj;
+    }, {});
 
     return ActionSequence({
         actions,
@@ -38,7 +56,7 @@ module.exports = ({ params, props }) => {
     })
         .then(success => {
             if (spinner) {
-                spinner.succeed('complete!');
+                spinner.succeed(`${action} complete!`);
             }
 
             if (success.length === 1) {
