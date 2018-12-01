@@ -127,6 +127,7 @@ ${chalk.cyan('list')} | ${chalk.cyan('scan')} | ${chalk.cyan(
 
   Output the plugin zones as JSON
     $ arcli zones ${chalk.cyan('list')} --json
+    $ arcli zones ${chalk.cyan('list')} -j
 
     ${chalk.magenta(
         '* Note:',
@@ -146,6 +147,9 @@ ${chalk.cyan('list')} | ${chalk.cyan('scan')} | ${chalk.cyan(
     $ arcli zones ${chalk.cyan(
         'add',
     )} --id "my-plugin-zone" --description "My awesome plugins go here!"
+    $ arcli zones ${chalk.cyan(
+        'add',
+    )} -i "my-plugin-zone" -d "My awesome plugins go here!"
 
     ${chalk.magenta(
         '* Note:',
