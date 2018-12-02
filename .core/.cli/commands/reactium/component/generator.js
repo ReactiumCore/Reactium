@@ -4,15 +4,15 @@ const op = require('object-path');
 const ActionSequence = require('action-sequence');
 const mod = path.dirname(require.main.filename);
 
-const spinner = ora({
-    spinner: 'dots',
-    color: 'cyan',
-});
-
-const actions = require('./actions')(spinner);
-
 module.exports = ({ params, props }) => {
+    const spinner = ora({
+        spinner: 'dots',
+        color: 'cyan',
+    });
+
     spinner.start();
+
+    const actions = require('./actions')(spinner);
 
     if (!op.get(params, 'overwrite', false)) {
         delete actions.backup;
@@ -56,9 +56,28 @@ module.exports = ({ params, props }) => {
                     options: { params: params.stylesheet, props },
                 });
         } catch (err) {
-            return new Promise((resolve, reject) => {
-                reject(err);
-            });
+            return Promise.reject(err);
+        }
+    }
+
+    if (op.get(params, 'plugin', false)) {
+        try {
+            const pluginActions = require('../plugin/actions')(spinner);
+            const pluginParams = {
+                destination: params.destination,
+                id: `${String(params.name).toUpperCase()}-PLUGIN`,
+                component: params.name,
+                order: 1000,
+                zone: [],
+            };
+
+            actions['plugin'] = ({ params, props }) =>
+                ActionSequence({
+                    actions: pluginActions,
+                    options: { params: pluginParams, props },
+                });
+        } catch (err) {
+            return Promise.reject(err);
         }
     }
 

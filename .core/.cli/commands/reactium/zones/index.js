@@ -404,7 +404,7 @@ const COMMAND = ({ program, props }) =>
             'The description of the plugin zone. Used when the <action> is add or update.',
         )
         .option(
-            '-j, --json',
+            '-j, --json [json]',
             'Output the plugin zones as a JSON object. Used when calling the <list> action.',
         )
         .option(
