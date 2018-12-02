@@ -28,11 +28,11 @@ const formatDestination = (val, props) => {
     val = String(val).replace(/^~\/|^\/cwd\/|^cwd\/|^cwd$/i, `${cwd}/`);
     val = String(val).replace(
         /^\/components\/|^components\/|^components$/i,
-        `${cwd}/src/app/components/`
+        `${cwd}/src/app/components/`,
     );
     val = String(val).replace(
         /^\/common-ui\/|^common-ui\/|^common-ui$/i,
-        `${cwd}/src/app/components/common-ui/`
+        `${cwd}/src/app/components/common-ui/`,
     );
 
     return path.normalize(val);
@@ -54,7 +54,7 @@ const formatRoute = val => {
 
     val = val.toLowerCase();
     val = val.replace(special, c =>
-        specialReplace.charAt(specialChars.indexOf(c))
+        specialReplace.charAt(specialChars.indexOf(c)),
     );
     val = slugify(val, { remove: /[*+~()'"!@]/g });
 
@@ -126,7 +126,7 @@ const CONFIRM = ({ props, params }) => {
                 properties: {
                     confirmed: {
                         description: `${chalk.white('Proceed?')} ${chalk.cyan(
-                            '(Y/N):'
+                            '(Y/N):',
                         )}`,
                         type: 'string',
                         required: true,
@@ -152,7 +152,7 @@ const CONFIRM = ({ props, params }) => {
                 } else {
                     resolve(confirmed);
                 }
-            }
+            },
         );
     });
 };
@@ -235,14 +235,14 @@ const CONFORM = ({ input, props }) => {
     // Set the style import statement
     if (output.stylesheet === true) {
         const stylesheetFile = path.normalize(
-            path.join(output.destination, '_style.scss')
+            path.join(output.destination, '_style.scss'),
         );
 
         const importString = output.inject.map(filepath =>
             path
                 .relative(filepath, stylesheetFile)
                 .replace(/^\..\//, '')
-                .replace('_style.scss', 'style')
+                .replace('_style.scss', 'style'),
         );
 
         output.stylesheet = {
@@ -290,7 +290,7 @@ const SCHEMA = ({ props }) => {
     const typeSelections = types
         .map((type, index) => {
             return `\n\t    ${chalk.cyan(`${index + 1}.`)} ${chalk.white(
-                type
+                type,
             )}`;
         })
         .join('');
@@ -310,7 +310,6 @@ const SCHEMA = ({ props }) => {
     return {
         properties: {
             name: {
-                pattern: /[a-zA-Z]/,
                 required: true,
                 message: ' Component name is required',
                 description: chalk.white('Component Name:'),
@@ -326,7 +325,7 @@ const SCHEMA = ({ props }) => {
                 pattern: /^y|n|Y|N/,
                 message: '',
                 description: `${chalk.white(
-                    'Overwrite existing component?'
+                    'Overwrite existing component?',
                 )} ${chalk.cyan('(Y/N):')}`,
                 ask: () => {
                     try {
@@ -345,14 +344,14 @@ const SCHEMA = ({ props }) => {
                     }
                 },
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             type: {
                 required: true,
                 message: ` Select the component type: ${types.join(' | ')}`,
                 description: `${chalk.white(
-                    'Type:'
+                    'Type:',
                 )} ${typeSelections}\n    ${chalk.white('Select:')}`,
                 before: val => {
                     if (!isNaN(val)) {
@@ -405,14 +404,14 @@ const SCHEMA = ({ props }) => {
                     return type === 'class' && overwritable(prompt);
                 },
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             actions: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
                 description: `${chalk.white('Actions?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => {
                     try {
@@ -426,14 +425,14 @@ const SCHEMA = ({ props }) => {
                     }
                 },
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             actionTypes: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
                 description: `${chalk.white('Actions Types?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => {
                     try {
@@ -447,14 +446,14 @@ const SCHEMA = ({ props }) => {
                     }
                 },
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             reducers: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
                 description: `${chalk.white('Reducers?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => {
                     try {
@@ -468,18 +467,29 @@ const SCHEMA = ({ props }) => {
                     }
                 },
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
+            plugin: {
+                pattern: /^y|n|Y|N/,
+                default: 'Y',
+                description: `${chalk.white('Plugin?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             services: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
                 description: `${chalk.white('Services?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => overwritable(prompt),
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             stylesheet: {
@@ -487,17 +497,17 @@ const SCHEMA = ({ props }) => {
                 default: 'Y',
                 message: ' Add a style sheet?',
                 description: `${chalk.white('Stylesheet?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => overwritable(prompt),
                 before: val => {
-                    return String(val).toLowerCase() === 'y';
+                    return String(val).toUpperCase() === 'Y';
                 },
             },
             inject: {
                 pattern: /[0-9\s]/,
                 description: `${chalk.white(
-                    'Import stylesheet to:'
+                    'Import stylesheet to:',
                 )} ${styles}\n    ${chalk.white('Select:')}`,
                 required: true,
                 message: 'Select a number or list of numbers. Example: 1 2 3',
@@ -586,7 +596,7 @@ const ACTION = ({ opt, props }) => {
         console.log(
             prettier.format(JSON.stringify(preflight), {
                 parser: 'json-stringify',
-            })
+            }),
         );
 
         CONFIRM({ props, params })
@@ -620,18 +630,19 @@ const COMMAND = ({ program, props }) => {
         .option('-n, --name [name]', 'Component name.')
         .option(
             '-d, --destination [destination]',
-            'Component parent directory.'
+            'Component parent directory.',
         )
         .option('-o, --overwrite [overwrite]', 'Overwrite existing component.')
         .option('-t, --type [type]', `Component type: ${types.join(' | ')}.`)
-        .option('--route [route]', 'Include route.js file.')
         .option('--redux [redux]', 'Create Redux Class component.')
+        .option('--route [route]', 'Include route.js file.')
         .option('--actions [actions]', 'Include Redux actions.js file.')
         .option(
             '--actionTypes [actionTypes]',
-            'Include Redux actionTypes.js file.'
+            'Include Redux actionTypes.js file.',
         )
         .option('--reducers [reducers]', 'Include Redux reducers.js file.')
+        .option('--plugin [plugin]', 'Include plugin.js file.')
         .option('--services [services]', 'Include services.js file.')
         .option('--stylesheet [stylesheet]', 'Include style.scss file.')
         .on('--help', HELP);
