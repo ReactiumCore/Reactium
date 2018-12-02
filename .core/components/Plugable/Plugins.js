@@ -38,7 +38,7 @@ export default class Plugins extends Component {
                                 };
                                 return cmps;
                             },
-                            {}
+                            {},
                         );
 
                         return (
@@ -114,17 +114,17 @@ export default class Plugins extends Component {
             .reduce(
                 (
                     PluginComponents,
-                    { id, component, path, paths, ...pluginProps }
+                    { id, component, path, paths, ...pluginProps },
                 ) => {
                     let Component = component;
                     if (typeof component === 'string') {
                         Component = Plugins.findComponent(
                             component,
                             path,
-                            paths
+                            paths,
                         );
                     }
-                    PluginComponents[component] = {
+                    PluginComponents[id] = {
                         Component,
                         id,
                         key: id,
@@ -134,7 +134,7 @@ export default class Plugins extends Component {
 
                     return PluginComponents;
                 },
-                {}
+                {},
             );
 
         return PluginComponents;
@@ -153,7 +153,7 @@ export default class Plugins extends Component {
                 paths.map(path => ({
                     type,
                     path: `${path}${type}`,
-                }))
+                })),
             );
         }
 
