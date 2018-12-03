@@ -59,6 +59,7 @@ module.exports = {
                 redux: require('reactium-core/redux/enhancer').default,
             },
             allPlugins: {
+                Button: require('components/Demo/Site/Button/plugin').default,
                 TestPlugin: require('components/Demo/Test/TestPlugin/plugin')
                     .default,
             },
@@ -161,7 +162,10 @@ module.exports = {
             },
             allPlugins: {
                 type: 'plugin',
-                imports: ['components/Demo/Test/TestPlugin/plugin'],
+                imports: [
+                    'components/Demo/Site/Button/plugin',
+                    'components/Demo/Test/TestPlugin/plugin',
+                ],
             },
         };
     },
