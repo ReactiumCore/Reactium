@@ -10,7 +10,7 @@
 import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import _ from 'underscore';
-import { PlugableProvider, Plugins } from 'reactium-core/components/Plugable';
+import { Plugins } from 'reactium-core/components/Plugable';
 
 /**
  * -----------------------------------------------------------------------------
