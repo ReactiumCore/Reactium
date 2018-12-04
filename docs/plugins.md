@@ -105,7 +105,7 @@ Let's start by defining plugin zones with the built-in `<Plugins />` component.
 
 ```js
 import React from 'react';
-import Plugins from 'reactium-core/components/Plugable';
+import { Plugins } from 'reactium-core/components/Plugable';
 
 export default class Template extends React {
     render() {
@@ -196,7 +196,7 @@ When you define your `Plugins` zone, you can also optionally provide a `mapper` 
 
 ```js
 import React from 'react';
-import Plugins from 'reactium-core/components/Plugable';
+import { Plugins } from 'reactium-core/components/Plugable';
 
 export default class Template extends React {
     render() {
