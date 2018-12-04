@@ -25,6 +25,8 @@ module.exports = {
                     ora: '^3.0.0',
                     slugify: '^1.3.3',
                     'webpack-filter-warnings-plugin': '^1.2.0',
+                    'eslint-plugin-react': '^7.11.1',
+                    'babel-eslint': '^10.0.1',
                 },
                 remove: [
                     'atomic-reactor-cli',

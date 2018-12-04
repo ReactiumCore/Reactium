@@ -92,27 +92,29 @@ module.exports = spinner => {
                     return z;
                 }
 
-                const reg_find = /<Plugins[\s\S](.*?)[\s\S]\/>/g;
-                const match = reg_find.exec(
-                    String(fs.readFileSync(file)).replace(/["'\s+]/g, ' '),
-                );
+                const reg_find = /<Plugins[\s\S](.*?)[\s\S]\/>/gm;
+                const matches = String(fs.readFileSync(file))
+                    .replace(/["'\s+]/g, ' ')
+                    .match(reg_find);
 
-                if (match) {
-                    const zone = String(match[0]).match(/zone= (.*?) /i);
-                    if (Array.isArray(zone) && zone.length > 1) {
-                        const id = zone[1];
-                        if (op.has(M, id)) {
-                            return z;
+                if (matches) {
+                    matches.forEach(match => {
+                        const zone = String(match).match(/zone= (.*?) /i);
+                        if (Array.isArray(zone) && zone.length > 1) {
+                            const id = zone[1];
+                            if (op.has(M, id)) {
+                                return z;
+                            }
+
+                            z[id] = {
+                                file,
+                                description: `Plugin zone found in: ${file.replace(
+                                    path.normalize(cwd),
+                                    '',
+                                )}`,
+                            };
                         }
-
-                        z[id] = {
-                            file,
-                            description: `Plugin zone found in: ${file.replace(
-                                path.normalize(cwd),
-                                '',
-                            )}`,
-                        };
-                    }
+                    });
                 }
 
                 return z;
