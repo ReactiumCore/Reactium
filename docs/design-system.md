@@ -2,9 +2,9 @@
 
 A design system unites product teams around a common visual language. It reduces design debt, accelerates the design process, and builds bridges between teams working in concert to bring products to life.
 
-![design system](https://image.ibb.co/fzm3po/design_systems.png 'A UI audit collects the many permutations of simple UI elements to illustrate how deep in design debt your team is.')
+Reactium ships with the ability to create a Design System for your application elements and components.
 
-Reactium ships with the ability to create a Design System for your application elements and components. Simply fire up the local instance and navigate to `http://localhost:3030/toolkit` to view the default elements.
+Simply fire up the local instance `$ npm run local` and navigate to `http://localhost:3030/toolkit` to view the default elements.
 
 # Atomic Design
 
@@ -47,12 +47,9 @@ $ arcli element create
 
 You will be prompted to input the required options if no flags are passed.
 
-> `arcli element --help` for a list of possible flags
-
 ```
-Usage: element [options] [action]
-
-Toolkit:  Manage toolkit elements. Available actions: create | updated | remove.
+Usage: element <action> [options]
+Manage toolkit elements. Available actions: create | updated | remove.
 
 Options:
   -o, --overwrite [overwrite]      Overwrite existing element.
@@ -73,23 +70,20 @@ Options:
 Reactium Design System allows for quick switching of themes. Adding a new theme is simple:
 
 ```
-arcli re:theme
+arcli theme
 ```
 
 You will be prompted to input the required options if no flags are passed.
 
 ```
-Usage: re:theme [options]
-
-  Create, remove, or update a Design System theme <action>: add | remove | update
-
-  Options:
-
-    -i, --index [index]        the menu order index.
-    -n, --name <name>          the display name of the theme.
-    -f, --file <file>          the path to the theme style sheet relative to the `src` directory. Example: /assets/style/style.scss
-    -s, --selected [selected]  designate the theme as the default.
-    -h, --help                 output usage information
+Options:
+  -n, --name [name]              Theme Name.
+  -s, --stylesheet [stylesheet]  Theme stylesheet.
+  -a, --active [active]          Activate the theme.
+  -i, --inactive [inactive]      Deactivate the theme.
+  -m, --menu-order [menuOrder]   Theme menu order index.
+  -N, --new-name [newName]       Rename to.
+  -h, --help                     Output usage information.
 ```
 
 # Customizing the Design System
@@ -114,25 +108,33 @@ module.exports = {
 };
 ```
 
+## Customizing the Menu
+
+You can customize the Design System Menu by adding new element groups.
+
+```
+arcli group create
+```
+
+You will be prompted to input the required options if no flags are passed.
+
+```
+-o, --overwrite [overwrite]  Overwrite existing group. Beware this will remove all children of the group.
+-i, --id [id]                The group ID.
+-l, --label [label]          Menu Text.
+--menu-order [menuOrder]     Menu order.
+-h, --help                   Output usage information
+```
+
 ## Custom Overview
 
 The Overview page is displayed when you navigate to the `http://localhost:3030/toolkit` page.
-You can customize it by either replacing the `required()` component or editing the default overview component located at `~/src/app/toolkit/overview/index.js`.
+You can customize it by either replacing the `required` component or editing the default overview component located at `~/src/app/toolkit/overview/index.js`.
 
-```js
+```javascript
 module.exports = {
     ...
     "overview": require('appdir/toolkit/overview').default,
     ...
 };
-```
-
-## Customizing the Menu
-
-You can customize the Design System Menu by adding new elements, groups, and pages. You can also add links to other sites/pages to the menu.
-
-```
-arcli re:kit page
-
-// When prompted for the route, input a fully qualified URL or local route: http://www.somewhere.com
 ```
