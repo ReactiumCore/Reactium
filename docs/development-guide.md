@@ -5,7 +5,11 @@ With that in mind, we geared the tooling towards automation and ease of use.
 
 Before reading the rest of this guide, grab the [Atomic Reactor CLI](https://github.com/Atomic-Reactor/CLI) it will make creating components, styles, and toolkit elements extremely easy.
 
-No, seriously... go get the [CLI](https://github.com/Atomic-Reactor/CLI).
+No, seriously... go get the CLI:
+
+```
+$ npm i -g atomic-reactor-cli
+```
 
 ## Components
 
