@@ -140,7 +140,7 @@ module.exports = async function() {
                             .map(key => {
                                 const { imports, type } = manifest[key];
                                 const domainRegExp = new RegExp(
-                                    `\/([A-Za-z_0-9]+?)\/${type}$`,
+                                    `\/([A-Za-z_0-9]+?)\/[A-Za-z_0-9]+$`,
                                 );
                                 return (
                                     `${key}: {\n` +
