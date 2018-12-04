@@ -38,6 +38,10 @@ const formatDestination = ({ val, props }) => {
     val = path.normalize(val);
     val = String(val).replace(/^~\/|^\/cwd\/|^cwd\/|^cwd$/i, `${cwd}/`);
     val = String(val).replace(
+        /^\/core\/|^core\/|^core/i,
+        `${cwd}/.core/components/`,
+    );
+    val = String(val).replace(
         /^\/components\/|^components\/|^components$/i,
         `${cwd}/src/app/components/`,
     );

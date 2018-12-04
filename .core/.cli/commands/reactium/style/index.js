@@ -23,12 +23,16 @@ const formatDestination = (val, props) => {
     val = path.normalize(val);
     val = String(val).replace(/^~\/|^\/cwd\/|^cwd\/|^cwd$/i, `${cwd}/`);
     val = String(val).replace(
+        /^\/core\/|^core\/|^core/i,
+        `${cwd}/.core/components/`,
+    );
+    val = String(val).replace(
         /^\/components\/|^components\/|^components$/i,
-        `${cwd}/src/app/components/`
+        `${cwd}/src/app/components/`,
     );
     val = String(val).replace(
         /^\/common-ui\/|^common-ui\/|^common-ui$/i,
-        `${cwd}/src/app/components/common-ui/`
+        `${cwd}/src/app/components/common-ui/`,
     );
 
     return path.normalize(val);
@@ -56,7 +60,7 @@ const formatImport = (val, props) => {
         val.split(' ').map(v => {
             v = Number(String(v).replace(/[^0-9]/gi)) - 1;
             return styles[v];
-        })
+        }),
     );
 
     return val;
@@ -66,7 +70,7 @@ const topLevelStyles = ({ props }) => {
     const { cwd } = props;
 
     return globby([`${cwd}/src/**/*.scss`]).filter(
-        file => String(path.basename(file)).substr(0, 1) !== '_'
+        file => String(path.basename(file)).substr(0, 1) !== '_',
     );
 };
 
@@ -109,7 +113,7 @@ const CONFIRM = ({ props, params }) => {
                 properties: {
                     confirmed: {
                         description: `${chalk.white('Proceed?')} ${chalk.cyan(
-                            '(Y/N):'
+                            '(Y/N):',
                         )}`,
                         type: 'string',
                         required: true,
@@ -129,7 +133,7 @@ const CONFIRM = ({ props, params }) => {
                 } else {
                     resolve(confirmed);
                 }
-            }
+            },
         );
     });
 };
@@ -167,7 +171,7 @@ const CONFORM = ({ input, props }) => {
 
     // Set the file path
     output['filepath'] = path.normalize(
-        path.join(output.destination, output.filename)
+        path.join(output.destination, output.filename),
     );
 
     // Set the style import statement
@@ -179,7 +183,7 @@ const CONFORM = ({ input, props }) => {
         path
             .relative(filepath, output.filepath)
             .replace(/^\..\//, '')
-            .replace(output.filename, fnameReplace)
+            .replace(output.filename, fnameReplace),
     );
 
     return output;
@@ -196,7 +200,7 @@ const HELP = () => {
     console.log('Example:');
     console.log('');
     console.log(
-        `  arcli style --filename '_fubar.scss' --destination '~/src/assets/style' --overwrite`
+        `  arcli style --filename '_fubar.scss' --destination '~/src/assets/style' --overwrite`,
     );
     console.log('');
 };
@@ -248,7 +252,7 @@ const SCHEMA = ({ props }) => {
                 pattern: /^y|n|Y|N/,
                 message: '',
                 description: `${chalk.white(
-                    'Overwrite existing stylesheet?'
+                    'Overwrite existing stylesheet?',
                 )} ${chalk.cyan('(Y/N):')}`,
                 ask: () => {
                     try {
@@ -276,7 +280,7 @@ const SCHEMA = ({ props }) => {
             inject: {
                 pattern: /[0-9\s]/,
                 description: `${chalk.white(
-                    'Import to:'
+                    'Import to:',
                 )} ${styles}\n    ${chalk.white('Select:')}`,
                 required: true,
                 message: 'Select a number or list of numbers. Example: 1 2 3',
@@ -357,7 +361,7 @@ const ACTION = ({ opt, props }) => {
         console.log(
             prettier.format(JSON.stringify(preflight), {
                 parser: 'json-stringify',
-            })
+            }),
         );
 
         CONFIRM({ props, params })
@@ -386,13 +390,13 @@ const COMMAND = ({ program, props }) =>
         .action(opt => ACTION({ opt, props }))
         .option(
             '-d, --destination [destination]',
-            'Path where the stylesheet is saved.'
+            'Path where the stylesheet is saved.',
         )
         .option('-f, --filename [filename]', 'File name.')
         .option(
             '-o, --overwrite [overwrite]',
             'Overwrite the existing stylesheet.',
-            false
+            false,
         )
         .on('--help', HELP);
 
