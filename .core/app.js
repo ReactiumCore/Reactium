@@ -9,6 +9,7 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router';
 import storeCreator from 'reactium-core/storeCreator';
 import deps, { getComponents } from 'dependencies';
@@ -85,9 +86,11 @@ export const App = () => {
             bindPoints.forEach(item => {
                 ReactDOM.render(
                     <Provider store={store}>
-                        <Fragment>{item.component}</Fragment>
+                        <PlugableProvider>
+                            <Fragment>{item.component}</Fragment>
+                        </PlugableProvider>
                     </Provider>,
-                    item.element
+                    item.element,
                 );
             });
         }
@@ -105,11 +108,13 @@ export const App = () => {
                 // Hydrate the Routed component
                 ReactDOM.hydrate(
                     <Provider store={store}>
-                        <Fragment>
-                            <Router />
-                        </Fragment>
+                        <PlugableProvider>
+                            <Fragment>
+                                <Router />
+                            </Fragment>
+                        </PlugableProvider>
                     </Provider>,
-                    routerTarget
+                    routerTarget,
                 );
             } else {
                 // Reactium FE Mode
@@ -119,11 +124,13 @@ export const App = () => {
                 // Bind the Routed component
                 ReactDOM.render(
                     <Provider store={store}>
-                        <Fragment>
-                            <Router />
-                        </Fragment>
+                        <PlugableProvider>
+                            <Fragment>
+                                <Router />
+                            </Fragment>
+                        </PlugableProvider>
                     </Provider>,
-                    routerTarget
+                    routerTarget,
                 );
             }
         }
@@ -135,7 +142,7 @@ export const AppError = error => {
 
     ReactDOM.render(
         <RedBox error={error} />,
-        document.getElementById('router')
+        document.getElementById('router'),
     );
 };
 

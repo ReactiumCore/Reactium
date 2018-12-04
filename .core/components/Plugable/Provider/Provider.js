@@ -4,7 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import PlugableContext from './Context';
+import PlugableContext from '../Context';
 import deps from 'dependencies';
 import op from 'object-path';
 
@@ -15,10 +15,27 @@ import op from 'object-path';
  */
 
 export default class PlugableProvider extends Component {
-    constructor(props) {
-        super(props);
-        this.allPlugins = Object.values(deps.plugins)
-            .concat(props.plugins)
+    render() {
+        const { filter, sort, mapper } = this.props;
+        const context = {
+            plugins: this.allPlugins(),
+            filter: filter,
+            sort: sort,
+            mapper: mapper,
+        };
+
+        return (
+            <PlugableContext.Provider value={context}>
+                {this.props.children}
+            </PlugableContext.Provider>
+        );
+    }
+
+    allPlugins() {
+        const { plugins } = this.props;
+
+        return Object.values(deps.plugins)
+            .concat(plugins)
             .reduce((allPlugins, plugin) => {
                 // support multi-use plugin
                 if (Array.isArray(plugin)) {
@@ -31,7 +48,7 @@ export default class PlugableProvider extends Component {
                         plugin.zone.map(zone => ({
                             ...plugin,
                             zone,
-                        }))
+                        })),
                     );
                 }
 
@@ -43,22 +60,6 @@ export default class PlugableProvider extends Component {
                 plugins[plugin.zone] = zone.concat([plugin]);
                 return plugins;
             }, {});
-    }
-
-    render() {
-        const { filter, sort, mapper } = this.props;
-
-        return (
-            <PlugableContext.Provider
-                value={{
-                    plugins: this.allPlugins,
-                    filter: filter,
-                    sort: sort,
-                    mapper: mapper,
-                }}>
-                {this.props.children}
-            </PlugableContext.Provider>
-        );
     }
 }
 PlugableProvider.defaultProps = {

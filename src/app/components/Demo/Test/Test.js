@@ -39,25 +39,7 @@ export default class Test extends Component {
         let { click } = this.props;
 
         return (
-            <PlugableProvider
-                plugins={[
-                    {
-                        zone: 'demo-test-nested-example',
-                        id: 'inline-plugin-example',
-                        component: 'Checkbox',
-                        path: 'form/',
-                        order: 0,
-                        name: 'inline-plugin-example2',
-                        text: 'Test Checkbox Plugin',
-                        value: 'inline-plugin-example',
-                    },
-                    {
-                        zone: 'demo-test-nested-example',
-                        id: 'inline-plugin-example2',
-                        component: () => <small>Nested Inline Plugin</small>,
-                        order: 0,
-                    },
-                ]}>
+            <Fragment>
                 <Helmet>
                     <link rel='stylesheet' href={style} />
                     <title>{title}</title>
@@ -76,7 +58,7 @@ export default class Test extends Component {
                         Click It
                     </button>
                 </div>
-            </PlugableProvider>
+            </Fragment>
         );
     }
 }

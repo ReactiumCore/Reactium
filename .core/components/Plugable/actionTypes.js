@@ -1,0 +1,5 @@
+export default {
+    ADD_PLUGIN: 'ADD_PLUGIN',
+    UPDATE_PLUGIN: 'UPDATE_PLUGIN',
+    REMOVE_PLUGIN: 'REMOVE_PLUGIN',
+};

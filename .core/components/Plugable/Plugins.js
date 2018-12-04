@@ -23,6 +23,7 @@ export default class Plugins extends Component {
                 <Context.Consumer>
                     {context => {
                         const plugins = this.getPlugins(context);
+
                         const components = Object.entries(plugins).reduce(
                             (cmps, [name, plugin]) => {
                                 const { Component, ...pluginProps } = plugin;
@@ -157,7 +158,6 @@ export default class Plugins extends Component {
             );
         }
 
-        // console.log({type, path, paths, search});
         const found = getComponents(search);
         let Component = null;
         if (found) {
