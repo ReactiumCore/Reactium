@@ -8,6 +8,8 @@ module.exports = {
         return {
             allActions: {
                 Test: require('components/Demo/Test/actions').default,
+                Plugable: require('reactium-core/components/Plugable/actions')
+                    .default,
                 Router: require('reactium-core/components/Router/actions')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/actions')
@@ -15,6 +17,8 @@ module.exports = {
             },
             allActionTypes: {
                 Test: require('components/Demo/Test/actionTypes').default,
+                Plugable: require('reactium-core/components/Plugable/actionTypes')
+                    .default,
                 Router: require('reactium-core/components/Router/actionTypes')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/actionTypes')
@@ -22,6 +26,8 @@ module.exports = {
             },
             allReducers: {
                 Test: require('components/Demo/Test/reducers').default,
+                Plugable: require('reactium-core/components/Plugable/reducers')
+                    .default,
                 Router: require('reactium-core/components/Router/reducers')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/reducers')
@@ -29,6 +35,8 @@ module.exports = {
             },
             allInitialStates: {
                 Test: require('components/Demo/Test/state').default,
+                Plugable: require('reactium-core/components/Plugable/state')
+                    .default,
                 Router: require('reactium-core/components/Router/state')
                     .default,
                 Toolkit: require('reactium-core/components/Toolkit/state')
@@ -105,6 +113,7 @@ module.exports = {
                 type: 'actions',
                 imports: [
                     'components/Demo/Test/actions',
+                    'reactium-core/components/Plugable/actions',
                     'reactium-core/components/Router/actions',
                     'reactium-core/components/Toolkit/actions',
                 ],
@@ -113,6 +122,7 @@ module.exports = {
                 type: 'actionTypes',
                 imports: [
                     'components/Demo/Test/actionTypes',
+                    'reactium-core/components/Plugable/actionTypes',
                     'reactium-core/components/Router/actionTypes',
                     'reactium-core/components/Toolkit/actionTypes',
                 ],
@@ -121,6 +131,7 @@ module.exports = {
                 type: 'reducers',
                 imports: [
                     'components/Demo/Test/reducers',
+                    'reactium-core/components/Plugable/reducers',
                     'reactium-core/components/Router/reducers',
                     'reactium-core/components/Toolkit/reducers',
                 ],
@@ -129,6 +140,7 @@ module.exports = {
                 type: 'state',
                 imports: [
                     'components/Demo/Test/state',
+                    'reactium-core/components/Plugable/state',
                     'reactium-core/components/Router/state',
                     'reactium-core/components/Toolkit/state',
                 ],
