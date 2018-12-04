@@ -37,6 +37,17 @@ DDD focuses on three core principles:
 -   **Emphasizes Domain Over Interface:** Since DDD is the practice of building around the concepts of domain and what the domain experts within the project advise, DDD will often produce applications that are accurately suited for and representative of the domain at hand, as opposed to those applications which emphasize the UI/UX first and foremost. While an obvious balance is required, the focus on domain means that a DDD approach can produce a product that resonates well with the audience associated with that domain.
 -   **Encourages Iterative Practices:** DDD practices strongly rely on constant iteration and continuous integration in order to build a malleable project that can adjust itself when necessary. Some organizations may have trouble with these practices, particularly if their past experience is largely tied to less-flexible development models, such as the waterfall model or the like.
 
+## Styling
+
+Reactium takes the approach of **NOT** bundling CSS in JS.
+
+There are a many reasons why, but the most important ones to us are:
+
+-   Traditional styling allows you to declare which style wins very clearly and easily.
+-   Bundling the styles as a separate file allow for easy holistic replacement.
+-   Easy delivery of the styles to a CDN or other resource management tool.
+-   Faster Webpack compilation.
+
 ## Reactium Features
 
 -   **Fast Local Development Workflow:** Javascript tooling is hard, laborious, and annoying. We've spent a lot of time working through dozens of _"what if..."_ scenarios to deliver a minimal pain dev workflow!
