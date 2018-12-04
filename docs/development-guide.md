@@ -15,9 +15,9 @@ $ npm i -g atomic-reactor-cli
 
 There are 3 types of components you can create:
 
--   [Functional Components](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#functional-components)
--   [Class Components](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#class-components)
--   [Redux Class Components](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#redux-class-components)
+-   [Functional Components](#functional-components)
+-   [Class Components](#class-components)
+-   [Redux Class Components](#redux-class-components)
 
 ### Functional Components
 
@@ -155,15 +155,15 @@ Reactium component architecture is pretty simple when it comes to a function or 
 
 When it comes to a Redux Class Component the following architecture is applied:
 
-| File                                                                                                      | Description                                                                                                                                                                                                                                                         |
-| :-------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [actions.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-actionsjs-file)         | List of action functions. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). Redux [Super Thunk actions](https://github.com/Atomic-Reactor/redux-super-thunk), based on the (https://github.com/gaearon/redux-thunk), are automatically supported. |
-| [actionTypes.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-actiontypesjs-file) | List of action filters. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html).                                                                                                                                                                         |
-| [index.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-indexjs-file)             | Main component class.                                                                                                                                                                                                                                               |
-| [reducers.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-reducersjs-file)       | Action handlers. See [Redux Reducers](https://redux.js.org/docs/basics/Reducers.html).                                                                                                                                                                              |
-| [route.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-routejs-file)             | Route handler for the component.                                                                                                                                                                                                                                    |
-| [services.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-servicesjs-file)       | Ajax requests associated with the component.                                                                                                                                                                                                                        |
-| [state.js](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-statejs-file)             | The default state of the component.                                                                                                                                                                                                                                 |
+| File                                      | Description                                                                                                                                                                                                                                                         |
+| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [actions.js](#the-actionsjs-file)         | List of action functions. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). Redux [Super Thunk actions](https://github.com/Atomic-Reactor/redux-super-thunk), based on the (https://github.com/gaearon/redux-thunk), are automatically supported. |
+| [actionTypes.js](#the-actiontypesjs-file) | List of action filters. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html).                                                                                                                                                                         |
+| [index.js](#the-indexjs-file)             | Main component class.                                                                                                                                                                                                                                               |
+| [reducers.js](#the-reducersjs-file)       | Action handlers. See [Redux Reducers](https://redux.js.org/docs/basics/Reducers.html).                                                                                                                                                                              |
+| [route.js](#the-routejs-file)             | Route handler for the component.                                                                                                                                                                                                                                    |
+| [services.js](#the-servicesjs-file)       | Ajax requests associated with the component.                                                                                                                                                                                                                        |
+| [state.js](#the-statejs-file)             | The default state of the component.                                                                                                                                                                                                                                 |
 
 > Don't worry, there's a CLI command that automates component creation.
 
@@ -380,7 +380,7 @@ import deps from 'dependencies';
 export default {
     mount: params => dispatch => {
         deps.services.Test.fetchHello().then(data => {
-            dispatch({ type: actionTypes.TEST_MOUNT, data: data });
+            dispatch({ type: actionTypes.TEST_MOUNT, payload: data });
         });
     },
 };
@@ -463,6 +463,7 @@ Flags:
 --actions [actions]              Include Redux actions.js file.
 --actionTypes [actionTypes]      Include Redux actionTypes.js file.
 --reducers [reducers]            Include Redux reducers.js file.
+--plugin [plugin]                Include plugin.js file.
 --services [services]            Include services.js file.
 --stylesheet [stylesheet]        Include style.scss file.
 ```
@@ -618,138 +619,3 @@ Gulp's ability to compile Sass is pretty straight forward and doesn't require a 
 #### Hot Reloading
 
 Browsersync offers a large variety of simple configurations that allows you to serve the development environment locally. The deciding factor was Browsersync's ability to serve from a proxy instead of the application directory. This could come in handy if you need to run a node instance as well as your application within your development environment.
-
-## The Gulp Config
-
-Source paths and destinations should be managed in the `gulp.config.js` file, giving you a single place to alter build behaviors without directly altering Gulp Tasks.
-
-### entries
-
-List of files that will be bundled and transpiled by Webpack.
-
-_**Default:**_ `src/app/*.js`
-
-> Top level .js files in the `~/src/app` directory
-
-### browsers
-
-Babel browser support when transpiling.
-
-_**Default:**_ `last 1 version`
-
-> The previous and current version of all major browsers.
-
-### port
-
-List or ports used when running the development environment.
-
--   **port.browsersync:** The port to run Browsersync on. **Default:** `3030`
-
-> If you're running a proxy with Browsersync, you will want to define the port the proxy runs on, then reference it in your serve task.
-
-### cssPreProcessor
-
-Determines which CSS pre-processor to use. Valid values: sass/less.
-
-_**Default:**_ `sass`
-
-### src
-
-List of source locations for the default build task.
-
--   **src.js:** The source location of js files.
--   **src.markup:** The source location of html files.
--   **src.style:** The source location of .scss or .less files.
--   **src.assets:** The source location of asset files such as images, web fonts and other support files.
--   **src.includes:** The node modules location that gets included by Webpack. **Default:** `./node_modules`.
--   **src.appdir:** The path to the application that gets defined for global usage by Webpack. **Default:** `~/src/app`.
--   **src.rootdir:** The root application path that gets defined for global usage by Webpack. **Default:** `~`.
-
-> You can define more source locations and use them for your own tasks.
-
-### watch
-
-List of watch locations for the default defined Gulp tasks.
-
--   **watch.js:** The locations to watch for js file changes, used to automatically build the src/manifest.js
--   **watch.markup:** The locations to watch for html file changes.
--   **watch.style:** The locations to watch for `.scss` or `.less` file changes.
--   **watch.assets:** The locations to watch for asset files such as images, web fonts, and other support files.
-
-> You can define more watch locations and use them for your own tasks.
-
-### dest
-
-Destination paths for the default defined Gulp tasks.
-
-## The Webpack Config
-
-Reactium only uses Webpack for bundling and transpiling javascript. If you need it to do more, the `webpack.config.js` file is the place to do it.
-
-> The Webpack config receives the [Gulp Config](https://github.com/Atomic-Reactor/Reactium/blob/master/readme.md#the-gulp-config) as an argument.
-
-## Gulp Tasks
-
-By default, the following Gulp Tasks are defined:
-
-### scripts
-
-Compiles javascript using Webpack. If the `NODE_ENV` environment variable is `production`, the output files are optimized and minified.
-
-### styles
-
-Compiles `.scss` files into `.css` files by default. If the `NODE_ENV` environment variable is `production`, the output files are optimized and minified.
-
-You can switch this to `.less` by specifying 'less' as the Gulp Config `cssPreProcessor` value.
-
-### assets
-
-Transports asset files such as images, web fonts, and other support files to their corresponding location.
-
-### markup
-
-Transports html files to their corresponding location.
-
-### clean
-
-Removes all files from the `config.dest.dist` directory.
-
-### serve
-
-Runs the development environment via Browsersync.
-
-### build
-
-Runs the `clean`, `assets`, `markup`, `scripts`, and `styles` tasks.
-
-### default
-
-If the `config.env` is `development`, the `build` task is run followed by the `serve`. Otherwise, the `build` task is run.
-
-## Gulp Watch
-
-When the `serve` task is run, the following watches are started:
-
-### style changes
-
-When changes to the `config.watch.style` files are detected, the `styles` task is run.
-
-> Browsersync does a hot reload of the style sheet.
-
-### script changes
-
-When changes to the `config.watch.js` files are detected, the `scripts` task is run.
-
-> Browsersync does a full reload of the page.
-
-### markup changes
-
-When changes to the `config.watch.markup` files are detected, the `markup` task is run.
-
-> Browsersync does a full reload of the page.
-
-### asset changes
-
-When changes to the `config.watch.assets` files are detected, the `assets` task is run.
-
-> Browsersync does a full reload of the page.
