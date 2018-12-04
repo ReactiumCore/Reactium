@@ -3,6 +3,10 @@
 The intent behind the Reactium Framework is to get you quickly creating React components and applications.
 With that in mind, we geared the tooling towards automation and ease of use.
 
+Before reading the rest of this guide, grab the [Atomic Reactor CLI](https://github.com/Atomic-Reactor/CLI) it will make creating components, styles, and toolkit elements extremely easy.
+
+No, seriously... go get the [CLI](https://github.com/Atomic-Reactor/CLI).
+
 ## Components
 
 There are 3 types of components you can create:
@@ -71,9 +75,7 @@ import { connect } from 'react-redux';
 import deps from 'dependencies';
 
 // Map state to properties
-const mapStateToProps = (state, props) => {
-    return Object.assign({}, state['Test'], props);
-};
+const mapStateToProps = (state, props) => Object.assign({}, state.Test, props);
 
 // Map dispatchers to actions
 const mapDispatchToProps = (dispatch, props) => ({
@@ -84,7 +86,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(Test);
 ```
 
@@ -97,13 +99,28 @@ export default class Test extends Component {
     constructor(props) {
         super(props);
 
-        this.state = Object.assign({}, this.props);
+        this.state = {
+            msg: this.props.message,
+            count: this.props.count,
+        };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
+    componentDidUpdate(prevProps) {
+        const newState = {};
+        const { count: prevCount, msg: prevMsg } = prevProps;
+        const { count: currCount, msg: currMsg } = this.props;
+
+        if (prevCount !== currCount) {
+            newState.count = currCount;
+        }
+
+        if (prevMsg !== currMsg) {
+            newState.msg = currMsg;
+        }
+
+        if (Object.keys(newState).length > 0) {
+            this.setState(newState);
+        }
     }
 
     // Use the above mapped click dispatcher on button click

@@ -39,7 +39,8 @@ DDD focuses on three core principles:
 
 ## Styling
 
-Reactium takes the approach of **NOT** using CSS in JS.
+Reactium takes the approach of **NOT** bundling CSS in JS.
+
 There are a many reasons why, but the most important ones to us are:
 
 -   Traditional styling allows you to declare which style wins very clearly and easily.
