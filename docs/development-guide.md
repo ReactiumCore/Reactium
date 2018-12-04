@@ -454,19 +454,19 @@ Flags:
 
 ```
 -r, --redux-all [reduxAll]       Include all Redux files.
--i, --ID [ID]                    Component ID.
 -n, --name [name]                Component name.
 -d, --destination [destination]  Component parent directory.
 -o, --overwrite [overwrite]      Overwrite existing component.
--t, --type [type]                Component type: functional | class | hook.
---route [route]                  Include route.js file.
---redux [redux]                  Create Redux component.
+-t, --type [type]                Component type: class | functional.
+--redux [redux]                  Create Redux Class component.
 --actions [actions]              Include Redux actions.js file.
 --actionTypes [actionTypes]      Include Redux actionTypes.js file.
 --reducers [reducers]            Include Redux reducers.js file.
+--route [route]                  Include route.js file.
 --plugin [plugin]                Include plugin.js file.
 --services [services]            Include services.js file.
 --stylesheet [stylesheet]        Include style.scss file.
+-h, --help                       Output usage information
 ```
 
 4.  Follow the prompts
