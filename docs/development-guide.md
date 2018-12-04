@@ -166,8 +166,9 @@ When it comes to a Redux Class Component the following architecture is applied:
 | [state.js](#the-statejs-file)             | The default state of the component.                                                                                                                                                                                                                                 |
 
 > Don't worry, there's a CLI command that automates component creation.
+> `$ arcli component -h`
 
-> **Note:** You will need to restart the build after creating a new component with state, reducers, actions, actionTypes, etc.
+> **Note:** In some cases you may need to restart the watch after creating a new component with state, reducers, actions, actionTypes, etc.
 
 ### The actions.js File
 
