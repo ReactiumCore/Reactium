@@ -143,10 +143,10 @@ import HomeNavigation from './index';
 
 export default {
     /**
-     * Required - used as rendering key
+     * Required - used as rendering key. Make this unique.
      * @type {String}
      */
-    id: '<Unique id of the plugin within zone>',
+    id: 'home-page-main-navigation',
 
     /**
      * By default plugins in zone are rendering in ascending order.
@@ -192,7 +192,7 @@ export default {
 
 ### Advanced Plugins Properties
 
-When you define your `Plugins` zone, you can also optionally provide a `mapper` callback which will be called for each plugin in the zone, a `sort` callback to determine rendering order, and a `filter` callback to eliminate plugins from a region.
+When you define your `Plugins` zone, you can also optionally provide a `mapper` callback which will be called for each plugin in the zone, a `sort` callback to determine rendering order, and a `filter` callback to disqualify plugins from a zone.
 
 ```js
 import React from 'react';
