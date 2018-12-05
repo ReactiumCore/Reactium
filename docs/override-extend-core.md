@@ -49,14 +49,14 @@ In this way, you can add/change routing, security configuration, etc to your hea
 
 See `.core/index.js` for built-in middlewares list.
 
-Example:
+#### Express Middleware Examples
 
 A simple logger:
 
 ```js
 module.exports = expressMiddlewares => {
     const mySimpleRequestLogger = (req, res, next) => {
-        console.log(`SIMPLE LOGGER: REQUEST ${req.pathname}`);
+        console.log(`SIMPLE LOGGER: REQUEST ${req.path}`);
         next();
     };
 
@@ -114,7 +114,7 @@ module.exports = expressMiddlewares => {
 };
 ```
 
-### Override Express Single Page Application Template
+### Override Express SPA Template
 
 The default templates are good for simple SPAs, but inevitably you will need to provide a different template for rendering your application's index.html.
 
@@ -132,7 +132,7 @@ Node/Express `global.defines` variables can be set by creating a `src/app/server
 
 The file will also be used in constructing a webpack defines plugin values as well.
 
-Theoretically, your SSR and FE code could make refer to values specified here.
+Theoretically, your SSR and FE code could make reference to values specified here.
 
 Contrived `src/app/server/defines.js`:
 
@@ -142,11 +142,11 @@ module.exports = {
 };
 ```
 
-Isomorphic Define Javascript in Application:
+Isomorphic Define JS somewhere in front-end React code:
 
 ```js
 let fooValue;
-if (typeof window !== 'undefine') {
+if (typeof window !== 'undefined') {
     fooValue = foo; // webpack define plugin
 } else {
     fooValue = defines.foo; // node express global
@@ -170,7 +170,9 @@ Two advanced DDD component architecture files that are searched for in front-end
 
 When found in a Reactium `src/component` domain, Reactium core will attempt to add them to Redux store construction.
 
-Example Custom Redux Middleware:
+See `.core/storeCreator.js` for built-in Redux middleware and store enhancers.
+
+#### Example Custom Redux Middleware
 
 ```js
 /**
@@ -194,7 +196,7 @@ export default (middlewares = [], isServer = false) => {
 };
 ```
 
-Example Custom Store Enhancer:
+#### Example Custom Store Enhancer
 
 ```js
 import DevTools from 'reactium-core/components/DevTools';
