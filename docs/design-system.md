@@ -70,7 +70,7 @@ Options:
 Reactium Design System allows for quick switching of themes. Adding a new theme is simple:
 
 ```
-arcli theme
+$ arcli theme
 ```
 
 You will be prompted to input the required options if no flags are passed.
@@ -113,7 +113,7 @@ module.exports = {
 You can customize the Design System Menu by adding new element groups.
 
 ```
-arcli group create
+$ arcli group create
 ```
 
 You will be prompted to input the required options if no flags are passed.
