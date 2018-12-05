@@ -120,7 +120,7 @@ The default templates are good for simple SPAs, but inevitably you will need to 
 
 To do so, copy `.core/server/template/feo.js` and `.core/server/template/ssr.js` to `src/app/server/template` to make modifications to the template served by express for your front-end only and server-side rendered SPA, respectively.
 
-**Important**: replace the `%TEMPLATE_VERSION%` string found in those templates with the version number found in `.core/reactium-config.js` at the time you copy them. Reactium core will use these templates to serve your SPA so long as your template version string satisfies the `semver` property found in your `src/app/server/template` versions. You may need to update these templates after major and minor version updates of core.
+**Important**: replace the `%TEMPLATE_VERSION%` string found in those templates with the version number found in `.core/reactium-config.js` at the time you copy them. Reactium core will use these templates to serve your SPA so long as your src template version string satisfies the `semver` property found in your `.core/reactium.config.js`. You may need to update these templates after major and minor version updates of core.
 
 ### Static Build Template
 
