@@ -153,17 +153,18 @@ Reactium component architecture is pretty simple when it comes to a function or 
 1.  Create the component domain in the `~/src/app/components` directory.
 2.  Create an `index.js` file with your component code.
 
-When it comes to a Redux Class Component the following architecture is applied:
+The following domain artifacts can be used/found withing your component domain to utilize Reactium's Domain Driven component architecture:
 
-| File                                      | Description                                                                                                                                                                                                                                                         |
-| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [actions.js](#the-actionsjs-file)         | List of action functions. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). Redux [Super Thunk actions](https://github.com/Atomic-Reactor/redux-super-thunk), based on the (https://github.com/gaearon/redux-thunk), are automatically supported. |
-| [actionTypes.js](#the-actiontypesjs-file) | List of action filters. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html).                                                                                                                                                                         |
-| [index.js](#the-indexjs-file)             | Main component class.                                                                                                                                                                                                                                               |
-| [reducers.js](#the-reducersjs-file)       | Action handlers. See [Redux Reducers](https://redux.js.org/docs/basics/Reducers.html).                                                                                                                                                                              |
-| [route.js](#the-routejs-file)             | Route handler for the component.                                                                                                                                                                                                                                    |
-| [services.js](#the-servicesjs-file)       | Ajax requests associated with the component.                                                                                                                                                                                                                        |
-| [state.js](#the-statejs-file)             | The default state of the component.                                                                                                                                                                                                                                 |
+| File                                                                                | Description                                                                                                                                                                                                                                                         |
+| :---------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [actions.js](#the-actionsjs-file)                                                   | List of action functions. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html). Redux [Super Thunk actions](https://github.com/Atomic-Reactor/redux-super-thunk), based on the (https://github.com/gaearon/redux-thunk), are automatically supported. |
+| [actionTypes.js](#the-actiontypesjs-file)                                           | List of action filters. See [Redux Actions](https://redux.js.org/docs/basics/Actions.html).                                                                                                                                                                         |
+| [index.js](#the-indexjs-file)                                                       | Main component class.                                                                                                                                                                                                                                               |
+| [reducers.js](#the-reducersjs-file)                                                 | Action handlers. See [Redux Reducers](https://redux.js.org/docs/basics/Reducers.html).                                                                                                                                                                              |
+| [route.js](#the-routejs-file)                                                       | Route handler for the component.                                                                                                                                                                                                                                    |
+| [services.js](#the-servicesjs-file)                                                 | Ajax requests associated with the component.                                                                                                                                                                                                                        |
+| [state.js](#the-statejs-file)                                                       | The default state of the component.                                                                                                                                                                                                                                 |
+| [plugin.js](https://github.com/Atomic-Reactor/Reactium/blob/master/docs/plugins.md) | Defines component domain plugins.                                                                                                                                                                                                                                   |
 
 > Don't worry, there's a CLI command that automates component creation.
 > `$ arcli component -h`
@@ -172,7 +173,7 @@ When it comes to a Redux Class Component the following architecture is applied:
 
 ### The actions.js File
 
-Reactium aggregates all `action.js` files into the `actions` export of the `app.js` file.
+Reactium aggregates all `action.js` files into the `actions` property of the `dependencies` module default export.
 
 A typical `actions.js` file may look like this:
 
@@ -205,7 +206,7 @@ deps.actions.Test.mount({ some: 'params' });
 
 ### The actionTypes.js File
 
-Reactium aggregates all `actionTypes.js` files in the `actionTypes` export of the `app.js` file.
+Reactium aggregates all `actionTypes.js` into the `actionTypes` property of the `dependencies` module default export.
 
 A typical `actionTypes.js` file may look like this:
 
@@ -216,7 +217,7 @@ export default {
 };
 ```
 
-To access the actionTypes, import them into your component:
+To access the actionTypes, import them into your component. Not that unlike other domain dependencies, actionTypes are flattened together in `deps.actionTypes` with no domain.:
 
 ```javascript
 import deps from 'dependencies';
@@ -342,7 +343,7 @@ export default [
 
 ### The services.js File
 
-Reactium aggregates all `services.js` files into the `services` export of the `app.js` file.
+Reactium aggregates all `services.js` files into the `services` property of the `dependencies` module default export.
 
 A typical `services.js` file may look like this:
 
