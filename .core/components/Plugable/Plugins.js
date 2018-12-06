@@ -118,14 +118,16 @@ export default class Plugins extends Component {
                     { id, component, path, paths, ...pluginProps },
                 ) => {
                     let Component = component;
+                    let name = id;
                     if (typeof component === 'string') {
+                        name = component;
                         Component = Plugins.findComponent(
                             component,
                             path,
                             paths,
                         );
                     }
-                    PluginComponents[id] = {
+                    PluginComponents[name] = {
                         Component,
                         id,
                         key: id,
