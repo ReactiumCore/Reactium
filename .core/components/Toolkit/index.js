@@ -14,7 +14,7 @@ import deps from 'dependencies';
  */
 const mapStateToProps = (state, props) => ({
     ...state.Toolkit,
-    ...props
+    ...props,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -23,13 +23,14 @@ const mapDispatchToProps = dispatch => ({
     menuToggle: elm => dispatch(deps.actions.Toolkit.menuToggle(elm)),
     notice: {
         hide: params => dispatch(deps.actions.Toolkit.notice.hide(params)),
-        show: params => dispatch(deps.actions.Toolkit.notice.show(params))
+        show: params => dispatch(deps.actions.Toolkit.notice.show(params)),
     },
     set: data => dispatch(deps.actions.Toolkit.set(data)),
-    setTheme: data => dispatch(deps.actions.Toolkit.setTheme(data))
+    setTheme: data => dispatch(deps.actions.Toolkit.setTheme(data)),
+    toggleSettings: () => dispatch(deps.actions.Toolkit.toggleSettings()),
 });
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(Toolkit);

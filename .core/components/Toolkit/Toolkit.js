@@ -13,6 +13,7 @@ import Notify from './Notify';
 import { Helmet } from 'react-helmet';
 import ToolbarIcons from './Toolbar/ToolbarIcons';
 import React, { Component, Fragment } from 'react';
+import { Plugins } from 'reactium-core/components/Plugable';
 
 /**
  * -----------------------------------------------------------------------------
@@ -87,8 +88,8 @@ export default class Toolkit extends Component {
         let data = {
             state: {
                 id: target,
-                value
-            }
+                value,
+            },
         };
 
         let type = 'toggle-menu';
@@ -119,11 +120,11 @@ export default class Toolkit extends Component {
     }
 
     onSettingsOpen() {
-        this.setState({ showSettings: true });
+        this.state.toggleSettings();
     }
 
     onSettingsClose() {
-        this.setState({ showSettings: false });
+        this.state.toggleSettings();
     }
 
     onSettingSwitchClick({ pref, value }) {
@@ -189,7 +190,7 @@ export default class Toolkit extends Component {
             'toggle-codeColor',
             'toggle-docs',
             'toggle-link',
-            'toggle-menu'
+            'toggle-menu',
         ];
 
         if (toggles.indexOf(type) < 0) {
@@ -211,7 +212,7 @@ export default class Toolkit extends Component {
 
                 value = !op.get(
                     this.content,
-                    `${k}.${data.state.id}.state.visible`
+                    `${k}.${data.state.id}.state.visible`,
                 );
 
                 break;
@@ -289,7 +290,7 @@ export default class Toolkit extends Component {
             showSettings,
             showMenu,
             style,
-            notify
+            notify,
         } = this.state;
 
         let {
@@ -298,7 +299,7 @@ export default class Toolkit extends Component {
             toolbar = {},
             sidebar = {},
             header = {},
-            overview
+            overview,
         } = manifest;
 
         menu = this.filterMenu(menu);
@@ -320,11 +321,12 @@ export default class Toolkit extends Component {
 
         return (
             <Fragment>
-                <Helmet titleTemplate="%s | Style Guide">
+                <Helmet titleTemplate='%s | Style Guide'>
                     <title>{groupName}</title>
-                    <html lang="en" />
-                    <body className="re-toolkit" />
+                    <html lang='en' />
+                    <body className='re-toolkit' />
                 </Helmet>
+                <Plugins zone='toolkit-head' />
 
                 <ToolbarIcons />
 
@@ -402,5 +404,5 @@ Toolkit.defaultProps = {
     prefs: {},
     filters: [],
     style: null,
-    showSettings: false
+    showSettings: false,
 };

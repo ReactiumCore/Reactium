@@ -11,7 +11,7 @@ export default {
     mount: data => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_MOUNT,
-            data
+            data,
         });
     },
 
@@ -26,7 +26,7 @@ export default {
 
             return dispatch({
                 type: deps.actionTypes.TOOLKIT_NAV,
-                params
+                params,
             });
         }
     },
@@ -64,9 +64,9 @@ export default {
                 dispatch({
                     type: deps.actionTypes.TOOLKIT_PREF,
                     value: expanded,
-                    key: 'prefs.sidebar.expanded'
+                    key: 'prefs.sidebar.expanded',
                 });
-            }
+            },
         };
 
         TweenMax.to(elm, 0.125, anime);
@@ -86,7 +86,7 @@ export default {
 
             dispatch({
                 type: deps.actionTypes.TOOLKIT_NOTICE_UPDATE,
-                params: { ...state.notify, animating: true }
+                params: { ...state.notify, animating: true },
             });
 
             let h = -(elm.offsetHeight + 20);
@@ -97,11 +97,11 @@ export default {
                 onComplete: () => {
                     dispatch({
                         type: deps.actionTypes.TOOLKIT_NOTICE_TOGGLE,
-                        visible: false
+                        visible: false,
                     });
 
                     elm.style.display = 'none';
-                }
+                },
             });
         },
 
@@ -122,7 +122,7 @@ export default {
 
             dispatch({
                 type: deps.actionTypes.TOOLKIT_NOTICE_UPDATE,
-                params
+                params,
             });
 
             TweenMax.to(elm, 0.25, {
@@ -131,25 +131,29 @@ export default {
                 onComplete: () => {
                     dispatch({
                         type: deps.actionTypes.TOOLKIT_NOTICE_TOGGLE,
-                        visible: true
+                        visible: true,
                     });
-                }
+                },
             });
-        }
+        },
     },
 
     set: ({ key, value }) => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_PREF,
             value,
-            key
+            key,
         });
     },
 
     setTheme: theme => dispatch => {
         return dispatch({
             type: deps.actionTypes.TOOLKIT_THEME,
-            theme
+            theme,
         });
-    }
+    },
+
+    toggleSettings: () => dispatch => {
+        dispatch({ type: deps.actionTypes.TOOLKIT_SETTINGS_TOGGLE });
+    },
 };

@@ -61,6 +61,10 @@ export default (state = {}, action) => {
 
             return newState;
 
+        case deps.actionTypes.TOOLKIT_SETTINGS_TOGGLE:
+            newState = { ...state, showSettings: !state.showSettings };
+            return newState;
+
         default:
             return state;
     }
