@@ -11,12 +11,14 @@ No, seriously... go get the CLI:
 $ npm i -g atomic-reactor-cli
 ```
 
-## Installation
+## Zero Day Install
 Instead of cloning the main Reactium repo, you can install via the ARCLI:
 
 ```
 $ cd YOUR_PROJECT
 $ arcli reactium install
+$ npm install
+$ npm run local
 ```
 
 
