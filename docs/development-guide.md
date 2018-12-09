@@ -11,6 +11,16 @@ No, seriously... go get the CLI:
 $ npm i -g atomic-reactor-cli
 ```
 
+## Installation
+Instead of cloning the main Reactium repo, you can install via the ARCLI:
+
+```
+$ cd YOUR_PROJECT
+$ arcli reactium install
+```
+
+
+
 ## Components
 
 There are 3 types of components you can create:
