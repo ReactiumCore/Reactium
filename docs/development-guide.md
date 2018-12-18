@@ -12,6 +12,7 @@ $ npm i -g atomic-reactor-cli
 ```
 
 ## Zero Day Install
+
 Instead of cloning the main Reactium repo, you can install via the ARCLI:
 
 ```
@@ -20,8 +21,6 @@ $ arcli reactium install
 $ npm install
 $ npm run local
 ```
-
-
 
 ## Components
 
@@ -388,13 +387,12 @@ export default {
 In your actions.js file you would do something like:
 
 ```javascript
-import { actionTypes } from 'dependencies';
 import deps from 'dependencies';
 
 export default {
     mount: params => dispatch => {
         deps.services.Test.fetchHello().then(data => {
-            dispatch({ type: actionTypes.TEST_MOUNT, payload: data });
+            dispatch({ type: deps.actionTypes.TEST_MOUNT, payload: data });
         });
     },
 };
