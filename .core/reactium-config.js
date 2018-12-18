@@ -27,6 +27,7 @@ module.exports = {
                     'webpack-filter-warnings-plugin': '^1.2.0',
                     'eslint-plugin-react': '^7.11.1',
                     'babel-eslint': '^10.0.1',
+                    'node-sass-tilde-importer': '^1.0.2',
                 },
                 remove: [
                     'atomic-reactor-cli',
