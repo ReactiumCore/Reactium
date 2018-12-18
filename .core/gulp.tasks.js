@@ -12,6 +12,7 @@ const gulpwatch = require('gulp-watch');
 const run = require('gulp-run');
 const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
+const tildeImporter = require('node-sass-tilde-importer');
 const less = require('gulp-less');
 const csso = require('gulp-csso');
 const sourcemaps = require('gulp-sourcemaps');
@@ -50,8 +51,8 @@ const reactium = (gulp, config, webpackConfig) => {
             rootPath,
             `${config.dest.dist}/${ePathRelative.replace(
                 /^.*?\/assets/,
-                'assets'
-            )}`
+                'assets',
+            )}`,
         );
 
         let displaySrc = path.relative(rootPath, e.path);
@@ -73,7 +74,7 @@ const reactium = (gulp, config, webpackConfig) => {
         }
 
         console.log(
-            `${timestamp()} File ${e.event}: ${displaySrc} -> ${displayDest}`
+            `${timestamp()} File ${e.event}: ${displaySrc} -> ${displayDest}`,
         );
     };
 
@@ -124,11 +125,11 @@ const reactium = (gulp, config, webpackConfig) => {
         local: () => {
             let watch = new run.Command(
                 'cross-env SSR_MODE=off NODE_ENV=development gulp',
-                { verbosity: 3 }
+                { verbosity: 3 },
             );
             let babel = new run.Command(
                 'cross-env SSR_MODE=off NODE_ENV=development nodemon ./.core/index.js --exec babel-node',
-                { verbosity: 3 }
+                { verbosity: 3 },
             );
 
             watch.exec();
@@ -137,11 +138,11 @@ const reactium = (gulp, config, webpackConfig) => {
         'local:ssr': () => {
             let watch = new run.Command(
                 'cross-env SSR_MODE=on NODE_ENV=development gulp',
-                { verbosity: 3 }
+                { verbosity: 3 },
             );
             let babel = new run.Command(
                 'cross-env SSR_MODE=on NODE_ENV=development nodemon ./.core/index.js --exec babel-node',
-                { verbosity: 3 }
+                { verbosity: 3 },
             );
 
             watch.exec();
@@ -165,7 +166,7 @@ const reactium = (gulp, config, webpackConfig) => {
                 ['scripts', 'assets', 'styles'],
                 ['markup', 'json'],
                 ['postBuild'],
-                done
+                done,
             );
         },
         // stub task to provide sequenced override for application
@@ -246,7 +247,7 @@ const reactium = (gulp, config, webpackConfig) => {
             fs.copySync(config.dest.dist, config.dest.static);
 
             let mainPage = path.normalize(
-                `${config.dest.static}/index-static.html`
+                `${config.dest.static}/index-static.html`,
             );
 
             if (fs.existsSync(mainPage)) {
@@ -286,7 +287,7 @@ const reactium = (gulp, config, webpackConfig) => {
 
                     colorFileContents += colorVars.join('\n') + '\n\n\n';
                     colorFileContents += `$color: (\n${colorArr.join(
-                        ',\n'
+                        ',\n',
                     )}\n);\n\n\n`;
                     colorFileContents +=
                         '@each $clr-name, $clr-code in $color {\n\t.#{$clr-name} { color: $clr-code; }\n\t.bg-#{$clr-name} { background-color: $clr-code; }\n}';
@@ -295,7 +296,7 @@ const reactium = (gulp, config, webpackConfig) => {
                     fs.writeFileSync(
                         config.dest.colors,
                         colorFileContents,
-                        'utf8'
+                        'utf8',
                     );
                 }
             }
@@ -314,11 +315,11 @@ const reactium = (gulp, config, webpackConfig) => {
                 .pipe(
                     gulpif(
                         isSass,
-                        sass({ includePaths: config.src.includes }).on(
-                            'error',
-                            sass.logError
-                        )
-                    )
+                        sass({
+                            importer: tildeImporter,
+                            includePaths: config.src.includes,
+                        }).on('error', sass.logError),
+                    ),
                 )
                 .pipe(gulpif(isLess, less({ paths: config.src.includes })))
                 .pipe(prefix(config.browsers))
