@@ -12,9 +12,10 @@ process.on('message', ({ config, webpackConfig, restart }) => {
         ['build'],
         ['watchFork'],
         [restart ? 'serve-restart' : 'serve'],
+        ['postServe'],
         () => {
             process.send('build-started');
-        }
+        },
     );
 
     gulpwatch(config.watch.restartWatches, () => {
