@@ -171,6 +171,7 @@ const reactium = (gulp, config, webpackConfig) => {
         },
         // stub task to provide sequenced override for application
         postBuild: done => done(),
+        postServe: done => done(),
         clean: done => {
             // Remove build files
             del.sync([config.dest.dist]);
@@ -352,7 +353,7 @@ const reactium = (gulp, config, webpackConfig) => {
         tasksOverride = require(`${rootPath}/gulp.tasks.override.js`);
     }
 
-    return tasksOverride(tasks);
+    return tasksOverride(tasks, config);
 };
 
 module.exports = reactium;
