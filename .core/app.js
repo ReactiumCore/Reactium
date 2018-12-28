@@ -86,7 +86,7 @@ export const App = () => {
             bindPoints.forEach(item => {
                 ReactDOM.render(
                     <Provider store={store}>
-                        <PlugableProvider>
+                        <PlugableProvider {...deps.plugableConfig}>
                             <Fragment>{item.component}</Fragment>
                         </PlugableProvider>
                     </Provider>,
@@ -108,7 +108,7 @@ export const App = () => {
                 // Hydrate the Routed component
                 ReactDOM.hydrate(
                     <Provider store={store}>
-                        <PlugableProvider>
+                        <PlugableProvider {...deps.plugableConfig}>
                             <Fragment>
                                 <Router />
                             </Fragment>
@@ -124,7 +124,7 @@ export const App = () => {
                 // Bind the Routed component
                 ReactDOM.render(
                     <Provider store={store}>
-                        <PlugableProvider>
+                        <PlugableProvider {...deps.plugableConfig}>
                             <Fragment>
                                 <Router />
                             </Fragment>

@@ -61,6 +61,7 @@ class ReactiumDependencies {
         this.services = {};
         this.reducers = {};
         this.plugins = {};
+        this.plugableConfig = {};
         this.coreTypes = [
             'allActions',
             'allActionTypes',
@@ -99,7 +100,7 @@ class ReactiumDependencies {
                 ...types,
                 ...this.manifest.allActionTypes[key],
             }),
-            {}
+            {},
         );
         this.services = this.manifest.allServices;
 
@@ -143,6 +144,14 @@ class ReactiumDependencies {
             .concat([{ component: NotFound }]);
 
         this.plugins = this.manifest.allPlugins;
+
+        try {
+            let plugableConfig = require('appdir/plugable');
+            if ('default' in plugableConfig) {
+                plugableConfig = plugableConfig.default;
+            }
+            this.plugableConfig = plugableConfig;
+        } catch (error) {}
 
         // Resolve non-core types as dependencies
         Object.keys(this.manifest).forEach(type => {
