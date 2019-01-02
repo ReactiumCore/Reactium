@@ -75,8 +75,8 @@ if (elements.length > 0) {
  * inside of them.
  * -----------------------------------------------------------------------------
  */
-// Create the Redux store
-const store = storeCreator();
+// Create the Redux store and export it
+export const store = storeCreator();
 deps.init();
 
 export const App = () => {
