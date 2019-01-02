@@ -43,7 +43,7 @@ class Colors extends Component {
 
     render() {
         return (
-            <div className="re-toolkit-colors">
+            <div className='re-toolkit-colors'>
                 {Object.keys(colorProfile).map((k, i) => {
                     let css = `.${k}`;
                     let cname = k.split('color-').join('');
