@@ -30,7 +30,7 @@ export default class Content extends Component {
         this.link = {};
         this.previews = {};
         this.watcher = null;
-        this.state = { ...this.props };
+        this.state = {};
         this.onWatch = this.onWatch.bind(this);
         this.registerPreview = this.registerPreview.bind(this);
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
@@ -38,22 +38,21 @@ export default class Content extends Component {
 
     // Handlers
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
+        if (this.props.hasOwnProperty('mount')) {
+            this.props.mount(this);
         }
 
-        this.watcher = setInterval(this.onWatch, this.state.watchTimer);
+        this.watcher = setInterval(this.onWatch, this.props.watchTimer);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps
-        }));
+    componentWillUnmount() {
+        if (this.watcher) {
+            clearInterval(this.watcher);
+        }
     }
 
     onCardButtonClick(e, card) {
-        let { onButtonClick } = this.state;
+        let { onButtonClick } = this.props;
         let { id: action } = e.currentTarget;
 
         let evtdata = card;
@@ -131,8 +130,8 @@ export default class Content extends Component {
             prefs,
             update,
             style,
-            menu
-        } = this.state;
+            menu,
+        } = this.props;
 
         this.cards = {};
         this.codes = {};
@@ -152,7 +151,7 @@ export default class Content extends Component {
                 path,
                 hideCode = false,
                 hideDna = false,
-                hideDocs = false
+                hideDocs = false,
             } = item;
             let { buttons = {} } = card;
 
@@ -167,7 +166,7 @@ export default class Content extends Component {
             if (noCode === true) {
                 let idx = _.indexOf(
                     _.pluck(buttons.footer, 'name'),
-                    'toggle-code'
+                    'toggle-code',
                 );
                 buttons.footer.splice(idx, 1);
             }
@@ -180,7 +179,7 @@ export default class Content extends Component {
             ) {
                 let idx = _.indexOf(
                     _.pluck(buttons.footer, 'name'),
-                    'toggle-link'
+                    'toggle-link',
                 );
                 buttons.footer.splice(idx, 1);
             }
@@ -188,7 +187,7 @@ export default class Content extends Component {
             if (!readme || hideDocs === true) {
                 let idx = _.indexOf(
                     _.pluck(buttons.footer, 'name'),
-                    'toggle-docs'
+                    'toggle-docs',
                 );
                 buttons.footer.splice(idx, 1);
             }
@@ -202,8 +201,7 @@ export default class Content extends Component {
                     onButtonClick={this.onCardButtonClick}
                     ref={elm => {
                         this.registerCard({ elm, id });
-                    }}
-                >
+                    }}>
                     <Preview
                         ref={elm => {
                             this.registerPreview({ elm, id });
@@ -259,7 +257,7 @@ export default class Content extends Component {
     }
 
     renderCrumbs({ title, group, element }) {
-        let { onCrumbClick } = this.state;
+        let { onCrumbClick } = this.props;
         let elms = [];
 
         if (!element) {
@@ -270,7 +268,7 @@ export default class Content extends Component {
                     <Link to={`/toolkit/${group}`} onClick={onCrumbClick}>
                         {title}
                     </Link>
-                </span>
+                </span>,
             );
         }
 
@@ -291,8 +289,8 @@ export default class Content extends Component {
             defaultComponent,
             update,
             onMenuToggleClick,
-            prefs
-        } = this.state;
+            prefs,
+        } = this.props;
 
         let pos = op.get(prefs, 'sidebar.position', 'left');
 
@@ -308,8 +306,7 @@ export default class Content extends Component {
                     <button
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
-                        onClick={onMenuToggleClick}
-                    >
+                        onClick={onMenuToggleClick}>
                         <svg>
                             <use xlinkHref={'#re-icon-menu'} />
                         </svg>
@@ -330,8 +327,7 @@ export default class Content extends Component {
                     <button
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
-                        onClick={onMenuToggleClick}
-                    >
+                        onClick={onMenuToggleClick}>
                         <svg>
                             <use xlinkHref={'#re-icon-menu'} />
                         </svg>
@@ -347,8 +343,7 @@ export default class Content extends Component {
                     <button
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
-                        onClick={onMenuToggleClick}
-                    >
+                        onClick={onMenuToggleClick}>
                         <svg>
                             <use xlinkHref={'#re-icon-menu'} />
                         </svg>
@@ -377,22 +372,22 @@ Content.defaultProps = {
                 {
                     name: 'toggle-fullscreen',
                     title: 'toggle fullscreen',
-                    icon: '#re-icon-fullscreen'
-                }
+                    icon: '#re-icon-fullscreen',
+                },
             ],
             footer: [
                 {
                     name: 'toggle-code',
                     title: 'code view',
-                    icon: '#re-icon-markup'
+                    icon: '#re-icon-markup',
                 },
                 {
                     name: 'toggle-link',
                     title: 'dependencies',
-                    icon: '#re-icon-link'
+                    icon: '#re-icon-link',
                 },
-                { name: 'toggle-docs', title: 'docs', icon: '#re-icon-docs' }
-            ]
-        }
-    }
+                { name: 'toggle-docs', title: 'docs', icon: '#re-icon-docs' },
+            ],
+        },
+    },
 };
