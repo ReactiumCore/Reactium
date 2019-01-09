@@ -25,47 +25,44 @@ export default class Toolkit extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { ...this.props };
+        this.state = {};
         this.content = null;
         this.sidebar = null;
         this.settings = null;
         this.notify = null;
+        this.onResize = this.onResize.bind(this);
         this.togglePref = this.togglePref.bind(this);
         this.toggleSettings = this.toggleSettings.bind(this);
-        this.onResize = this.onResize.bind(this);
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            let newState = Object.assign({}, this.state, nextProps);
-            return newState;
-        });
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.onResize);
     }
 
     onCopyClick() {
-        let autohide = 3000;
-        let dismissable = true;
-        let elm = this.notify;
-        let message = 'Code copied!';
+        const autohide = 3000;
+        const dismissable = true;
+        const elm = this.notify;
+        const message = 'Code copied!';
 
-        this.state.notice.show({ message, autohide, dismissable, elm });
+        this.props.notice.show({ message, autohide, dismissable, elm });
     }
 
     onNoticeDismiss() {
-        let elm = this.notify;
+        const elm = this.notify;
 
-        this.state.notice.hide({ elm });
+        this.props.notice.hide({ elm });
     }
 
     onResize() {
         let w = window.innerWidth;
         if (w < 768) {
-            let { prefs } = this.state;
-            let expanded = op.get(prefs, 'sidebar.expanded', true);
+            const { prefs } = this.props;
+            const expanded = op.get(prefs, 'sidebar.expanded', true);
 
             if (expanded === true) {
                 this.toggleMenu();
@@ -74,31 +71,31 @@ export default class Toolkit extends Component {
     }
 
     onMenuItemClick(e) {
-        let url = e.target.getAttribute('href');
-        this.state.menuItemClick(url);
+        const url = e.target.getAttribute('href');
+        this.props.menuItemClick(url);
     }
 
     onMenuItemToggle(e) {
-        let { prefs } = this.state;
-        let target = e.currentTarget.dataset.target;
+        const { prefs } = this.props;
+        const target = e.currentTarget.dataset.target;
 
-        let collapseAll = op.get(prefs, 'menu.all', false);
-        let value = !op.get(prefs, `menu.${target}`, collapseAll);
+        const collapseAll = op.get(prefs, 'menu.all', false);
+        const value = !op.get(prefs, `menu.${target}`, collapseAll);
 
-        let data = {
+        const data = {
             state: {
                 id: target,
                 value,
             },
         };
 
-        let type = 'toggle-menu';
+        const type = 'toggle-menu';
 
         this.togglePref({ type, data });
     }
 
     onButtonClick(e, data) {
-        let { type } = e;
+        const { type } = e;
 
         this.togglePref({ type, data });
         this.toggleFilter({ type, data });
@@ -120,33 +117,33 @@ export default class Toolkit extends Component {
     }
 
     onSettingsOpen() {
-        this.state.toggleSettings();
+        this.props.toggleSettings();
     }
 
     onSettingsClose() {
-        this.state.toggleSettings();
+        this.props.toggleSettings();
     }
 
     onSettingSwitchClick({ pref, value }) {
-        let { set } = this.state;
-        let key = `prefs.${pref}`;
+        const key = `prefs.${pref}`;
 
-        set({ key, value });
+        this.props.set({ key, value });
 
         this.setState({ update: Date.now() });
     }
 
     onThemeChange(e) {
-        this.state.setTheme(e.target.value);
+        this.props.setTheme(e.target.value);
     }
 
     toggleFilter({ type, data }) {
-        let isFilter = new RegExp('^toolbar-filter').test(type);
+        const isFilter = new RegExp('^toolbar-filter').test(type);
         if (isFilter !== true) {
             return;
         }
 
-        let { filters = [], manifest = {} } = this.state;
+        const { manifest } = this.props;
+        const { filters = [] } = this.state;
 
         let filter = type.split('toolbar-filter-').join('');
 
@@ -180,12 +177,12 @@ export default class Toolkit extends Component {
     }
 
     toggleMenu() {
-        this.state.menuToggle(this.sidebar.container);
+        this.props.menuToggle(this.sidebar.container);
         this.setState({ update: Date.now() });
     }
 
     togglePref({ type, data }) {
-        let toggles = [
+        const toggles = [
             'toggle-code',
             'toggle-codeColor',
             'toggle-docs',
@@ -197,7 +194,7 @@ export default class Toolkit extends Component {
             return;
         }
 
-        let { set } = this.state;
+        let { set } = this.props;
 
         let value;
         let key = type.split('toggle-').join('');
@@ -265,7 +262,7 @@ export default class Toolkit extends Component {
                 return;
             }
 
-            let elements = op.get(menu, `${k}.elements`, {});
+            const elements = op.get(menu, `${k}.elements`, {});
 
             Object.keys(elements).forEach(e => {
                 if (op.get(elements, `${e}.hidden`, false) === true) {
@@ -280,9 +277,9 @@ export default class Toolkit extends Component {
     }
 
     render() {
+        const { filters = [] } = this.state;
         let {
             update = Date.now(),
-            filters = [],
             manifest = {},
             prefs = {},
             group,
@@ -291,7 +288,7 @@ export default class Toolkit extends Component {
             showMenu,
             style,
             notify,
-        } = this.state;
+        } = this.props;
 
         let {
             themes = [],

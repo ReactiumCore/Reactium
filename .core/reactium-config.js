@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.3.16',
+    version: '2.3.17',
     semver: '2.3.x',
     update: {
         package: {
@@ -69,6 +69,16 @@ module.exports = {
                     'static:build',
                 ],
             },
+        },
+        files: {
+            add: [
+                {
+                    version: '>=2.3.16',
+                    destination: '/src/app/plugable',
+                    source: '/tmp/update/src/app/plugable',
+                },
+            ],
+            remove: [],
         },
     },
     manifest: {
