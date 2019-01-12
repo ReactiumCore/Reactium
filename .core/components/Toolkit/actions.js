@@ -8,12 +8,11 @@ const isToolkit = path => {
 };
 
 export default {
-    mount: data => dispatch => {
-        return dispatch({
+    mount: data => dispatch =>
+        dispatch({
             type: deps.actionTypes.TOOLKIT_MOUNT,
             data,
-        });
-    },
+        }),
 
     menuItemClick: url => dispatch => {
         if (isToolkit(url)) {
@@ -69,7 +68,7 @@ export default {
             },
         };
 
-        TweenMax.to(elm, 0.125, anime);
+        TweenMax.to(elm, 0.25, anime);
     },
 
     notice: {
@@ -138,22 +137,19 @@ export default {
         },
     },
 
-    set: ({ key, value }) => dispatch => {
-        return dispatch({
+    set: ({ key, value }) => dispatch =>
+        dispatch({
             type: deps.actionTypes.TOOLKIT_PREF,
             value,
             key,
-        });
-    },
+        }),
 
-    setTheme: theme => dispatch => {
-        return dispatch({
+    setTheme: theme => dispatch =>
+        dispatch({
             type: deps.actionTypes.TOOLKIT_THEME,
             theme,
-        });
-    },
+        }),
 
-    toggleSettings: () => dispatch => {
-        dispatch({ type: deps.actionTypes.TOOLKIT_SETTINGS_TOGGLE });
-    },
+    toggleSettings: () => dispatch =>
+        dispatch({ type: deps.actionTypes.TOOLKIT_SETTINGS_TOGGLE }),
 };

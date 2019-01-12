@@ -48,6 +48,15 @@ export default class Dna extends Component {
         this.applyPrefs();
     }
 
+    componentDidUpdate(prevProps) {
+        const { update: lastUpdate } = prevProps;
+        const { update } = this.props;
+
+        if (update !== lastUpdate) {
+            this.applyPrefs();
+        }
+    }
+
     getPref(newState = {}, key, vals) {
         const { prefs = {} } = this.state;
 

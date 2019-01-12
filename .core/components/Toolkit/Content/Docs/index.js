@@ -45,6 +45,15 @@ export default class Docs extends Component {
         this.applyPrefs();
     }
 
+    componentDidUpdate(prevProps) {
+        const { update: lastUpdate } = prevProps;
+        const { update } = this.props;
+
+        if (update !== lastUpdate) {
+            this.applyPrefs();
+        }
+    }
+
     getPref(newState = {}, key, vals) {
         const { prefs = {} } = this.state;
 
@@ -62,7 +71,6 @@ export default class Docs extends Component {
 
     applyPrefs() {
         let newState = {};
-        newState = this.applyThemePref(newState);
         newState = this.applyVisiblePref(newState);
 
         if (Object.keys(newState).length > 0) {
@@ -80,18 +88,6 @@ export default class Docs extends Component {
         ];
 
         return this.getPref(newState, 'visible', vals);
-    }
-
-    applyThemePref(newState = {}) {
-        const { id, theme } = this.props;
-        const { prefs = {} } = this.state;
-
-        let vals = [
-            op.get(prefs, `codeColor.${id}`),
-            op.get(prefs, `codeColor.all`, theme),
-        ];
-
-        return this.getPref(newState, 'theme', vals);
     }
 
     open() {
@@ -136,14 +132,10 @@ export default class Docs extends Component {
     render() {
         const { visible, height } = this.state;
 
-        const {
-            component: Component,
-            title,
-            update,
-            theme = 'dark',
-        } = this.props;
+        const { component: Component, title, update, prefs } = this.props;
 
         const display = visible === true ? 'block' : 'none';
+        const theme = prefs.codeColor.all;
 
         return !Component ? null : (
             <div

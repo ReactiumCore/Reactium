@@ -29,6 +29,7 @@ export default class Content extends Component {
         this.docs = {};
         this.link = {};
         this.previews = {};
+        this.watcher = null;
         this.state = {};
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
     }

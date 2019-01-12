@@ -16,7 +16,7 @@ export default (state = {}, action) => {
             return newState;
 
         case deps.actionTypes.TOOLKIT_PREF:
-            newState = { ...state };
+            newState = { ...state, update: Date.now() };
             let karry = action.key.split('.');
 
             let all = karry.pop();
@@ -29,7 +29,7 @@ export default (state = {}, action) => {
             return newState;
 
         case deps.actionTypes.TOOLKIT_THEME:
-            newState = { ...state, style: action.theme };
+            newState = { ...state, style: action.theme, update: Date.now() };
 
             return newState;
 
