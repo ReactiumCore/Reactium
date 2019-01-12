@@ -603,17 +603,17 @@ const SCHEMA_CREATE = ({ props }) => {
                     return String(val).toLowerCase() === 'y';
                 },
             },
-            // dna: {
-            //     pattern: /^y|n|Y|N/,
-            //     default: 'Y',
-            //     description: `${chalk.white('Show DNA?')} ${chalk.cyan(
-            //         '(Y/N):'
-            //     )}`,
-            //     ask: () => canOverwrite,
-            //     before: val => {
-            //         return String(val).toLowerCase() === 'y';
-            //     },
-            // },
+            dna: {
+                pattern: /^y|n|Y|N/,
+                default: 'Y',
+                description: `${chalk.white('Show DNA?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => canOverwrite,
+                before: val => {
+                    return String(val).toLowerCase() === 'y';
+                },
+            },
             stylesheet: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
@@ -786,16 +786,16 @@ const SCHEMA_UPDATE = ({ props, params }) => {
                     return String(val).toLowerCase() === 'y';
                 },
             },
-            // dna: {
-            //     pattern: /^y|n|Y|N/,
-            //     default: hideDna ? 'N' : 'Y',
-            //     description: `${chalk.white('Show DNA?')} ${chalk.cyan(
-            //         '(Y/N):'
-            //     )}`,
-            //     before: val => {
-            //         return String(val).toLowerCase() === 'y';
-            //     },
-            // },
+            dna: {
+                pattern: /^y|n|Y|N/,
+                default: hideDna ? 'N' : 'Y',
+                description: `${chalk.white('Show DNA?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                before: val => {
+                    return String(val).toLowerCase() === 'y';
+                },
+            },
         },
     };
 };
@@ -1087,7 +1087,6 @@ const ACTION = ({ action, opt, props }) => {
  * COMMAND Function
  * @description Function that executes program.command()
  */
-// .option('--dna [dna]', 'Show DNA info.')
 const COMMAND = ({ program, props }) =>
     program
         .command(NAME)
@@ -1102,6 +1101,7 @@ const COMMAND = ({ program, props }) =>
         .option('--stylesheet [stylesheet]', 'Add a stylesheet.')
         .option('--documentation [documentation]', 'Show readme.')
         .option('--code [code]', 'Show Code view.')
+        .option('--dna [dna]', 'Show DNA info.')
         .on('--help', HELP);
 
 /**

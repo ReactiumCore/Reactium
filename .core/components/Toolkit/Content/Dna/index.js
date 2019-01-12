@@ -268,13 +268,14 @@ export default class Dna extends Component {
         }
 
         let elements = [];
+
         let pkg = str
             .split('./node_modules/')
             .join('')
             .split('/')
             .shift();
 
-        let exclude = ['webpack', 'react'];
+        let exclude = ['webpack', 'react', 'core-js'];
         if (exclude.indexOf(pkg) > -1) {
             return;
         }
@@ -307,7 +308,7 @@ export default class Dna extends Component {
 
         let npm = _.compact(deps.map(item => this.getNPM(item, deps)));
         let dependencies = _.compact(
-            deps.map(item => this.getDependency(item))
+            deps.map(item => this.getDependency(item)),
         );
 
         let dependents = this.getDependents(component);
