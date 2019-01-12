@@ -1,4 +1,10 @@
+const gulpConfig = require('./gulp.config');
+const reactiumConfig = require('./reactium-config');
+const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
 const regenManifest = require('./manifest-tools');
 
 // run it
-regenManifest();
+regenManifest({
+    manifestFilePath: gulpConfig.src.manifest,
+    manifestConfig,
+});

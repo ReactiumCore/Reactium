@@ -19,7 +19,13 @@ const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 const chalk = require('chalk');
 const moment = require('moment');
+const reactiumConfig = require('./reactium-config');
+const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
+const libraryManifestConfig = require('./manifest.config')(
+    reactiumConfig.library,
+);
 const regenManifest = require('./manifest-tools');
+const libraryTools = require('./library-tools');
 const rootPath = path.resolve(__dirname, '..');
 const { fork } = require('child_process');
 
@@ -194,7 +200,10 @@ const reactium = (gulp, config, webpackConfig) => {
         },
         manifest: done => {
             // Generate manifest.js file
-            regenManifest();
+            regenManifest({
+                manifestFilePath: config.src.manifest,
+                manifestConfig,
+            });
             done();
         },
         markup: () => {
@@ -238,6 +247,45 @@ const reactium = (gulp, config, webpackConfig) => {
         },
         'serve-restart': done => {
             serve(done, false);
+        },
+        library: done => {
+            // Create library
+            runSequence(
+                ['library:manifest', 'library:copy', 'library:dependencies'],
+                done,
+            );
+        },
+        'library:manifest': done => {
+            // Generate manifest.js file
+            regenManifest({
+                manifestFilePath: config.src.library,
+                manifestConfig: libraryManifestConfig,
+            });
+            done();
+        },
+        'library:copy': done => {
+            let babel = new run.Command(
+                `cross-env NODE_ENV=production babel src --out-dir ${
+                    config.dest.library
+                }`,
+                { verbosity: 3 },
+            );
+
+            babel.exec();
+
+            // Make libs/libs.js file
+            libraryTools.createLibExports();
+
+            // Copy static files
+            [config.src.style, config.src.assets].forEach(src =>
+                gulp.src(src).pipe(gulp.dest(config.dest.library)),
+            );
+
+            done();
+        },
+        'library:dependencies': done => {
+            libraryTools.createPackage();
+            done();
         },
         static: done => {
             // Build static site
