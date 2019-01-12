@@ -23,6 +23,7 @@ export default class Card extends Component {
         this.state = {
             fullscreen: this.props.fullscreen,
             buttons: this.props.buttons,
+            id: this.props.id,
         };
         this.toggleFullScreen = this.toggleFullScreen.bind(this);
     }
