@@ -218,7 +218,7 @@ export default class Content extends Component {
                             ref={elm => {
                                 this.registerCode({ elm, id });
                             }}
-                            onButtonClick={onCopyClick}
+                            onButtonClick={onButtonClick}
                             component={component}
                             update={update}
                             prefs={prefs}

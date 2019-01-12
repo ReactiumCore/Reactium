@@ -31,7 +31,7 @@ export default class Code extends Component {
         prefs: {},
         onButtonClick: null,
         height: 'auto',
-        speed: 0.2,
+        speed: 0.5,
         visible: false,
         component: null,
         group: null,
@@ -43,7 +43,7 @@ export default class Code extends Component {
     constructor(props) {
         super(props);
 
-        this.cont = null;
+        this.cont = React.createRef();
         this.state = {
             height: this.props.height,
             prefs: this.props.prefs,
@@ -70,22 +70,7 @@ export default class Code extends Component {
 
     componentDidMount() {
         this.applyPrefs();
-        // if (this.state.hasOwnProperty('mount')) {
-        //     this.state.mount(this);
-        // }
     }
-
-    // componentWillReceiveProps(nextProps) {
-    //     this.setState(prevState => {
-    //         let newState = {
-    //             ...prevState,
-    //             ...nextProps,
-    //         };
-    //         return newState;
-    //     });
-    //
-    //     this.applyPrefs();
-    // }
 
     getPref(newState = {}, key, vals) {
         const { prefs = {} } = this.state;
@@ -166,7 +151,7 @@ export default class Code extends Component {
 
         if (typeof onButtonClick === 'function') {
             e['type'] = 'copy';
-            onButtonClick(e, this, markup);
+            onButtonClick(e, this);
         }
     }
 
@@ -181,7 +166,7 @@ export default class Code extends Component {
         if (typeof onButtonClick === 'function') {
             e['type'] = 'toggle-codeColor';
 
-            let data = { ...this };
+            const data = { ...this };
             data.state.theme = theme;
 
             onButtonClick(e, data);
@@ -189,15 +174,11 @@ export default class Code extends Component {
     }
 
     open() {
-        if (!this.cont) {
-            return;
-        }
-
         const { speed } = this.props;
         const _self = this;
 
-        TweenMax.set(this.cont, { height: 'auto', display: 'block' });
-        TweenMax.from(this.cont, speed, {
+        TweenMax.set(this.cont.current, { height: 'auto', display: 'block' });
+        TweenMax.from(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
@@ -208,14 +189,10 @@ export default class Code extends Component {
     }
 
     close() {
-        if (!this.cont) {
-            return;
-        }
-
         const { speed } = this.props;
         const _self = this;
 
-        TweenMax.to(this.cont, speed, {
+        TweenMax.to(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
@@ -271,9 +248,7 @@ export default class Code extends Component {
             case 'function': {
                 return (
                     <div
-                        ref={elm => {
-                            this.cont = elm;
-                        }}
+                        ref={this.cont}
                         className={'re-toolkit-code-view'}
                         style={{ height, display }}>
                         <div className={'re-toolkit-card-heading thin'}>
@@ -311,11 +286,9 @@ export default class Code extends Component {
             default: {
                 return (
                     <div
-                        ref={elm => {
-                            this.cont = elm;
-                        }}
-                        className={'re-toolkit-code-view'}
-                        style={{ height, display }}>
+                        ref={this.cont}
+                        style={{ height, display }}
+                        className={'re-toolkit-code-view'}>
                         <div className={'re-toolkit-card-heading thin'}>
                             <small>
                                 <em>

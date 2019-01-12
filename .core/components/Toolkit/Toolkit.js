@@ -43,7 +43,10 @@ export default class Toolkit extends Component {
         window.removeEventListener('resize', this.onResize);
     }
 
-    onCopyClick() {
+    onCopyClick(type) {
+        if (type !== 'copy') {
+            return;
+        }
         const autohide = 3000;
         const dismissable = true;
         const elm = this.notify;
@@ -96,11 +99,11 @@ export default class Toolkit extends Component {
 
     onButtonClick(e, data) {
         const { type } = e;
-
         this.togglePref({ type, data });
         this.toggleFilter({ type, data });
         this.toggleFullscreen({ type, data, e });
         this.toggleSettings({ type });
+        this.onCopyClick(type);
     }
 
     onFilterClick(e, filter) {
