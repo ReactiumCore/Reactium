@@ -46,31 +46,28 @@ const createLibExports = () => {
 
 const createPackage = () => {
     const parent = require('../package.json');
-    const package = Object.entries(parent)
+    const libPackage = Object.entries(parent)
         .filter(([key, value]) =>
             [
                 'name',
                 'version',
                 'description',
-                'main',
-                'scripts',
                 'keywords',
                 'author',
                 'license',
                 'engines',
                 'repository',
-                'browser',
                 'dependencies',
                 'devDependencies',
             ].find(allowed => allowed === key),
         )
         .reduce(
-            (package, [key, value]) => {
+            (libPackage, [key, value]) => {
                 switch (key) {
                     case 'dependencies':
                     case 'devDependencies':
                         const libDeps = op.get(parent, 'libDependencies', []);
-                        package[key] = Object.entries(value)
+                        libPackage[key] = Object.entries(value)
                             .filter(([mod, version]) =>
                                 libDeps.find(allowed => allowed === mod),
                             )
@@ -80,9 +77,9 @@ const createPackage = () => {
                             }, {});
                         break;
                     default:
-                        package[key] = value;
+                        libPackage[key] = value;
                 }
-                return package;
+                return libPackage;
             },
             {
                 main: 'index.js',
@@ -95,7 +92,7 @@ const createPackage = () => {
         }
         fs.writeFileSync(
             `${rootPath}/${gulpConfig.dest.library}/package.json`,
-            JSON.stringify(package, null, 2),
+            JSON.stringify(libPackage, null, 2),
         );
     } catch (error) {
         console.error('Error creating library package.json', error);
