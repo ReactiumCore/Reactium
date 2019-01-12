@@ -23,11 +23,33 @@ import parserHtml from 'prettier/parser-html';
  */
 
 export default class Code extends Component {
+    static contextTypes = {
+        store: PropTypes.object,
+    };
+
+    static defaultProps = {
+        prefs: {},
+        onButtonClick: null,
+        height: 'auto',
+        speed: 0.2,
+        visible: false,
+        component: null,
+        group: null,
+        id: null,
+        theme: 'light',
+        wrap: false,
+    };
+
     constructor(props) {
         super(props);
 
         this.cont = null;
-        this.state = { ...this.props };
+        this.state = {
+            height: this.props.height,
+            prefs: this.props.prefs,
+            theme: this.props.theme,
+            visible: this.props.visible,
+        };
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
         this.toggle = this.toggle.bind(this);
@@ -48,25 +70,25 @@ export default class Code extends Component {
 
     componentDidMount() {
         this.applyPrefs();
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
+        // if (this.state.hasOwnProperty('mount')) {
+        //     this.state.mount(this);
+        // }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            let newState = {
-                ...prevState,
-                ...nextProps,
-            };
-            return newState;
-        });
-
-        this.applyPrefs();
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     this.setState(prevState => {
+    //         let newState = {
+    //             ...prevState,
+    //             ...nextProps,
+    //         };
+    //         return newState;
+    //     });
+    //
+    //     this.applyPrefs();
+    // }
 
     getPref(newState = {}, key, vals) {
-        let { prefs = {} } = this.state;
+        const { prefs = {} } = this.state;
 
         vals = !Array.isArray(vals) ? [vals] : vals;
 
@@ -98,9 +120,9 @@ export default class Code extends Component {
     }
 
     applyThemePref(newState = {}) {
-        let { prefs = {}, theme, id } = this.state;
-
-        let vals = [
+        const { id } = this.props;
+        const { prefs = {}, theme } = this.state;
+        const vals = [
             op.get(prefs, `codeColor.${id}`),
             op.get(prefs, `codeColor.all`, theme),
         ];
@@ -109,17 +131,17 @@ export default class Code extends Component {
     }
 
     applyWrapPref(newState = {}) {
-        let { prefs = {} } = this.state;
-
+        const { prefs = {} } = this.state;
         return this.getPref(
             newState,
             'wrap',
-            op.get(prefs, `syntax.wrap`, false)
+            op.get(prefs, `syntax.wrap`, false),
         );
     }
 
     applyVisiblePref(newState = {}) {
-        let { prefs = {}, visible = false, id } = this.state;
+        const { id } = this.props;
+        const { prefs = {}, visible = false } = this.state;
 
         let vals = [
             op.get(prefs, `code.${id}`),
@@ -130,15 +152,14 @@ export default class Code extends Component {
     }
 
     onCopyClick(e) {
-        let { component: Component, onButtonClick } = this.state;
-
-        let markup = prettier.format(
+        const { component: Component, onButtonClick } = this.props;
+        const markup = prettier.format(
             renderToStaticMarkup(
                 <Provider store={this.context.store}>
                     <Component />
-                </Provider>
+                </Provider>,
             ),
-            this.prettierOptions
+            this.prettierOptions,
         );
 
         copy(markup);
@@ -150,7 +171,8 @@ export default class Code extends Component {
     }
 
     onThemeClick(e) {
-        let { theme, onButtonClick } = this.state;
+        const { onButtonClick } = this.props;
+        let { theme } = this.state;
 
         theme = theme === 'dark' ? 'light' : 'dark';
 
@@ -171,8 +193,8 @@ export default class Code extends Component {
             return;
         }
 
-        let { speed } = this.state;
-        let _self = this;
+        const { speed } = this.props;
+        const _self = this;
 
         TweenMax.set(this.cont, { height: 'auto', display: 'block' });
         TweenMax.from(this.cont, speed, {
@@ -190,8 +212,8 @@ export default class Code extends Component {
             return;
         }
 
-        let { speed } = this.state;
-        let _self = this;
+        const { speed } = this.props;
+        const _self = this;
 
         TweenMax.to(this.cont, speed, {
             height: 0,
@@ -204,7 +226,7 @@ export default class Code extends Component {
     }
 
     toggle() {
-        let { visible } = this.state;
+        const { visible } = this.state;
 
         if (visible !== true) {
             this.open();
@@ -214,7 +236,7 @@ export default class Code extends Component {
     }
 
     themes(theme = 'dark') {
-        let thms = {
+        const thms = {
             dark: vs2015,
             light: vs,
         };
@@ -226,27 +248,24 @@ export default class Code extends Component {
         const html = renderToStaticMarkup(
             <Provider store={this.context.store}>
                 <Component />
-            </Provider>
+            </Provider>,
         );
 
         return prettier.format(html, this.prettierOptions);
     }
 
     render() {
-        let {
-            component: Component,
-            visible,
-            height,
-            theme = 'dark',
-        } = this.state;
+        const { component: Component } = this.props;
 
         if (!Component) {
             return null;
         }
 
-        let type = typeof Component;
-        let style = this.themes(theme);
-        let display = visible === true ? 'block' : 'none';
+        const { visible, height, theme = 'dark' } = this.state;
+
+        const type = typeof Component;
+        const style = this.themes(theme);
+        const display = visible === true ? 'block' : 'none';
 
         switch (type) {
             case 'function': {
@@ -311,20 +330,3 @@ export default class Code extends Component {
         }
     }
 }
-
-Code.defaultProps = {
-    prefs: {},
-    onButtonClick: null,
-    height: 'auto',
-    speed: 0.2,
-    visible: false,
-    component: null,
-    group: null,
-    id: null,
-    theme: 'light',
-    wrap: false,
-};
-
-Code.contextTypes = {
-    store: PropTypes.object,
-};
