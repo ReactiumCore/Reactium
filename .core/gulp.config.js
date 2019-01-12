@@ -73,6 +73,8 @@ const defaultConfig = {
         includes: ['./node_modules'],
         appdir: path.resolve(__dirname, 'src/app'),
         rootdir: path.resolve(__dirname),
+        manifest: `${rootPath}/src/manifest.js`,
+        library: `${rootPath}/src/library-manifest.js`,
     },
     dest: {
         dist: 'public',
@@ -81,6 +83,7 @@ const defaultConfig = {
         style: 'public/assets/style',
         assets: 'public/assets',
         static: 'dist',
+        library: 'lib',
         build: 'build/src',
         colors: 'src/assets/style/_scss/_colors.scss',
     },

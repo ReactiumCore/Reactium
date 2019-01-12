@@ -2,9 +2,6 @@ const tree = require('directory-tree');
 const path = require('path');
 const fs = require('fs');
 const _ = require('underscore');
-const reactiumConfig = require('./reactium-config');
-const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
-const manifestFilePath = path.resolve('./src', 'manifest.js');
 const op = require('object-path');
 const prettier = require('prettier');
 const moment = require('moment');
@@ -60,7 +57,7 @@ const find = (searches = [], sourceMappings) => {
     return mappings;
 };
 
-module.exports = async function() {
+module.exports = async function({ manifestFilePath, manifestConfig }) {
     const manifest = find(
         manifestConfig.patterns,
         manifestConfig.sourceMappings,
@@ -123,7 +120,7 @@ module.exports = async function() {
     if (shouldWriteManifest) {
         console.log(
             `[${moment().format('HH:mm:ss')}] Writing  '${chalk.cyan(
-                'manifest.js',
+                manifestFilePath,
             )}'...`,
         );
 
