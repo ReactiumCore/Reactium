@@ -31,7 +31,7 @@ export default class Code extends Component {
         prefs: {},
         onButtonClick: null,
         height: 'auto',
-        speed: 0.5,
+        speed: 0.2,
         visible: false,
         component: null,
         group: null,
