@@ -22,6 +22,14 @@ import { Plugins } from 'reactium-core/components/Plugable';
  */
 
 export default class Toolkit extends Component {
+    static defaultProps = {
+        update: Date.now(),
+        prefs: {},
+        filters: [],
+        style: null,
+        showSettings: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -398,11 +406,3 @@ export default class Toolkit extends Component {
         );
     }
 }
-
-Toolkit.defaultProps = {
-    update: Date.now(),
-    prefs: {},
-    filters: [],
-    style: null,
-    showSettings: false,
-};

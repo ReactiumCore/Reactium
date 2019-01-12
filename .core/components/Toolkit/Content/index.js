@@ -171,18 +171,18 @@ export default class Content extends Component {
                 buttons.footer.splice(idx, 1);
             }
 
-            if (
-                !dna ||
-                hideDna == true ||
-                typeof component === 'string' ||
-                process.env.NODE_ENV !== 'development'
-            ) {
-                let idx = _.indexOf(
-                    _.pluck(buttons.footer, 'name'),
-                    'toggle-link',
-                );
-                buttons.footer.splice(idx, 1);
-            }
+            // if (
+            //     !dna ||
+            //     hideDna == true ||
+            //     typeof component === 'string' ||
+            //     process.env.NODE_ENV !== 'development'
+            // ) {
+            //     let idx = _.indexOf(
+            //         _.pluck(buttons.footer, 'name'),
+            //         'toggle-link',
+            //     );
+            //     buttons.footer.splice(idx, 1);
+            // }
 
             if (!readme || hideDocs === true) {
                 let idx = _.indexOf(

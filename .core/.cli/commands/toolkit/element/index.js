@@ -99,7 +99,7 @@ const mapStyleSheet = ({ output, input, props }) => {
 
     if (op.get(output, 'stylesheet', false) === true) {
         const dest = path.normalize(
-            `${cwd}/src/app/toolkit/${output.group}/${output.name}`
+            `${cwd}/src/app/toolkit/${output.group}/${output.name}`,
         );
         const stylesheetFile = path.normalize(path.join(dest, '_style.scss'));
 
@@ -107,7 +107,7 @@ const mapStyleSheet = ({ output, input, props }) => {
             path
                 .relative(filepath, stylesheetFile)
                 .replace(/^\..\//, '')
-                .replace('_style.scss', 'style')
+                .replace('_style.scss', 'style'),
         );
 
         stylesheet = {
@@ -270,7 +270,7 @@ const CONFIRM = ({ props, params, description }) => {
                 } else {
                     resolve(confirmed);
                 }
-            }
+            },
         );
     });
 };
@@ -346,7 +346,7 @@ const CONFORM = ({ input, props }) => {
 
     // destination
     output['destination'] = path.normalize(
-        `${cwd}/src/app/toolkit/${output.group}/${output.name}`
+        `${cwd}/src/app/toolkit/${output.group}/${output.name}`,
     );
 
     delete output.documentation;
@@ -368,7 +368,7 @@ const CONFORM_UPDATE = ({ props, input }) => {
     };
 
     const groupElements = Object.keys(
-        op.get(m, `menu.${output.prev.group}.elements`, {})
+        op.get(m, `menu.${output.prev.group}.elements`, {}),
     );
     const prevMenuOrder = groupElements.indexOf(output.prev.ID);
 
@@ -377,7 +377,7 @@ const CONFORM_UPDATE = ({ props, input }) => {
             case 'name':
                 output.new[key] = formatName(val);
                 output.prev[key] = formatName(
-                    path.basename(output.prev.element.dna)
+                    path.basename(output.prev.element.dna),
                 );
                 break;
 
@@ -429,10 +429,10 @@ const CONFORM_UPDATE = ({ props, input }) => {
 
     // destination
     output.new['destination'] = path.normalize(
-        `${cwd}/src/app/toolkit/${output.new.group}/${output.new.name}`
+        `${cwd}/src/app/toolkit/${output.new.group}/${output.new.name}`,
     );
     output.prev['destination'] = path.normalize(
-        `${cwd}/src/app/toolkit/${output.prev.group}/${output.prev.name}`
+        `${cwd}/src/app/toolkit/${output.prev.group}/${output.prev.name}`,
     );
 
     // key
@@ -457,7 +457,7 @@ const SCHEMA_ACTION = ({ props }) => {
                 item,
                 index,
                 padding: String(actions.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -467,7 +467,7 @@ const SCHEMA_ACTION = ({ props }) => {
                 required: true,
                 message: 'Select an action.',
                 description: `${chalk.white(
-                    'Action:'
+                    'Action:',
                 )} ${actionList}\n    ${chalk.white('Select:')}`,
                 before: val => actionBefore({ val, actions }),
             },
@@ -485,7 +485,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 item,
                 index,
                 padding: String(types.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -496,7 +496,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 item,
                 index,
                 padding: String(styles.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -507,7 +507,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 item,
                 index,
                 padding: String(groups.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -520,7 +520,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 required: true,
                 message: ` Select the element type`,
                 description: `${chalk.white(
-                    'Type:'
+                    'Type:',
                 )} ${typeList}\n    ${chalk.white('Select:')}`,
                 before: val => typeBefore({ val, types }),
             },
@@ -529,7 +529,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 message:
                     'Select the menu group or enter the name of a new group.',
                 description: `${chalk.white(
-                    'Menu Group:'
+                    'Menu Group:',
                 )} ${groupList}\n    ${chalk.white('Select:')}`,
                 before: val => groupBefore({ val, groups }),
             },
@@ -543,7 +543,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 pattern: /^y|n|Y|N/,
                 message: '',
                 description: `${chalk.white(
-                    'Overwrite existing component?'
+                    'Overwrite existing component?',
                 )} ${chalk.cyan('(Y/N):')}`,
                 ask: () => {
                     try {
@@ -560,7 +560,7 @@ const SCHEMA_CREATE = ({ props }) => {
                             op.get(
                                 m,
                                 `menu.${group}.elements.${name}`,
-                                false
+                                false,
                             ) !== false
                         );
                     } catch (err) {
@@ -585,7 +585,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 pattern: /^y|n/i,
                 default: 'Y',
                 description: `${chalk.white('Documentation?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => canOverwrite,
                 before: val => {
@@ -596,30 +596,30 @@ const SCHEMA_CREATE = ({ props }) => {
                 pattern: /^y|n/i,
                 default: 'Y',
                 description: `${chalk.white('Show Code?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => canOverwrite,
                 before: val => {
                     return String(val).toLowerCase() === 'y';
                 },
             },
-            dna: {
-                pattern: /^y|n|Y|N/,
-                default: 'Y',
-                description: `${chalk.white('Show DNA?')} ${chalk.cyan(
-                    '(Y/N):'
-                )}`,
-                ask: () => canOverwrite,
-                before: val => {
-                    return String(val).toLowerCase() === 'y';
-                },
-            },
+            // dna: {
+            //     pattern: /^y|n|Y|N/,
+            //     default: 'Y',
+            //     description: `${chalk.white('Show DNA?')} ${chalk.cyan(
+            //         '(Y/N):'
+            //     )}`,
+            //     ask: () => canOverwrite,
+            //     before: val => {
+            //         return String(val).toLowerCase() === 'y';
+            //     },
+            // },
             stylesheet: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
                 message: ' Add a style sheet?',
                 description: `${chalk.white('Stylesheet?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 ask: () => canOverwrite,
                 before: val => {
@@ -631,7 +631,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 pattern: /[0-9\s]/,
                 message: 'Select a number or list of numbers. Example: 1 2 3',
                 description: `${chalk.white(
-                    'Import stylesheet to:'
+                    'Import stylesheet to:',
                 )} ${styleList}\n    ${chalk.white('Select:')}`,
                 ask: () => {
                     try {
@@ -656,7 +656,7 @@ const SCHEMA_GROUP = ({ props }) => {
                 item,
                 index,
                 padding: String(groups.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -666,7 +666,7 @@ const SCHEMA_GROUP = ({ props }) => {
                 required: true,
                 message: 'Select the menu group.',
                 description: `${chalk.white(
-                    'Menu Group:'
+                    'Menu Group:',
                 )} ${groupList}\n    ${chalk.white('Select:')}`,
                 before: val => groupBefore({ val, groups }),
             },
@@ -682,7 +682,7 @@ const SCHEMA_ELEMENT = ({ props, group }) => {
                 item,
                 index,
                 padding: String(elements.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -692,7 +692,7 @@ const SCHEMA_ELEMENT = ({ props, group }) => {
                 required: true,
                 message: 'Select the element.',
                 description: `${chalk.white(
-                    'Element:'
+                    'Element:',
                 )} ${elementList}\n    ${chalk.white('Select:')}`,
                 before: input => {
                     if (!isNaN(input)) {
@@ -731,7 +731,7 @@ const SCHEMA_UPDATE = ({ props, params }) => {
                 item,
                 index,
                 padding: String(types.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -745,7 +745,7 @@ const SCHEMA_UPDATE = ({ props, params }) => {
                 default: type,
                 message: ` Select the element type`,
                 description: `${chalk.white(
-                    'Type:'
+                    'Type:',
                 )} ${typeList}\n    ${chalk.white('Select:')}`,
                 before: val => typeBefore({ val, types }),
             },
@@ -763,14 +763,14 @@ const SCHEMA_UPDATE = ({ props, params }) => {
             menuOrder: {
                 default: menuOrder,
                 description: `${chalk.white('Menu Order:')} ${chalk.cyan(
-                    `[0-${groupElements.length - 1}]`
+                    `[0-${groupElements.length - 1}]`,
                 )}`,
             },
             documentation: {
                 pattern: /^y|n/i,
                 default: hideDocs ? 'N' : 'Y',
                 description: `${chalk.white('Documentation?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 before: val => {
                     return String(val).toLowerCase() === 'y';
@@ -780,22 +780,22 @@ const SCHEMA_UPDATE = ({ props, params }) => {
                 pattern: /^y|n/i,
                 default: hideCode ? 'N' : 'Y',
                 description: `${chalk.white('Show Code?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 before: val => {
                     return String(val).toLowerCase() === 'y';
                 },
             },
-            dna: {
-                pattern: /^y|n|Y|N/,
-                default: hideDna ? 'N' : 'Y',
-                description: `${chalk.white('Show DNA?')} ${chalk.cyan(
-                    '(Y/N):'
-                )}`,
-                before: val => {
-                    return String(val).toLowerCase() === 'y';
-                },
-            },
+            // dna: {
+            //     pattern: /^y|n|Y|N/,
+            //     default: hideDna ? 'N' : 'Y',
+            //     description: `${chalk.white('Show DNA?')} ${chalk.cyan(
+            //         '(Y/N):'
+            //     )}`,
+            //     before: val => {
+            //         return String(val).toLowerCase() === 'y';
+            //     },
+            // },
         },
     };
 };
@@ -846,7 +846,7 @@ const ACTION_CREATE = ({ opt, props }) => {
         console.log(
             prettier.format(JSON.stringify(preflight), {
                 parser: 'json-stringify',
-            })
+            }),
         );
 
         CONFIRM({ props, params })
@@ -912,9 +912,9 @@ const ACTION_REMOVE = ({ opt, props }) => {
             const key = `menu.${group}.elements.${ID}`;
             const element = op.get(m, key, {});
             const description = `${chalk.white(
-                'Are you sure you want to delete'
+                'Are you sure you want to delete',
             )} ${chalk.cyan(`${group}.${ID}`)} ${chalk.white(
-                'element?'
+                'element?',
             )} ${chalk.cyan('(Y/N):')}`;
 
             params['key'] = key;
@@ -922,7 +922,7 @@ const ACTION_REMOVE = ({ opt, props }) => {
             params['element'] = element;
             params['name'] = path.basename(element.dna);
             params['destination'] = path.normalize(
-                `${cwd}/src/app/${element.dna}`
+                `${cwd}/src/app/${element.dna}`,
             );
 
             return CONFIRM({ props, params, description });
@@ -1020,7 +1020,7 @@ const ACTION_UPDATE = ({ opt, props }) => {
             console.log(
                 prettier.format(JSON.stringify(params.new), {
                     parser: 'json-stringify',
-                })
+                }),
             );
 
             return CONFIRM({ props, params });
@@ -1087,6 +1087,7 @@ const ACTION = ({ action, opt, props }) => {
  * COMMAND Function
  * @description Function that executes program.command()
  */
+// .option('--dna [dna]', 'Show DNA info.')
 const COMMAND = ({ program, props }) =>
     program
         .command(NAME)
@@ -1101,7 +1102,6 @@ const COMMAND = ({ program, props }) =>
         .option('--stylesheet [stylesheet]', 'Add a stylesheet.')
         .option('--documentation [documentation]', 'Show readme.')
         .option('--code [code]', 'Show Code view.')
-        .option('--dna [dna]', 'Show DNA info.')
         .on('--help', HELP);
 
 /**
