@@ -213,7 +213,6 @@ export default class Toolkit extends Component {
 
         switch (type) {
             case 'toggle-link':
-            case 'toggle-docs':
             case 'toggle-code': {
                 let k = type === 'toggle-code' ? 'codes' : 'docs';
                 k = type === 'toggle-link' ? 'link' : k;

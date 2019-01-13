@@ -7,6 +7,8 @@
 import op from 'object-path';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import React, { Component, Fragment } from 'react';
+import { store } from 'reactium-core/app';
+import deps from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -21,7 +23,6 @@ export default class Docs extends Component {
         prefs: {},
         height: 'auto',
         speed: 0.2,
-        visible: true,
         id: null,
         update: null,
     };
@@ -31,10 +32,9 @@ export default class Docs extends Component {
 
         this.state = {
             height: this.props.height,
-            prefs: this.props.prefs,
-            visible: this.props.visible,
         };
 
+        this.prefs = {};
         this.cont = React.createRef();
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
@@ -54,44 +54,12 @@ export default class Docs extends Component {
         }
     }
 
-    getPref(newState = {}, key, vals) {
-        const { prefs = {} } = this.state;
-
-        vals.forEach((v, i) => {
-            if (op.has(newState, key)) {
-                return;
-            }
-            if (typeof v !== 'undefined') {
-                newState[key] = v;
-            }
-        });
-
-        return newState;
-    }
-
     applyPrefs() {
-        let newState = {};
-        newState = this.applyVisiblePref(newState);
-
-        if (Object.keys(newState).length > 0) {
-            this.setState(newState);
-        }
-    }
-
-    applyVisiblePref(newState = {}) {
-        const { id } = this.props;
-        const { prefs = {}, visible = false } = this.state;
-
-        const vals = [
-            op.get(prefs, `docs.${id}`),
-            op.get(prefs, 'docs.all', visible),
-        ];
-
-        return this.getPref(newState, 'visible', vals);
+        this.prefs = store.getState().Toolkit.prefs;
     }
 
     open() {
-        const { speed } = this.props;
+        const { id, speed } = this.props;
         const _self = this;
 
         TweenMax.set(this.cont.current, { height: 'auto', display: 'block' });
@@ -100,13 +68,19 @@ export default class Docs extends Component {
             overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({ visible: true, height: 'auto' });
+                _self.setState({ height: 'auto' });
+                store.dispatch(
+                    deps.actions.Toolkit.set({
+                        key: `prefs.docs.${id}`,
+                        value: true,
+                    }),
+                );
             },
         });
     }
 
     close() {
-        const { speed } = this.props;
+        const { id, speed } = this.props;
         const _self = this;
 
         TweenMax.to(this.cont.current, speed, {
@@ -114,28 +88,59 @@ export default class Docs extends Component {
             overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({ visible: false, height: 0 });
+                _self.setState({ height: 0 });
+                store.dispatch(
+                    deps.actions.Toolkit.set({
+                        key: `prefs.docs.${id}`,
+                        value: false,
+                    }),
+                );
             },
         });
     }
 
     toggle() {
-        const { visible } = this.state;
-
-        if (visible !== true) {
+        if (this.visible() !== true) {
             this.open();
         } else {
             this.close();
         }
     }
 
+    getPref(key, prefs) {
+        prefs = prefs || store.getState().Toolkit.prefs;
+        const { id } = this.props;
+
+        let def, pref;
+
+        switch (key) {
+            case 'visible':
+                pref = `docs.${id}`;
+                def = 'docs.all';
+                break;
+
+            case 'theme':
+                pref = `codeColor.${id}`;
+                def = 'codeColor.all';
+                break;
+        }
+
+        return op.get(prefs, pref, op.get(prefs, def, false));
+    }
+
+    visible() {
+        return this.getPref('visible');
+    }
+
+    theme() {
+        return this.getPref('theme');
+    }
+
     render() {
-        const { visible, height } = this.state;
-
-        const { component: Component, title, update, prefs } = this.props;
-
-        const display = visible === true ? 'block' : 'none';
-        const theme = prefs.codeColor.all;
+        const { height } = this.state;
+        const { component: Component, title, update } = this.props;
+        const display = this.visible() ? 'block' : 'none';
+        const theme = this.theme();
 
         return !Component ? null : (
             <div
