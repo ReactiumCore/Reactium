@@ -1,11 +1,9 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-
+import React, { Component } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -13,67 +11,56 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
+const noop = () => {};
+
 export default class Search extends Component {
+    static defaultProps = {
+        text: null,
+        onChange: noop,
+        onSearchClear: noop,
+    };
+
     constructor(props) {
         super(props);
-
-        this.input = null;
-        this.state = { ...this.props };
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
+        this.state = {};
+        this.input = React.createRef();
     }
 
     onInput(e) {
-        let { onChange } = this.state;
-
-        if (typeof onChange === 'function') {
-            onChange(e);
-        }
+        const { onChange } = this.props;
+        onChange(e);
     }
 
     onSearchClear(e) {
-        let { onSearchClear } = this.state;
-        this.input.value = '';
-
-        this.input.focus();
+        const { onSearchClear } = this.props;
+        this.input.current.value = '';
+        this.input.current.focus();
         onSearchClear();
     }
 
-
     render() {
-        let { text } = this.state;
+        const { text } = this.props;
 
         return (
-            <div className={'re-toolkit-search'}>
+            <div className='re-toolkit-search'>
                 <input
-                    ref={(elm) => { this.input = elm; }}
-                    name={'search'}
-                    type={'text'}
-                    placeholder={'search'}
+                    type='text'
+                    name='search'
+                    ref={this.input}
+                    placeholder='search'
+                    onKeyUp={this.onInput.bind(this)}
                     onChange={this.onInput.bind(this)}
-                    onKeyUp={this.onInput.bind(this)} />
+                />
 
-                <button type={'button'} className={'re-toolkit-search-clear'} onClick={this.onSearchClear.bind(this)}>
-                    <svg><use xlinkHref={'#re-icon-close'}></use></svg>
+                <button
+                    type='button'
+                    className='re-toolkit-search-clear'
+                    onClick={this.onSearchClear.bind(this)}>
+                    <svg>
+                        <use xlinkHref='#re-icon-close' />
+                    </svg>
                 </button>
             </div>
         );
     }
 }
-
-Search.defaultProps = {
-    text: null,
-    onChange: null,
-    onSearchClear: null,
-};

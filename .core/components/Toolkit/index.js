@@ -18,9 +18,9 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    mount: () => dispatch(deps.actions.Toolkit.mount()),
+    mount: params => dispatch(deps.actions.Toolkit.mount(params)),
     menuItemClick: url => dispatch(deps.actions.Toolkit.menuItemClick(url)),
-    menuToggle: elm => dispatch(deps.actions.Toolkit.menuToggle(elm)),
+    menuToggle: () => dispatch(deps.actions.Toolkit.menuToggle()),
     notice: {
         hide: params => dispatch(deps.actions.Toolkit.notice.hide(params)),
         show: params => dispatch(deps.actions.Toolkit.notice.show(params)),

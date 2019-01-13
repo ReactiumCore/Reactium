@@ -18,10 +18,15 @@
     h1 {
         font-size: 16px;
         padding: 0;
+        flex-grow: 1;
     }
 
     small {
         color: $gray;
+    }
+
+    select {
+        margin-left: 10px;
     }
 }
 

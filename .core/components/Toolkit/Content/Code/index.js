@@ -15,6 +15,8 @@ import PropTypes from 'prop-types';
 import prettier from 'prettier/standalone';
 import parserBabylon from 'prettier/parser-babylon';
 import parserHtml from 'prettier/parser-html';
+import { store } from 'reactium-core/app';
+import deps from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -23,11 +25,34 @@ import parserHtml from 'prettier/parser-html';
  */
 
 export default class Code extends Component {
+    static contextTypes = {
+        store: PropTypes.object,
+    };
+
+    static defaultProps = {
+        prefs: {},
+        onButtonClick: null,
+        height: 'auto',
+        speed: 0.2,
+        visible: false,
+        component: null,
+        group: null,
+        id: null,
+        theme: 'light',
+        wrap: false,
+    };
+
     constructor(props) {
         super(props);
 
-        this.cont = null;
-        this.state = { ...this.props };
+        this.cont = React.createRef();
+        this.state = {
+            height: this.props.height,
+            prefs: this.props.prefs,
+            theme: this.props.theme,
+            visible: this.props.visible,
+            update: this.props.update,
+        };
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
         this.toggle = this.toggle.bind(this);
@@ -48,25 +73,19 @@ export default class Code extends Component {
 
     componentDidMount() {
         this.applyPrefs();
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { update: lastUpdate } = prevProps;
+        const { update, prefs } = this.props;
+
+        if (update !== lastUpdate) {
+            this.applyPrefs();
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            let newState = {
-                ...prevState,
-                ...nextProps,
-            };
-            return newState;
-        });
-
-        this.applyPrefs();
-    }
-
     getPref(newState = {}, key, vals) {
-        let { prefs = {} } = this.state;
+        const { prefs = {} } = this.state;
 
         vals = !Array.isArray(vals) ? [vals] : vals;
 
@@ -98,9 +117,9 @@ export default class Code extends Component {
     }
 
     applyThemePref(newState = {}) {
-        let { prefs = {}, theme, id } = this.state;
-
-        let vals = [
+        const { id } = this.props;
+        const { prefs = {}, theme } = this.state;
+        const vals = [
             op.get(prefs, `codeColor.${id}`),
             op.get(prefs, `codeColor.all`, theme),
         ];
@@ -109,17 +128,17 @@ export default class Code extends Component {
     }
 
     applyWrapPref(newState = {}) {
-        let { prefs = {} } = this.state;
-
+        const { prefs = {} } = this.state;
         return this.getPref(
             newState,
             'wrap',
-            op.get(prefs, `syntax.wrap`, false)
+            op.get(prefs, `syntax.wrap`, false),
         );
     }
 
     applyVisiblePref(newState = {}) {
-        let { prefs = {}, visible = false, id } = this.state;
+        const { id } = this.props;
+        const { prefs = {}, visible = false } = this.state;
 
         let vals = [
             op.get(prefs, `code.${id}`),
@@ -130,52 +149,41 @@ export default class Code extends Component {
     }
 
     onCopyClick(e) {
-        let { component: Component, onButtonClick } = this.state;
-
-        let markup = prettier.format(
+        const { component: Component, onButtonClick } = this.props;
+        const markup = prettier.format(
             renderToStaticMarkup(
                 <Provider store={this.context.store}>
                     <Component />
-                </Provider>
+                </Provider>,
             ),
-            this.prettierOptions
+            this.prettierOptions,
         );
 
         copy(markup);
 
         if (typeof onButtonClick === 'function') {
             e['type'] = 'copy';
-            onButtonClick(e, this, markup);
+            onButtonClick(e, this);
         }
     }
 
     onThemeClick(e) {
-        let { theme, onButtonClick } = this.state;
-
+        let { theme } = this.state;
         theme = theme === 'dark' ? 'light' : 'dark';
-
-        this.setState({ theme });
-
-        if (typeof onButtonClick === 'function') {
-            e['type'] = 'toggle-codeColor';
-
-            let data = { ...this };
-            data.state.theme = theme;
-
-            onButtonClick(e, data);
-        }
+        store.dispatch(
+            deps.actions.Toolkit.set({
+                key: 'prefs.codeColor.all',
+                value: theme,
+            }),
+        );
     }
 
     open() {
-        if (!this.cont) {
-            return;
-        }
+        const { speed } = this.props;
+        const _self = this;
 
-        let { speed } = this.state;
-        let _self = this;
-
-        TweenMax.set(this.cont, { height: 'auto', display: 'block' });
-        TweenMax.from(this.cont, speed, {
+        TweenMax.set(this.cont.current, { height: 'auto', display: 'block' });
+        TweenMax.from(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
@@ -186,14 +194,10 @@ export default class Code extends Component {
     }
 
     close() {
-        if (!this.cont) {
-            return;
-        }
+        const { speed } = this.props;
+        const _self = this;
 
-        let { speed } = this.state;
-        let _self = this;
-
-        TweenMax.to(this.cont, speed, {
+        TweenMax.to(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
@@ -204,7 +208,7 @@ export default class Code extends Component {
     }
 
     toggle() {
-        let { visible } = this.state;
+        const { visible } = this.state;
 
         if (visible !== true) {
             this.open();
@@ -214,7 +218,7 @@ export default class Code extends Component {
     }
 
     themes(theme = 'dark') {
-        let thms = {
+        const thms = {
             dark: vs2015,
             light: vs,
         };
@@ -226,35 +230,30 @@ export default class Code extends Component {
         const html = renderToStaticMarkup(
             <Provider store={this.context.store}>
                 <Component />
-            </Provider>
+            </Provider>,
         );
 
         return prettier.format(html, this.prettierOptions);
     }
 
     render() {
-        let {
-            component: Component,
-            visible,
-            height,
-            theme = 'dark',
-        } = this.state;
+        const { component: Component } = this.props;
 
         if (!Component) {
             return null;
         }
 
-        let type = typeof Component;
-        let style = this.themes(theme);
-        let display = visible === true ? 'block' : 'none';
+        const { visible, height, theme = 'dark' } = this.state;
+
+        const type = typeof Component;
+        const style = this.themes(theme);
+        const display = visible === true ? 'block' : 'none';
 
         switch (type) {
             case 'function': {
                 return (
                     <div
-                        ref={elm => {
-                            this.cont = elm;
-                        }}
+                        ref={this.cont}
                         className={'re-toolkit-code-view'}
                         style={{ height, display }}>
                         <div className={'re-toolkit-card-heading thin'}>
@@ -292,11 +291,9 @@ export default class Code extends Component {
             default: {
                 return (
                     <div
-                        ref={elm => {
-                            this.cont = elm;
-                        }}
-                        className={'re-toolkit-code-view'}
-                        style={{ height, display }}>
+                        ref={this.cont}
+                        style={{ height, display }}
+                        className={'re-toolkit-code-view'}>
                         <div className={'re-toolkit-card-heading thin'}>
                             <small>
                                 <em>
@@ -311,20 +308,3 @@ export default class Code extends Component {
         }
     }
 }
-
-Code.defaultProps = {
-    prefs: {},
-    onButtonClick: null,
-    height: 'auto',
-    speed: 0.2,
-    visible: false,
-    component: null,
-    group: null,
-    id: null,
-    theme: 'light',
-    wrap: false,
-};
-
-Code.contextTypes = {
-    store: PropTypes.object,
-};

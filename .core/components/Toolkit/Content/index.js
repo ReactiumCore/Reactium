@@ -31,8 +31,6 @@ export default class Content extends Component {
         this.previews = {};
         this.watcher = null;
         this.state = {};
-        this.onWatch = this.onWatch.bind(this);
-        this.registerPreview = this.registerPreview.bind(this);
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
     }
 
@@ -40,14 +38,6 @@ export default class Content extends Component {
     componentDidMount() {
         if (this.props.hasOwnProperty('mount')) {
             this.props.mount(this);
-        }
-
-        this.watcher = setInterval(this.onWatch, this.props.watchTimer);
-    }
-
-    componentWillUnmount() {
-        if (this.watcher) {
-            clearInterval(this.watcher);
         }
     }
 
@@ -81,11 +71,6 @@ export default class Content extends Component {
         }
     }
 
-    onWatch() {
-        // Resize previews
-        Object.values(this.previews).forEach(preview => preview.resize());
-    }
-
     // Registers
     registerCard({ elm, id }) {
         if (!elm) {
@@ -115,13 +100,6 @@ export default class Content extends Component {
         this.link[id] = elm;
     }
 
-    registerPreview({ elm, id }) {
-        if (!elm) {
-            return;
-        }
-        this.previews[id] = elm;
-    }
-
     // Renderers
     renderCards({ data, card, group }) {
         let {
@@ -137,7 +115,6 @@ export default class Content extends Component {
         this.codes = {};
         this.docs = {};
         this.link = {};
-        this.previews = {};
 
         return Object.keys(data).map((key, k) => {
             let id = [group, key].join('_');
@@ -203,9 +180,6 @@ export default class Content extends Component {
                         this.registerCard({ elm, id });
                     }}>
                     <Preview
-                        ref={elm => {
-                            this.registerPreview({ elm, id });
-                        }}
                         component={component}
                         update={update}
                         group={group}
@@ -218,7 +192,7 @@ export default class Content extends Component {
                             ref={elm => {
                                 this.registerCode({ elm, id });
                             }}
-                            onButtonClick={onCopyClick}
+                            onButtonClick={onButtonClick}
                             component={component}
                             update={update}
                             prefs={prefs}
