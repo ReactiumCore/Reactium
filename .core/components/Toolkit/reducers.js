@@ -36,7 +36,7 @@ export default (state = {}, action) => {
         case deps.actionTypes.TOOLKIT_MENU_TOGGLE:
             let { animating = false } = state;
 
-            newState = { ...state, animating: !animating };
+            newState = { ...state, animating: !animating, update: Date.now() };
 
             return newState;
 

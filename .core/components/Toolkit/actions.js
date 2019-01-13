@@ -30,7 +30,12 @@ export default {
         }
     },
 
-    menuToggle: elm => (dispatch, getState) => {
+    menuToggle: () => (dispatch, getState) => {
+        const elm = document.getElementById('reactium-sidebar');
+        if (!elm) {
+            return;
+        }
+
         let state = getState()['Toolkit'];
 
         let { animating = false } = state;

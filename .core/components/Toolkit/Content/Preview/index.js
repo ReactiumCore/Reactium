@@ -53,14 +53,18 @@ export default class Preview extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { style: prevStyle } = prevProps;
-        const { style: currStyle } = this.props;
+        const { style: prevStyle, update: lastUpdate } = prevProps;
+        const { style: currStyle, update } = this.props;
 
         if (this.iframe.current && prevStyle !== currStyle) {
             const stylesheet = this.iframe.current.node.contentWindow.document.head.querySelector(
                 'link[rel=stylesheet]',
             );
             stylesheet.setAttribute('href', currStyle);
+        }
+
+        if (update !== lastUpdate) {
+            this.resize();
         }
     }
 

@@ -188,7 +188,7 @@ export default class Toolkit extends Component {
     }
 
     toggleMenu() {
-        this.props.menuToggle(this.sidebar.container);
+        this.props.menuToggle();
         this.setState({ update: Date.now() });
     }
 
@@ -339,6 +339,7 @@ export default class Toolkit extends Component {
 
                 <Header
                     {...header}
+                    update={update}
                     themes={themes}
                     onThemeChange={this.onThemeChange.bind(this)}
                 />
@@ -352,9 +353,6 @@ export default class Toolkit extends Component {
                         toolbar={toolbar}
                         filters={filters}
                         group={group}
-                        ref={elm => {
-                            this.sidebar = elm;
-                        }}
                         onFilterClick={this.onFilterClick.bind(this)}
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
                         onMenuItemToggle={this.onMenuItemToggle.bind(this)}
