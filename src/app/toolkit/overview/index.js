@@ -1,7 +1,8 @@
-import React from "react";
-import Card from "reactium-core/components/Toolkit/Content/Card";
-import Docs from "reactium-core/components/Toolkit/Content/Docs";
-import Markdown from "reactium-core/components/Toolkit/Markdown";
+import React from 'react';
+import Card from 'reactium-core/components/Toolkit/Content/Card';
+import Docs from 'reactium-core/components/Toolkit/Content/Docs';
+import Markdown from 'reactium-core/components/Toolkit/Markdown';
+import { store } from 'reactium-core/app';
 
 /**
  * -----------------------------------------------------------------------------
@@ -11,9 +12,22 @@ import Markdown from "reactium-core/components/Toolkit/Markdown";
  * -----------------------------------------------------------------------------
  */
 const content = `
-# Style Guide
----------
-Add some content about this design system here.
+### Overview
+
+Add some content about this design system by editing:
+
+${'```javascript'}
+/src/app/toolkit/overview/index.js
+${'```'}
+
+Need help on how to create Design System elements?
+
+[Design System Documentation](https://reactium.io/docs/guide/design-system).
+
+#### Code Example
+${'```javascript'}
+console.log('Put some code here if you want to show some examples of how to do stuff');
+${'```'}
 `;
 
 /**
@@ -21,10 +35,17 @@ Add some content about this design system here.
  * DO NOT EDIT BELOW HERE
  * -----------------------------------------------------------------------------
  */
-const Comp = () => <Markdown>{content}</Markdown>;
-const overview = () => (
-    <Card title={"Atomic Thinking"}>
-        <Docs component={Comp} id={"overview"} />
-    </Card>
+const Comp = () => (
+    <Markdown theme={store.getState().Toolkit.prefs.codeColor.all}>
+        {content}
+    </Markdown>
 );
+const overview = () => {
+    return (
+        <Card title={'Reactium Style Guide'}>
+            <Docs component={Comp} id={'overview'} visible={true} />
+        </Card>
+    );
+};
+
 export default overview;
