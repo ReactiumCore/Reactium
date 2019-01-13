@@ -18,7 +18,6 @@ import deps from 'dependencies';
 
 export default class Docs extends Component {
     static defaultProps = {
-        theme: 'dark',
         title: null,
         prefs: {},
         height: 'auto',
@@ -129,7 +128,8 @@ export default class Docs extends Component {
     }
 
     visible() {
-        return this.getPref('visible');
+        const { visible } = this.props;
+        return visible === true ? true : this.getPref('visible');
     }
 
     theme() {
