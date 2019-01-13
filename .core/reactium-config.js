@@ -33,7 +33,6 @@ module.exports = {
                     'node-sass': '^4.11.0',
                     'node-sass-tilde-importer': '^1.0.2',
                     'redux-devtools': '^3.5.0',
-                    'redux-super-thunk': '^0.0.7',
                 },
                 remove: [
                     'atomic-reactor-cli',
@@ -54,6 +53,7 @@ module.exports = {
                     prettier: '^1.15.1',
                     'react-frame-component': '^4.0.1',
                     'redbox-react': '^1.6.0',
+                    'redux-super-thunk': '^0.0.7',
                     xss: '^1.0.3',
                 },
                 remove: ['beautify'],
