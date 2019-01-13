@@ -28,6 +28,10 @@ const libraryTools = require('./manifest/library-tools');
 const rootPath = path.resolve(__dirname, '..');
 const { fork } = require('child_process');
 
+// For backward compatibility with gulp override tasks using run-sequence module
+// make compatible with gulp4
+require('module-alias').addAlias('run-sequence', 'gulp4-run-sequence');
+
 const reactium = (gulp, config, webpackConfig) => {
     const task = require('./get-task')(gulp);
 

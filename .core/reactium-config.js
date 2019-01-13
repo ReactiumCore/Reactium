@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.4.0',
+    version: '2.4.1',
     semver: '^2.0.0',
     update: {
         package: {
@@ -23,7 +23,9 @@ module.exports = {
                     'fs-extra': '^7.0.1',
                     'fs-readdir-recursive': '^1.1.0',
                     gulp: '^4.0.0',
+                    'gulp4-run-sequence': '^0.2.1',
                     handlebars: '^4.0.12',
+                    'module-alias': '^2.1.0',
                     ora: '^3.0.0',
                     slugify: '^1.3.3',
                     'webpack-filter-warnings-plugin': '^1.2.0',
@@ -41,6 +43,7 @@ module.exports = {
                     'babel-preset-env',
                     'babel-preset-react',
                     'babel-preset-stage-2',
+                    'run-sequence',
                 ],
             },
             dependencies: {
