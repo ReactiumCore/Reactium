@@ -69,7 +69,7 @@ const scripts = (req, res) => {
 
         scriptTags = Object.values(assetsByChunkName)
             .map(chunk =>
-                normalizeAssets(chunk).filter(path => path.endsWith('.js'))
+                normalizeAssets(chunk).filter(path => path.endsWith('.js')),
             )
             .reduce((files, chunk) => files.concat(chunk), [])
             .sort(prioritize('vendors.js'))
@@ -112,6 +112,10 @@ export default (req, res, context) => {
                 op.has(localTemplate, 'styles') && !isToolkit(req.path)
                     ? localTemplate.styles(req)
                     : req.styles;
+        } else {
+            console.warn(
+                `${rootPath}/src/app/server/template/${renderMode}.js is out of date, and will not be used. Use 'arcli server template' command to update.`,
+            );
         }
     }
 

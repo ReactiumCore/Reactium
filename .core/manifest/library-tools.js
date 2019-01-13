@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const op = require('object-path');
 const hb = require('handlebars');
-const gulpConfig = require('./gulp.config');
-const rootPath = path.resolve(__dirname, '..');
+const gulpConfig = require('../gulp.config');
+const rootPath = path.resolve(__dirname, '../..');
 
 const parseDomains = (imports = []) =>
     imports
@@ -22,7 +22,7 @@ const createLibExports = () => {
     try {
         const template = hb.compile(
             fs.readFileSync(
-                path.resolve(__dirname, 'libraries/libs-template.hbs'),
+                path.resolve(__dirname, 'templates/lib.hbs'),
                 'utf-8',
             ),
         );
@@ -45,7 +45,7 @@ const createLibExports = () => {
 };
 
 const createPackage = () => {
-    const parent = require('../package.json');
+    const parent = require('../../package.json');
     const libPackage = Object.entries(parent)
         .filter(([key, value]) =>
             [

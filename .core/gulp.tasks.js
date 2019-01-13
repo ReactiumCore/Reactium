@@ -6,7 +6,6 @@ const path = require('path');
 const globby = require('globby');
 const webpack = require('webpack');
 const browserSync = require('browser-sync');
-const runSequence = require('run-sequence');
 const gulpif = require('gulp-if');
 const gulpwatch = require('gulp-watch');
 const run = require('gulp-run');
@@ -24,12 +23,14 @@ const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
 const libraryManifestConfig = require('./manifest.config')(
     reactiumConfig.library,
 );
-const regenManifest = require('./manifest-tools');
-const libraryTools = require('./library-tools');
+const regenManifest = require('./manifest/manifest-tools');
+const libraryTools = require('./manifest/library-tools');
 const rootPath = path.resolve(__dirname, '..');
 const { fork } = require('child_process');
 
 const reactium = (gulp, config, webpackConfig) => {
+    const task = require('./get-task')(gulp);
+
     const env = process.env.NODE_ENV || 'development';
     const assetPath = p => {
         p.dirname = p.dirname.split('assets').pop();
@@ -44,6 +45,8 @@ const reactium = (gulp, config, webpackConfig) => {
     config.port.browsersync = process.env.hasOwnProperty('APP_PORT')
         ? Number(process.env.APP_PORT)
         : Number(config.port.browsersync);
+
+    const noop = done => done();
 
     const timestamp = () => {
         let now = moment().format('HH:mm:ss');
@@ -84,7 +87,7 @@ const reactium = (gulp, config, webpackConfig) => {
         );
     };
 
-    const serve = (done, open = config.open) => {
+    const serve = ({ open } = { open: config.open }) => done => {
         // Serve locally
         // Delay to allow server time to start
 
@@ -127,273 +130,264 @@ const reactium = (gulp, config, webpackConfig) => {
         });
     };
 
-    const tasks = {
-        local: () => {
-            let watch = new run.Command(
-                'cross-env SSR_MODE=off NODE_ENV=development gulp',
-                { verbosity: 3 },
-            );
-            let babel = new run.Command(
-                'cross-env SSR_MODE=off NODE_ENV=development nodemon ./.core/index.js --exec babel-node',
-                { verbosity: 3 },
-            );
+    const local = ({ ssr = false } = {}) => () => {
+        const SSR_MODE = ssr ? 'on' : 'off';
 
-            watch.exec();
-            babel.exec();
-        },
-        'local:ssr': () => {
-            let watch = new run.Command(
-                'cross-env SSR_MODE=on NODE_ENV=development gulp',
-                { verbosity: 3 },
-            );
-            let babel = new run.Command(
-                'cross-env SSR_MODE=on NODE_ENV=development nodemon ./.core/index.js --exec babel-node',
-                { verbosity: 3 },
-            );
+        let watch = new run.Command(
+            `cross-env SSR_MODE=${SSR_MODE} NODE_ENV=development gulp`,
+            { verbosity: 3 },
+        );
+        let babel = new run.Command(
+            `cross-env SSR_MODE=${SSR_MODE} NODE_ENV=development nodemon ./.core/index.js --exec babel-node`,
+            { verbosity: 3 },
+        );
 
-            watch.exec();
-            babel.exec();
-        },
-        assets: () => {
-            // Copy assets dir
-            return gulp
-                .src(config.src.assets)
-                .pipe(rename(assetPath))
-                .pipe(gulp.dest(config.dest.assets));
-        },
-        // stub task to provide sequenced override for application
-        preBuild: done => done(),
-        build: done => {
-            // Build
-            runSequence(
-                ['preBuild'],
-                ['clean'],
-                ['manifest'],
-                ['scripts', 'assets', 'styles'],
-                ['markup', 'json'],
-                ['postBuild'],
-                done,
-            );
-        },
-        // stub task to provide sequenced override for application
-        postBuild: done => done(),
-        postServe: done => done(),
-        clean: done => {
-            // Remove build files
-            del.sync([config.dest.dist]);
-            done();
-        },
-        default: done => {
-            // Default gulp command
-            if (env === 'development') {
-                runSequence(['watch'], () => {
+        watch.exec();
+        babel.exec();
+    };
+
+    const assets = () =>
+        gulp
+            .src(config.src.assets)
+            .pipe(rename(assetPath))
+            .pipe(gulp.dest(config.dest.assets));
+
+    const build = gulp.series(
+        task('preBuild'),
+        task('clean'),
+        task('manifest'),
+        gulp.parallel(task('scripts'), task('assets'), task('styles')),
+        gulp.parallel(task('markup'), task('json')),
+        task('postBuild'),
+    );
+
+    const clean = done => {
+        // Remove build files
+        del.sync([config.dest.dist]);
+        done();
+    };
+
+    const defaultTask = env === 'development' ? task('watch') : task('build');
+
+    const json = () =>
+        gulp.src(config.src.json).pipe(gulp.dest(config.dest.build));
+
+    const manifest = done => {
+        // Generate manifest.js file
+        regenManifest({
+            manifestFilePath: config.src.manifest,
+            manifestConfig,
+        });
+        done();
+    };
+
+    const markup = () =>
+        gulp
+            .src(config.src.markup)
+            .pipe(rename(markupPath))
+            .pipe(gulp.dest(config.dest.markup));
+
+    const scripts = done => {
+        // Compile js
+        let isDev = env === 'development';
+
+        if (!isDev) {
+            webpack(webpackConfig, (err, stats) => {
+                if (err) {
+                    console.log(err());
                     done();
-                });
-            } else {
-                runSequence(['build'], () => {
-                    done();
-                });
-            }
-        },
-        json: () => {
-            return gulp.src(config.src.json).pipe(gulp.dest(config.dest.build));
-        },
-        manifest: done => {
-            // Generate manifest.js file
-            regenManifest({
-                manifestFilePath: config.src.manifest,
-                manifestConfig,
-            });
-            done();
-        },
-        markup: () => {
-            // Copy markup
-            return gulp
-                .src(config.src.markup)
-                .pipe(rename(markupPath))
-                .pipe(gulp.dest(config.dest.markup));
-        },
-        scripts: done => {
-            // Compile js
-            let isDev = env === 'development';
+                    return;
+                }
 
-            if (!isDev) {
-                webpack(webpackConfig, (err, stats) => {
-                    if (err) {
-                        console.log(err());
-                        done();
-                        return;
-                    }
+                let result = stats.toJson();
 
-                    let result = stats.toJson();
-
-                    if (result.errors.length > 0) {
-                        result.errors.forEach(error => {
-                            console.log(error);
-                        });
-
-                        done();
-                        return;
-                    }
-
-                    done();
-                });
-            } else {
-                done();
-            }
-        },
-        serve: done => {
-            serve(done);
-        },
-        'serve-restart': done => {
-            serve(done, false);
-        },
-        library: done => {
-            // Create library
-            runSequence(
-                ['library:manifest', 'library:copy', 'library:dependencies'],
-                done,
-            );
-        },
-        'library:manifest': done => {
-            // Generate manifest.js file
-            regenManifest({
-                manifestFilePath: config.src.library,
-                manifestConfig: libraryManifestConfig,
-            });
-            done();
-        },
-        'library:copy': done => {
-            let babel = new run.Command(
-                `cross-env NODE_ENV=production babel src --out-dir ${
-                    config.dest.library
-                }`,
-                { verbosity: 3 },
-            );
-
-            babel.exec();
-
-            // Make libs/libs.js file
-            libraryTools.createLibExports();
-
-            // Copy static files
-            [config.src.style, config.src.assets].forEach(src =>
-                gulp.src(src).pipe(gulp.dest(config.dest.library)),
-            );
-
-            done();
-        },
-        'library:dependencies': done => {
-            libraryTools.createPackage();
-            done();
-        },
-        static: done => {
-            // Build static site
-            runSequence(['static:copy'], done);
-        },
-        'static:copy': done => {
-            // Copy static files
-            fs.copySync(config.dest.dist, config.dest.static);
-
-            let mainPage = path.normalize(
-                `${config.dest.static}/index-static.html`,
-            );
-
-            if (fs.existsSync(mainPage)) {
-                let newName = mainPage
-                    .split('index-static.html')
-                    .join('index.html');
-                fs.renameSync(mainPage, newName);
-            }
-
-            done();
-        },
-        'styles:colors': done => {
-            if (config.cssPreProcessor === 'sass') {
-                // Currently only works with sass
-                let colorProfiles = globby.sync(config.src.colors);
-                if (colorProfiles.length > 0) {
-                    let colorFileContents =
-                        '// WARNING: Do not directly edit this file !!!!\n// File generated by gulp styles:colors task\n\n';
-                    let colorVars = [];
-                    let colorArr = [];
-
-                    colorProfiles.forEach(filePath => {
-                        let profile = fs.readFileSync(path.resolve(filePath));
-                        profile = JSON.parse(profile);
-
-                        Object.keys(profile).forEach(k => {
-                            let code = profile[k];
-                            let cvar = `$${k}`;
-                            let vline = `${cvar}: ${code};`;
-                            let cname = k.split('color-').join('');
-                            let aline = `\t"${cname}": ${cvar}`;
-
-                            colorVars.push(vline);
-                            colorArr.push(aline);
-                        });
+                if (result.errors.length > 0) {
+                    result.errors.forEach(error => {
+                        console.log(error);
                     });
 
-                    colorFileContents += colorVars.join('\n') + '\n\n\n';
-                    colorFileContents += `$color: (\n${colorArr.join(
-                        ',\n',
-                    )}\n);\n\n\n`;
-                    colorFileContents +=
-                        '@each $clr-name, $clr-code in $color {\n\t.#{$clr-name} { color: $clr-code; }\n\t.bg-#{$clr-name} { background-color: $clr-code; }\n}';
-
-                    fs.ensureFileSync(config.dest.colors);
-                    fs.writeFileSync(
-                        config.dest.colors,
-                        colorFileContents,
-                        'utf8',
-                    );
+                    done();
+                    return;
                 }
-            }
 
-            done();
-        },
-        'styles:compile': () => {
-            // Compile Sass & Less
-            let isDev = env === 'development';
-            let isSass = config.cssPreProcessor === 'sass';
-            let isLess = config.cssPreProcessor === 'less';
-
-            return gulp
-                .src(config.src.style)
-                .pipe(gulpif(isDev, sourcemaps.init()))
-                .pipe(
-                    gulpif(
-                        isSass,
-                        sass({
-                            importer: tildeImporter,
-                            includePaths: config.src.includes,
-                        }).on('error', sass.logError),
-                    ),
-                )
-                .pipe(gulpif(isLess, less({ paths: config.src.includes })))
-                .pipe(prefix(config.browsers))
-                .pipe(gulpif(!isDev, csso()))
-                .pipe(gulpif(isDev, sourcemaps.write()))
-                .pipe(rename({ dirname: '' }))
-                .pipe(gulp.dest(config.dest.style))
-                .pipe(gulpif(isDev, browserSync.stream()));
-        },
-        styles: done => {
-            runSequence(['styles:colors'], ['styles:compile'], done);
-        },
-        watch,
-        watchFork: done => {
-            // Watch for file changes
-            gulp.watch(config.watch.colors, ['styles']);
-            gulp.watch(config.watch.style, ['styles']);
-            gulpwatch(config.watch.markup, watcher);
-            gulpwatch(config.watch.assets, watcher);
-            const scriptWatcher = gulp.watch(config.watch.js, () => {
-                runSequence(['manifest']);
+                done();
             });
-
+        } else {
             done();
-        },
+        }
+    };
+
+    const library = gulp.series(
+        task('library:manifest'),
+        task('library:copy'),
+        task('library:dependencies'),
+    );
+
+    const libraryManifest = done => {
+        // Generate manifest.js file
+        regenManifest({
+            manifestFilePath: config.src.library,
+            manifestConfig: libraryManifestConfig,
+        });
+        done();
+    };
+
+    const libraryCopy = done => {
+        let babel = new run.Command(
+            `cross-env NODE_ENV=production babel src --out-dir ${
+                config.dest.library
+            }`,
+            { verbosity: 3 },
+        );
+
+        babel.exec();
+
+        // Make libs/libs.js file
+        libraryTools.createLibExports();
+
+        // Copy static files
+        [config.src.style, config.src.assets].forEach(src =>
+            gulp.src(src).pipe(gulp.dest(config.dest.library)),
+        );
+
+        done();
+    };
+
+    const libraryDependencies = done => {
+        libraryTools.createPackage();
+        done();
+    };
+
+    const staticTask = task('static:copy');
+
+    const staticCopy = done => {
+        // Copy static files
+        fs.copySync(config.dest.dist, config.dest.static);
+
+        let mainPage = path.normalize(
+            `${config.dest.static}/index-static.html`,
+        );
+
+        if (fs.existsSync(mainPage)) {
+            let newName = mainPage
+                .split('index-static.html')
+                .join('index.html');
+            fs.renameSync(mainPage, newName);
+        }
+
+        done();
+    };
+
+    const stylesColors = done => {
+        if (config.cssPreProcessor === 'sass') {
+            // Currently only works with sass
+            let colorProfiles = globby.sync(config.src.colors);
+            if (colorProfiles.length > 0) {
+                let colorFileContents =
+                    '// WARNING: Do not directly edit this file !!!!\n// File generated by gulp styles:colors task\n\n';
+                let colorVars = [];
+                let colorArr = [];
+
+                colorProfiles.forEach(filePath => {
+                    let profile = fs.readFileSync(path.resolve(filePath));
+                    profile = JSON.parse(profile);
+
+                    Object.keys(profile).forEach(k => {
+                        let code = profile[k];
+                        let cvar = `$${k}`;
+                        let vline = `${cvar}: ${code};`;
+                        let cname = k.split('color-').join('');
+                        let aline = `\t"${cname}": ${cvar}`;
+
+                        colorVars.push(vline);
+                        colorArr.push(aline);
+                    });
+                });
+
+                colorFileContents += colorVars.join('\n') + '\n\n\n';
+                colorFileContents += `$color: (\n${colorArr.join(
+                    ',\n',
+                )}\n);\n\n\n`;
+                colorFileContents +=
+                    '@each $clr-name, $clr-code in $color {\n\t.#{$clr-name} { color: $clr-code; }\n\t.bg-#{$clr-name} { background-color: $clr-code; }\n}';
+
+                fs.ensureFileSync(config.dest.colors);
+                fs.writeFileSync(config.dest.colors, colorFileContents, 'utf8');
+            }
+        }
+
+        done();
+    };
+
+    const stylesCompile = () => {
+        // Compile Sass & Less
+        let isDev = env === 'development';
+        let isSass = config.cssPreProcessor === 'sass';
+        let isLess = config.cssPreProcessor === 'less';
+
+        return gulp
+            .src(config.src.style)
+            .pipe(gulpif(isDev, sourcemaps.init()))
+            .pipe(
+                gulpif(
+                    isSass,
+                    sass({
+                        importer: tildeImporter,
+                        includePaths: config.src.includes,
+                    }).on('error', sass.logError),
+                ),
+            )
+            .pipe(gulpif(isLess, less({ paths: config.src.includes })))
+            .pipe(prefix(config.browsers))
+            .pipe(gulpif(!isDev, csso()))
+            .pipe(gulpif(isDev, sourcemaps.write()))
+            .pipe(rename({ dirname: '' }))
+            .pipe(gulp.dest(config.dest.style))
+            .pipe(gulpif(isDev, browserSync.stream()));
+    };
+
+    const styles = gulp.series(task('styles:colors'), task('styles:compile'));
+
+    const watchFork = done => {
+        // Watch for file changes
+        gulp.watch(config.watch.colors, gulp.task('styles'));
+        gulp.watch(config.watch.style, gulp.task('styles'));
+        gulpwatch(config.watch.markup, watcher);
+        gulpwatch(config.watch.assets, watcher);
+        const scriptWatcher = gulp.watch(
+            config.watch.js,
+            gulp.task('manifest'),
+        );
+        done();
+    };
+
+    const tasks = {
+        local: local(),
+        'local:ssr': local({ ssr: true }),
+        assets,
+        preBuild: noop,
+        build,
+        postBuild: noop,
+        postServe: noop,
+        clean,
+        default: defaultTask,
+        json,
+        manifest,
+        markup,
+        scripts,
+        serve: serve(),
+        'serve-restart': serve({ open: false }),
+        library,
+        'library:manifest': libraryManifest,
+        'library:copy': libraryCopy,
+        'library:dependencies': libraryDependencies,
+        static: staticTask,
+        'static:copy': staticCopy,
+        'styles:colors': stylesColors,
+        'styles:compile': stylesCompile,
+        styles,
+        watch,
+        watchFork,
     };
 
     let tasksOverride = _ => _;
