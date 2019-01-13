@@ -78,4 +78,15 @@ export default {
             default: false,
         },
     ],
+    onSettingsClose: null,
+    onSettingsOpen: null,
+    onSwitchClick: null,
+    visible: false,
+    speed: 0.125,
+    manifest: {},
+    buttons: {
+        header: [
+            { name: 'toggle-settings', title: 'close', icon: '#re-icon-close' },
+        ],
+    },
 };
