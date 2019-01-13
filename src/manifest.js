@@ -57,8 +57,6 @@ module.exports = {
             },
             allServices: {
                 Test: require('components/Demo/Test/services').default,
-                Toolkit: require('reactium-core/components/Toolkit/services')
-                    .default,
             },
             allMiddleware: {
                 redux: require('reactium-core/redux/middleware').default,
@@ -159,10 +157,7 @@ module.exports = {
             },
             allServices: {
                 type: 'services',
-                imports: [
-                    'components/Demo/Test/services',
-                    'reactium-core/components/Toolkit/services',
-                ],
+                imports: ['components/Demo/Test/services'],
             },
             allMiddleware: {
                 type: 'middleware',
