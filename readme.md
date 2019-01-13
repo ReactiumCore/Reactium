@@ -4,6 +4,8 @@
 
 An opinionated framework for creating React + Redux apps.
 
+[Reactium documentation](https://reactium.io/get-started)
+
 ## Quick Start
 
 To run in **front-end only** (no server side rendering) development mode from your project directory for local development:
