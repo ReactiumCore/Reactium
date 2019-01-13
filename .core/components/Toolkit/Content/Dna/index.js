@@ -16,9 +16,25 @@ import _ from 'underscore';
  */
 
 export default class Dna extends Component {
+    static defaultProps = {
+        component: null,
+        height: 'auto',
+        menu: {},
+        prefs: {},
+        speed: 0.2,
+        id: null,
+        visible: false,
+    };
+
     constructor(props) {
         super(props);
 
+        this.state = {
+            prefs: this.props.prefs,
+            visible: this.props.visible,
+        };
+
+        this.cont = React.createRef();
         this.getDependents = this.getDependents.bind(this);
         this.getDependency = this.getDependency.bind(this);
         this.getElements = this.getElements.bind(this);
@@ -26,31 +42,23 @@ export default class Dna extends Component {
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
         this.toggle = this.toggle.bind(this);
-
-        this.state = {
-            ...this.props,
-        };
     }
 
     componentDidMount() {
         this.applyPrefs();
+    }
 
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
+    componentDidUpdate(prevProps) {
+        const { update: lastUpdate } = prevProps;
+        const { update } = this.props;
+
+        if (update !== lastUpdate) {
+            this.applyPrefs();
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-
-        this.applyPrefs();
-    }
-
     getPref(newState = {}, key, vals) {
-        let { prefs = {} } = this.state;
+        const { prefs = {} } = this.state;
 
         vals.forEach((v, i) => {
             if (op.has(newState, key)) {
@@ -74,9 +82,10 @@ export default class Dna extends Component {
     }
 
     applyVisiblePref(newState = {}) {
-        let { prefs = {}, visible = false, id } = this.state;
+        const { id } = this.props;
+        const { prefs = {}, visible = false } = this.state;
 
-        let vals = [
+        const vals = [
             op.get(prefs, `link.${id}`),
             op.get(prefs, 'link.all', visible),
         ];
@@ -85,15 +94,11 @@ export default class Dna extends Component {
     }
 
     open() {
-        if (!this.cont) {
-            return;
-        }
+        const { speed } = this.props;
+        const _self = this;
 
-        let { speed } = this.state;
-        let _self = this;
-
-        TweenMax.set(this.cont, { height: 'auto', display: 'block' });
-        TweenMax.from(this.cont, speed, {
+        TweenMax.set(this.cont.current, { height: 'auto', display: 'block' });
+        TweenMax.from(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
@@ -104,14 +109,10 @@ export default class Dna extends Component {
     }
 
     close() {
-        if (!this.cont) {
-            return;
-        }
+        const { speed } = this.props;
+        const _self = this;
 
-        let { speed } = this.state;
-        let _self = this;
-
-        TweenMax.to(this.cont, speed / 2, {
+        TweenMax.to(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
@@ -122,7 +123,7 @@ export default class Dna extends Component {
     }
 
     toggle() {
-        let { visible } = this.state;
+        const { visible } = this.state;
 
         if (visible !== true) {
             this.open();
@@ -132,7 +133,7 @@ export default class Dna extends Component {
     }
 
     getElements() {
-        let { menu } = this.state;
+        const { menu } = this.props;
         let elements = [];
         _.compact(_.pluck(Object.values(menu), 'elements')).forEach(item => {
             elements = elements.concat(Object.values(item));
@@ -142,15 +143,14 @@ export default class Dna extends Component {
     }
 
     getDependents(component) {
-        let { dna } = this.state;
-
-        let output = [];
+        const { dna } = this.props;
+        const output = [];
 
         if (!op.has(component, 'dependencies')) {
             return output;
         }
 
-        let elements = this.getElements();
+        const elements = this.getElements();
 
         elements.forEach(item => {
             if (!op.has(item, 'dna')) {
@@ -170,8 +170,8 @@ export default class Dna extends Component {
                 return;
             }
 
-            let results = [];
-            let deps = item.component.dependencies();
+            const results = [];
+            const deps = item.component.dependencies();
 
             deps.forEach(str => {
                 if (typeof str !== 'string') {
@@ -180,12 +180,12 @@ export default class Dna extends Component {
                     }
                 }
 
-                let exp = new RegExp('^./node_modules/', 'i');
+                const exp = new RegExp('^./node_modules/', 'i');
                 if (exp.test(str)) {
                     return;
                 }
 
-                let p = str
+                const p = str
                     .split('./src/app/')
                     .join('/')
                     .split('/index.js')
@@ -215,20 +215,19 @@ export default class Dna extends Component {
             return;
         }
 
-        let { menu } = this.state;
+        const { menu } = this.props;
+        const elements = this.getElements();
 
-        let elements = this.getElements();
-
-        let p = str
+        const p = str
             .split('./src/app/')
             .join('/')
             .split('/index.js')
             .join('');
 
-        let item = _.findWhere(elements, { dna: p });
+        const item = _.findWhere(elements, { dna: p });
 
         if (item) {
-            let { route, label } = item;
+            const { route, label } = item;
             return route && label
                 ? () => (
                       <Link to={route} title={str}>
@@ -240,12 +239,12 @@ export default class Dna extends Component {
                   )
                 : null;
         } else {
-            let exp = new RegExp('^./node_modules/', 'i');
+            const exp = new RegExp('^./node_modules/', 'i');
             if (exp.test(str)) {
                 return;
             }
 
-            let cmp = str
+            const cmp = str
                 .split('/')
                 .pop()
                 .split('.js')
@@ -262,24 +261,25 @@ export default class Dna extends Component {
     }
 
     getNPM(str, deps) {
-        let exp = new RegExp('^./node_modules/', 'i');
+        const exp = new RegExp('^./node_modules/', 'i');
         if (!exp.test(str)) {
             return;
         }
 
-        let elements = [];
-        let pkg = str
+        const elements = [];
+
+        const pkg = str
             .split('./node_modules/')
             .join('')
             .split('/')
             .shift();
 
-        let exclude = ['webpack', 'react'];
+        const exclude = ['webpack', 'react', 'core-js'];
         if (exclude.indexOf(pkg) > -1) {
             return;
         }
 
-        let url = `https://www.npmjs.com/package/${pkg}`;
+        const url = `https://www.npmjs.com/package/${pkg}`;
 
         return () => (
             <a href={url} target={'_blank'}>
@@ -293,33 +293,32 @@ export default class Dna extends Component {
             return null;
         }
 
-        let { component, height, visible } = this.state;
+        const { visible } = this.state;
+        const { component, height } = this.props;
 
         if (typeof component === 'undefined' || typeof component === 'string') {
             return null;
         }
 
-        let deps = op.has(component, 'dependencies')
+        const deps = op.has(component, 'dependencies')
             ? component.dependencies()
             : [];
 
-        let display = visible === true ? 'block' : 'none';
+        const display = visible === true ? 'block' : 'none';
 
-        let npm = _.compact(deps.map(item => this.getNPM(item, deps)));
-        let dependencies = _.compact(
-            deps.map(item => this.getDependency(item))
+        const npm = _.compact(deps.map(item => this.getNPM(item, deps)));
+        const dependencies = _.compact(
+            deps.map(item => this.getDependency(item)),
         );
 
-        let dependents = this.getDependents(component);
+        const dependents = this.getDependents(component);
 
-        let count = npm.length + dependencies.length + dependents.length;
+        const count = npm.length + dependencies.length + dependents.length;
 
         if (count < 1) {
             return (
                 <div
-                    ref={elm => {
-                        this.cont = elm;
-                    }}
+                    ref={this.cont}
                     className={'re-toolkit-dna-view'}
                     style={{ height, display }}>
                     <div className={'re-toolkit-card-heading thin'}>DNA</div>
@@ -336,9 +335,7 @@ export default class Dna extends Component {
 
         return (
             <div
-                ref={elm => {
-                    this.cont = elm;
-                }}
+                ref={this.cont}
                 className={'re-toolkit-dna-view'}
                 style={{ height, display }}>
                 {dependents.length > 0 ? (
@@ -397,13 +394,3 @@ export default class Dna extends Component {
         );
     }
 }
-
-Dna.defaultProps = {
-    component: null,
-    height: 'auto',
-    menu: {},
-    prefs: {},
-    speed: 0.2,
-    id: null,
-    visible: false,
-};

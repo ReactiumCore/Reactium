@@ -1,4 +1,3 @@
-
 /**
  * -----------------------------------------------------------------------------
  * Imports
@@ -7,9 +6,8 @@
 import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { renderToStaticMarkup } from 'react-dom/server';
-import React, { Component } from 'react';
 import marked from 'marked';
-
+import React from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -17,63 +15,47 @@ import marked from 'marked';
  * -----------------------------------------------------------------------------
  */
 
-export default class Markdown extends Component {
-    constructor(props) {
-        super(props);
-        this.state        = { ...this.props };
-    }
+const markedRenderer = (theme = 'dark') => {
+    const style = theme === 'dark' ? vs2015 : vs;
+    const rndr = new marked.Renderer();
 
-    componentWillReceiveProps(nextProps) {
-        this.setState((prevState) => {
-            let newState = {
-                ...prevState,
-                ...nextProps,
-            };
-            return newState;
-        });
-    }
+    rndr.code = function(markup, lang) {
+        const hl = renderToStaticMarkup(
+            <SyntaxHighlighter
+                showLineNumbers={true}
+                style={style}
+                customStyle={{ padding: '20px 30px' }}
+                language={lang}>
+                {markup}
+            </SyntaxHighlighter>,
+        );
 
+        return `<div class="re-toolkit-code inline">${hl}</div>`;
+    };
 
-    markedRenderer(theme = 'dark') {
-        let style = (theme === 'dark') ? vs2015 : vs;
+    return rndr;
+};
 
-        let rndr = new marked.Renderer();
+const parseMarkdown = (md, theme = 'dark') => {
+    marked.setOptions({
+        xhtml: true,
+        gfm: true,
+        breaks: true,
+    });
 
-        rndr.code = function (markup, lang) {
+    md = marked(md, { renderer: markedRenderer(theme) });
+    return { __html: md };
+};
 
-            let hl = renderToStaticMarkup(
-                <SyntaxHighlighter
-                    showLineNumbers={true}
-                    style={style}
-                    customStyle={{padding: "20px 30px"}}
-                    language={lang} >
-                    {markup}
-                </SyntaxHighlighter>
-            );
-
-            return `<div class="re-toolkit-code inline">${hl}</div>`;
-        };
-
-        return rndr;
-    }
-
-    parseMarkdown(md, theme = 'dark') {
-        marked.setOptions({
-            xhtml: true,
-            gfm: true,
-            breaks: true,
-        });
-
-        md = marked(md, {renderer: this.markedRenderer(theme)});
-        return {__html: md};
-    }
-
-    render() {
-        let { children, theme } = this.state;
-        return <div className={'markdown'} dangerouslySetInnerHTML={this.parseMarkdown(children, theme)} />;
-    }
-}
+const Markdown = ({ children, theme }) => (
+    <div
+        className='markdown'
+        dangerouslySetInnerHTML={parseMarkdown(children, theme)}
+    />
+);
 
 Markdown.defaultProps = {
     theme: 'dark',
 };
+
+export default Markdown;

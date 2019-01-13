@@ -15,6 +15,8 @@ import PropTypes from 'prop-types';
 import prettier from 'prettier/standalone';
 import parserBabylon from 'prettier/parser-babylon';
 import parserHtml from 'prettier/parser-html';
+import { store } from 'reactium-core/app';
+import deps from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -31,7 +33,7 @@ export default class Code extends Component {
         prefs: {},
         onButtonClick: null,
         height: 'auto',
-        speed: 0.5,
+        speed: 0.2,
         visible: false,
         component: null,
         group: null,
@@ -49,6 +51,7 @@ export default class Code extends Component {
             prefs: this.props.prefs,
             theme: this.props.theme,
             visible: this.props.visible,
+            update: this.props.update,
         };
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
@@ -70,6 +73,15 @@ export default class Code extends Component {
 
     componentDidMount() {
         this.applyPrefs();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { update: lastUpdate } = prevProps;
+        const { update, prefs } = this.props;
+
+        if (update !== lastUpdate) {
+            this.applyPrefs();
+        }
     }
 
     getPref(newState = {}, key, vals) {
@@ -156,21 +168,14 @@ export default class Code extends Component {
     }
 
     onThemeClick(e) {
-        const { onButtonClick } = this.props;
         let { theme } = this.state;
-
         theme = theme === 'dark' ? 'light' : 'dark';
-
-        this.setState({ theme });
-
-        if (typeof onButtonClick === 'function') {
-            e['type'] = 'toggle-codeColor';
-
-            const data = { ...this };
-            data.state.theme = theme;
-
-            onButtonClick(e, data);
-        }
+        store.dispatch(
+            deps.actions.Toolkit.set({
+                key: 'prefs.codeColor.all',
+                value: theme,
+            }),
+        );
     }
 
     open() {

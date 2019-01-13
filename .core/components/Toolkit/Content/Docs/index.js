@@ -7,6 +7,8 @@
 import op from 'object-path';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import React, { Component, Fragment } from 'react';
+import { store } from 'reactium-core/app';
+import deps from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -15,144 +17,134 @@ import React, { Component, Fragment } from 'react';
  */
 
 export default class Docs extends Component {
+    static defaultProps = {
+        theme: 'dark',
+        title: null,
+        prefs: {},
+        height: 'auto',
+        speed: 0.2,
+        id: null,
+        update: null,
+    };
+
     constructor(props) {
         super(props);
 
-        this.cont = null;
-        this.state = { ...this.props };
+        this.state = {
+            height: this.props.height,
+        };
+
+        this.prefs = {};
+        this.cont = React.createRef();
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
         this.toggle = this.toggle.bind(this);
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
+        this.applyPrefs();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { update: lastUpdate } = prevProps;
+        const { update } = this.props;
+
+        if (update !== lastUpdate) {
+            this.applyPrefs();
         }
-
-        this.applyPrefs();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps
-        }));
-
-        this.applyPrefs();
-    }
-
-    getPref(newState = {}, key, vals) {
-        let { prefs = {} } = this.state;
-
-        vals.forEach((v, i) => {
-            if (op.has(newState, key)) {
-                return;
-            }
-            if (typeof v !== 'undefined') {
-                newState[key] = v;
-            }
-        });
-
-        return newState;
     }
 
     applyPrefs() {
-        let newState = {};
-        newState = this.applyThemePref(newState);
-        newState = this.applyVisiblePref(newState);
-
-        if (Object.keys(newState).length > 0) {
-            this.setState(newState);
-        }
-    }
-
-    applyVisiblePref(newState = {}) {
-        let { prefs = {}, visible = false, id } = this.state;
-
-        let vals = [
-            op.get(prefs, `docs.${id}`),
-            op.get(prefs, 'docs.all', visible)
-        ];
-
-        return this.getPref(newState, 'visible', vals);
-    }
-
-    applyThemePref(newState = {}) {
-        let { prefs = {}, theme, id } = this.state;
-
-        let vals = [
-            op.get(prefs, `codeColor.${id}`),
-            op.get(prefs, `codeColor.all`, theme)
-        ];
-
-        return this.getPref(newState, 'theme', vals);
+        this.prefs = store.getState().Toolkit.prefs;
     }
 
     open() {
-        if (!this.cont) {
-            return;
-        }
+        const { id, speed } = this.props;
+        const _self = this;
 
-        let { speed } = this.state;
-        let _self = this;
-
-        TweenMax.set(this.cont, { height: 'auto', display: 'block' });
-        TweenMax.from(this.cont, speed, {
+        TweenMax.set(this.cont.current, { height: 'auto', display: 'block' });
+        TweenMax.from(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({ visible: true, height: 'auto' });
-            }
+                _self.setState({ height: 'auto' });
+                store.dispatch(
+                    deps.actions.Toolkit.set({
+                        key: `prefs.docs.${id}`,
+                        value: true,
+                    }),
+                );
+            },
         });
     }
 
     close() {
-        if (!this.cont) {
-            return;
-        }
+        const { id, speed } = this.props;
+        const _self = this;
 
-        let { speed } = this.state;
-        let _self = this;
-
-        TweenMax.to(this.cont, speed, {
+        TweenMax.to(this.cont.current, speed, {
             height: 0,
             overwrite: 'all',
             ease: Power2.easeInOut,
             onComplete: () => {
-                _self.setState({ visible: false, height: 0 });
-            }
+                _self.setState({ height: 0 });
+                store.dispatch(
+                    deps.actions.Toolkit.set({
+                        key: `prefs.docs.${id}`,
+                        value: false,
+                    }),
+                );
+            },
         });
     }
 
     toggle() {
-        let { visible } = this.state;
-
-        if (visible !== true) {
+        if (this.visible() !== true) {
             this.open();
         } else {
             this.close();
         }
     }
 
-    render() {
-        let {
-            component: Component,
-            visible,
-            height,
-            title,
-            update,
-            theme = 'dark'
-        } = this.state;
+    getPref(key, prefs) {
+        prefs = prefs || store.getState().Toolkit.prefs;
+        const { id } = this.props;
 
-        let display = visible === true ? 'block' : 'none';
+        let def, pref;
+
+        switch (key) {
+            case 'visible':
+                pref = `docs.${id}`;
+                def = 'docs.all';
+                break;
+
+            case 'theme':
+                pref = `codeColor.${id}`;
+                def = 'codeColor.all';
+                break;
+        }
+
+        return op.get(prefs, pref, op.get(prefs, def, false));
+    }
+
+    visible() {
+        return this.getPref('visible');
+    }
+
+    theme() {
+        return this.getPref('theme');
+    }
+
+    render() {
+        const { height } = this.state;
+        const { component: Component, title, update } = this.props;
+        const display = this.visible() ? 'block' : 'none';
+        const theme = this.theme();
 
         return !Component ? null : (
             <div
-                ref={elm => {
-                    this.cont = elm;
-                }}
+                ref={this.cont}
                 className={'re-toolkit-docs-view'}
                 style={{ height, display }}>
                 {title ? (
@@ -168,14 +160,3 @@ export default class Docs extends Component {
         );
     }
 }
-
-Docs.defaultProps = {
-    theme: 'dark',
-    title: null,
-    prefs: {},
-    height: 'auto',
-    speed: 0.2,
-    visible: true,
-    id: null,
-    update: null
-};

@@ -22,6 +22,14 @@ import { Plugins } from 'reactium-core/components/Plugable';
  */
 
 export default class Toolkit extends Component {
+    static defaultProps = {
+        update: Date.now(),
+        prefs: {},
+        filters: [],
+        style: null,
+        showSettings: false,
+    };
+
     constructor(props) {
         super(props);
 
@@ -180,7 +188,7 @@ export default class Toolkit extends Component {
     }
 
     toggleMenu() {
-        this.props.menuToggle(this.sidebar.container);
+        this.props.menuToggle();
         this.setState({ update: Date.now() });
     }
 
@@ -205,7 +213,6 @@ export default class Toolkit extends Component {
 
         switch (type) {
             case 'toggle-link':
-            case 'toggle-docs':
             case 'toggle-code': {
                 let k = type === 'toggle-code' ? 'codes' : 'docs';
                 k = type === 'toggle-link' ? 'link' : k;
@@ -332,6 +339,7 @@ export default class Toolkit extends Component {
 
                 <Header
                     {...header}
+                    update={update}
                     themes={themes}
                     onThemeChange={this.onThemeChange.bind(this)}
                 />
@@ -345,9 +353,6 @@ export default class Toolkit extends Component {
                         toolbar={toolbar}
                         filters={filters}
                         group={group}
-                        ref={elm => {
-                            this.sidebar = elm;
-                        }}
                         onFilterClick={this.onFilterClick.bind(this)}
                         onMenuItemClick={this.onMenuItemClick.bind(this)}
                         onMenuItemToggle={this.onMenuItemToggle.bind(this)}
@@ -398,11 +403,3 @@ export default class Toolkit extends Component {
         );
     }
 }
-
-Toolkit.defaultProps = {
-    update: Date.now(),
-    prefs: {},
-    filters: [],
-    style: null,
-    showSettings: false,
-};
