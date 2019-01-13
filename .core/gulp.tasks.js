@@ -23,8 +23,8 @@ const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
 const libraryManifestConfig = require('./manifest.config')(
     reactiumConfig.library,
 );
-const regenManifest = require('./manifest-tools');
-const libraryTools = require('./library-tools');
+const regenManifest = require('./manifest/manifest-tools');
+const libraryTools = require('./manifest/library-tools');
 const rootPath = path.resolve(__dirname, '..');
 const { fork } = require('child_process');
 

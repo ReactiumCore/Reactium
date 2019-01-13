@@ -110,6 +110,7 @@
         "decamelize": "^2.0.0",
         "del": "^3.0.0",
         "eslint-plugin-react": "^7.11.1",
+        "fast-diff": "^1.2.0",
         "fs-extra": "^7.0.1",
         "fs-readdir-recursive": "^1.1.0",
         "gulp": "^4.0.0",
