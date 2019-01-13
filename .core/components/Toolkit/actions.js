@@ -16,12 +16,12 @@ export default {
 
     menuItemClick: url => dispatch => {
         if (isToolkit(url)) {
-            let uarr = url.split('/toolkit')[1].split('/');
+            const uarr = url.split('/toolkit')[1].split('/');
             uarr.shift();
 
-            let group = uarr[0];
-            let element = uarr[1];
-            let params = { group, element };
+            const group = uarr[0];
+            const element = uarr[1];
+            const params = { group, element };
 
             return dispatch({
                 type: deps.actionTypes.TOOLKIT_NAV,
@@ -36,9 +36,8 @@ export default {
             return;
         }
 
-        let state = getState()['Toolkit'];
-
-        let { animating = false } = state;
+        const state = getState()['Toolkit'];
+        const { animating = false } = state;
 
         if (animating === true) {
             return;
@@ -50,11 +49,9 @@ export default {
         // Unset display: none
         TweenMax.set(elm, { display: 'flex' });
 
-        let expanded = op.get(state, 'prefs.sidebar.expanded', false);
-
-        let w = expanded === true ? 0 : 320;
-
-        let anime = {
+        const expanded = op.get(state, 'prefs.sidebar.expanded', false);
+        const w = expanded === true ? 0 : 320;
+        const anime = {
             ease: Power2.easeInOut,
             width: `${w}px`,
             onComplete: () => {
@@ -78,8 +75,8 @@ export default {
 
     notice: {
         hide: params => (dispatch, getState) => {
-            let state = getState()['Toolkit'];
-            let { animating = false } = op.get(state, 'notify', {});
+            const state = getState()['Toolkit'];
+            const { animating = false } = op.get(state, 'notify', {});
             let { elm } = params;
 
             elm = elm.cont;
@@ -93,7 +90,7 @@ export default {
                 params: { ...state.notify, animating: true },
             });
 
-            let h = -(elm.offsetHeight + 20);
+            const h = -(elm.offsetHeight + 20);
 
             TweenMax.to(elm, 0.25, {
                 top: `${h}px`,
@@ -110,8 +107,8 @@ export default {
         },
 
         show: params => (dispatch, getState) => {
-            let state = getState()['Toolkit'];
-            let { animating = false } = op.get(state, 'notify', {});
+            const state = getState()['Toolkit'];
+            const { animating = false } = op.get(state, 'notify', {});
             let { autohide, dismissable, elm, message } = params;
 
             elm = elm.cont;
