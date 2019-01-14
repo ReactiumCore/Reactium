@@ -74,7 +74,7 @@ const defaultConfig = {
         appdir: path.resolve(__dirname, 'src/app'),
         rootdir: path.resolve(__dirname),
         manifest: `${rootPath}/src/manifest.js`,
-        library: `${rootPath}/src/library-manifest.js`,
+        library: `${rootPath}/src/lib.js`,
     },
     dest: {
         dist: 'public',

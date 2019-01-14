@@ -1,48 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const op = require('object-path');
-const hb = require('handlebars');
 const gulpConfig = require('../gulp.config');
 const rootPath = path.resolve(__dirname, '../..');
-
-const parseDomains = (imports = []) =>
-    imports
-        .map(file => file.replace(/\\/g, '/'))
-        .map(file => {
-            const domainRegExp = new RegExp(`\/([A-Za-z_0-9]+?)\/library$`);
-            let [, domain] = file.match(domainRegExp);
-
-            return {
-                domain,
-                file,
-            };
-        });
-
-const createLibExports = () => {
-    try {
-        const template = hb.compile(
-            fs.readFileSync(
-                path.resolve(__dirname, 'templates/lib.hbs'),
-                'utf-8',
-            ),
-        );
-        const { imports } = op.get(
-            require(gulpConfig.src.library).list(),
-            'allLibraryComponents',
-            { imports: [] },
-        );
-
-        if (!fs.existsSync(`${rootPath}/${gulpConfig.dest.library}`)) {
-            fs.mkdirSync(`${rootPath}/${gulpConfig.dest.library}`);
-        }
-        fs.writeFileSync(
-            `${rootPath}/${gulpConfig.dest.library}/index.js`,
-            template(parseDomains(imports)),
-        );
-    } catch (error) {
-        console.error(`Error reading library manifest.`, error);
-    }
-};
 
 const createPackage = () => {
     const parent = require('../../package.json');
@@ -82,7 +42,7 @@ const createPackage = () => {
                 return libPackage;
             },
             {
-                main: 'index.js',
+                main: 'lib.js',
             },
         );
 
@@ -100,6 +60,5 @@ const createPackage = () => {
 };
 
 module.exports = {
-    createLibExports,
     createPackage,
 };

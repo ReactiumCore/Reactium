@@ -8,9 +8,6 @@ const moment = require('moment');
 const chalk = require('chalk');
 const diff = require('fast-diff');
 const hb = require('handlebars');
-const template = hb.compile(
-    fs.readFileSync(path.resolve(__dirname, 'templates/manifest.hbs'), 'utf-8'),
-);
 
 const flattenRegistry = (registry = { children: [] }, manifest = []) =>
     registry.children.reduce((manifest, item) => {
@@ -62,50 +59,28 @@ const find = (searches = [], sourceMappings) => {
     return mappings;
 };
 
-module.exports = async function({ manifestFilePath, manifestConfig }) {
+module.exports = function({
+    manifestFilePath,
+    manifestConfig,
+    manifestTemplateFilePath,
+    manifestProcessor,
+}) {
     const manifest = find(
         manifestConfig.patterns,
         manifestConfig.sourceMappings,
     );
 
-    const types = Object.entries(manifest).map(([name, typeDomains]) => {
-        const domainRegExp = new RegExp(`\/([A-Za-z_0-9]+?)\/[A-Za-z_0-9]+$`);
-        const { imports, type } = typeDomains;
-        const domains = imports
-            .map(file => file.replace(/\\/g, '/'))
-            .filter(file => file.match(domainRegExp))
-            .map(file => {
-                let [, domain] = file.match(domainRegExp);
-                return {
-                    domain,
-                    file,
-                };
-            });
-
-        return {
-            name,
-            domains,
-        };
-    });
-
-    const contexts = Object.entries(manifestConfig.contexts).map(
-        ([context, pattern]) => {
-            const { modulePath, filePattern } = pattern;
-            return {
-                context,
-                modulePath,
-                filePattern,
-            };
-        },
+    const template = hb.compile(
+        fs.readFileSync(manifestTemplateFilePath, 'utf-8'),
     );
 
     const fileContents = prettier.format(
-        template({
-            types,
-            contexts,
-            contextObj: JSON.stringify(manifestConfig.contexts, null, 2),
-            manifest: JSON.stringify(manifest, null, 2),
-        }),
+        template(
+            manifestProcessor({
+                manifest,
+                contexts: manifestConfig.contexts,
+            }),
+        ),
         {
             parser: 'babylon',
             trailingComma: 'all',

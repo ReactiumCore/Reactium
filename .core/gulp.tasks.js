@@ -19,10 +19,6 @@ const rename = require('gulp-rename');
 const chalk = require('chalk');
 const moment = require('moment');
 const reactiumConfig = require('./reactium-config');
-const manifestConfig = require('./manifest.config')(reactiumConfig.manifest);
-const libraryManifestConfig = require('./manifest.config')(
-    reactiumConfig.library,
-);
 const regenManifest = require('./manifest/manifest-tools');
 const libraryTools = require('./manifest/library-tools');
 const rootPath = path.resolve(__dirname, '..');
@@ -180,7 +176,14 @@ const reactium = (gulp, config, webpackConfig) => {
         // Generate manifest.js file
         regenManifest({
             manifestFilePath: config.src.manifest,
-            manifestConfig,
+            manifestConfig: require('./manifest.config')(
+                reactiumConfig.manifest,
+            ),
+            manifestTemplateFilePath: path.resolve(
+                __dirname,
+                'manifest/templates/manifest.hbs',
+            ),
+            manifestProcessor: require('./manifest/processors/manifest'),
         });
         done();
     };
@@ -231,7 +234,14 @@ const reactium = (gulp, config, webpackConfig) => {
         // Generate manifest.js file
         regenManifest({
             manifestFilePath: config.src.library,
-            manifestConfig: libraryManifestConfig,
+            manifestConfig: require('./manifest.config')(
+                reactiumConfig.library,
+            ),
+            manifestTemplateFilePath: path.resolve(
+                __dirname,
+                'manifest/templates/library.hbs',
+            ),
+            manifestProcessor: require('./manifest/processors/library'),
         });
         done();
     };
@@ -245,9 +255,6 @@ const reactium = (gulp, config, webpackConfig) => {
         );
 
         babel.exec();
-
-        // Make libs/libs.js file
-        libraryTools.createLibExports();
 
         // Copy static files
         [config.src.style, config.src.assets].forEach(src =>
