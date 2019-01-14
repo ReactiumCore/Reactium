@@ -39,16 +39,34 @@ export default class Toolkit extends Component {
         this.settings = null;
         this.notify = null;
         this.onResize = this.onResize.bind(this);
+        this.onKeyPress = this.onKeyPress.bind(this);
         this.togglePref = this.togglePref.bind(this);
         this.toggleSettings = this.toggleSettings.bind(this);
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.onResize);
+        window.addEventListener('keydown', this.onKeyPress);
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize);
+        window.removeEventListener('keydown', this.onKeyPress);
+    }
+
+    onKeyPress(e) {
+        const { altKey, shiftKey, code } = e;
+        const codes = ['bracketleft'];
+
+        if (codes.includes(String(code).toLowerCase()) && altKey && !shiftKey) {
+            e.preventDefault();
+            this.props.menuToggle();
+        }
+
+        if (codes.includes(String(code).toLowerCase()) && altKey && shiftKey) {
+            e.preventDefault();
+            this.toggleSettings({ type: 'toolbar-toggle-settings' });
+        }
     }
 
     onCopyClick(type) {
@@ -240,11 +258,11 @@ export default class Toolkit extends Component {
         this.setState({ update: Date.now() });
     }
 
-    toggleSettings({ type, data }) {
+    toggleSettings({ type }) {
         if (type !== 'toolbar-toggle-settings') {
             return;
         }
-        this.settings.open();
+        this.settings.toggle();
     }
 
     getElements({ menu, group, element }) {

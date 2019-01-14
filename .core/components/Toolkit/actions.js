@@ -49,7 +49,7 @@ export default {
         // Unset display: none
         TweenMax.set(elm, { display: 'flex' });
 
-        const expanded = op.get(state, 'prefs.sidebar.expanded', false);
+        let expanded = op.get(state, 'prefs.sidebar.expanded', false);
         const w = expanded === true ? 0 : 320;
         const anime = {
             ease: Power2.easeInOut,
