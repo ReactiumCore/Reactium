@@ -527,6 +527,17 @@ const SCHEMA = ({ props }) => {
                     }
                 },
             },
+            library: {
+                pattern: /^y|n|Y|N/,
+                default: 'N',
+                description: `${chalk.white('Library?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
         },
     };
 };
