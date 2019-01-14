@@ -7,10 +7,11 @@
         "start": "node build/.core/index.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "manifest": "node ./.core/createManifest.js",
-        "build": "npm install --production-only",
+        "build": "export NODE_ENV=production && npm-run-all build:*",
         "build:gulp": "cross-env NODE_ENV=production gulp",
         "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
         "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src",
+        "build:cleanup": "npm prune --production",
         "static": "npm-run-all build:* && gulp static",
         "library": "gulp library",
         "local": "gulp local",
@@ -21,7 +22,10 @@
         "docker:push": "cross-env docker push $npm_package_name:$npm_package_version && cross-env docker push $npm_package_name:$npm_package_version:latest",
         "deploy": "cf push",
         "precommit": "lint-staged",
-        "postinstall": "npm-run-all -s build:*"
+        "postinstall": "npm run autoinstall",
+        "autoinstall": "run-script-os",
+        "autoinstall:darwin:linux": "if [ \"$NODE_ENV\" = \"production\" ]; then npm run build; fi",
+        "autoinstall:win32": ""
     },
     "keywords": [
         "react",
@@ -89,6 +93,7 @@
         "redux-devtools-log-monitor": "^1.4.0",
         "redux-local-persist": "0.0.5",
         "redux-super-thunk": "^0.0.7",
+        "run-script-os": "^1.0.5",
         "semver": "^5.5.0",
         "serialize-javascript": "^1.4.0",
         "underscore": "*",

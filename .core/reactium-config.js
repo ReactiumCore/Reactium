@@ -57,6 +57,7 @@ module.exports = {
                     'redbox-react': '^1.6.0',
                     'redux-devtools': '^3.5.0',
                     'redux-super-thunk': '^0.0.7',
+                    'run-script-os': '^1.0.5',
                     xss: '^1.0.3',
                 },
                 remove: ['beautify'],
