@@ -30,7 +30,7 @@ const MenuItems = ({
                 return false;
             }
 
-            return hidden;
+            return !hidden;
         })
         .map((key, k) => {
             let {
