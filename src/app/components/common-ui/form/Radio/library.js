@@ -1,2 +1,3 @@
 import Radio from './index';
-export default Radio;
+
+export { Radio as default };
