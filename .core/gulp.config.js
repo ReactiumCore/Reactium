@@ -73,8 +73,8 @@ const defaultConfig = {
         includes: ['./node_modules'],
         appdir: path.resolve(__dirname, 'src/app'),
         rootdir: path.resolve(__dirname),
-        manifest: `${rootPath}/src/manifest.js`,
-        library: `${rootPath}/src/lib.js`,
+        manifest: path.normalize(`${rootPath}/src/manifest.js`),
+        library: path.normalize(`${rootPath}/src/lib.js`),
     },
     dest: {
         dist: 'public',

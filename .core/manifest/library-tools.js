@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const op = require('object-path');
 const gulpConfig = require('../gulp.config');
@@ -47,11 +47,14 @@ const createPackage = () => {
         );
 
     try {
-        if (!fs.existsSync(`${rootPath}/${gulpConfig.dest.library}`)) {
-            fs.mkdirSync(`${rootPath}/${gulpConfig.dest.library}`);
-        }
+        fs.ensureDirSync(
+            path.normalize(`${rootPath}/${gulpConfig.dest.library}`),
+        );
+
         fs.writeFileSync(
-            `${rootPath}/${gulpConfig.dest.library}/package.json`,
+            path.normalize(
+                `${rootPath}/${gulpConfig.dest.library}/package.json`,
+            ),
             JSON.stringify(libPackage, null, 2),
         );
     } catch (error) {
