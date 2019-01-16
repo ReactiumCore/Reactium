@@ -44,7 +44,7 @@ const NAME = 'library';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC = 'Convert a component into a library component.';
+const DESC = 'Reactium: Convert a component into a library component.';
 
 /**
  * CANCELED String
