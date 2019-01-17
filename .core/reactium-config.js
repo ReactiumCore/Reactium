@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.4.1',
+    version: '2.4.2',
     semver: '^2.0.0',
     update: {
         package: {
@@ -11,6 +11,8 @@ module.exports = {
                 add: {
                     'gulp-run': '^1.7.1',
                     'atomic-reactor-cli': '^2.0.21',
+                    'babel-core': '^7.0.0-bridge.0',
+                    'babel-jest': '^23.6.0',
                     '@babel/core': '^7.1.2',
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
@@ -19,12 +21,15 @@ module.exports = {
                     camelcase: '^5.0.0',
                     'cli-spinners': '^1.3.1',
                     decamelize: '^2.0.0',
+                    enzyme: '^3.8.0',
+                    'enzyme-adapter-react-16': '^1.7.1',
                     'fast-diff': '^1.2.0',
                     'fs-extra': '^7.0.1',
                     'fs-readdir-recursive': '^1.1.0',
                     gulp: '^4.0.0',
                     'gulp4-run-sequence': '^0.2.1',
                     handlebars: '^4.0.12',
+                    jest: '^23.6.0',
                     'module-alias': '^2.1.0',
                     ora: '^3.0.0',
                     slugify: '^1.3.3',
