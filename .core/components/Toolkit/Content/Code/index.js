@@ -15,7 +15,6 @@ import PropTypes from 'prop-types';
 import prettier from 'prettier/standalone';
 import parserBabylon from 'prettier/parser-babylon';
 import parserHtml from 'prettier/parser-html';
-import { store } from 'reactium-core/app';
 import deps from 'dependencies';
 
 /**
@@ -25,10 +24,6 @@ import deps from 'dependencies';
  */
 
 export default class Code extends Component {
-    static contextTypes = {
-        store: PropTypes.object,
-    };
-
     static defaultProps = {
         prefs: {},
         onButtonClick: null,
@@ -44,6 +39,9 @@ export default class Code extends Component {
 
     constructor(props) {
         super(props);
+
+        this.store =
+            typeof window !== 'undefined' && require('reactium-core/app').store;
 
         this.cont = React.createRef();
         this.state = {
@@ -149,10 +147,14 @@ export default class Code extends Component {
     }
 
     onCopyClick(e) {
+        if (!this.store) {
+            return;
+        }
+
         const { component: Component, onButtonClick } = this.props;
         const markup = prettier.format(
             renderToStaticMarkup(
-                <Provider store={this.context.store}>
+                <Provider store={this.store}>
                     <Component />
                 </Provider>,
             ),
@@ -168,9 +170,13 @@ export default class Code extends Component {
     }
 
     onThemeClick(e) {
+        if (!this.store) {
+            return;
+        }
+
         let { theme } = this.state;
         theme = theme === 'dark' ? 'light' : 'dark';
-        store.dispatch(
+        this.store.dispatch(
             deps.actions.Toolkit.set({
                 key: 'prefs.codeColor.all',
                 value: theme,
@@ -227,8 +233,12 @@ export default class Code extends Component {
     }
 
     markup(Component) {
+        if (!this.store) {
+            return '';
+        }
+
         const html = renderToStaticMarkup(
-            <Provider store={this.context.store}>
+            <Provider store={this.store}>
                 <Component />
             </Provider>,
         );
@@ -240,7 +250,7 @@ export default class Code extends Component {
         const { component: Component } = this.props;
 
         if (!Component) {
-            return null;
+            return '';
         }
 
         const { visible, height, theme = 'dark' } = this.state;

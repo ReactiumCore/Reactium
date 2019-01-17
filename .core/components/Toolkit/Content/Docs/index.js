@@ -7,7 +7,6 @@
 import op from 'object-path';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import React, { Component, Fragment } from 'react';
-import { store } from 'reactium-core/app';
 import deps from 'dependencies';
 
 /**
@@ -28,6 +27,9 @@ export default class Docs extends Component {
 
     constructor(props) {
         super(props);
+
+        this.store =
+            typeof window !== 'undefined' && require('reactium-core/app').store;
 
         this.state = {
             height: this.props.height,
@@ -54,7 +56,7 @@ export default class Docs extends Component {
     }
 
     applyPrefs() {
-        this.prefs = store.getState().Toolkit.prefs;
+        this.prefs = this.store.getState().Toolkit.prefs;
     }
 
     open() {
@@ -68,7 +70,7 @@ export default class Docs extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ height: 'auto' });
-                store.dispatch(
+                this.store.dispatch(
                     deps.actions.Toolkit.set({
                         key: `prefs.docs.${id}`,
                         value: true,
@@ -88,7 +90,7 @@ export default class Docs extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ height: 0 });
-                store.dispatch(
+                this.store.dispatch(
                     deps.actions.Toolkit.set({
                         key: `prefs.docs.${id}`,
                         value: false,
@@ -107,7 +109,12 @@ export default class Docs extends Component {
     }
 
     getPref(key, prefs) {
-        prefs = prefs || store.getState().Toolkit.prefs;
+        if (typeof window !== 'undefined') {
+            prefs = prefs || this.store.getState().Toolkit.prefs;
+        } else {
+            prefs = prefs || {};
+        }
+
         const { id } = this.props;
 
         let def, pref;
@@ -142,16 +149,18 @@ export default class Docs extends Component {
         const display = this.visible() ? 'block' : 'none';
         const theme = this.theme();
 
-        return !Component ? null : (
+        return !Component ? (
+            <div />
+        ) : (
             <div
                 ref={this.cont}
                 className={'re-toolkit-docs-view'}
                 style={{ height, display }}>
-                {title ? (
+                {title && (
                     <div className={'re-toolkit-card-heading thin'}>
                         <h3>{title}</h3>
                     </div>
-                ) : null}
+                )}
 
                 <div className={'re-toolkit-card-docs'}>
                     <Component theme={theme} />

@@ -2,7 +2,6 @@ import React from 'react';
 import Card from 'reactium-core/components/Toolkit/Content/Card';
 import Docs from 'reactium-core/components/Toolkit/Content/Docs';
 import Markdown from 'reactium-core/components/Toolkit/Markdown';
-import { store } from 'reactium-core/app';
 
 /**
  * -----------------------------------------------------------------------------
@@ -35,11 +34,19 @@ ${'```'}
  * DO NOT EDIT BELOW HERE
  * -----------------------------------------------------------------------------
  */
-const Comp = () => (
-    <Markdown theme={store.getState().Toolkit.prefs.codeColor.all}>
-        {content}
-    </Markdown>
-);
+const Comp = () => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+
+    const { store } = require('reactium-core/app');
+
+    return (
+        <Markdown theme={store.getState().Toolkit.prefs.codeColor.all}>
+            {content}
+        </Markdown>
+    );
+};
 const overview = () => {
     return (
         <Card title={'Reactium Style Guide'}>

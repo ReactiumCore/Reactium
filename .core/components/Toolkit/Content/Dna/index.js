@@ -17,7 +17,7 @@ import _ from 'underscore';
 
 export default class Dna extends Component {
     static defaultProps = {
-        component: null,
+        component: '',
         height: 'auto',
         menu: {},
         prefs: {},
@@ -290,14 +290,14 @@ export default class Dna extends Component {
 
     render() {
         if (process.env.NODE_ENV !== 'development') {
-            return null;
+            return <div />;
         }
 
         const { visible } = this.state;
         const { component, height } = this.props;
 
         if (typeof component === 'undefined' || typeof component === 'string') {
-            return null;
+            return <div />;
         }
 
         const deps = op.has(component, 'dependencies')
@@ -338,7 +338,7 @@ export default class Dna extends Component {
                 ref={this.cont}
                 className={'re-toolkit-dna-view'}
                 style={{ height, display }}>
-                {dependents.length > 0 ? (
+                {dependents.length > 0 && (
                     <Fragment>
                         <div className={'re-toolkit-card-heading thin'}>
                             Dependents
@@ -346,17 +346,19 @@ export default class Dna extends Component {
                         <ul>
                             {dependents.map((item, i) => {
                                 let { route, label } = item;
-                                return !route ? null : (
-                                    <li key={`dep-${i}`}>
-                                        <a href={route}>{label}</a>
-                                    </li>
+                                return (
+                                    route && (
+                                        <li key={`dep-${i}`}>
+                                            <a href={route}>{label}</a>
+                                        </li>
+                                    )
                                 );
                             })}
                         </ul>
                     </Fragment>
-                ) : null}
+                )}
 
-                {dependencies.length > 0 ? (
+                {dependencies.length > 0 && (
                     <Fragment>
                         <div className={'re-toolkit-card-heading thin'}>
                             Dependencies
@@ -364,16 +366,18 @@ export default class Dna extends Component {
                         <ul>
                             {dependencies.map((item, i) => {
                                 const Alink = item;
-                                return Alink ? (
-                                    <li key={`dep-${i}`}>
-                                        <Alink />
-                                    </li>
-                                ) : null;
+                                return (
+                                    Alink && (
+                                        <li key={`dep-${i}`}>
+                                            <Alink />
+                                        </li>
+                                    )
+                                );
                             })}
                         </ul>
                     </Fragment>
-                ) : null}
-                {npm.length > 0 ? (
+                )}
+                {npm.length > 0 && (
                     <Fragment>
                         <div className={'re-toolkit-card-heading thin'}>
                             NPM Modules
@@ -381,15 +385,17 @@ export default class Dna extends Component {
                         <ul>
                             {npm.map((item, i) => {
                                 const Alink = item;
-                                return Alink ? (
-                                    <li key={`dep-${i}`}>
-                                        <Alink />
-                                    </li>
-                                ) : null;
+                                return (
+                                    Alink && (
+                                        <li key={`dep-${i}`}>
+                                            <Alink />
+                                        </li>
+                                    )
+                                );
                             })}
                         </ul>
                     </Fragment>
-                ) : null}
+                )}
             </div>
         );
     }

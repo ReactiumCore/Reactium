@@ -53,6 +53,10 @@ export default class Preview extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         const { style: prevStyle, update: lastUpdate } = prevProps;
         const { style: currStyle, update } = this.props;
 
@@ -69,6 +73,10 @@ export default class Preview extends Component {
     }
 
     resize() {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
         const { visible } = this.state;
 
         if (!this.iframe.current || visible === false) {
@@ -96,7 +104,8 @@ export default class Preview extends Component {
 
     renderCmp({ style, toolkit }) {
         let browserSync;
-        if (document) {
+
+        if (typeof window !== 'undefined') {
             browserSync = document.getElementById('__bs_script__');
             browserSync = browserSync ? browserSync.outerHTML : '';
         }
@@ -129,7 +138,7 @@ export default class Preview extends Component {
         } = this.props;
 
         if (!Component || !group || !id) {
-            return null;
+            return <div />;
         }
 
         const display = visible ? 'block' : 'none';

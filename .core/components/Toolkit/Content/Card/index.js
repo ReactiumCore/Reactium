@@ -196,7 +196,7 @@ export default class Card extends Component {
                     ref={elm => {
                         this.cont = elm;
                     }}>
-                    {!title && hbuttons.length < 1 ? null : (
+                    {!title && hbuttons.length > 0 && (
                         <div className={'re-toolkit-card-heading'}>
                             {!title ? <div /> : <h3>{title}</h3>}
                             {this.renderButtons(hbuttons)}
@@ -207,7 +207,7 @@ export default class Card extends Component {
                             {children}
                         </div>
                     </div>
-                    {fbuttons.length < 1 ? null : (
+                    {fbuttons.length > 0 && (
                         <div className={'re-toolkit-card-footer'}>
                             {this.renderButtons(fbuttons)}
                         </div>
