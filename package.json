@@ -91,7 +91,7 @@
         "redux-devtools": "^3.5.0",
         "redux-devtools-dock-monitor": "^1.1.2",
         "redux-devtools-log-monitor": "^1.4.0",
-        "redux-local-persist": "0.0.5",
+        "redux-local-persist": "^0.1.0",
         "redux-super-thunk": "^0.0.7",
         "run-script-os": "^1.0.5",
         "semver": "^5.5.0",

@@ -76,7 +76,7 @@ class ReactiumDependencies {
     }
 
     setManifest(manifest) {
-        this.manifest = manifest;
+        this.manifest = manifest || {};
 
         // Provide placeholder for non-core types
         Object.keys(this.manifest).forEach(type => {
@@ -93,19 +93,21 @@ class ReactiumDependencies {
     }
 
     init() {
-        this.reducers = this.manifest.allReducers;
-        this.actions = this.manifest.allActions;
-        this.actionTypes = Object.keys(this.manifest.allActionTypes).reduce(
+        this.reducers = op.get(this, 'manifest.allReducers', {});
+        this.actions = op.get(this, 'manifest.allActions', {});
+        this.actionTypes = Object.keys(
+            op.get(this, 'manifest.allActionTypes', {}),
+        ).reduce(
             (types, key) => ({
                 ...types,
-                ...this.manifest.allActionTypes[key],
+                ...op.get(this, 'manifest.allActionTypes', {})[key],
             }),
             {},
         );
-        this.services = this.manifest.allServices;
+        this.services = op.get(this, 'manifest.allServices', {});
 
-        this.routes = Object.keys(this.manifest.allRoutes)
-            .map(route => this.manifest.allRoutes[route])
+        this.routes = Object.keys(op.get(this, 'manifest.allRoutes', {}))
+            .map(route => op.get(this, 'manifest.allRoutes', {})[route])
             .reduce((rts, route) => {
                 // Support multiple routable components per route file
                 if (Array.isArray(route)) {
@@ -143,7 +145,7 @@ class ReactiumDependencies {
             .sort((a, b) => a.order - b.order)
             .concat([{ component: NotFound }]);
 
-        this.plugins = this.manifest.allPlugins;
+        this.plugins = op.get(this, 'manifest.allPlugins', {});
 
         try {
             let plugableConfig = require('appdir/plugable');
@@ -154,7 +156,7 @@ class ReactiumDependencies {
         } catch (error) {}
 
         // Resolve non-core types as dependencies
-        Object.keys(this.manifest).forEach(type => {
+        Object.keys(op.get(this, 'manifest', {})).forEach(type => {
             if (!this.coreTypes.find(coreType => coreType === type)) {
                 this[type] = this.manifest[type];
             }
