@@ -101,24 +101,27 @@ const MenuItems = ({
                             )}
 
                             <ul id={`menu-group-${key}-items`}>
-                                {childSearch
-                                    .filter(elm =>
-                                        Boolean(
-                                            searchTest(elements[elm].label) !==
-                                                true ||
-                                                elements[elm].hidden === true
-                                                ? false
-                                                : true,
-                                        ),
-                                    )
-                                    .map((elm, i) => (
-                                        <li key={`menu-item-${i}`}>
-                                            <MenuLink
-                                                {...elements[elm]}
-                                                className='link'
-                                            />
-                                        </li>
-                                    ))}
+                                {typeof window !== 'undefined' &&
+                                    childSearch
+                                        .filter(elm =>
+                                            Boolean(
+                                                searchTest(
+                                                    elements[elm].label,
+                                                ) !== true ||
+                                                    elements[elm].hidden ===
+                                                        true
+                                                    ? false
+                                                    : true,
+                                            ),
+                                        )
+                                        .map((elm, i) => (
+                                            <li key={`menu-item-${i}`}>
+                                                <MenuLink
+                                                    {...elements[elm]}
+                                                    className='link'
+                                                />
+                                            </li>
+                                        ))}
                             </ul>
                         </Fragment>
                     )}

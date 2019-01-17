@@ -111,6 +111,17 @@ export default class Content extends Component {
             menu,
         } = this.props;
 
+        let defaultItem = {
+            label: null,
+            component: null,
+            readme: null,
+            dna: null,
+            path: null,
+            hideCode: false,
+            hideDna: false,
+            hideDocs: false,
+        };
+
         this.cards = {};
         this.codes = {};
         this.docs = {};
@@ -118,10 +129,13 @@ export default class Content extends Component {
 
         return Object.keys(data).map((key, k) => {
             let id = [group, key].join('_');
-            let item = data[key];
+            let item = {
+                ...defaultItem,
+                ...data[key],
+            };
 
             let {
-                label = '',
+                label,
                 component,
                 readme,
                 dna,
@@ -130,12 +144,11 @@ export default class Content extends Component {
                 hideDna = false,
                 hideDocs = false,
             } = item;
+
             let { buttons = {} } = card;
 
             buttons = JSON.stringify(buttons);
             buttons = JSON.parse(buttons);
-
-            const Cmp = component;
 
             let noCode = Boolean(typeof component === 'string');
             noCode = hideCode === true ? hideCode : noCode;
@@ -187,7 +200,7 @@ export default class Content extends Component {
                         dna={dna}
                         id={id}
                     />
-                    {noCode !== true ? (
+                    {noCode !== true && (
                         <Code
                             ref={elm => {
                                 this.registerCode({ elm, id });
@@ -199,8 +212,8 @@ export default class Content extends Component {
                             group={group}
                             id={id}
                         />
-                    ) : null}
-                    {readme && hideDocs !== true ? (
+                    )}
+                    {readme && hideDocs !== true && (
                         <Docs
                             ref={elm => {
                                 this.registerDocs({ elm, id });
@@ -211,8 +224,8 @@ export default class Content extends Component {
                             prefs={prefs}
                             id={id}
                         />
-                    ) : null}
-                    {hideDna !== true ? (
+                    )}
+                    {hideDna !== true && (
                         <Dna
                             ref={elm => {
                                 this.registerDnas({ elm, id });
@@ -224,7 +237,7 @@ export default class Content extends Component {
                             dna={dna}
                             id={id}
                         />
-                    ) : null}
+                    )}
                 </Card>
             );
         });
@@ -270,7 +283,7 @@ export default class Content extends Component {
 
         if (!data) {
             if (!defaultComponent) {
-                return null;
+                return <div />;
             }
 
             const Overview = defaultComponent;

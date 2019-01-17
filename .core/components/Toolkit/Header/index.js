@@ -48,7 +48,7 @@ Header.defaultProps = {
     onThemeChange: null,
     themes: [],
     title: null,
-    version: '0.0.1',
+    version: null,
 };
 
 export default Header;
