@@ -1,0 +1,9 @@
+import React from 'react';
+import {{component}} from '{{from}}';
+import { shallow } from 'reactium-core/enzyme';
+
+test('<{{component}} />', () => {
+    const component = shallow(<{{component}} />);
+
+    expect(component.html().length).toBeGreaterThan(0);
+});

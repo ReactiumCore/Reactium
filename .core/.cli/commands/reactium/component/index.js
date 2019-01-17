@@ -538,6 +538,15 @@ const SCHEMA = ({ props }) => {
                     return String(val).toUpperCase() === 'Y';
                 },
             },
+            test: {
+                pattern: /^y|n|Y|N/,
+                default: 'Y',
+                description: `${chalk.white('Test?')} ${chalk.cyan('(Y/N):')}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
         },
     };
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import Checkbox from './index';
 import { shallow } from 'reactium-core/enzyme';
 
-test('testing', () => {
+test('<Checkbox />', () => {
     const props = {
         align: 'right',
         checked: false,
@@ -16,5 +16,7 @@ test('testing', () => {
     };
 
     const checkBox = shallow(<Checkbox {...props} />);
+
+    expect(checkBox.html().length).toBeGreaterThan(0);
     expect(checkBox.find('#test-checkbox')).toBeDefined();
 });

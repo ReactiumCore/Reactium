@@ -99,6 +99,26 @@ module.exports = ({ params, props }) => {
         }
     }
 
+    if (op.get(params, 'test', false)) {
+        try {
+            const testActions = require('../test/actions')(spinner);
+            const testParams = {
+                destination: params.destination,
+                component: params.name,
+                from: op.get(params, 'redux', false)
+                    ? `./${params.name}`
+                    : './index',
+            };
+            actions['test'] = ({ params, props }) =>
+                ActionSequence({
+                    actions: testActions,
+                    options: { params: testParams, props },
+                });
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
     switch (params.type) {
         case 'functional':
             delete actions.class;
