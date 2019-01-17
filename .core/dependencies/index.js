@@ -55,6 +55,7 @@ let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
 
 class ReactiumDependencies {
     constructor() {
+        this.manifest = {};
         this.routes = [];
         this.actions = {};
         this.actionTypes = {};
@@ -93,21 +94,21 @@ class ReactiumDependencies {
     }
 
     init() {
-        this.reducers = op.get(this, 'manifest.allReducers', {});
-        this.actions = op.get(this, 'manifest.allActions', {});
+        this.reducers = op.get(this.manifest, 'allReducers', {});
+        this.actions = op.get(this.manifest, 'allActions', {});
         this.actionTypes = Object.keys(
-            op.get(this, 'manifest.allActionTypes', {}),
+            op.get(this.manifest, 'allActionTypes', {}),
         ).reduce(
             (types, key) => ({
                 ...types,
-                ...op.get(this, 'manifest.allActionTypes', {})[key],
+                ...op.get(this.manifest, 'allActionTypes', {})[key],
             }),
             {},
         );
-        this.services = op.get(this, 'manifest.allServices', {});
+        this.services = op.get(this.manifest, 'allServices', {});
 
-        this.routes = Object.keys(op.get(this, 'manifest.allRoutes', {}))
-            .map(route => op.get(this, 'manifest.allRoutes', {})[route])
+        this.routes = Object.keys(op.get(this.manifest, 'allRoutes', {}))
+            .map(route => op.get(this.manifest, 'allRoutes', {})[route])
             .reduce((rts, route) => {
                 // Support multiple routable components per route file
                 if (Array.isArray(route)) {
@@ -145,7 +146,7 @@ class ReactiumDependencies {
             .sort((a, b) => a.order - b.order)
             .concat([{ component: NotFound }]);
 
-        this.plugins = op.get(this, 'manifest.allPlugins', {});
+        this.plugins = op.get(this.manifest, 'allPlugins', {});
 
         try {
             let plugableConfig = require('appdir/plugable');
