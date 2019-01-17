@@ -17,7 +17,7 @@ const M = require('./manifest')();
 
 const NAME = 'zones <action>';
 
-const DESC = 'Manage the current project Plugin Zones';
+const DESC = 'Reactium: Manage the current project Plugin Zones';
 
 const ZONE_LIST = () =>
     Object.keys(M).map((zone, index) => {

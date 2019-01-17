@@ -27,7 +27,7 @@ const NAME = 'empty';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC = 'Remove Reactium demo pages, components, and toolkit.';
+const DESC = 'Reactium: Remove Reactium demo pages, components, and toolkit.';
 
 /**
  * CANCELED String

@@ -29,7 +29,7 @@ const NAME = 'server <action>';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC = 'Create a custom server template.';
+const DESC = 'Reactium: Create a custom server template.';
 
 /**
  * CANCELED String

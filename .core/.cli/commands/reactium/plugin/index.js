@@ -55,7 +55,7 @@ const formatDestination = ({ val, props }) => {
 
 const NAME = 'plugin';
 
-const DESC = 'Reactium plugin helper.';
+const DESC = 'Reactium: plugin helper.';
 
 const CANCELED = 'Plugin canceled!';
 
