@@ -102,7 +102,7 @@ const CONFIRM = ({ props, params, message = 'Proceed?' }) => {
                 properties: {
                     confirmed: {
                         description: `${chalk.white(message)} ${chalk.cyan(
-                            '(Y/N):'
+                            '(Y/N):',
                         )}`,
                         type: 'string',
                         required: true,
@@ -128,7 +128,7 @@ const CONFIRM = ({ props, params, message = 'Proceed?' }) => {
                 } else {
                     resolve({ ...params, ...input });
                 }
-            }
+            },
         );
     });
 };
@@ -229,7 +229,7 @@ const SCHEMA_ACTION = ({ props }) => {
                 item,
                 index,
                 padding: String(actions.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -239,7 +239,7 @@ const SCHEMA_ACTION = ({ props }) => {
                 required: true,
                 message: 'Select an action.',
                 description: `${chalk.white(
-                    'Action:'
+                    'Action:',
                 )} ${actionList}\n    ${chalk.white('Select:')}`,
                 before: val => actionBefore({ val, actions }),
             },
@@ -268,7 +268,7 @@ const SCHEMA_CREATE = ({ props }) => {
                 pattern: /^y|n|Y|N/,
                 message: '',
                 description: `${chalk.white(
-                    'Overwrite existing group?'
+                    'Overwrite existing group?',
                 )} ${chalk.cyan('(Y/N):')}`,
                 ask: () => {
                     try {
@@ -291,7 +291,7 @@ const SCHEMA_CREATE = ({ props }) => {
             },
             menuOrder: {
                 description: `${chalk.white('Menu Order')} ${chalk.cyan(
-                    `[0-${groupsLength}]:`
+                    `[0-${groupsLength}]:`,
                 )}`,
                 default: groupsLength,
                 ask: () => canOverwrite,
@@ -319,7 +319,7 @@ const SCHEMA_ID = ({ props }) => {
                 item,
                 index,
                 padding: String(groups.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -329,7 +329,7 @@ const SCHEMA_ID = ({ props }) => {
                 required: true,
                 message: 'Select the group.',
                 description: `${chalk.white(
-                    'Group:'
+                    'Group:',
                 )} ${groupList}\n    ${chalk.white('Select:')}`,
                 before: val => groupBefore({ val, groups }),
             },
@@ -364,7 +364,7 @@ const SCHEMA_UPDATE = ({ props, id }) => {
             },
             menuOrder: {
                 description: `${chalk.white('Menu Order')} ${chalk.cyan(
-                    `[0-${groupsLength}]:`
+                    `[0-${groupsLength}]:`,
                 )}`,
                 default: menuOrder,
                 before: val => {
@@ -467,7 +467,7 @@ const ACTION_CREATE = ({ opt, props }) => {
         console.log(
             prettier.format(JSON.stringify(preflight), {
                 parser: 'json-stringify',
-            })
+            }),
         );
 
         CONFIRM({ props, params })
@@ -512,7 +512,7 @@ const ACTION_REMOVE = ({ opt, props }) => {
         const params = { ...input };
 
         const warning = `Are you sure you want to remove the ${chalk.cyan(
-            params.id
+            params.id,
         )} group?`;
 
         CONFIRM({ props, params, message: warning })
@@ -587,15 +587,15 @@ const ACTION_UPDATE = ({ opt, props }) => {
 
             message(
                 `The ${chalk.cyan(
-                    params.id
-                )} group will be updated with the following options:`
+                    params.id,
+                )} group will be updated with the following options:`,
             );
             const preflight = { ...input };
 
             console.log(
                 prettier.format(JSON.stringify(preflight), {
                     parser: 'json-stringify',
-                })
+                }),
             );
 
             return CONFIRM({ props, params });
@@ -624,11 +624,11 @@ const COMMAND = ({ program, props }) =>
         .action((action, opt) => ACTION({ action, opt, props }))
         .option(
             '-o, --overwrite [overwrite]',
-            'Overwrite existing group. Beware this will remove all children of the group.'
+            'Overwrite existing group. Beware this will remove all children of the group.',
         )
         .option('-i, --id [id]', 'The group ID.')
         .option('-l, --label [label]', 'Menu Text.')
-        .option('--menu-order [menuOrder]', 'Menu order.')
+        .option('-m, --menu-order [menuOrder]', 'Menu order.')
         .on('--help', HELP);
 
 /**

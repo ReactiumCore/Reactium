@@ -1094,14 +1094,14 @@ const COMMAND = ({ program, props }) =>
         .action((action, opt) => ACTION({ action, opt, props }))
         .option('-o, --overwrite [overwrite]', 'Overwrite existing element.')
         .option('-i, --id [id]', 'The element ID.')
-        .option('--name [name]', 'The element name.')
-        .option('--group [group]', 'The menu group to add the element to.')
-        .option('--label [label]', 'The menu link text.')
-        .option('--menu-order [menuOrder]', 'The menu link index.')
-        .option('--stylesheet [stylesheet]', 'Add a stylesheet.')
-        .option('--documentation [documentation]', 'Show readme.')
-        .option('--code [code]', 'Show Code view.')
-        .option('--dna [dna]', 'Show DNA info.')
+        .option('-n, --name [name]', 'The element name.')
+        .option('-g, --group [group]', 'The menu group to add the element to.')
+        .option('-l, --label [label]', 'The menu link text.')
+        .option('-m, --menu-order [menuOrder]', 'The menu link index.')
+        .option('-s, --stylesheet [stylesheet]', 'Add a stylesheet.')
+        .option('-d, --documentation [documentation]', 'Show readme.')
+        .option('-c, --code [code]', 'Show Code view.')
+        .option('-D, --dna [dna]', 'Show DNA info.')
         .on('--help', HELP);
 
 /**
