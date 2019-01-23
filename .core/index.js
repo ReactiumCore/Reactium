@@ -176,7 +176,7 @@ if (fs.existsSync(`${rootPath}/src/app/server/middleware.js`)) {
 
 middlewares
     .filter(_ => _)
-    .sort(({ order: aOrder = 0 }, { oder: bOrder = 0 }) => bOrder - aOrder)
+    .sort(({ order: aOrder = 0 }, { order: bOrder = 0 }) => bOrder - aOrder)
     .forEach(({ use }) => {
         if (Array.isArray(use)) {
             app.use(...use);
