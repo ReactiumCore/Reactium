@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.4.2',
+    version: '2.4.4',
     semver: '^2.0.0',
     update: {
         package: {
@@ -57,6 +57,7 @@ module.exports = {
                     '@babel/node': '^7.0.0',
                     '@babel/polyfill': '^7.0.0',
                     gsap: '^2.0.2',
+                    'http-proxy-middleware': '^0.19.1',
                     prettier: '^1.15.1',
                     'react-frame-component': '^4.0.1',
                     'redbox-react': '^1.6.0',
@@ -65,7 +66,7 @@ module.exports = {
                     'run-script-os': '^1.0.5',
                     xss: '^1.0.3',
                 },
-                remove: ['beautify'],
+                remove: ['beautify', 'express-http-proxy'],
             },
             scripts: {
                 add: {
@@ -132,6 +133,7 @@ module.exports = {
                 name: 'allMiddleware',
                 type: 'middleware',
                 pattern: /middleware.jsx?$/,
+                ignore: /server\/middleware/,
             },
             {
                 name: 'allEnhancers',
