@@ -361,8 +361,8 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const watchFork = done => {
         // Watch for file changes
-        gulp.watch(config.watch.colors, gulp.task('styles'));
-        gulp.watch(config.watch.style, gulp.task('styles'));
+        gulp.watch(config.watch.colors, gulp.task('styles:colors'));
+        gulp.watch(config.watch.style, gulp.task('styles:compile'));
         gulpwatch(config.watch.markup, watcher);
         gulpwatch(config.watch.assets, watcher);
         const scriptWatcher = gulp.watch(

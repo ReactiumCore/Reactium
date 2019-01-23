@@ -38,6 +38,10 @@ const defaultConfig = {
             '.core/**/*.less',
             '.core/**/*.scss',
             '.core/**/*.sass',
+            '!{src/**/assets/style/*.less}',
+            '!{src/**/assets/style/*.scss}',
+            '!{src/**/assets/style/*.sass}',
+            '!{.core/components/Toolkit/style.scss}',
         ],
         assets: [
             'src/**/assets/**/*',
