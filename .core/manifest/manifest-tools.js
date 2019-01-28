@@ -41,8 +41,8 @@ const find = (searches = [], sourceMappings) => {
         mappings = jsSources(sourceMapping.from)
             .map(file => file.path)
             .reduce((mappings, file) => {
-                searches.forEach(({ name, pattern }) => {
-                    if (pattern.test(file)) {
+                searches.forEach(({ name, pattern, ignore }) => {
+                    if (pattern.test(file) && (!ignore || !ignore.test(file))) {
                         mappings[name].imports.push(
                             file
                                 .replace(/\\/g, '/')
