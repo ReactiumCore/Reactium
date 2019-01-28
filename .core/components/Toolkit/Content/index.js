@@ -116,26 +116,35 @@ export default class Content extends Component {
         this.docs = {};
         this.link = {};
 
+        const defItem = {
+            label: '',
+            component: null,
+            readme: null,
+            dna: null,
+            hideCode: false,
+            hideDna: false,
+            hideDocs: false,
+        };
+
         return Object.keys(data).map((key, k) => {
-            let id = [group, key].join('_');
-            let item = data[key];
+            const id = [group, key].join('_');
+            const item = { ...defItem, ...data[key] };
 
             let {
-                label = '',
+                label,
                 component,
                 readme,
                 dna,
                 path,
-                hideCode = false,
-                hideDna = false,
-                hideDocs = false,
+                hideCode,
+                hideDna,
+                hideDocs,
             } = item;
+
             let { buttons = {} } = card;
 
             buttons = JSON.stringify(buttons);
             buttons = JSON.parse(buttons);
-
-            const Cmp = component;
 
             let noCode = Boolean(typeof component === 'string');
             noCode = hideCode === true ? hideCode : noCode;
