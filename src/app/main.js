@@ -1,5 +1,3 @@
-import 'core-js/modules/es6.string.starts-with';
-import 'core-js/modules/es7.object.entries.js';
 import { App, AppError } from 'reactium-core/app';
 
 let render = App;
