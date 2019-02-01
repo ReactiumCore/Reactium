@@ -1,10 +1,5 @@
-/**
- * -----------------------------------------------------------------------------
- * Imports
- * -----------------------------------------------------------------------------
- */
 import React, { Component, Fragment } from 'react';
-import PlugableContext from '../Context';
+import PlugableContext, { compilePlugins } from '../Context';
 import deps from 'dependencies';
 import op from 'object-path';
 
@@ -13,7 +8,6 @@ import op from 'object-path';
  * React Component: PlugableProvider
  * -----------------------------------------------------------------------------
  */
-
 export default class PlugableProvider extends Component {
     render() {
         const { filter, sort, mapper } = this.props;
