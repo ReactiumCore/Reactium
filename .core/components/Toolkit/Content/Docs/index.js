@@ -7,15 +7,14 @@
 import op from 'object-path';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 import React, { Component, Fragment } from 'react';
-import { store } from 'reactium-core/app';
 import deps from 'dependencies';
+import { getStore } from 'reactium-core/app';
 
 /**
  * -----------------------------------------------------------------------------
  * React Component: Docs
  * -----------------------------------------------------------------------------
  */
-
 export default class Docs extends Component {
     static defaultProps = {
         title: null,
@@ -54,7 +53,7 @@ export default class Docs extends Component {
     }
 
     applyPrefs() {
-        this.prefs = store.getState().Toolkit.prefs;
+        this.prefs = getStore().getState().Toolkit.prefs;
     }
 
     open() {
@@ -68,7 +67,7 @@ export default class Docs extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ height: 'auto' });
-                store.dispatch(
+                getStore().dispatch(
                     deps.actions.Toolkit.set({
                         key: `prefs.docs.${id}`,
                         value: true,
@@ -88,7 +87,7 @@ export default class Docs extends Component {
             ease: Power2.easeInOut,
             onComplete: () => {
                 _self.setState({ height: 0 });
-                store.dispatch(
+                getStore().dispatch(
                     deps.actions.Toolkit.set({
                         key: `prefs.docs.${id}`,
                         value: false,
@@ -107,7 +106,7 @@ export default class Docs extends Component {
     }
 
     getPref(key, prefs) {
-        prefs = prefs || store.getState().Toolkit.prefs;
+        prefs = prefs || getStore().getState().Toolkit.prefs;
         const { id } = this.props;
 
         let def, pref;

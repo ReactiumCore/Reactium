@@ -77,7 +77,20 @@ if (elements.length > 0) {
  * -----------------------------------------------------------------------------
  */
 // Create the Redux store and export it
-export const store = storeCreator();
+const store = storeCreator();
+
+/**
+ * Use the getStore export sparingly! Most uses will not work as you expect in file scope.
+ * Using in mounted component will probably work in browser. This is SSR safe, but the store
+ * will not be available server-side, so your component will lack redux state for
+ * rendering!
+ */
+const noop = () => {};
+export let getStore = () => ({ dispatch: noop, getState: () => ({}) });
+if (typeof window !== 'undefined') {
+    getStore = () => store;
+}
+
 deps.init();
 
 export const App = () => {

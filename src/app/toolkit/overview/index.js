@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'reactium-core/components/Toolkit/Content/Card';
 import Docs from 'reactium-core/components/Toolkit/Content/Docs';
 import Markdown from 'reactium-core/components/Toolkit/Markdown';
-import { store } from 'reactium-core/app';
+import { getStore } from 'reactium-core/app';
 
 /**
  * -----------------------------------------------------------------------------
@@ -36,7 +36,7 @@ ${'```'}
  * -----------------------------------------------------------------------------
  */
 const Comp = () => (
-    <Markdown theme={store.getState().Toolkit.prefs.codeColor.all}>
+    <Markdown theme={getStore().getState().Toolkit.prefs.codeColor.all}>
         {content}
     </Markdown>
 );
