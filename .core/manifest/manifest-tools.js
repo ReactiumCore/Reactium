@@ -82,7 +82,7 @@ module.exports = function({
             }),
         ),
         {
-            parser: 'babel',
+            parser: 'babylon',
             trailingComma: 'all',
             singleQuote: true,
             tabWidth: 4,
