@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import prettier from 'prettier/standalone';
 import parserBabylon from 'prettier/parser-babylon';
 import parserHtml from 'prettier/parser-html';
-import { store } from 'reactium-core/app';
+import { getStore } from 'reactium-core/app';
 import deps from 'dependencies';
 
 /**
@@ -25,10 +25,6 @@ import deps from 'dependencies';
  */
 
 export default class Code extends Component {
-    static contextTypes = {
-        store: PropTypes.object,
-    };
-
     static defaultProps = {
         prefs: {},
         onButtonClick: null,
@@ -152,7 +148,7 @@ export default class Code extends Component {
         const { component: Component, onButtonClick } = this.props;
         const markup = prettier.format(
             renderToStaticMarkup(
-                <Provider store={this.context.store}>
+                <Provider store={getStore()}>
                     <Component />
                 </Provider>,
             ),
@@ -170,7 +166,7 @@ export default class Code extends Component {
     onThemeClick(e) {
         let { theme } = this.state;
         theme = theme === 'dark' ? 'light' : 'dark';
-        store.dispatch(
+        getStore().dispatch(
             deps.actions.Toolkit.set({
                 key: 'prefs.codeColor.all',
                 value: theme,
@@ -228,7 +224,7 @@ export default class Code extends Component {
 
     markup(Component) {
         const html = renderToStaticMarkup(
-            <Provider store={this.context.store}>
+            <Provider store={getStore()}>
                 <Component />
             </Provider>,
         );
