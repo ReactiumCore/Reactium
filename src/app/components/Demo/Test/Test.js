@@ -7,7 +7,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
+import React, { Component, PureComponent, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import _ from 'underscore';
 import { Plugins } from 'reactium-core/components/Plugable';
@@ -18,25 +18,10 @@ import { Plugins } from 'reactium-core/components/Plugable';
  * -----------------------------------------------------------------------------
  */
 export default class Test extends Component {
-    constructor(props) {
-        super(props);
-
-        const { count, msg } = this.props;
-        this.state = { count, msg };
-    }
-
-    componentDidUpdate(prevProps, prevState = {}) {
-        if (!_.isMatch(this.props, prevState)) {
-            const { count, msg } = this.props;
-            this.setState({ count, msg });
-        }
-    }
-
     render() {
         let title = 'Redux | Reactium';
         let style = '/assets/style/demo-redux.css';
-        let { count = 0, msg } = this.state;
-        let { click } = this.props;
+        let { click, count = 0, msg } = this.props;
 
         return (
             <Fragment>

@@ -19,14 +19,18 @@ import deps from 'dependencies';
  * -----------------------------------------------------------------------------
  */
 const mapStateToProps = (state, props) => {
-    return Object.assign({}, state['Test'], props);
+    const { count, msg } = state.Test;
+    return {
+        count,
+        msg,
+    };
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
-    click: () => dispatch(deps.actions.Test.click())
+    click: () => dispatch(deps.actions.Test.click()),
 });
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
 )(Test);
