@@ -12,13 +12,21 @@ import _ from 'underscore';
  * -----------------------------------------------------------------------------
  */
 
-const selectedTheme = (themes = []) => {
+const selectedTheme = ({ themes = [], style }) => {
     return themes.length > 1
-        ? _.findWhere(themes, { selected: true })
+        ? _.findWhere(themes, { css: style })
         : { css: null };
 };
 
-const Header = ({ logo, minThemes, onThemeChange, themes, title, version }) => (
+const Header = ({
+    logo,
+    minThemes,
+    onThemeChange,
+    themes,
+    title,
+    version,
+    style,
+}) => (
     <header className='re-toolkit-header'>
         {logo && (
             <a href='/toolkit'>
@@ -30,7 +38,7 @@ const Header = ({ logo, minThemes, onThemeChange, themes, title, version }) => (
         {themes.length > minThemes && (
             <select
                 className='re-toolkit-select'
-                defaultValue={selectedTheme(themes)}
+                defaultValue={selectedTheme({ themes, style })}
                 onChange={onThemeChange}>
                 {themes.map(({ css, name }, i) => (
                     <option key={i} value={css}>
