@@ -359,6 +359,7 @@ export default class Toolkit extends Component {
                     {...header}
                     update={update}
                     themes={themes}
+                    style={style}
                     onThemeChange={this.onThemeChange.bind(this)}
                 />
 

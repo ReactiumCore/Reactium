@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import _ from 'underscore';
+import op from 'object-path';
 
 /**
  * -----------------------------------------------------------------------------
@@ -12,13 +13,18 @@ import _ from 'underscore';
  * -----------------------------------------------------------------------------
  */
 
-const selectedTheme = (themes = []) => {
-    return themes.length > 1
-        ? _.findWhere(themes, { selected: true })
-        : { css: null };
-};
+const selectedTheme = ({ themes = [], style }) =>
+    op.get(_.findWhere(themes, { css: style }), 'css', style);
 
-const Header = ({ logo, minThemes, onThemeChange, themes, title, version }) => (
+const Header = ({
+    logo,
+    minThemes,
+    onThemeChange,
+    themes,
+    title,
+    version,
+    style,
+}) => (
     <header className='re-toolkit-header'>
         {logo && (
             <a href='/toolkit'>
@@ -30,7 +36,7 @@ const Header = ({ logo, minThemes, onThemeChange, themes, title, version }) => (
         {themes.length > minThemes && (
             <select
                 className='re-toolkit-select'
-                defaultValue={selectedTheme(themes)}
+                defaultValue={selectedTheme({ themes, style })}
                 onChange={onThemeChange}>
                 {themes.map(({ css, name }, i) => (
                     <option key={i} value={css}>
@@ -48,7 +54,7 @@ Header.defaultProps = {
     onThemeChange: null,
     themes: [],
     title: null,
-    version: '0.0.1',
+    version: null,
 };
 
 export default Header;
