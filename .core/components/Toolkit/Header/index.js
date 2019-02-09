@@ -47,6 +47,7 @@ const Header = ({
                 className='re-toolkit-select'
                 defaultValue={selectedTheme({ themes, style })}
                 onChange={onThemeChange}>
+                <option value={false}>Theme</option>
                 {themes.map(({ css, name }, i) => (
                     <option key={i} value={css}>
                         {name}
