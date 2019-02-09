@@ -13,8 +13,17 @@ import op from 'object-path';
  * -----------------------------------------------------------------------------
  */
 
-const selectedTheme = ({ themes = [], style }) =>
-    op.get(_.findWhere(themes, { css: style }), 'css', style);
+const selectedTheme = ({ themes = [], style }) => {
+    let theme =
+        _.findWhere(themes, { css: style }) ||
+        _.findWhere(themes, { selected: true });
+    theme =
+        typeof theme === 'undefined'
+            ? _.findWhere(themes, { css: '/assets/style/style.css' })
+            : theme;
+
+    return op.get(theme, 'css', style);
+};
 
 const Header = ({
     logo,
@@ -50,7 +59,7 @@ const Header = ({
 
 Header.defaultProps = {
     logo: null,
-    minThemes: 1,
+    minThemes: 0,
     onThemeChange: null,
     themes: [],
     title: null,

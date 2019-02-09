@@ -1,5 +1,7 @@
-import deps from 'dependencies';
+import _ from 'underscore';
 import op from 'object-path';
+import deps from 'dependencies';
+import { themes } from 'appdir/toolkit';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 
 const isToolkit = path => {
@@ -146,11 +148,15 @@ export default {
             key,
         }),
 
-    setTheme: theme => dispatch =>
-        dispatch({
+    setTheme: theme => dispatch => {
+        theme =
+            op.get(_.findWhere(themes, { css: theme }), 'css') ||
+            '/assets/style/style.css';
+        return dispatch({
             type: deps.actionTypes.TOOLKIT_THEME,
             theme,
-        }),
+        });
+    },
 
     toggleSettings: () => dispatch =>
         dispatch({ type: deps.actionTypes.TOOLKIT_SETTINGS_TOGGLE }),
