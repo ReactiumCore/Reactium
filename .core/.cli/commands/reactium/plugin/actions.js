@@ -27,7 +27,7 @@ module.exports = spinner => {
             const cont =
                 '\n\n' +
                 prettier.format(`export default ${plugin}`, {
-                    parser: 'babylon',
+                    parser: 'babel',
                 });
 
             fs.ensureFileSync(pluginFile);

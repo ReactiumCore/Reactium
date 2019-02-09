@@ -48,14 +48,16 @@ module.exports = spinner => {
             op.del(manifest, `menu.${id}`);
 
             let content = String(
-                prettier(JSON.stringify(manifest), { parser: 'json-stringify' })
+                prettier(JSON.stringify(manifest), {
+                    parser: 'json-stringify',
+                }),
             )
                 .replace(/\"require(.*?)\.default\"/gim, 'require$1.default')
                 .replace(/\\"/g, '"')
                 .replace(/\\'/g, "'");
 
             content = prettier(`module.exports = ${content};`, {
-                parser: 'babylon',
+                parser: 'babel',
                 printWidth: 240,
                 singleQuote: true,
                 tabWidth: 4,
