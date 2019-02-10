@@ -151,7 +151,11 @@ export default class Preview extends Component {
                 ref={this.iframe}
                 initialContent={markup}
                 mountTarget='#router'>
-                <Component />
+                <FrameContextConsumer>
+                    {({ window: iWindow, document: iDocument }) => (
+                        <Component iWindow={iWindow} iDocument={iDocument} />
+                    )}
+                </FrameContextConsumer>
             </Frame>
         );
     }
