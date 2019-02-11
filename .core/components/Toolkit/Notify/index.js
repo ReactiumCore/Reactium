@@ -6,6 +6,7 @@
 import React, { Component, Fragment } from 'react';
 import op from 'object-path';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 
 /**
  * -----------------------------------------------------------------------------
@@ -83,9 +84,7 @@ export default class Notify extends Component {
                         type='button'
                         className='re-notice-close'
                         onClick={onCloseClick}>
-                        <svg>
-                            <use xlinkHref={'#re-icon-close'} />
-                        </svg>
+                        <Icon.Close />
                     </button>
                 )}
             </aside>

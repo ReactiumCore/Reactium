@@ -85,30 +85,28 @@ export default {
     speed: 0.125,
     manifest: {},
     buttons: {
-        header: [
-            { name: 'toggle-settings', title: 'close', icon: '#re-icon-close' },
-        ],
+        header: [{ name: 'toggle-settings', title: 'close', icon: 'Close' }],
         toolbar: [
-            { icon: '#re-icon-dna', name: 'filter-all', label: 'All Elements' },
-            { icon: '#re-icon-atom', name: 'filter-atom', label: 'Atoms' },
+            { icon: 'Dna', name: 'filter-all', label: 'All Elements' },
+            { icon: 'Atom', name: 'filter-atom', label: 'Atoms' },
             {
-                icon: '#re-icon-molecule',
+                icon: 'Molecule',
                 name: 'filter-molecule',
                 label: 'Molecules',
             },
             {
-                icon: '#re-icon-organism',
+                icon: 'Organism',
                 name: 'filter-organism',
                 label: 'Organisms',
             },
             {
-                icon: '#re-icon-catalyst',
+                icon: 'Catalyst',
                 name: 'filter-catalyst',
                 label: 'Catalysts',
             },
-            { icon: '#re-icon-page', name: 'filter-template', label: 'Pages' },
+            { icon: 'Page', name: 'filter-template', label: 'Pages' },
             {
-                icon: '#re-icon-template',
+                icon: 'Template',
                 name: 'filter-template',
                 label: 'Templates',
             },

@@ -5,6 +5,7 @@
  */
 import React, { Component, Fragment } from 'react';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 import _ from 'underscore';
 
 /**
@@ -136,10 +137,7 @@ export default class Card extends Component {
                     _.pluck(btns.header, 'name'),
                     'toggle-fullscreen',
                 );
-                let icon =
-                    fullscreen === true
-                        ? '#re-icon-fullscreen'
-                        : '#re-icon-collapse';
+                let icon = fullscreen === true ? 'Fullscreen' : 'Collapse';
 
                 btns.header[idx]['icon'] = icon;
 
@@ -164,9 +162,7 @@ export default class Card extends Component {
                     title={title}
                     key={`button-${i}`}
                     id={name}>
-                    <svg>
-                        <use xlinkHref={icon} />
-                    </svg>
+                    {Icon[icon]()}
                 </button>
             );
         });

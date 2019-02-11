@@ -8,6 +8,7 @@ import React, { Component, Fragment } from 'react';
 import op from 'object-path';
 import { Link } from 'react-router-dom';
 import _ from 'underscore';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 
 /**
  * -----------------------------------------------------------------------------
@@ -231,9 +232,7 @@ export default class Dna extends Component {
             return route && label
                 ? () => (
                       <Link to={route} title={str}>
-                          <svg>
-                              <use xlinkHref={'#re-icon-link'} />
-                          </svg>
+                          <Icon.Close />
                           {label}
                       </Link>
                   )
@@ -251,9 +250,7 @@ export default class Dna extends Component {
                 .join('');
             return () => (
                 <span>
-                    <svg>
-                        <use xlinkHref={'#re-icon-docs'} />
-                    </svg>
+                    <Icon.Docs />
                     {cmp} &ndash; {str.split('./src/app').join('')}
                 </span>
             );

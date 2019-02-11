@@ -27,37 +27,37 @@ module.exports = {
     toolbar: {
         buttons: [
             {
-                icon: '#re-icon-dna',
+                icon: 'Dna',
                 name: 'filter-all',
                 label: 'All Elements',
             },
             {
-                icon: '#re-icon-atom',
+                icon: 'Atom',
                 name: 'filter-atom',
                 label: 'Atoms',
             },
             {
-                icon: '#re-icon-molecule',
+                icon: 'Molecule',
                 name: 'filter-molecule',
                 label: 'Molecules',
             },
             {
-                icon: '#re-icon-organism',
+                icon: 'Organism',
                 name: 'filter-organism',
                 label: 'Organisms',
             },
             {
-                icon: '#re-icon-catalyst',
+                icon: 'Catalyst',
                 name: 'filter-catalyst',
                 label: 'Catalyst',
             },
             {
-                icon: '#re-icon-page',
+                icon: 'Page',
                 name: 'filter-page',
                 label: 'Pages',
             },
             {
-                icon: '#re-icon-template',
+                icon: 'Template',
                 name: 'filter-template',
                 label: 'Templates',
             },
@@ -65,7 +65,7 @@ module.exports = {
                 name: 'spacer',
             },
             {
-                icon: '#re-icon-settings',
+                icon: 'Settings',
                 name: 'toggle-settings',
                 cls: 'toggle',
             },

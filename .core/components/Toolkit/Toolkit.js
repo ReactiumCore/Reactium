@@ -12,7 +12,6 @@ import Settings from './Settings';
 import Notify from './Notify';
 import Loading from './Loading';
 import { Helmet } from 'react-helmet';
-import ToolbarIcons from './Toolbar/ToolbarIcons';
 import React, { Component, Fragment } from 'react';
 import { Plugins } from 'reactium-core/components/Plugable';
 
@@ -354,8 +353,6 @@ export default class Toolkit extends Component {
                     <body className='re-toolkit' />
                 </Helmet>
                 <Plugins zone='toolkit-head' />
-
-                <ToolbarIcons />
 
                 <Header
                     {...header}

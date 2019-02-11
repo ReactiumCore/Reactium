@@ -4,6 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component } from 'react';
+import { Close } from 'reactium-core/components/Toolkit/Icon';
 
 /**
  * -----------------------------------------------------------------------------
@@ -56,9 +57,7 @@ export default class Search extends Component {
                     type='button'
                     className='re-toolkit-search-clear'
                     onClick={this.onSearchClear.bind(this)}>
-                    <svg>
-                        <use xlinkHref='#re-icon-close' />
-                    </svg>
+                    <Close width={14} height={14} />
                 </button>
             </div>
         );

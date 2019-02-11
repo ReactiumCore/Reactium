@@ -17,6 +17,7 @@ import parserbabel from 'prettier/parser-babylon';
 import parserHtml from 'prettier/parser-html';
 import { getStore } from 'reactium-core/app';
 import deps from 'dependencies';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 
 /**
  * -----------------------------------------------------------------------------
@@ -266,9 +267,7 @@ export default class Code extends Component {
                                 title={'copy to clipboard'}
                                 onClick={this.onCopyClick}
                                 type={'button'}>
-                                <svg>
-                                    <use xlinkHref={'#re-icon-clipboard'} />
-                                </svg>
+                                <Icon.Clipboard />
                             </button>
                         </div>
                         <div className={'re-toolkit-code'}>
