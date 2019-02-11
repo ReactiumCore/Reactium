@@ -11,6 +11,14 @@ module.exports = {
             css: '/assets/style/style.css',
             selected: true,
         },
+        {
+            name: 'Theme 1',
+            css: '/assets/style/theme-1.css',
+        },
+        {
+            name: 'Theme 2',
+            css: '/assets/style/theme-2.css',
+        },
     ],
     sidebar: {
         closed: false,
@@ -68,6 +76,18 @@ module.exports = {
             label: 'Global',
             route: '/toolkit/global',
             elements: {
+                theming: {
+                    type: 'organism',
+                    label: 'Theming',
+                    route: '/toolkit/global/theming',
+                    dna: '/toolkit/global/Theming',
+                    component: require('appdir/toolkit/global/Theming').default,
+                    readme: require('appdir/toolkit/global/Theming/readme')
+                        .default,
+                    hideCode: true,
+                    hideDna: true,
+                    hideDocs: false,
+                },
                 colors: {
                     type: 'atom',
                     label: 'Colors',

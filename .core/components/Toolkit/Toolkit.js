@@ -10,6 +10,7 @@ import Sidebar from './Sidebar';
 import Content from './Content';
 import Settings from './Settings';
 import Notify from './Notify';
+import Loading from './Loading';
 import { Helmet } from 'react-helmet';
 import ToolbarIcons from './Toolbar/ToolbarIcons';
 import React, { Component, Fragment } from 'react';
@@ -316,6 +317,7 @@ export default class Toolkit extends Component {
             showMenu,
             style,
             notify,
+            loading,
         } = this.props;
 
         let {
@@ -378,24 +380,27 @@ export default class Toolkit extends Component {
                         onToolbarItemClick={this.onButtonClick.bind(this)}
                     />
 
-                    <Content
-                        group={group}
-                        prefs={prefs}
-                        menu={menu}
-                        style={style}
-                        data={elements}
-                        update={update}
-                        title={groupName}
-                        element={element}
-                        defaultComponent={overview}
-                        ref={elm => {
-                            this.content = elm;
-                        }}
-                        onMenuToggleClick={this.toggleMenu.bind(this)}
-                        onButtonClick={this.onButtonClick.bind(this)}
-                        onCrumbClick={this.onMenuItemClick.bind(this)}
-                        onCopyClick={this.onCopyClick.bind(this)}
-                    />
+                    {!loading && (
+                        <Content
+                            group={group}
+                            prefs={prefs}
+                            menu={menu}
+                            style={style}
+                            data={elements}
+                            update={update}
+                            title={groupName}
+                            element={element}
+                            defaultComponent={overview}
+                            ref={elm => {
+                                this.content = elm;
+                            }}
+                            onMenuToggleClick={this.toggleMenu.bind(this)}
+                            onButtonClick={this.onButtonClick.bind(this)}
+                            onCrumbClick={this.onMenuItemClick.bind(this)}
+                            onCopyClick={this.onCopyClick.bind(this)}
+                        />
+                    )}
+                    {loading && <Loading onComplete={this.props.loaded} />}
                 </main>
 
                 <Settings

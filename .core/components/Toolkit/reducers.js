@@ -6,10 +6,17 @@ export default (state = {}, action) => {
     let newState;
 
     switch (action.type) {
+        case deps.actionTypes.TOOLKIT_LOAD:
+            return { ...state, ...action.data, manifest, loading: true };
+
+        case deps.actionTypes.TOOLKIT_LOADED:
+            return { ...state, loading: null };
+
         case deps.actionTypes.TOOLKIT_MOUNT:
             return { ...state, ...action.data, manifest };
 
         case deps.actionTypes.TOOLKIT_NAV:
+        case deps.actionTypes.UPDATE_ROUTE:
             const { group = null, element = null } = action.params;
             return { ...state, group, element };
 

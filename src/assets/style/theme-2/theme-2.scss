@@ -1,0 +1,11 @@
+// DEFAULT STYLES
+@import "../style.scss";
+
+// THEME SPECIFIC VARIABLES
+@import "./theme-2-vars.scss";
+
+button.test {
+    padding: 10px 10px;
+    background-color: $button-bg-color;
+    color: $button-color;
+}

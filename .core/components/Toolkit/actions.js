@@ -10,10 +10,24 @@ const isToolkit = path => {
 };
 
 export default {
+    load: data => dispatch =>
+        dispatch({
+            type: deps.actionTypes.TOOLKIT_LOAD,
+            data,
+        }),
+
+    loaded: () => dispatch =>
+        dispatch({ type: deps.actionTypes.TOOLKIT_LOADED }),
+
     mount: data => dispatch =>
         dispatch({
             type: deps.actionTypes.TOOLKIT_MOUNT,
             data,
+        }),
+
+    unmount: data => dispatch =>
+        dispatch({
+            type: deps.actionTypes.TOOLKIT_UNMOUNT,
         }),
 
     menuItemClick: url => dispatch => {
