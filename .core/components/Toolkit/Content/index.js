@@ -14,6 +14,7 @@ import Code from './Code';
 import Docs from './Docs';
 import Dna from './Dna';
 import Icon from 'reactium-core/components/Toolkit/Icon';
+import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 
 /**
  * -----------------------------------------------------------------------------
@@ -31,7 +32,7 @@ export default class Content extends Component {
         this.link = {};
         this.previews = {};
         this.watcher = null;
-        this.state = {};
+        this.container = React.createRef();
         this.onCardButtonClick = this.onCardButtonClick.bind(this);
     }
 
@@ -39,6 +40,15 @@ export default class Content extends Component {
     componentDidMount() {
         if (this.props.hasOwnProperty('mount')) {
             this.props.mount(this);
+        }
+
+        const cont = this.container.current;
+        if (cont) {
+            TweenMax.from(cont, 0.5, {
+                opacity: 0,
+                delay: 0.25,
+                ease: Power2.easeOut,
+            });
         }
     }
 
@@ -285,15 +295,19 @@ export default class Content extends Component {
 
             const Overview = defaultComponent;
             return (
-                <section className={'re-toolkit-content'}>
-                    <Overview />
+                <>
+                    <section
+                        className={'re-toolkit-content'}
+                        ref={this.container}>
+                        <Overview />
+                    </section>
                     <button
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
                         <Icon.Menu />
                     </button>
-                </section>
+                </>
             );
         }
 
@@ -303,30 +317,38 @@ export default class Content extends Component {
             const label = op.get(element, 'label', null);
 
             return (
-                <section className={'re-toolkit-content'}>
-                    {this.renderCrumbs({ title, group, element: label })}
-                    {this.renderCards({ data, card, group })}
+                <>
+                    <section
+                        className={'re-toolkit-content'}
+                        ref={this.container}>
+                        {this.renderCrumbs({ title, group, element: label })}
+                        {this.renderCards({ data, card, group })}
+                    </section>
                     <button
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
                         <Icon.Menu />
                     </button>
-                </section>
+                </>
             );
         } else {
             const Component = data;
             return (
-                <section className={'re-toolkit-content'}>
-                    {this.renderCrumbs({ title })}
-                    {<Component />}
+                <>
+                    <section
+                        className={'re-toolkit-content'}
+                        ref={this.container}>
+                        {this.renderCrumbs({ title })}
+                        {<Component />}
+                    </section>
                     <button
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
                         <Icon.Menu />
                     </button>
-                </section>
+                </>
             );
         }
     }
