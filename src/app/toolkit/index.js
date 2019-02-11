@@ -82,9 +82,11 @@ module.exports = {
                     route: '/toolkit/global/theming',
                     dna: '/toolkit/global/Theming',
                     component: require('appdir/toolkit/global/Theming').default,
+                    readme: require('appdir/toolkit/global/Theming/readme')
+                        .default,
                     hideCode: true,
                     hideDna: true,
-                    hideDocs: true,
+                    hideDocs: false,
                 },
                 colors: {
                     type: 'atom',

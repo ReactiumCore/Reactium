@@ -17,6 +17,10 @@ import _ from 'underscore';
  * React Component: Preview
  * -----------------------------------------------------------------------------
  */
+const Empty = props => {
+    return () => null;
+};
+
 export default class Preview extends Component {
     static defaultProps = {
         visible: true,
@@ -124,22 +128,11 @@ export default class Preview extends Component {
     }
 
     render() {
-        const {
-            component: Component,
-            group,
-            id,
-            visible,
-            style,
-            path,
-            dna,
-        } = this.props;
-
-        if (!Component || !group || !id) {
-            return null;
-        }
+        const { group, id, visible, style, path, dna } = this.props;
 
         const display = visible ? 'block' : 'none';
         const markup = this.renderCmp(this.props);
+        let Component = this.props.component || Empty(this.props);
 
         return (
             <Frame

@@ -8,11 +8,12 @@ import Markdown from 'reactium-core/components/Toolkit/Markdown';
  */
 
 const content = `
-# Your Documentation Here
+Reactium ships with the ability to create multiple themes and apply them in your Style Guide.
 
-Be sure to use [markdown ](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) to format the text.
-
-I suppose you could also use HTML but come on.. do you _REALLY_ need to?
+Simply run the following ARCLI command:
+${'```'}
+$ arcli theme
+${'```'}
 `;
 
 /**

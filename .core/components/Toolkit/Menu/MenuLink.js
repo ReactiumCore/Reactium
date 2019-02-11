@@ -10,15 +10,15 @@ const MenuLink = ({
     className = 'link',
 }) =>
     redirect === true ? (
-        <a className={className} href={route} target={target}>
+        <a
+            className={className}
+            href={route}
+            target={target}
+            onClick={onItemClick}>
             {label}
         </a>
     ) : (
-        <NavLink
-            className={className}
-            exact={true}
-            to={route}
-            onClick={onItemClick}>
+        <NavLink className={className} exact={true} to={route}>
             {label}
         </NavLink>
     );

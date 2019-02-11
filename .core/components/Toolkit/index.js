@@ -28,6 +28,7 @@ const mapDispatchToProps = dispatch => ({
     set: data => dispatch(deps.actions.Toolkit.set(data)),
     setTheme: data => dispatch(deps.actions.Toolkit.setTheme(data)),
     toggleSettings: () => dispatch(deps.actions.Toolkit.toggleSettings()),
+    loaded: () => dispatch(deps.actions.Toolkit.loaded()),
 });
 
 export default connect(

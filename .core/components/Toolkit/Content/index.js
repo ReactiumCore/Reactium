@@ -186,7 +186,7 @@ export default class Content extends Component {
                     key={`card-${id}`}
                     onButtonClick={this.onCardButtonClick}
                     ref={elm => {
-                        this.registerCard({ elm, id });
+                        //this.registerCard({ elm, id });
                     }}>
                     <Preview
                         component={component}
@@ -298,10 +298,10 @@ export default class Content extends Component {
             );
         }
 
-        if (typeof data !== 'function') {
-            element = data[element] || {};
+        if (data && typeof data !== 'function') {
+            element = data[element];
 
-            let { label = null } = element;
+            const label = op.get(element, 'label', null);
 
             return (
                 <section className={'re-toolkit-content'}>

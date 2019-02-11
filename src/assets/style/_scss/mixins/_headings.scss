@@ -10,7 +10,7 @@
             font-size: $size;
         }
     }
-    
+
     @each $h, $style in $headings {
         $font: nth($style, 1);
         $size: nth($style, 2);
