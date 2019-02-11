@@ -27,7 +27,7 @@ module.exports = spinner => {
 
             const backupDir = backupPath(cwd);
             const backupZip = path.normalize(
-                `${backupDir}/${now}.${group}.${name}.zip`
+                `${backupDir}/${now}.${group}.${name}.zip`,
             );
 
             // Create the backup directory
@@ -76,11 +76,13 @@ module.exports = spinner => {
             op.del(manifest, key);
 
             let content = String(
-                prettier(JSON.stringify(manifest), { parser: 'json-stringify' })
+                prettier(JSON.stringify(manifest), {
+                    parser: 'json-stringify',
+                }),
             ).replace(/\"require(.*?)\.default\"/gim, 'require$1.default');
 
             content = prettier(`module.exports = ${content};`, {
-                parser: 'babylon',
+                parser: 'babel',
                 printWidth: 240,
                 singleQuote: true,
                 tabWidth: 4,

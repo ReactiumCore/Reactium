@@ -13,7 +13,7 @@ import copy from 'copy-to-clipboard';
 import op from 'object-path';
 import PropTypes from 'prop-types';
 import prettier from 'prettier/standalone';
-import parserBabylon from 'prettier/parser-babylon';
+import parserbabel from 'prettier/parser-babylon';
 import parserHtml from 'prettier/parser-html';
 import { getStore } from 'reactium-core/app';
 import deps from 'dependencies';
@@ -63,7 +63,7 @@ export default class Code extends Component {
             jsxSingleQuote: true,
             jsxBracketSameLine: true,
             trailingComma: 'es5',
-            plugins: [parserBabylon, parserHtml],
+            plugins: [parserbabel, parserHtml],
         };
     }
 

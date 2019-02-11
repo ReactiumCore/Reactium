@@ -11,6 +11,7 @@ const gulpwatch = require('gulp-watch');
 const run = require('gulp-run');
 const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
+const jsonFunctions = require('node-sass-functions-json').default;
 const tildeImporter = require('node-sass-tilde-importer');
 const less = require('gulp-less');
 const csso = require('gulp-csso');
@@ -343,6 +344,9 @@ const reactium = (gulp, config, webpackConfig) => {
                 gulpif(
                     isSass,
                     sass({
+                        functions: {
+                            ...jsonFunctions,
+                        },
                         importer: tildeImporter,
                         includePaths: config.src.includes,
                     }).on('error', sass.logError),

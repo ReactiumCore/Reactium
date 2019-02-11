@@ -38,6 +38,7 @@ module.exports = {
                     'eslint-plugin-react': '^7.11.1',
                     'babel-eslint': '^10.0.1',
                     'node-sass': '^4.11.0',
+                    'node-sass-functions-json': '^1.0.0',
                     'node-sass-tilde-importer': '^1.0.2',
                 },
                 remove: [

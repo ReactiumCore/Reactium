@@ -3,11 +3,14 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import { Provider } from 'react-redux';
 import { getDisplayName } from 'reactium-core/components/Toolkit/_lib/tools';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
+import React, { Component, Fragment } from 'react';
+import { themes } from 'appdir/toolkit';
+import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
+import op from 'object-path';
+import _ from 'underscore';
 
 /**
  * -----------------------------------------------------------------------------
@@ -101,6 +104,9 @@ export default class Preview extends Component {
             browserSync = browserSync ? browserSync.outerHTML : '';
         }
 
+        const theme = _.findWhere(themes, { css: style }) || themes[0];
+        style = op.get(theme, 'css');
+
         return `
             <!DOCTYPE html>
             <html>
@@ -145,7 +151,11 @@ export default class Preview extends Component {
                 ref={this.iframe}
                 initialContent={markup}
                 mountTarget='#router'>
-                <Component />
+                <FrameContextConsumer>
+                    {({ window: iWindow, document: iDocument }) => (
+                        <Component iWindow={iWindow} iDocument={iDocument} />
+                    )}
+                </FrameContextConsumer>
             </Frame>
         );
     }
