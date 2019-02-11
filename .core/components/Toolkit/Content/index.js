@@ -291,7 +291,7 @@ export default class Content extends Component {
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
-                        <Icon.Close />
+                        <Icon.Menu />
                     </button>
                 </section>
             );
