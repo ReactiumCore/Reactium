@@ -52,10 +52,7 @@
         svg {
             width: 24px;
             height: 24px;
-
-            * {
-                fill: $black;
-            }
+            color: $blue;
 
             use {
                 color: #bbb;

@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 
 const MenuFilters = ({ filters = [], onFilterClick }) =>
     filters.length > 0 && (
@@ -12,9 +13,7 @@ const MenuFilters = ({ filters = [], onFilterClick }) =>
                         onClick={e => {
                             onFilterClick(e, item);
                         }}>
-                        <svg>
-                            <use xlinkHref={'#re-icon-close'} />
-                        </svg>
+                        <Icon.Close width={12} height={12} />
                         {label}
                     </button>
                 );

@@ -5,13 +5,13 @@
  */
 import React, { Component, Fragment } from 'react';
 import defaultState from '../state';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 
 /**
  * -----------------------------------------------------------------------------
  * React Component: Toolbar
  * -----------------------------------------------------------------------------
  */
-
 const noop = () => {};
 
 export default class Toolbar extends Component {
@@ -39,8 +39,9 @@ export default class Toolbar extends Component {
             <nav className='re-toolkit-toolbar'>
                 <div>
                     {buttons.map(
-                        ({ icon, name, label = null, cls = null }, i) =>
-                            name === 'spacer' ? (
+                        ({ icon: ico, name, label = null, cls = null }, i) => {
+                            const Ico = Icon[ico];
+                            return name === 'spacer' ? (
                                 <div
                                     className='spacer'
                                     key={`re-toolkit-toolbar-${i}`}
@@ -52,12 +53,11 @@ export default class Toolbar extends Component {
                                     key={`re-toolkit-toolbar-${i}`}
                                     id={`toolbar-${name}`}
                                     className={cls}>
-                                    <svg>
-                                        <use xlinkHref={icon} />
-                                    </svg>
+                                    {ico && Ico && <Ico />}
                                     {label ? <div>{label}</div> : ''}
                                 </button>
-                            ),
+                            );
+                        },
                     )}
                 </div>
             </nav>

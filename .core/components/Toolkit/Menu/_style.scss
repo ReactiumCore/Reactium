@@ -50,6 +50,8 @@
     .filters {
         padding: 8px 12px 4px 12px;
         border-bottom: 1px solid $grey-light;
+        display: flex;
+        flex-wrap: wrap;
 
         &-remove-btn {
             font-size        : 11px;
@@ -61,12 +63,13 @@
             margin-bottom    : 4px;
             border-radius    : 2px;
             transition       : opacity .2s ease-in-out;
+            display: flex;
+            align-items: center;
 
             svg {
-                width        : 8px;
-                height       : 8px;
                 margin-right : 6px;
                 fill         : $white;
+                margin-bottom: -1px;
             }
 
             &:hover {

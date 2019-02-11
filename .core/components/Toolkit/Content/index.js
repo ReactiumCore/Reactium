@@ -13,6 +13,7 @@ import Card from './Card';
 import Code from './Code';
 import Docs from './Docs';
 import Dna from './Dna';
+import Icon from 'reactium-core/components/Toolkit/Icon';
 
 /**
  * -----------------------------------------------------------------------------
@@ -290,9 +291,7 @@ export default class Content extends Component {
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
-                        <svg>
-                            <use xlinkHref={'#re-icon-menu'} />
-                        </svg>
+                        <Icon.Close />
                     </button>
                 </section>
             );
@@ -311,9 +310,7 @@ export default class Content extends Component {
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
-                        <svg>
-                            <use xlinkHref={'#re-icon-menu'} />
-                        </svg>
+                        <Icon.Menu />
                     </button>
                 </section>
             );
@@ -327,9 +324,7 @@ export default class Content extends Component {
                         type={'button'}
                         className={`re-toolkit-menu-toggle-${pos}`}
                         onClick={onMenuToggleClick}>
-                        <svg>
-                            <use xlinkHref={'#re-icon-menu'} />
-                        </svg>
+                        <Icon.Menu />
                     </button>
                 </section>
             );
@@ -355,21 +350,21 @@ Content.defaultProps = {
                 {
                     name: 'toggle-fullscreen',
                     title: 'toggle fullscreen',
-                    icon: '#re-icon-fullscreen',
+                    icon: 'Fullscreen',
                 },
             ],
             footer: [
                 {
                     name: 'toggle-code',
                     title: 'code view',
-                    icon: '#re-icon-markup',
+                    icon: 'Markup',
                 },
                 {
                     name: 'toggle-link',
                     title: 'dependencies',
-                    icon: '#re-icon-link',
+                    icon: 'Link',
                 },
-                { name: 'toggle-docs', title: 'docs', icon: '#re-icon-docs' },
+                { name: 'toggle-docs', title: 'docs', icon: 'Docs' },
             ],
         },
     },
