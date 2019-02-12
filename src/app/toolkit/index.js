@@ -1,8 +1,9 @@
 module.exports = {
     header: {
-        logo: '/assets/images/atomic-reactor-logo.svg',
+        name: 'Reactium',
         title: 'Style Guide',
-        version: '2.1.1',
+        logo: '/assets/images/atomic-reactor-logo.svg',
+        version: '2.1.2',
     },
     overview: require('appdir/toolkit/overview').default,
     themes: [

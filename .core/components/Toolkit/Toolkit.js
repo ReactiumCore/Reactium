@@ -14,6 +14,7 @@ import Loading from './Loading';
 import { Helmet } from 'react-helmet';
 import React, { Component, Fragment } from 'react';
 import { Plugins } from 'reactium-core/components/Plugable';
+import config from 'appdir/toolkit';
 
 /**
  * -----------------------------------------------------------------------------
@@ -331,7 +332,9 @@ export default class Toolkit extends Component {
         menu = this.filterMenu(menu);
 
         let elements = this.getElements({ menu, group, element });
-        let groupName = group ? menu[group]['label'] : 'Reactium';
+        let groupName = group
+            ? menu[group]['label']
+            : op.get(config, 'header.name', 'Reactium');
         let theme = _.findWhere(themes, { selected: true });
 
         if (!style) {
@@ -347,7 +350,12 @@ export default class Toolkit extends Component {
 
         return (
             <Fragment>
-                <Helmet titleTemplate='%s | Style Guide'>
+                <Helmet
+                    titleTemplate={`%s | ${op.get(
+                        config,
+                        'header.title',
+                        'Style Guide',
+                    )}`}>
                     <title>{groupName}</title>
                     <html lang='en' />
                     <body className='re-toolkit' />
