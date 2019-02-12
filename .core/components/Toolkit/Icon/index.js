@@ -290,6 +290,7 @@ const legacy = {
     '#re-icon-catalyst': Catalyst,
     '#re-icon-page': Page,
     '#re-icon-template': Template,
+    '#re-icon-settings': Settings,
 };
 
 export default {
