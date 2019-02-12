@@ -291,6 +291,7 @@ const legacy = {
     '#re-icon-organism': Organism,
     '#re-icon-page': Page,
     '#re-icon-template': Template,
+    '#re-icon-settings': Settings,
 };
 
 export default {
