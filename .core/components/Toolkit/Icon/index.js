@@ -283,11 +283,12 @@ export const Page = props => (
 );
 
 const legacy = {
+    '#re-icon-atom': Atom,
+    '#re-icon-catalyst': Catalyst,
     '#re-icon-close': Close,
     '#re-icon-dna': Dna,
     '#re-icon-molecule': Molecule,
     '#re-icon-organism': Organism,
-    '#re-icon-catalyst': Catalyst,
     '#re-icon-page': Page,
     '#re-icon-template': Template,
 };
