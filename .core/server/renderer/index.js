@@ -15,32 +15,57 @@ const isMain = str => {
     return exp.test(str);
 };
 
-const styles = (req, res) => {
+const styles = (req, res, includeSheets = [], excludeSheets = []) => {
     let sarr = [];
+    const theme = op.get(
+        req,
+        'query.theme',
+        process.env.DEFAULT_THEME || 'style',
+    );
+    const defaultStylesheet = `${theme}.css`;
+
+    let styles = [];
+    let publicDir =
+        process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), 'public');
+    let styleDir = path.normalize(path.join(publicDir, '/assets/style'));
+    let includes = [defaultStylesheet].concat(includeSheets);
+    let excludes = ['core.css', 'toolkit.css'].concat(excludeSheets);
 
     if (isToolkit(req.path)) {
-        sarr.push('/assets/style/core.css');
+        let p = path.normalize(path.join(styleDir, 'core.css'));
+        styles.push(
+            `<link rel="stylesheet" href="${p.split(publicDir).join('')}">`,
+        );
     } else {
-        let publicDir =
-            process.env.PUBLIC_DIRECTORY ||
-            path.resolve(process.cwd(), 'public');
-        let styleDir = path.normalize(path.join(publicDir, '/assets/style'));
-        let exclude = ['core.css', 'toolkit.css'];
+        styles = styles.concat(
+            fs
+                .readdirSync(styleDir)
+                .map(item => {
+                    let p = path.normalize(path.join(styleDir, item));
+                    if (fs.statSync(p).isFile()) {
+                        return `<link rel="stylesheet" href="${p
+                            .split(publicDir)
+                            .join('')}">`;
+                    }
+                    return false;
+                })
+                .filter(item => {
+                    if (
+                        item &&
+                        includes.find(search => item.indexOf(search) >= 0)
+                    ) {
+                        return true;
+                    }
 
-        fs.readdirSync(styleDir).forEach(item => {
-            if (exclude.indexOf(item) >= 0) {
-                return;
-            }
-            let p = path.normalize(path.join(styleDir, item));
-            if (fs.statSync(p).isFile()) {
-                sarr.push(p.split(publicDir).join(''));
-            }
-        });
+                    if (
+                        !item ||
+                        excludes.find(search => item.indexOf(search) >= 0)
+                    ) {
+                        return false;
+                    }
+                }),
+        );
     }
-
-    let styles = sarr.map(item => {
-        return `<link rel="stylesheet" href="${item}">`;
-    });
 
     return styles.join('\n\t');
 };
