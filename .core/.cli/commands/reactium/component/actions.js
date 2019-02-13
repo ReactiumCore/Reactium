@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const op = require('object-path');
 const zip = require('folder-zipper');
 const handlebars = require('handlebars').compile;
+const homedir = require('os').homedir();
 
 module.exports = spinner => {
     const message = text => {
@@ -26,7 +27,7 @@ module.exports = spinner => {
 
         // Template content
         const template = path.normalize(
-            `${__dirname}/template/${templateFile}.hbs`
+            `${__dirname}/template/${templateFile}.hbs`,
         );
         const content = handlebars(fs.readFileSync(template, 'utf-8'))(params);
 
@@ -49,7 +50,13 @@ module.exports = spinner => {
             message(`backing up ${name} component...`);
 
             const now = Date.now();
-            const backupDir = path.normalize(`${cwd}/.BACKUP/component`);
+            const backupDir = path.join(
+                homedir,
+                '.arcli',
+                cwd,
+                '.BACKUP',
+                'component',
+            );
             const backupZip = path.normalize(`${backupDir}/${now}.${name}.zip`);
 
             // Create the backup directory

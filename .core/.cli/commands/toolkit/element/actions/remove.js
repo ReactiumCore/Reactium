@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const op = require('object-path');
 const zip = require('folder-zipper');
+const homedir = require('os').homedir();
 const prettier = require('prettier').format;
 const handlebars = require('handlebars').compile;
 
@@ -14,9 +15,8 @@ module.exports = spinner => {
         }
     };
 
-    const backupPath = cwd => {
-        return path.normalize(`${cwd}/.BACKUP/toolkit`);
-    };
+    const backupPath = cwd =>
+        path.normalize(homedir, '.arcli', cwd, '.BACKUP', 'toolkit');
 
     return {
         backup: ({ action, params, props }) => {

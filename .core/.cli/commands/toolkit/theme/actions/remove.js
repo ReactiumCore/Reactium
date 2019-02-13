@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const op = require('object-path');
 const _ = require('underscore');
+const homedir = require('os').homedir();
 const prettier = require('prettier').format;
 
 module.exports = spinner => {
@@ -13,9 +14,8 @@ module.exports = spinner => {
         }
     };
 
-    const backupPath = cwd => {
-        return path.normalize(`${cwd}/.BACKUP/toolkit`);
-    };
+    const backupPath = cwd =>
+        path.join(homedir, '.arcli', cwd, '.BACKUP', 'toolkit');
 
     return {
         backup: ({ action, params, props }) => {

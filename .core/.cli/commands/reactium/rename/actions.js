@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const op = require('object-path');
 const zip = require('folder-zipper');
+const homedir = require('os').homedir();
 const decamelize = require('decamelize');
 const handlebars = require('handlebars').compile;
 
@@ -25,8 +26,12 @@ module.exports = spinner => {
         }
 
         const filename = path.basename(file);
-        const backupFilePath = path.normalize(
-            `${cwd}/.BACKUP/${now}.${filename}`
+        const backupFilePath = path.join(
+            homedir,
+            '.arcli',
+            cwd,
+            '.BACKUP',
+            `${now}.${filename}`,
         );
 
         fs.copySync(file, backupFilePath);
@@ -40,7 +45,13 @@ module.exports = spinner => {
             message(`backing up ${from} component...`);
 
             const now = Date.now();
-            const backupDir = path.normalize(`${cwd}/.BACKUP/component`);
+            const backupDir = path.join(
+                homedir,
+                '.arcli',
+                cwd,
+                '.BACKUP',
+                'component',
+            );
             const backupZip = path.normalize(`${backupDir}/${now}.${from}.zip`);
 
             // Create the backup directory
@@ -91,7 +102,7 @@ module.exports = spinner => {
                     const dirname = path.dirname(file);
                     const filename = String(path.basename(file)).replace(
                         from,
-                        to
+                        to,
                     );
                     const newfile = path.normalize(`${dirname}/${filename}`);
 

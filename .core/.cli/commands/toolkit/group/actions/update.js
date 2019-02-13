@@ -2,6 +2,7 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const op = require('object-path');
+const homedir = require('os').homedir();
 const prettier = require('prettier').format;
 const handlebars = require('handlebars').compile;
 
@@ -21,7 +22,13 @@ module.exports = spinner => {
             message(`backing up toolkit manifest...`);
 
             // Backup the ~/src/app/toolkit/index.js file
-            const backupDir = path.normalize(`${cwd}/.BACKUP/toolkit`);
+            const backupDir = path.join(
+                homedir,
+                '.arcli',
+                cwd,
+                '.BACKUP',
+                'toolkit',
+            );
             const backupIndex = path.normalize(`${backupDir}/${now}.index.js`);
             const index = path.normalize(`${cwd}/src/app/toolkit/index.js`);
 

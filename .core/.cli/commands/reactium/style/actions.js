@@ -3,6 +3,7 @@ const path = require('path');
 const op = require('object-path');
 const prettier = require('prettier');
 const chalk = require('chalk');
+const homedir = require('os').homedir();
 const handlebars = require('handlebars').compile;
 
 module.exports = spinner => {
@@ -26,7 +27,13 @@ module.exports = spinner => {
                 message(`backing up ${chalk.cyan(filename)}...`);
 
                 const now = Date.now();
-                const dir = path.normalize(`${cwd}/.BACKUP/style`);
+                const dir = path.join(
+                    homedir,
+                    '.arcli',
+                    cwd,
+                    '.BACKUP',
+                    'style',
+                );
                 const backup = path.normalize(`${dir}/${now}.${filename}`);
 
                 // Create the backup directory
@@ -55,7 +62,7 @@ module.exports = spinner => {
             // Template content
             const template = path.normalize(`${__dirname}/template/style.hbs`);
             const content = handlebars(fs.readFileSync(template, 'utf-8'))(
-                params
+                params,
             );
 
             return new Promise((resolve, reject) => {
@@ -82,7 +89,7 @@ module.exports = spinner => {
                                   }';`;
                                   let content = fs.readFileSync(
                                       filepath,
-                                      'utf-8'
+                                      'utf-8',
                                   );
                                   if (content.indexOf(istring) < 0) {
                                       content += istring;
@@ -104,7 +111,7 @@ module.exports = spinner => {
                                           status: 200,
                                       });
                                   }
-                              })
+                              }),
                       )
                     : [];
 
