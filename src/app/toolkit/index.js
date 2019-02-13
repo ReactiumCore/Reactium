@@ -45,6 +45,10 @@ module.exports = {
             css: '/assets/style/achromatopsia.css',
         },
         {
+            name: 'Achromatomaly Accessible',
+            css: '/assets/style/achromatomaly.css',
+        },
+        {
             name: 'Chromatomaly Accessible',
             css: '/assets/style/achromatomaly.css',
         },
