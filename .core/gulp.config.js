@@ -67,6 +67,7 @@ const defaultConfig = {
             '!{.core/**/_*.scss}',
         ],
         assets: [
+            '.core/assets/**/*',
             'src/**/assets/**/*',
             'src/assets/**/*',
             '!{src/**/*/assets/style,src/**/*/assets/style/**}',
