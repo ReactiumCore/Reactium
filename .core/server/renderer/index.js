@@ -32,7 +32,7 @@ const styles = (req, res, includeSheets = [], excludeSheets = []) => {
     let excludes = ['core.css', 'toolkit.css'].concat(excludeSheets);
 
     if (isToolkit(req.path)) {
-        let p = path.normalize(path.join(styleDir, 'core.css'));
+        const p = path.normalize(path.join(styleDir, 'core.css'));
         styles.push(
             `<link rel="stylesheet" href="${p.split(publicDir).join('')}">`,
         );
@@ -41,7 +41,7 @@ const styles = (req, res, includeSheets = [], excludeSheets = []) => {
             fs
                 .readdirSync(styleDir)
                 .map(item => {
-                    let p = path.normalize(path.join(styleDir, item));
+                    const p = path.normalize(path.join(styleDir, item));
                     if (fs.statSync(p).isFile()) {
                         return `<link rel="stylesheet" href="${p
                             .split(publicDir)
@@ -124,6 +124,7 @@ export default (req, res, context) => {
     const coreTemplate = require(`../template/${renderMode}`);
 
     template = coreTemplate.template;
+
     if (fs.existsSync(`${rootPath}/src/app/server/template/${renderMode}.js`)) {
         let localTemplate = require(`${rootPath}/src/app/server/template/${renderMode}`);
         let templateVersion = sanitizeTemplateVersion(localTemplate.version);
@@ -131,6 +132,10 @@ export default (req, res, context) => {
         // Check to see if local template should be compatible with core
         if (semver.satisfies(templateVersion, coreSemver)) {
             template = localTemplate.template;
+
+            const { includeSheets, excludeSheets } = localTemplate;
+
+            req.styles = styles(req, res, includeSheets, excludeSheets);
 
             // Accept local styles
             req.styles =
