@@ -22,7 +22,7 @@ export default class Plugins extends Component {
             <>
                 <Context.Consumer>
                     {context => {
-                        const plugins = this.getPlugins(context);
+                        const plugins = this.getPlugins(context || {});
 
                         const components = Object.entries(plugins).reduce(
                             (cmps, [name, plugin]) => {
