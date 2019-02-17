@@ -67,6 +67,6 @@ export default () => {
             return [...rts, route];
         }, [])
         .sort((a, b) => a.order - b.order)
-        .concat([{ component: NotFound }]);
+        .concat([{ component: NotFound, order: 1000 }]);
     return routes;
 };

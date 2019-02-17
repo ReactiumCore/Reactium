@@ -17,7 +17,10 @@ export default class AppRouter extends Component {
                     <RouteObserver routes={routes} />
                     <Switch>
                         {routes.map(route => (
-                            <Route {...route} key='route' />
+                            <Route
+                                {...route}
+                                key={route.path ? route.path : 'not-found'}
+                            />
                         ))}
                     </Switch>
                 </Fragment>

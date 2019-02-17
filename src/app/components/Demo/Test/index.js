@@ -7,9 +7,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
 import Test from './Test';
 import deps from 'dependencies';
 
@@ -18,7 +16,7 @@ import deps from 'dependencies';
  * React Component: Test
  * -----------------------------------------------------------------------------
  */
-const mapStateToProps = (state, props) => {
+const mapStateToProps = state => {
     const { count, msg } = state.Test;
     return {
         count,
@@ -26,9 +24,20 @@ const mapStateToProps = (state, props) => {
     };
 };
 
-const mapDispatchToProps = (dispatch, props) => ({
-    click: () => dispatch(deps.actions.Test.click()),
-});
+const mapDispatchToProps = dispatch => {
+    return {
+        addRoute: path =>
+            dispatch(
+                deps.actions.Routes.add({
+                    path,
+                    component: 'Demo/Test',
+                    exact: true,
+                    order: 0,
+                }),
+            ),
+        click: () => dispatch(deps.actions.Test.click()),
+    };
+};
 
 export default connect(
     mapStateToProps,
