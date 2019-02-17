@@ -1,13 +1,48 @@
+import { connect } from 'react-redux';
 import React from 'react';
-import ServerRouter from './server';
 import ClientRouter from './browser';
+import actions from './Routes/actions';
+import getRoutes from './getRoutes';
 
-const Router = ({server = false, location, context}) => {
-    if ( server ) {
-        return <ServerRouter location={location} context={context} />;
+const mapStateToProps = ({ Routes = {} }) => {
+    if (Object.values(Routes).length) {
+        return { Routes };
     }
 
-    return <ClientRouter />;
+    return {};
 };
 
-export default Router;
+const mapDispatchToProps = dispatch => ({
+    init: routes => dispatch(actions.init(routes)),
+});
+
+class Router extends React.Component {
+    constructor(props) {
+        super(props);
+        this.initRoutes = getRoutes();
+        props.init(this.initRoutes);
+    }
+
+    render() {
+        const {
+            server = false,
+            location,
+            context,
+            init,
+            Routes = {},
+        } = this.props;
+        const { routes = [], updated } = Routes;
+
+        return (
+            <ClientRouter
+                updated={updated}
+                routes={routes.length ? routes : this.initRoutes}
+            />
+        );
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Router);

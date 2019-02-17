@@ -7,10 +7,10 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import _ from 'underscore';
 import { Plugins } from 'reactium-core/components/Plugable';
+import { Link } from 'react-router-dom';
 
 /**
  * -----------------------------------------------------------------------------
@@ -42,6 +42,11 @@ export default class Test extends Component {
                     <button type='button' onClick={click}>
                         Click It
                     </button>
+                    <button
+                        onClick={() => this.props.addRoute('/some/long/route')}>
+                        Add /some/long/route
+                    </button>
+                    <Link to={'/some/long/route'}>Dynamic Route</Link>
                 </div>
             </Fragment>
         );

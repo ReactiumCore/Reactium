@@ -1,17 +1,26 @@
 import React, { Component, Fragment } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import RouteObserver from './RouteObserver';
-import deps from 'dependencies';
+import op from 'object-path';
 
 export default class AppRouter extends Component {
+    shouldComponentUpdate({ updated }) {
+        return !!(this.props.updated && updated !== this.props.updated);
+    }
+
     render() {
+        const { routes = [] } = this.props;
+
         return (
             <BrowserRouter>
                 <Fragment>
-                    <RouteObserver />
+                    <RouteObserver routes={routes} />
                     <Switch>
-                        {deps.routes.map(route => (
-                            <Route {...route} key="route" />
+                        {routes.map(route => (
+                            <Route
+                                {...route}
+                                key={route.path ? route.path : 'not-found'}
+                            />
                         ))}
                     </Switch>
                 </Fragment>

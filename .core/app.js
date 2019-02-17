@@ -13,7 +13,8 @@ import { Provider } from 'react-redux';
 import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router';
 import storeCreator from 'reactium-core/storeCreator';
-import deps, { getComponents } from 'dependencies';
+import deps from 'dependencies';
+import getComponents from 'dependencies/getComponents';
 
 // Placeholder for the bindable elements
 const bindPoints = [];

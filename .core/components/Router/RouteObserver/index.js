@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router';
 import RouteObserver from './RouteObserver';
 import deps from 'dependencies';
 
@@ -9,15 +9,23 @@ const initialState = {
     },
 };
 
-const mapStateToProps = ({Router = {
-    pathname: false
-}}) => ({
+const mapStateToProps = ({
+    Router = {
+        pathname: false,
+    },
+}) => ({
     ...initialState,
     Router,
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateRoute: (location, route, params) => dispatch(deps.actions.Router.updateRoute(location, route, params)),
+    updateRoute: (location, route, params) =>
+        dispatch(deps.actions.Router.updateRoute(location, route, params)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RouteObserver));
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    )(RouteObserver),
+);
