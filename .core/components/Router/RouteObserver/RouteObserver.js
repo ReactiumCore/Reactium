@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { matchPath } from 'react-router'
-import deps from 'dependencies';
+import { matchPath } from 'react-router';
 
 export default class RouteObserver extends Component {
     /**
@@ -9,29 +8,27 @@ export default class RouteObserver extends Component {
      * e.g. appdir/product-page/route
      */
     processRoute() {
-        const { location, Router, updateRoute } = this.props;
+        const { location, Router, updateRoute, routes = [] } = this.props;
 
-        const pathChanged = ! Router.pathname || location.pathname !== Router.pathname;
-        const searchChanged = 'search' in Router && location.search !== Router.search;
+        const pathChanged =
+            !Router.pathname || location.pathname !== Router.pathname;
+        const searchChanged =
+            'search' in Router && location.search !== Router.search;
 
-        if ( pathChanged || searchChanged) {
-            let [ route ] = deps.routes.filter(route => {
+        if (pathChanged || searchChanged) {
+            let [route] = routes.filter(route => {
                 let match = matchPath(location.pathname, route);
                 return match && match.isExact;
             });
 
-            if ( location ) {
+            if (location) {
                 let routeParams = {};
 
                 if (route) {
                     routeParams = matchPath(location.pathname, route).params;
                 }
 
-                updateRoute(
-                    location,
-                    route,
-                    routeParams
-                );
+                updateRoute(location, route, routeParams);
             }
         }
     }

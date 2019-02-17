@@ -1,0 +1,5 @@
+export default {
+    INIT_ROUTES: 'INIT_ROUTES',
+    ADD_ROUTE: 'ADD_ROUTE',
+    REMOVE_ROUTE: 'REMOVE_ROUTE',
+};

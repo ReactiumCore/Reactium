@@ -5,21 +5,24 @@ import { Helmet } from 'react-helmet';
 import querystring from 'querystring';
 import { matchRoutes } from 'react-router-config';
 import storeCreator from 'reactium-core/storeCreator';
-import Router from 'reactium-core/components/Router';
+import Router from 'reactium-core/components/Router/server';
+import getRoutes from 'reactium-core/components/Router/getRoutes';
 
 const app = {};
 app.dependencies = global.dependencies = require('dependencies').default;
 
 const renderer = template => (req, res, context) => {
     app.dependencies.init();
+    const routes = getRoutes();
+
     const store = storeCreator({ server: true });
-    const matches = matchRoutes(dependencies.routes, req.path);
+    const matches = matchRoutes(routes, req.path);
     const loaders = matches
         .map(({ route, match }) => {
             return {
                 ...route,
                 params: match.params,
-                query: req.query ? req.query : {}
+                query: req.query ? req.query : {},
             };
         })
         .filter(route => route.load)
@@ -46,8 +49,13 @@ const renderer = template => (req, res, context) => {
         let html = '';
         const body = renderToString(
             <Provider store={store}>
-                <Router server={true} location={req.path} context={context} />
-            </Provider>
+                <Router
+                    server={true}
+                    location={req.path}
+                    context={context}
+                    routes={routes}
+                />
+            </Provider>,
         );
 
         const helmet = Helmet.renderStatic();

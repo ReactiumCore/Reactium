@@ -1,8 +1,3 @@
-import {
-    save as lsSave,
-    load as lsLoad,
-    clear as lsClear,
-} from 'redux-local-persist';
 import { createStore, combineReducers, compose } from 'redux';
 import { applyMiddleware } from 'redux-super-thunk';
 
@@ -63,7 +58,13 @@ export default ({ server = false } = {}) => {
     middlewares = loadDependencyStack(allMiddleware, middlewares, server);
 
     // Get localized state and apply it
-    if (!server) {
+    if (!server && typeof window !== 'undefined') {
+        const {
+            save: lsSave,
+            load: lsLoad,
+            clear: lsClear,
+        } = require('redux-local-persist');
+
         if (middlewares.find(mw => mw.name === 'local-persist')) {
             initialState = {
                 ...initialState,

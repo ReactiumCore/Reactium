@@ -7,7 +7,8 @@ import React, { Component } from 'react';
 import Context from './Context';
 import { matchPath } from 'react-router';
 import op from 'object-path';
-import deps, { getComponents } from 'dependencies';
+import deps from 'dependencies';
+import getComponents from 'dependencies/getComponents';
 
 /**
  * -----------------------------------------------------------------------------
