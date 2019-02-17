@@ -19,10 +19,8 @@ const mapDispatchToProps = dispatch => ({
 class Router extends React.Component {
     constructor(props) {
         super(props);
-        const { init, Routes = {} } = props;
-        const { routes = [] } = props;
         this.initRoutes = getRoutes();
-        if (!routes.length) props.init(this.initRoutes);
+        props.init(this.initRoutes);
     }
 
     render() {
