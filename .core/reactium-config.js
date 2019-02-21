@@ -60,6 +60,8 @@ module.exports = {
                     gsap: '^2.0.2',
                     'http-proxy-middleware': '^0.19.1',
                     prettier: '^1.15.1',
+                    react: '^16.8.3',
+                    'react-dom': '^16.8.3',
                     'react-frame-component': '^4.0.1',
                     'react-redux': '^6.0.0',
                     'redbox-react': '^1.6.0',
@@ -68,7 +70,12 @@ module.exports = {
                     'run-script-os': '^1.0.5',
                     xss: '^1.0.3',
                 },
-                remove: ['beautify', 'express-http-proxy'],
+                remove: [
+                    'beautify',
+                    'express-http-proxy',
+                    'react',
+                    'react-dom',
+                ],
             },
             scripts: {
                 add: {
