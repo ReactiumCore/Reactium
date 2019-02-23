@@ -17,7 +17,7 @@ module.exports = {
     },
     contexts: {
         {{#each contexts}}
-        '{{context}}': typeof window !== 'undefined' && require.context('{{modulePath}}', true, /{{filePattern}}/),
+        '{{context}}': typeof window !== 'undefined' && require.context('{{modulePath}}', true, /{{filePattern}}/, '{{mode}}'),
         {{/each}}
     },
     listContexts: () => {

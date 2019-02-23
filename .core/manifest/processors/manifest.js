@@ -20,11 +20,12 @@ module.exports = data => {
     });
 
     const contexts = Object.entries(data.contexts).map(([context, pattern]) => {
-        const { modulePath, filePattern } = pattern;
+        const { modulePath, filePattern, mode } = pattern;
         return {
             context,
             modulePath,
             filePattern,
+            mode,
         };
     });
 

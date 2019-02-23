@@ -193,18 +193,22 @@ module.exports = {
             components: {
                 modulePath: 'components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             common: {
                 modulePath: 'components/common-ui/',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             toolkit: {
                 modulePath: 'toolkit',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             core: {
                 modulePath: 'reactium-core/components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
         },
     },

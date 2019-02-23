@@ -80,34 +80,48 @@ module.exports = {
     contexts: {
         components:
             typeof window !== 'undefined' &&
-            require.context('components', true, /.jsx?$/),
+            require.context('components', true, /.jsx?$/, 'lazy-once'),
         common:
             typeof window !== 'undefined' &&
-            require.context('components/common-ui/', true, /.jsx?$/),
+            require.context(
+                'components/common-ui/',
+                true,
+                /.jsx?$/,
+                'lazy-once',
+            ),
         toolkit:
             typeof window !== 'undefined' &&
-            require.context('toolkit', true, /.jsx?$/),
+            require.context('toolkit', true, /.jsx?$/, 'lazy-once'),
         core:
             typeof window !== 'undefined' &&
-            require.context('reactium-core/components', true, /.jsx?$/),
+            require.context(
+                'reactium-core/components',
+                true,
+                /.jsx?$/,
+                'lazy-once',
+            ),
     },
     listContexts: () => {
         return {
             components: {
                 modulePath: 'components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             common: {
                 modulePath: 'components/common-ui/',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             toolkit: {
                 modulePath: 'toolkit',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             core: {
                 modulePath: 'reactium-core/components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
         };
     },

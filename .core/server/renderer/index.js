@@ -81,10 +81,8 @@ const scripts = (req, res) => {
         process.env.PUBLIC_DIRECTORY || `${process.cwd()}/public`;
 
     let scriptTags = globby
-        .sync(path.resolve(scriptPathBase, 'assets', 'js', '*.js'))
+        .sync(path.resolve(scriptPathBase, 'assets', 'js', '*main.js'))
         .map(script => path.parse(script).base)
-        .sort(prioritize('vendors.js'))
-        .sort(prioritize('polyfill.js'))
         .map(script => `<script src="/assets/js/${script}"></script>`)
         .join('\n');
 
@@ -93,12 +91,13 @@ const scripts = (req, res) => {
             .assetsByChunkName;
 
         scriptTags = Object.values(assetsByChunkName)
-            .map(chunk =>
-                normalizeAssets(chunk).filter(path => path.endsWith('.js')),
-            )
+            .map(chunk => {
+                return normalizeAssets(chunk).filter(path =>
+                    path.endsWith('.js'),
+                );
+            })
             .reduce((files, chunk) => files.concat(chunk), [])
-            .sort(prioritize('vendors.js'))
-            .sort(prioritize('polyfill.js'))
+            .filter(file => /main.js$/.test(file))
             .map(path => `<script src="/${path}"></script>`)
             .join('\n');
     }
