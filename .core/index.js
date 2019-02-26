@@ -187,10 +187,6 @@ middlewares
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {
-    if (isSSR) {
-        app.dependencies.init();
-    }
-
     console.log(`[00:00:00] Reactium Server running on port '${port}'...`);
 });
 

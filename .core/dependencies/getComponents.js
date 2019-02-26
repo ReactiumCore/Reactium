@@ -1,3 +1,5 @@
+import React, { Suspense, lazy } from 'react';
+
 export default (elms = []) => {
     let cmps = {};
     if (typeof window !== 'undefined') {
@@ -24,14 +26,16 @@ export default (elms = []) => {
                     const found = context.keys().find(key => key === attempt);
                     if (found) {
                         req = context(attempt);
-
-                        // Check if the component has a .default
-                        // -> if so: set that as the component constructor
-                        req = 'default' in req ? req.default : req;
                     }
 
                     if (req) {
-                        cmps[type] = req;
+                        const Found = lazy(() => req);
+                        const Component = () => (
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Found />
+                            </Suspense>
+                        );
+                        cmps[type] = Component;
                     }
                 });
             });

@@ -17,6 +17,7 @@ export default class RouteObserver extends Component {
 
         if (pathChanged || searchChanged) {
             let [route] = routes.filter(route => {
+                if (!route.path) return false;
                 let match = matchPath(location.pathname, route);
                 return match && match.isExact;
             });

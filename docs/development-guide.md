@@ -95,7 +95,7 @@ const mapStateToProps = (state, props) => Object.assign({}, state.Test, props);
 // Map dispatchers to actions
 const mapDispatchToProps = (dispatch, props) => ({
     test: {
-        click: () => dispatch(deps.actions.Test.click()),
+        click: () => dispatch(deps().actions.Test.click()),
     },
 });
 
@@ -193,11 +193,11 @@ import deps from 'dependencies';
 
 export default {
     mount: params => dispatch => {
-        dispatch({ type: deps.actionTypes.TEST_MOUNT, data: params });
+        dispatch({ type: deps().actionTypes.TEST_MOUNT, data: params });
     },
 
     click: () => dispatch => {
-        dispatch({ type: deps.actionTypes.TEST_CLICK });
+        dispatch({ type: deps().actionTypes.TEST_CLICK });
     },
 };
 ```
@@ -212,7 +212,7 @@ Then use an action by targeting the component domain that created the action:
 
 ```javascript
 //...
-deps.actions.Test.mount({ some: 'params' });
+deps().actions.Test.mount({ some: 'params' });
 ```
 
 ### The actionTypes.js File
@@ -228,7 +228,7 @@ export default {
 };
 ```
 
-To access the actionTypes, import them into your component. Not that unlike other domain dependencies, actionTypes are flattened together in `deps.actionTypes` with no domain.:
+To access the actionTypes, import them into your component. Not that unlike other domain dependencies, actionTypes are flattened together in `deps().actionTypes` with no domain.:
 
 ```javascript
 import deps from 'dependencies';
@@ -238,7 +238,7 @@ Usage:
 
 ```javascript
 //...
-dispatch({ type: deps.actionTypes.TEST_MOUNT, data: data });
+dispatch({ type: deps().actionTypes.TEST_MOUNT, data: data });
 ```
 
 ### The index.js File
@@ -258,12 +258,12 @@ export default (state = {}, action) => {
     let newState;
 
     switch (action.type) {
-        case deps.actionTypes.TEST_MOUNT:
+        case deps().actionTypes.TEST_MOUNT:
             newState = Object.assign({}, state, { ...action.data });
             return newState;
             break;
 
-        case deps.actionTypes.TEST_CLICK:
+        case deps().actionTypes.TEST_CLICK:
             let count = state.count || 0;
             newState = Object.assign({}, state, { count: count + 1 });
             return newState;
@@ -304,7 +304,7 @@ export default {
     component: MyComponent,
 
     // (optional) a Redux thunk action to load data for this component
-    load: params => deps.actions.MyComponent.mount(params),
+    load: params => deps().actions.MyComponent.mount(params),
 };
 ```
 
@@ -340,14 +340,14 @@ export default [
         path: '/base-route',
         exact: true,
         component: MyComponent,
-        load: params => deps.actions.MyComponent(params),
+        load: params => deps().actions.MyComponent(params),
     },
     {
         order: 0,
         path: '/base-route/:param',
         exact: true,
         component: MyComponent,
-        load: params => deps.actions.MyComponent(params),
+        load: params => deps().actions.MyComponent(params),
     },
 ];
 ```
@@ -391,9 +391,14 @@ import deps from 'dependencies';
 
 export default {
     mount: params => dispatch => {
-        deps.services.Test.fetchHello().then(data => {
-            dispatch({ type: deps.actionTypes.TEST_MOUNT, payload: data });
-        });
+        deps()
+            .services.Test.fetchHello()
+            .then(data => {
+                dispatch({
+                    type: deps().actionTypes.TEST_MOUNT,
+                    payload: data,
+                });
+            });
     },
 };
 ```
@@ -410,9 +415,11 @@ Usage:
 
 ```javascript
 ///...
-deps.services.Test.fetchHello().then(result => {
-    // Do something with the result
-});
+deps()
+    .services.Test.fetchHello()
+    .then(result => {
+        // Do something with the result
+    });
 ```
 
 ### The state.js File

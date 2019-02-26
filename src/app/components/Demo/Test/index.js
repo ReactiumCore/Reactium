@@ -28,14 +28,14 @@ const mapDispatchToProps = dispatch => {
     return {
         addRoute: path =>
             dispatch(
-                deps.actions.Routes.add({
+                deps().actions.Routes.add({
                     path,
                     component: 'Demo/Test',
                     exact: true,
                     order: 0,
                 }),
             ),
-        click: () => dispatch(deps.actions.Test.click()),
+        click: () => dispatch(deps().actions.Test.click()),
     };
 };
 

@@ -3,11 +3,11 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
-import { Helmet } from "react-helmet";
-import Header from "./Header";
-import Nav from "./Nav";
-import Footer from "./Footer";
+import React, { Component, Fragment } from 'react';
+import { Helmet } from 'react-helmet';
+import Header from './Header';
+import Nav from './Nav';
+import Footer from './Footer';
 
 /**
  * -----------------------------------------------------------------------------
@@ -23,14 +23,11 @@ export default class Template extends Component {
         this.navbar = null;
         this.header = null;
         this.ival = null;
-        this.state = { ...this.props };
-        this.onLoad = this.onLoad.bind(this);
         this.onScroll = this.onScroll.bind(this);
     }
 
     componentDidMount() {
-        window.addEventListener("load", this.onLoad);
-        window.addEventListener("scroll", this.onScroll);
+        window.addEventListener('scroll', this.onScroll);
         this.ival = setInterval(() => {
             this.setState({ mounted: window.templateMounted });
         });
@@ -39,11 +36,7 @@ export default class Template extends Component {
     componentWillUnmount() {
         clearInterval(this.ival);
         this.ival = null;
-        window.removeEventListener("scroll", this.onScroll);
-    }
-
-    onLoad() {
-        window.templateMounted = true;
+        window.removeEventListener('scroll', this.onScroll);
     }
 
     onScroll(e) {
@@ -52,7 +45,7 @@ export default class Template extends Component {
         }
 
         let {
-            height: headerHeight
+            height: headerHeight,
         } = this.header.container.getBoundingClientRect();
         let { top, height } = this.navbar.container.getBoundingClientRect();
         let y = scrollY - headerHeight;
@@ -66,7 +59,6 @@ export default class Template extends Component {
 
     render() {
         let {
-            mounted,
             title,
             bodyClass,
             navbarFixed,
@@ -74,30 +66,17 @@ export default class Template extends Component {
             children,
             style,
             description,
-            header = {}
-        } = this.state;
+            header = {},
+        } = this.props;
 
         let headerStyle = { marginBottom: headerMarginBottom };
-
-        if (mounted !== true) {
-            return (
-                <Helmet>
-                    <link rel="stylesheet" href={style} />
-                    <title>{title}</title>
-                    <meta name="description" content={description} />
-                    <html lang="en" />
-                    <body className={bodyClass} />
-                </Helmet>
-            );
-        }
-
         return (
             <Fragment>
                 <Helmet>
-                    <link rel="stylesheet" href={style} />
+                    <link rel='stylesheet' href={style} />
                     <title>{title}</title>
-                    <meta name="description" content={description} />
-                    <html lang="en" />
+                    <meta name='description' content={description} />
+                    <html lang='en' />
                     <body className={bodyClass} />
                 </Helmet>
 
@@ -126,11 +105,10 @@ export default class Template extends Component {
 
 Template.defaultProps = {
     header: {},
-    mounted: false,
     navbarFixed: false,
     headerMarginBottom: 0,
-    bodyClass: "demo-site",
-    title: "Reactium",
-    description: "This is an example Reactium Site",
-    style: "/assets/style/demo-site.css"
+    bodyClass: 'demo-site',
+    title: 'Reactium',
+    description: 'This is an example Reactium Site',
+    style: '/assets/style/demo-site.css',
 };

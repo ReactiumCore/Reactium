@@ -3,8 +3,8 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.5.0',
-    semver: '^2.0.0',
+    version: '3.0.0',
+    semver: '^3.0.0',
     update: {
         package: {
             devDependencies: {
@@ -67,6 +67,7 @@ module.exports = {
                     '@babel/cli': '^7.2.3',
                     '@babel/node': '^7.2.2',
                     '@babel/polyfill': '^7.2.5',
+                    '@babel/plugin-syntax-dynamic-import': '^7.2.0',
                     eslint: '^5.14.1',
                     globby: '^9.0.0',
                     gsap: '^2.1.0',
@@ -77,6 +78,8 @@ module.exports = {
                     'react-dom': '^16.8.3',
                     'react-frame-component': '^4.0.1',
                     'react-redux': '^6.0.0',
+                    'react-router-config': '^4.4.0-beta.6',
+                    'react-router-dom': '^4.4.0-beta.6',
                     'redbox-react': '^1.6.0',
                     'redux-devtools': '^3.5.0',
                     'redux-local-persist': '0.1.0',
@@ -97,6 +100,8 @@ module.exports = {
                     'react',
                     'react-dom',
                     'react-redux',
+                    'react-router-config',
+                    'react-router-dom',
                     'redux-local-persist',
                 ],
             },
@@ -193,18 +198,22 @@ module.exports = {
             components: {
                 modulePath: 'components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             common: {
                 modulePath: 'components/common-ui/',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             toolkit: {
                 modulePath: 'toolkit',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             core: {
                 modulePath: 'reactium-core/components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
         },
     },

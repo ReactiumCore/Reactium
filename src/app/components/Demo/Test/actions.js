@@ -3,7 +3,7 @@ import deps from 'dependencies';
 
 const loadPlugins = dispatch => {
     dispatch(
-        deps.actions.Plugable.addPlugin({
+        deps().actions.Plugable.addPlugin({
             zone: 'demo-test-nested-example',
             id: 'inline-plugin-example',
             component: 'Checkbox',
@@ -15,7 +15,7 @@ const loadPlugins = dispatch => {
         }),
     );
     dispatch(
-        deps.actions.Plugable.addPlugin({
+        deps().actions.Plugable.addPlugin({
             zone: 'demo-test-nested-example',
             id: 'inline-plugin-example2',
             component: () => <small>Runtime Plugin</small>,
@@ -31,25 +31,26 @@ export default {
 
         loadPlugins(dispatch);
         if (loaded !== true) {
-            return deps.services.Test.fetchHello()
+            return deps()
+                .services.Test.fetchHello()
                 .then(data => {
-                    dispatch({ type: deps.actionTypes.TEST_MOUNT, data });
+                    dispatch({ type: deps().actionTypes.TEST_MOUNT, data });
                 })
                 .catch(error => {
                     dispatch({
-                        type: deps.actionTypes.TEST_MOUNT,
+                        type: deps().actionTypes.TEST_MOUNT,
                         data: { msg: '' },
                     });
                 });
         } else {
             // Demonstrate Run-time Plugins
             return Promise.resolve(
-                dispatch({ type: deps.actionTypes.TEST_MOUNT, data: state }),
+                dispatch({ type: deps().actionTypes.TEST_MOUNT, data: state }),
             );
         }
     },
 
     click: () => dispatch => {
-        dispatch({ type: deps.actionTypes.TEST_CLICK });
+        dispatch({ type: deps().actionTypes.TEST_CLICK });
     },
 };

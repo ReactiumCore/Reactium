@@ -77,22 +77,10 @@ if (elements.length > 0) {
  * inside of them.
  * -----------------------------------------------------------------------------
  */
-// Create the Redux store and export it
+// Create the Redux store
 const store = storeCreator();
 
-/**
- * Use the getStore export sparingly! Most uses will not work as you expect in file scope.
- * Using in mounted component will probably work in browser. This is SSR safe, but the store
- * will not be available server-side, so your component will lack redux state for
- * rendering!
- */
-const noop = () => {};
-export let getStore = () => ({ dispatch: noop, getState: () => ({}) });
-if (typeof window !== 'undefined') {
-    getStore = () => store;
-}
-
-deps.init();
+deps().init();
 
 export const App = () => {
     if (typeof document !== 'undefined') {
@@ -101,7 +89,7 @@ export const App = () => {
             bindPoints.forEach(item => {
                 ReactDOM.render(
                     <Provider store={store}>
-                        <PlugableProvider {...deps.plugableConfig}>
+                        <PlugableProvider {...deps().plugableConfig}>
                             <Fragment>{item.component}</Fragment>
                         </PlugableProvider>
                     </Provider>,
@@ -123,7 +111,7 @@ export const App = () => {
                 // Hydrate the Routed component
                 ReactDOM.hydrate(
                     <Provider store={store}>
-                        <PlugableProvider {...deps.plugableConfig}>
+                        <PlugableProvider {...deps().plugableConfig}>
                             <Fragment>
                                 <Router />
                             </Fragment>
@@ -139,7 +127,7 @@ export const App = () => {
                 // Bind the Routed component
                 ReactDOM.render(
                     <Provider store={store}>
-                        <PlugableProvider {...deps.plugableConfig}>
+                        <PlugableProvider {...deps().plugableConfig}>
                             <Fragment>
                                 <Router />
                             </Fragment>
