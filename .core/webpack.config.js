@@ -74,6 +74,11 @@ module.exports = config => {
         }),
     );
 
+    if (Boolean(env !== 'production')) {
+        const WebpackVisualizer = require('webpack-visualizer-plugin');
+        plugins.push(new WebpackVisualizer());
+    }
+
     const defaultConfig = {
         target: target,
         entry: entries,
@@ -117,6 +122,11 @@ module.exports = config => {
                         /.png$/,
                         /.jpg$/,
                         /.gif$/,
+                        /.core\/server/,
+                        /.core\/manifest/,
+                        /.core\/index.js/,
+                        /.core\/gulp/,
+                        /.core\/.*?config/,
                         /\.core\/.cli\//,
                         /\.cli/,
                     ],
