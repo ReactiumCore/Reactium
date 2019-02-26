@@ -31,7 +31,12 @@ export default (elms = []) => {
                     if (req) {
                         const Found = lazy(() => req);
                         const Component = () => (
-                            <Suspense fallback={<div>Loading...</div>}>
+                            <Suspense
+                                fallback={
+                                    <div className='get-components-loading'>
+                                        Loading...
+                                    </div>
+                                }>
                                 <Found />
                             </Suspense>
                         );
