@@ -7,14 +7,13 @@ import deps from 'dependencies';
  * Inject Redux State and Actions into React Component: {{name}}
  * -----------------------------------------------------------------------------
  */
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = state => ({
     ...state.{{name}},
-    ...props,
 });
 
 const mapDispatchToProps = dispatch => ({
     {{#if actions}}
-    mount: (data) => dispatch(deps().actions.{{name}}.mount(data)),
+    load: (data) => dispatch(deps().actions.{{name}}.load(data)),
     {{/if}}
 });
 
