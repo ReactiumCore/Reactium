@@ -6,7 +6,7 @@ import moment from 'moment';
 let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
 
 export default () => {
-    if (!Object.values(deps.allRoutes).length) {
+    if (!Object.values(deps().allRoutes).length) {
         return undefined;
     }
 
@@ -21,7 +21,7 @@ export default () => {
         }
     }
 
-    let routes = Object.values(deps.allRoutes)
+    let routes = Object.values(deps().allRoutes)
         .concat(
             dynamicRoutes.map(route => {
                 let Found = getComponents([{ type: route.component }]);

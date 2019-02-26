@@ -35,7 +35,7 @@ export default {
         }
 
         dispatch({
-            type: deps.actionTypes.UPDATE_ROUTE,
+            type: deps().actionTypes.UPDATE_ROUTE,
             location,
             params,
         });

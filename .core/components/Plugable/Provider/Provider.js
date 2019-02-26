@@ -70,7 +70,7 @@ export default class PlugableProvider extends Component {
     allPlugins(props) {
         const { plugins } = props;
 
-        return Object.values(deps.plugins)
+        return Object.values(deps().plugins)
             .concat(plugins)
             .reduce((allPlugins, plugin) => {
                 // support multi-use plugin

@@ -25,6 +25,7 @@ module.exports = {
         ],
     ],
     plugins: [
+        ['@babel/plugin-syntax-dynamic-import'],
         [
             'module-resolver',
             {
@@ -38,7 +39,6 @@ module.exports = {
                 loose: true,
             },
         ],
-        ['@babel/plugin-syntax-dynamic-import'],
     ],
     env: {
         test: {

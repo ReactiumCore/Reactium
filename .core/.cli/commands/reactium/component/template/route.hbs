@@ -6,6 +6,6 @@ export default {
     exact: true,
     component: {{name}},
     {{#if actions}}
-    load: (params, search) => deps.actions.{{name}}.mount({ params, search }),
+    load: (params, search) => deps().actions.{{name}}.mount({ params, search }),
     {{/if}}
 };

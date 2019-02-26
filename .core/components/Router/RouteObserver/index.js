@@ -20,7 +20,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
     updateRoute: (location, route, params) =>
-        dispatch(deps.actions.Router.updateRoute(location, route, params)),
+        dispatch(deps().actions.Router.updateRoute(location, route, params)),
 });
 
 export default withRouter(

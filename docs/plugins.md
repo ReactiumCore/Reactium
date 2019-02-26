@@ -242,19 +242,19 @@ Now that we have a filter on the plugin zone, plugins will only appear when thos
 If you wish to use application state to determine what plugins are loaded in a zone, you can dispatch core actions to dynamically add / remove / update plugins in a zone.
 
 ```js
-deps.actions.Plugable.addPlugin(plugin);
+deps().actions.Plugable.addPlugin(plugin);
 ```
 
 > Add a dynamic redux plugin
 
 ```js
-deps.actions.Plugable.updatePlugin(plugin);
+deps().actions.Plugable.updatePlugin(plugin);
 ```
 
 > Update a redux plugin (must have same id)
 
 ```js
-deps.actions.Plugable.removePlugin(pluginId);
+deps().actions.Plugable.removePlugin(pluginId);
 ```
 
 > Remove a redux plugin by id
@@ -267,7 +267,7 @@ export default {
     // components/navs/SecondaryNav to the navigation zone, having it appear only on the home pageType
     // (see custom filter above)
     load: () => dispatch => {
-        dispatch(deps.actions.Plugable.addPlugin({
+        dispatch(deps().actions.Plugable.addPlugin({
             id: 'my-dynamic-plugin',
             order: -1000,
             component: 'SecondaryNav',
@@ -291,11 +291,11 @@ export default {
     load: () => dispatch => {
         return api.get('/api/navs')
             .then(({data: plugins}) => {
-                plugins.forEach(plugin => dispatch(deps.actions.Plugable.addPlugin(plugin)))
+                plugins.forEach(plugin => dispatch(deps().actions.Plugable.addPlugin(plugin)))
             })
             .catch(error => {
                 const errorId = `error-${new Date()}`;
-                dispatch(deps.actions.Plugable.addPlugin({
+                dispatch(deps().actions.Plugable.addPlugin({
                     id: errorId,
                     component: 'ErrorMessage',
                     zone: 'errors',
@@ -304,7 +304,7 @@ export default {
 
                 // clear error after 2 seconds
                 setTimeout(() => {
-                    dispatch(deps.actions.Plugable.removePlugin(errorId));
+                    dispatch(deps().actions.Plugable.removePlugin(errorId));
                 }, 2000)
             })
     };

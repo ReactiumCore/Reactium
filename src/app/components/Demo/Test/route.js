@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import deps from 'dependencies';
-const Test = lazy(() => import(/* webpackChunkName: "Test" */ './index'));
+
+let AsyncTest = import(/* webpackChunkName: "Test" */ './index');
+const Test = lazy(() => AsyncTest);
 const Component = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
@@ -21,5 +23,5 @@ export default {
     component: Component,
 
     // load callback should return thunk that uses route params.
-    load: params => deps.actions.Test.mount(params),
+    load: params => deps().actions.Test.mount(params),
 };
