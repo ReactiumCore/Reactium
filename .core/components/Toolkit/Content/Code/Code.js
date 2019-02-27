@@ -146,7 +146,7 @@ export default class Code extends Component {
 
     onCopyClick(e) {
         const { getState, dispatch } = this.props;
-        const store = { getState, dispatch };
+        const store = { getState, dispatch, subscribe: () => {} };
         const { component: Component, onButtonClick } = this.props;
         const markup = prettier.format(
             renderToStaticMarkup(
@@ -227,7 +227,7 @@ export default class Code extends Component {
 
     markup(Component) {
         const { getState, dispatch } = this.props;
-        const store = { getState, dispatch };
+        const store = { getState, dispatch, subscribe: () => {} };
         const html = renderToStaticMarkup(
             <Provider store={store}>
                 <Component />
