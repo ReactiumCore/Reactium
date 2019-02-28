@@ -38,6 +38,7 @@ module.exports = {
                     webpack: '^4.29.5',
                     'webpack-dev-middleware': '^3.6.0',
                     'webpack-filter-warnings-plugin': '^1.2.0',
+                    'webpack-visualizer-plugin': '^0.1.11',
                     eslint: '^5.12.0',
                     'eslint-plugin-react': '^7.11.1',
                     'babel-eslint': '^10.0.1',
@@ -61,6 +62,7 @@ module.exports = {
                     'run-sequence',
                     'webpack',
                     'webpack-dev-middleware',
+                    'webpack-visualizer-plugin',
                 ],
             },
             dependencies: {
