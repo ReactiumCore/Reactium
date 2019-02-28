@@ -108,7 +108,7 @@ module.exports = {
             },
             scripts: {
                 add: {
-                    build: 'npm install --production-only',
+                    build: 'npm-run-all build:*',
                     static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
                     'local:ssr': 'gulp local:ssr',
