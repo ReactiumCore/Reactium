@@ -129,6 +129,7 @@ module.exports = config => {
                         /.core\/.*?config/,
                         /\.core\/.cli\//,
                         /\.cli/,
+                        /src\/app\/server/,
                     ],
                     use: [
                         {
