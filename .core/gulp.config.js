@@ -91,6 +91,7 @@ const defaultConfig = {
         library: 'lib',
         build: 'build/src',
         colors: 'src/assets/style/_scss/_colors.scss',
+        startPath: '/',
     },
 };
 
