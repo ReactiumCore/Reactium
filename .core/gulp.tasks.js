@@ -102,6 +102,7 @@ const reactium = (gulp, config, webpackConfig) => {
                 proxy: `localhost:${config.port.proxy}`,
                 open: open,
                 ghostMode: false,
+                startPath: config.dest.startPath,
             });
 
             done();
