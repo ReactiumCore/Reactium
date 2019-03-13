@@ -140,7 +140,7 @@ module.exports = {
                 {
                     overwrite: false,
                     version: '>=2.3.16',
-                    destination: '/',
+                    destination: '',
                     source: '/tmp/update/.stylelintrc',
                 },
                 {
