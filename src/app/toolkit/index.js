@@ -477,15 +477,15 @@ module.exports = {
         icons: {
             label: 'Icons',
             route: '/toolkit/icons',
+            hideEmpty: true,
             elements: {
-                'linear-icons': {
-                    type: 'molecule',
-                    label: 'Linearicons',
-                    route: '/toolkit/icons/linear-icons',
-                    dna: '/toolkit/icons/LinearIcons',
-                    component: require('appdir/toolkit/icons/LinearIcons')
-                        .default,
-                    readme: require('appdir/toolkit/icons/LinearIcons/readme')
+                'feather-icons': {
+                    type: 'atom',
+                    label: 'Feather Icons',
+                    route: '/toolkit/icons/feather-icons',
+                    dna: '/toolkit/icons/Feather',
+                    component: require('appdir/toolkit/icons/Feather').default,
+                    readme: require('appdir/toolkit/icons/Feather/readme')
                         .default,
                 },
             },

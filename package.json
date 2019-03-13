@@ -148,6 +148,7 @@
         "ora": "^3.0.0",
         "readdir-recursive": "0.0.4",
         "slugify": "^1.3.3",
+        "stylelint": "^9.10.1",
         "vinyl-source-stream": "^2.0.0",
         "webpack": "^4.29.5",
         "webpack-dev-middleware": "^3.6.0",

@@ -45,6 +45,7 @@ module.exports = {
                     'node-sass': '^4.11.0',
                     'node-sass-functions-json': '^1.0.0',
                     'node-sass-tilde-importer': '^1.0.2',
+                    stylelint: '^9.10.1',
                 },
                 remove: [
                     'atomic-reactor-cli',
@@ -131,9 +132,44 @@ module.exports = {
         files: {
             add: [
                 {
+                    overwrite: true,
                     version: '>=2.3.16',
                     destination: '/src/app/plugable',
                     source: '/tmp/update/src/app/plugable',
+                },
+                {
+                    overwrite: false,
+                    version: '>=2.3.16',
+                    destination: '.',
+                    source: '/tmp/update/.stylelintrc',
+                },
+                {
+                    overwrite: false,
+                    version: '>=2.3.16',
+                    destination:
+                        '/src/app/components/common-ui/Icon/defaultProps.js',
+                    source:
+                        '/tmp/update/src/app/components/common-ui/Icon/defaultProps.js',
+                },
+                {
+                    overwrite: false,
+                    version: '>=2.3.16',
+                    destination: '/src/app/components/common-ui/Icon/index.js',
+                    source:
+                        '/tmp/update/src/app/components/common-ui/Icon/index.js',
+                },
+                {
+                    overwrite: true,
+                    version: '>=2.3.16',
+                    destination: '/src/app/components/common-ui/Icon/Feather',
+                    source:
+                        '/tmp/update/src/app/components/common-ui/Icon/Feather',
+                },
+                {
+                    overwrite: true,
+                    version: '>=2.3.16',
+                    destination: '/src/app/toolkit/icons/Feather',
+                    source: '/tmp/update/src/app/toolkit/icons/Feather',
                 },
             ],
             remove: [],
