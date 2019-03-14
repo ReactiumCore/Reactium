@@ -70,7 +70,7 @@ class ReactiumDependencies {
 
 const dependencies = new ReactiumDependencies();
 
-export default dependencies;
+export default () => dependencies;
 
 export const restHeaders = () => {
     return {};

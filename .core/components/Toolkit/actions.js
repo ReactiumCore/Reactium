@@ -12,22 +12,22 @@ const isToolkit = path => {
 export default {
     load: data => dispatch =>
         dispatch({
-            type: deps.actionTypes.TOOLKIT_LOAD,
+            type: deps().actionTypes.TOOLKIT_LOAD,
             data,
         }),
 
     loaded: () => dispatch =>
-        dispatch({ type: deps.actionTypes.TOOLKIT_LOADED }),
+        dispatch({ type: deps().actionTypes.TOOLKIT_LOADED }),
 
     mount: data => dispatch =>
         dispatch({
-            type: deps.actionTypes.TOOLKIT_MOUNT,
+            type: deps().actionTypes.TOOLKIT_MOUNT,
             data,
         }),
 
     unmount: data => dispatch =>
         dispatch({
-            type: deps.actionTypes.TOOLKIT_UNMOUNT,
+            type: deps().actionTypes.TOOLKIT_UNMOUNT,
         }),
 
     menuItemClick: url => dispatch => {
@@ -40,7 +40,7 @@ export default {
             const params = { group, element };
 
             return dispatch({
-                type: deps.actionTypes.TOOLKIT_NAV,
+                type: deps().actionTypes.TOOLKIT_NAV,
                 params,
             });
         }
@@ -60,7 +60,7 @@ export default {
         }
 
         // Let the app know you're animating
-        dispatch({ type: deps.actionTypes.TOOLKIT_MENU_TOGGLE });
+        dispatch({ type: deps().actionTypes.TOOLKIT_MENU_TOGGLE });
 
         // Unset display: none
         TweenMax.set(elm, { display: 'flex' });
@@ -77,9 +77,9 @@ export default {
 
                 TweenMax.set(elm, { display });
 
-                dispatch({ type: deps.actionTypes.TOOLKIT_MENU_TOGGLE });
+                dispatch({ type: deps().actionTypes.TOOLKIT_MENU_TOGGLE });
                 dispatch({
-                    type: deps.actionTypes.TOOLKIT_PREF,
+                    type: deps().actionTypes.TOOLKIT_PREF,
                     value: expanded,
                     key: 'prefs.sidebar.expanded',
                 });
@@ -102,7 +102,7 @@ export default {
             }
 
             dispatch({
-                type: deps.actionTypes.TOOLKIT_NOTICE_UPDATE,
+                type: deps().actionTypes.TOOLKIT_NOTICE_UPDATE,
                 params: { ...state.notify, animating: true },
             });
 
@@ -113,7 +113,7 @@ export default {
                 ease: Power2.easeInOut,
                 onComplete: () => {
                     dispatch({
-                        type: deps.actionTypes.TOOLKIT_NOTICE_TOGGLE,
+                        type: deps().actionTypes.TOOLKIT_NOTICE_TOGGLE,
                         visible: false,
                     });
 
@@ -138,7 +138,7 @@ export default {
             params['animating'] = true;
 
             dispatch({
-                type: deps.actionTypes.TOOLKIT_NOTICE_UPDATE,
+                type: deps().actionTypes.TOOLKIT_NOTICE_UPDATE,
                 params,
             });
 
@@ -147,7 +147,7 @@ export default {
                 ease: Power2.easeInOut,
                 onComplete: () => {
                     dispatch({
-                        type: deps.actionTypes.TOOLKIT_NOTICE_TOGGLE,
+                        type: deps().actionTypes.TOOLKIT_NOTICE_TOGGLE,
                         visible: true,
                     });
                 },
@@ -157,7 +157,7 @@ export default {
 
     set: ({ key, value }) => dispatch =>
         dispatch({
-            type: deps.actionTypes.TOOLKIT_PREF,
+            type: deps().actionTypes.TOOLKIT_PREF,
             value,
             key,
         }),
@@ -167,11 +167,11 @@ export default {
             op.get(_.findWhere(themes, { css: theme }), 'css') ||
             '/assets/style/style.css';
         return dispatch({
-            type: deps.actionTypes.TOOLKIT_THEME,
+            type: deps().actionTypes.TOOLKIT_THEME,
             theme,
         });
     },
 
     toggleSettings: () => dispatch =>
-        dispatch({ type: deps.actionTypes.TOOLKIT_SETTINGS_TOGGLE }),
+        dispatch({ type: deps().actionTypes.TOOLKIT_SETTINGS_TOGGLE }),
 };

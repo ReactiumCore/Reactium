@@ -1,0 +1,14 @@
+// Icon: {{name}}.{{id}}
+
+import React from 'react';
+import defaultProps from 'components/common-ui/Icon/defaultProps';
+
+export default props => (
+    <svg {...defaultProps} {...props}>
+        <g>
+            {{#each paths}}
+            <path d="{{this}}" />
+            {{/each}}
+        </g>
+    </svg>
+);

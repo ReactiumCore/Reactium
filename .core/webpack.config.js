@@ -34,7 +34,7 @@ module.exports = config => {
     if ('process.env' in defines) {
         Object.keys(defines['process.env']).forEach(key => {
             config.defines['process.env'][key] = JSON.stringify(
-                defines['process.env'][key]
+                defines['process.env'][key],
             );
         });
     }
@@ -43,36 +43,41 @@ module.exports = config => {
     plugins.push(
         new webpack.ContextReplacementPlugin(/^toolkit/, context => {
             context.request = path.resolve('./src/app/toolkit');
-        })
+        }),
     );
     plugins.push(
         new webpack.ContextReplacementPlugin(
             /^components\/common-ui/,
             context => {
                 context.request = path.resolve(
-                    './src/app/components/common-ui'
+                    './src/app/components/common-ui',
                 );
-            }
-        )
+            },
+        ),
     );
     plugins.push(
         new webpack.ContextReplacementPlugin(/^components/, context => {
             context.request = path.resolve('./src/app/components');
-        })
+        }),
     );
     plugins.push(
         new webpack.ContextReplacementPlugin(
             /^reactium-core\/components/,
             context => {
                 context.request = path.resolve('./.core/components');
-            }
-        )
+            },
+        ),
     );
     plugins.push(
         new FilterWarningsPlugin({
             exclude: /Critical dependency: the request of a dependency is an expression/i,
-        })
+        }),
     );
+
+    if (Boolean(env !== 'production')) {
+        const WebpackVisualizer = require('webpack-visualizer-plugin');
+        plugins.push(new WebpackVisualizer());
+    }
 
     const defaultConfig = {
         target: target,
@@ -82,6 +87,7 @@ module.exports = config => {
         externals: externals,
         mode: env,
         output: {
+            publicPath: '/assets/js/',
             path: path.resolve(__dirname, dest),
             filename,
         },
@@ -89,12 +95,6 @@ module.exports = config => {
             minimize: Boolean(env !== 'development'),
             splitChunks: {
                 chunks: 'all',
-                name(module) {
-                    if (/[\\/]node_modules[\\/]/.test(module.context)) {
-                        return 'vendors';
-                    }
-                    return 'main';
-                },
             },
         },
         module: {
@@ -122,8 +122,14 @@ module.exports = config => {
                         /.png$/,
                         /.jpg$/,
                         /.gif$/,
+                        /.core\/server/,
+                        /.core\/manifest/,
+                        /.core\/index.js/,
+                        /.core\/gulp/,
+                        /.core\/.*?config/,
                         /\.core\/.cli\//,
                         /\.cli/,
+                        /src\/app\/server/,
                     ],
                     use: [
                         {

@@ -3,8 +3,8 @@
  * @type {Object}
  */
 module.exports = {
-    version: '2.5.0',
-    semver: '^2.0.0',
+    version: '3.0.1',
+    semver: '^3.0.0',
     update: {
         package: {
             devDependencies: {
@@ -12,7 +12,7 @@ module.exports = {
                     'gulp-run': '^1.7.1',
                     'atomic-reactor-cli': '^2.0.21',
                     'babel-core': '^7.0.0-bridge.0',
-                    'babel-jest': '^23.6.0',
+                    'babel-jest': '^24.1.0',
                     '@babel/core': '^7.3.3',
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
@@ -31,25 +31,28 @@ module.exports = {
                     'gulp4-run-sequence': '^0.3.1',
                     'gulp-sourcemaps': '^2.6.5',
                     handlebars: '^4.0.12',
-                    jest: '^23.6.0',
+                    jest: '^24.1.0',
                     'module-alias': '^2.1.0',
                     ora: '^3.0.0',
                     slugify: '^1.3.3',
                     webpack: '^4.29.5',
                     'webpack-dev-middleware': '^3.6.0',
                     'webpack-filter-warnings-plugin': '^1.2.0',
+                    'webpack-visualizer-plugin': '^0.1.11',
                     eslint: '^5.12.0',
                     'eslint-plugin-react': '^7.11.1',
                     'babel-eslint': '^10.0.1',
                     'node-sass': '^4.11.0',
                     'node-sass-functions-json': '^1.0.0',
                     'node-sass-tilde-importer': '^1.0.2',
+                    stylelint: '^9.10.1',
                 },
                 remove: [
                     'atomic-reactor-cli',
                     'babel-cli',
                     'babel-core',
                     '@babel/core',
+                    'babel-jest',
                     'babel-loader',
                     'babel-preset-env',
                     'babel-preset-react',
@@ -57,9 +60,11 @@ module.exports = {
                     'gulp-autoprefixer',
                     'gulp-sourcemaps',
                     'gulp4-run-sequence',
+                    'jest',
                     'run-sequence',
                     'webpack',
                     'webpack-dev-middleware',
+                    'webpack-visualizer-plugin',
                 ],
             },
             dependencies: {
@@ -67,6 +72,7 @@ module.exports = {
                     '@babel/cli': '^7.2.3',
                     '@babel/node': '^7.2.2',
                     '@babel/polyfill': '^7.2.5',
+                    '@babel/plugin-syntax-dynamic-import': '^7.2.0',
                     eslint: '^5.14.1',
                     globby: '^9.0.0',
                     gsap: '^2.1.0',
@@ -77,6 +83,8 @@ module.exports = {
                     'react-dom': '^16.8.3',
                     'react-frame-component': '^4.0.1',
                     'react-redux': '^6.0.0',
+                    'react-router-config': '^4.4.0-beta.6',
+                    'react-router-dom': '^4.4.0-beta.6',
                     'redbox-react': '^1.6.0',
                     'redux-devtools': '^3.5.0',
                     'redux-local-persist': '0.1.0',
@@ -97,12 +105,14 @@ module.exports = {
                     'react',
                     'react-dom',
                     'react-redux',
+                    'react-router-config',
+                    'react-router-dom',
                     'redux-local-persist',
                 ],
             },
             scripts: {
                 add: {
-                    build: 'npm install --production-only',
+                    build: 'npm-run-all build:*',
                     static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
                     'local:ssr': 'gulp local:ssr',
@@ -122,9 +132,44 @@ module.exports = {
         files: {
             add: [
                 {
+                    overwrite: true,
                     version: '>=2.3.16',
                     destination: '/src/app/plugable',
                     source: '/tmp/update/src/app/plugable',
+                },
+                {
+                    overwrite: false,
+                    version: '>=2.3.16',
+                    destination: '.stylelintrc',
+                    source: '/tmp/update/.stylelintrc',
+                },
+                {
+                    overwrite: false,
+                    version: '>=2.3.16',
+                    destination:
+                        '/src/app/components/common-ui/Icon/defaultProps.js',
+                    source:
+                        '/tmp/update/src/app/components/common-ui/Icon/defaultProps.js',
+                },
+                {
+                    overwrite: false,
+                    version: '>=2.3.16',
+                    destination: '/src/app/components/common-ui/Icon/index.js',
+                    source:
+                        '/tmp/update/src/app/components/common-ui/Icon/index.js',
+                },
+                {
+                    overwrite: true,
+                    version: '>=2.3.16',
+                    destination: '/src/app/components/common-ui/Icon/Feather',
+                    source:
+                        '/tmp/update/src/app/components/common-ui/Icon/Feather',
+                },
+                {
+                    overwrite: true,
+                    version: '>=2.3.16',
+                    destination: '/src/app/toolkit/icons/Feather',
+                    source: '/tmp/update/src/app/toolkit/icons/Feather',
                 },
             ],
             remove: [],
@@ -193,18 +238,22 @@ module.exports = {
             components: {
                 modulePath: 'components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             common: {
                 modulePath: 'components/common-ui/',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             toolkit: {
                 modulePath: 'toolkit',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
             core: {
                 modulePath: 'reactium-core/components',
                 filePattern: '.jsx?$',
+                mode: 'lazy-once',
             },
         },
     },

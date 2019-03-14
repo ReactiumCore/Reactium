@@ -1,9 +1,9 @@
 import deps from 'dependencies';
 
 export default {
-    mount: data => dispatch => {
+    load: data => dispatch => {
         return dispatch({
-            type: deps.actionTypes.{{ID}}_MOUNT,
+            type: deps().actionTypes.{{ID}}_LOAD,
             data,
         });
     },

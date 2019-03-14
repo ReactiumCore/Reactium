@@ -12,7 +12,7 @@ const app = {};
 app.dependencies = global.dependencies = require('dependencies').default;
 
 const renderer = template => (req, res, context) => {
-    app.dependencies.init();
+    app.dependencies().init();
     const routes = getRoutes();
 
     const store = storeCreator({ server: true });

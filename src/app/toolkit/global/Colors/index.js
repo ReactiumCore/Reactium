@@ -4,7 +4,7 @@
  * -----------------------------------------------------------------------------
  */
 import React, { Component, Fragment } from 'react';
-import colorProfile from './colors';
+import colorProfile from 'appdir/../assets/style/_scss/colors';
 
 /**
  * -----------------------------------------------------------------------------

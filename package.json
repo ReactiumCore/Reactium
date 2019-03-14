@@ -1,6 +1,6 @@
 {
     "name": "reactium",
-    "version": "2.5.0",
+    "version": "3.0.0",
     "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
     "main": "index.js",
     "scripts": {
@@ -11,7 +11,6 @@
         "build:gulp": "cross-env NODE_ENV=production gulp",
         "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
         "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src",
-        "build:cleanup": "npm prune --production",
         "static": "npm-run-all build:* && gulp static",
         "library": "gulp library",
         "local": "gulp local",
@@ -83,8 +82,8 @@
         "react-frame-component": "^4.0.1",
         "react-helmet": "^5.2.0",
         "react-redux": "^6.0.1",
-        "react-router-config": "^1.0.0-beta.4",
-        "react-router-dom": "^4.2.2",
+        "react-router-config": "^4.4.0-beta.6",
+        "react-router-dom": "^4.4.0-beta.6",
         "react-syntax-highlighter": "^8.0.1",
         "redbox-react": "^1.6.0",
         "redux": "^4.0.0",
@@ -102,6 +101,7 @@
     "devDependencies": {
         "@babel/core": "^7.3.3",
         "@babel/plugin-proposal-class-properties": "^7.1.0",
+        "@babel/plugin-syntax-dynamic-import": "^7.2.0",
         "@babel/preset-env": "^7.1.0",
         "@babel/preset-react": "^7.0.0",
         "atomic-reactor-cli": "^2.0.21",
@@ -148,11 +148,13 @@
         "ora": "^3.0.0",
         "readdir-recursive": "0.0.4",
         "slugify": "^1.3.3",
+        "stylelint": "^9.10.1",
         "vinyl-source-stream": "^2.0.0",
         "webpack": "^4.29.5",
         "webpack-dev-middleware": "^3.6.0",
         "webpack-filter-warnings-plugin": "^1.2.0",
         "webpack-hot-middleware": "^2.22.3",
+        "webpack-visualizer-plugin": "^0.1.11",
         "yargs": "^12.0.1"
     },
     "libDependencies": [

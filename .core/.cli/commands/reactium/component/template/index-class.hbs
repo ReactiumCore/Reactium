@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -6,6 +6,8 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 export default class {{name}} extends Component {
+    static defaultProps = {};
+
     constructor(props) {
         super(props);
         this.state = {};
@@ -13,22 +15,15 @@ export default class {{name}} extends Component {
     {{#unless route}}
     {{#if actions}}
 
-    componentDidMount() {
-        try {
-            const { mount } = this.props;
-            mount();
-        } catch (err) {}
-    }
+    componentDidMount() {}
 
     {{/if}}
     {{/unless}}
     render() {
         return (
-            <Fragment>
-                COMPONENT
-            </Fragment>
+            <>
+                {{name}}
+            </>
         );
     }
 }
-
-{{name}}.defaultProps = {};
