@@ -257,20 +257,4 @@ module.exports = {
             },
         },
     },
-    library: {
-        patterns: [
-            {
-                name: 'allLibraryComponents',
-                type: 'library',
-                pattern: /library.jsx?$/,
-            },
-        ],
-        sourceMappings: [
-            {
-                from: 'src/app/',
-                to: '',
-            },
-        ],
-        contexts: {},
-    },
 };

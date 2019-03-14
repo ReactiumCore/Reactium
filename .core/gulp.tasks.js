@@ -21,7 +21,6 @@ const chalk = require('chalk');
 const moment = require('moment');
 const reactiumConfig = require('./reactium-config');
 const regenManifest = require('./manifest/manifest-tools');
-const libraryTools = require('./manifest/library-tools');
 const rootPath = path.resolve(__dirname, '..');
 const { fork } = require('child_process');
 
@@ -226,51 +225,6 @@ const reactium = (gulp, config, webpackConfig) => {
         }
     };
 
-    const library = gulp.series(
-        task('library:manifest'),
-        task('library:copy'),
-        task('library:dependencies'),
-    );
-
-    const libraryManifest = done => {
-        // Generate manifest.js file
-        regenManifest({
-            manifestFilePath: config.src.library,
-            manifestConfig: require('./manifest.config')(
-                reactiumConfig.library,
-            ),
-            manifestTemplateFilePath: path.resolve(
-                __dirname,
-                'manifest/templates/library.hbs',
-            ),
-            manifestProcessor: require('./manifest/processors/library'),
-        });
-        done();
-    };
-
-    const libraryCopy = done => {
-        let babel = new run.Command(
-            `cross-env NODE_ENV=production babel src --out-dir ${
-                config.dest.library
-            }`,
-            { verbosity: 3 },
-        );
-
-        babel.exec();
-
-        // Copy static files
-        [config.src.style, config.src.assets].forEach(src =>
-            gulp.src(src).pipe(gulp.dest(config.dest.library)),
-        );
-
-        done();
-    };
-
-    const libraryDependencies = done => {
-        libraryTools.createPackage();
-        done();
-    };
-
     const staticTask = task('static:copy');
 
     const staticCopy = done => {
@@ -393,10 +347,6 @@ const reactium = (gulp, config, webpackConfig) => {
         scripts,
         serve: serve(),
         'serve-restart': serve({ open: false }),
-        library,
-        'library:manifest': libraryManifest,
-        'library:copy': libraryCopy,
-        'library:dependencies': libraryDependencies,
         static: staticTask,
         'static:copy': staticCopy,
         'styles:colors': stylesColors,

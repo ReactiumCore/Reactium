@@ -11,8 +11,9 @@ const path = require('path');
 const op = require('object-path');
 const mod = path.dirname(require.main.filename);
 const { error, message } = require(`${mod}/lib/messenger`);
+const _ = require('underscore');
 
-const formatDestination = (val, props) => {
+const formatsource = (val, props) => {
     const { cwd } = props;
 
     val = path.normalize(val);
@@ -24,6 +25,7 @@ const formatDestination = (val, props) => {
         /^\/common-ui\/|^common-ui\/|^common-ui$/i,
         `${cwd}/src/app/components/common-ui/`,
     );
+    val = String(val).replace(/^\/cwd\/|^cwd\/|^cwd/i, `${cwd}/`);
 
     return path.normalize(val);
 };
@@ -44,7 +46,8 @@ const NAME = 'library';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC = 'Reactium: Convert a component into a library component.';
+const DESC =
+    'Reactium: Generate a component library from the specified source directory.';
 
 /**
  * CANCELED String
@@ -84,7 +87,6 @@ const CONFIRM = ({ props, params, msg }) => {
                 if (error || confirmed === false) {
                     reject(error);
                 } else {
-                    params['confirmed'] = true;
                     resolve(params);
                 }
             },
@@ -98,12 +100,75 @@ const CONFIRM = ({ props, params, msg }) => {
  * @param input Object The key value pairs to reduce.
  * @since 2.0.0
  */
-const CONFORM = ({ input, props }) =>
-    Object.keys(input).reduce((output, key) => {
+const CONFORM = ({ input, props }) => {
+    const packageJSON = require(`${props.cwd}/package.json`);
+
+    return Object.keys(input).reduce((output, key) => {
         let val = input[key];
+        const pkg = op.get(output, 'package', {});
+
         switch (key) {
             case 'destination':
-                output[key] = formatDestination(val, props);
+            case 'source':
+                output[key] = formatsource(val, props);
+                break;
+
+            case 'name':
+            case 'version':
+            case 'main':
+            case 'author':
+                if (val != '') {
+                    pkg[key] = val;
+                    output['package'] = pkg;
+                }
+                break;
+
+            case 'dependencies':
+            case 'devDependencies':
+                if (typeof val === 'string') {
+                    val = val.replace(/\,/g, '');
+                    val = val.replace(/\s\s+/g, ' ').trim();
+                    val = _.compact(val.split(' '));
+                }
+
+                if (Array.isArray(val)) {
+                    if (val.length > 0) {
+                        pkg[key] = val.reduce((obj, dep) => {
+                            const v = op.get(packageJSON, `${key}.${dep}`, '*');
+                            obj[dep] = v;
+                            return obj;
+                        }, {});
+
+                        output['package'] = pkg;
+                    }
+                }
+
+                break;
+
+            case 'repo':
+                op.set(pkg, 'repository.url', val);
+                output['package'] = pkg;
+                break;
+
+            case 'repoType':
+                op.set(pkg, 'repository.type', val);
+                output['package'] = pkg;
+                break;
+
+            case 'keywords':
+                if (typeof val === 'string') {
+                    val = val.replace(/\,/g, '');
+                    val = val.replace(/\s\s+/g, ' ').trim();
+                    val = _.compact(val.split(' '));
+                }
+
+                if (Array.isArray(val)) {
+                    if (val.length > 0) {
+                        pkg[key] = val;
+                        output['package'] = pkg;
+                    }
+                }
+
                 break;
 
             default:
@@ -113,6 +178,7 @@ const CONFORM = ({ input, props }) =>
 
         return output;
     }, {});
+};
 
 /**
  * HELP Function
@@ -123,12 +189,11 @@ const CONFORM = ({ input, props }) =>
 const HELP = () =>
     console.log(`
 Example:
-  $ arcli library -d components/MyComponent
-  $ arcli library -d common-ui/MyCommonUiComponent
+  $ arcli library -s components/MyComponentLibrary -d cwd/lib -n MyComponentLibrary
 
-When specifying the destination [-d, --destination] the following shortcuts are available:
-  ${chalk.cyan('components/')}  The /.src/app/components directory.
-  ${chalk.cyan('common-ui/')}   The /.src/app/components/common-ui directory.
+When specifying the source [-d, --source] the following shortcuts are available:
+  ${chalk.cyan('components/')}  The /.src/app/components source.
+  ${chalk.cyan('common-ui/')}   The /.src/app/components/common-ui source.
 `);
 
 /**
@@ -136,7 +201,19 @@ When specifying the destination [-d, --destination] the following shortcuts are 
  * @description Array of flags passed from the commander options.
  * @since 2.0.18
  */
-const FLAGS = ['component', 'destination', 'from', 'overwrite'];
+const FLAGS = [
+    'name',
+    'source',
+    'destination',
+    'version',
+    'main',
+    'author',
+    'dependencies',
+    'devDependencies',
+    'keywords',
+    'repo',
+    'repoType',
+];
 
 /**
  * FLAGS_TO_PARAMS Function
@@ -162,8 +239,8 @@ const PREFLIGHT = ({ msg, params, props }) => {
     msg =
         msg ||
         `A new ${chalk.cyan(
-            'library.js',
-        )} file will be generated with the following options:`;
+            'library',
+        )} will be generated with the following options:`;
 
     message(msg);
 
@@ -177,31 +254,112 @@ const PREFLIGHT = ({ msg, params, props }) => {
     );
 };
 
+const SCHEMA_SOURCE = ({ params, props }) => {
+    const name = op.get(params, 'package.name', '');
+
+    return {
+        properties: {
+            source: {
+                description: chalk.white('Source:'),
+                message: `Enter the ${chalk.cyan('Source directory')}`,
+                required: true,
+            },
+            destination: {
+                description: chalk.white('Destination:'),
+                default: path.join('cwd', 'lib', name),
+            },
+        },
+    };
+};
+
+const SCHEMA_NAME = ({ props }) => {
+    let pkg;
+
+    try {
+        pkg = require(`${params.source}/package.json`);
+    } catch (err) {
+        pkg = {};
+    }
+
+    const schema = {
+        properties: {
+            name: {
+                description: chalk.white('Name:'),
+                message: `Enter the ${chalk.cyan('Library name')}`,
+                required: !op.has(pkg, 'name'),
+            },
+        },
+    };
+
+    if (op.has(pkg, 'name')) {
+        op.set(schema, 'properties.name.default', pkg.name);
+    }
+
+    return schema;
+};
+
 /**
  * SCHEMA Function
  * @description used to describe the input for the prompt function.
  * @see https://www.npmjs.com/package/prompt
  * @since 2.0.0
  */
-const SCHEMA = ({ props }) => {
-    return {
+const SCHEMA = ({ params, props }) => {
+    let pkg;
+
+    try {
+        pkg = require(`${params.source}/package.json`);
+    } catch (err) {
+        pkg = {};
+    }
+
+    const { prompt } = props;
+
+    const schema = {
         properties: {
-            destination: {
-                description: chalk.white('Destination:'),
-                message: `Enter the ${chalk.cyan('Destination')}`,
-                required: true,
+            version: {
+                description: chalk.white('Version:'),
+                default: op.get(pkg, 'version', '0.0.1'),
             },
-            component: {
-                description: chalk.white('Component:'),
-                message: `Enter the ${chalk.cyan('Component')} name`,
-                required: true,
+            main: {
+                description: chalk.white('Main js file:'),
+                default: op.get(pkg, 'main', 'index.js'),
             },
-            from: {
-                description: chalk.white('Import from:'),
-                default: './index',
+            author: {
+                description: chalk.white('NPM Package Author:'),
+                default: op.get(pkg, 'author', undefined),
+            },
+            dependencies: {
+                description: chalk.white('NPM Dependencies:'),
+                default: op.has(pkg, 'dependencies')
+                    ? Object.keys(pkg.dependencies).join(', ')
+                    : undefined,
+            },
+            devDependencies: {
+                description: chalk.white('NPM Dev. Dependencies:'),
+                default: op.has(pkg, 'devDependencies')
+                    ? Object.keys(pkg.devDependencies).join(', ')
+                    : undefined,
+            },
+            repo: {
+                description: chalk.white('Repository:'),
+                default: op.get(pkg, 'repository.url', undefined),
+            },
+            repoType: {
+                description: chalk.white('Repository Type:'),
+                default: op.get(pkg, 'repository.type', 'git'),
+                ask: () => !!prompt.history('repo'),
+            },
+            keywords: {
+                description: chalk.white('NPM Keywords:'),
+                default: op.has(pkg, 'keywords')
+                    ? pkg.keywords.join(', ')
+                    : undefined,
             },
         },
     };
+
+    return schema;
 };
 
 /**
@@ -216,45 +374,72 @@ const ACTION = ({ opt, props }) => {
     console.log('');
 
     const { cwd, prompt } = props;
-    const schema = SCHEMA({ props });
     const ovr = FLAGS_TO_PARAMS({ opt });
-
-    if (op.has(opt, 'destination') && !op.has(opt, 'component')) {
-        if (String(opt.destination).split('/').length > 1) {
-            const comp = String(opt.destination)
-                .split('/')
-                .pop();
-            if (comp) {
-                ovr['component'] = comp;
-            }
-        }
-    }
 
     prompt.override = ovr;
     prompt.start();
 
+    let params = {};
+
     return new Promise((resolve, reject) => {
-        prompt.get(schema, (err, input = {}) => {
+        prompt.get(SCHEMA_NAME({ props }), (err, input = {}) => {
             if (err) {
                 prompt.stop();
-                reject(`${NAME} ${err.message}`);
+                reject(`${NAME} ${err.message} 386`);
                 return;
             }
 
             input = { ...ovr, ...input };
             params = CONFORM({ input, props });
 
-            PREFLIGHT({ params, props });
-
             resolve(params);
         });
     })
+        .then(
+            () =>
+                new Promise((resolve, reject) => {
+                    prompt.get(
+                        SCHEMA_SOURCE({ params, props }),
+                        (err, input = {}) => {
+                            if (err) {
+                                prompt.stop();
+                                reject(`${NAME} ${err.message}`);
+                                return;
+                            }
+
+                            input = { ...ovr, ...params, ...input };
+                            params = CONFORM({ input, props });
+
+                            resolve(params);
+                        },
+                    );
+                }),
+        )
+        .then(
+            () =>
+                new Promise((resolve, reject) => {
+                    prompt.get(SCHEMA({ params, props }), (err, input = {}) => {
+                        if (err) {
+                            prompt.stop();
+                            reject(`${NAME} ${err.message}`);
+                            return;
+                        }
+
+                        input = { ...ovr, ...params, ...input };
+                        params = CONFORM({ input, props });
+
+                        PREFLIGHT({ params, props });
+
+                        resolve(params);
+                    });
+                }),
+        )
         .then(() => {
             return CONFIRM({ props, params });
         })
         .then(() => {
             console.log('');
-            return generator({ action: 'create', params, props });
+            return generator({ params, props });
         })
         .then(results => {
             console.log('');
@@ -274,18 +459,20 @@ const COMMAND = ({ program, props }) =>
         .command(NAME)
         .description(DESC)
         .action(opt => ACTION({ opt, props }))
-        .option('-d, --destination [destination]', 'The component directory.')
-        .option('-c, --component [component]', 'The component name.')
+        .option('-n, --name [name]', 'Library name.')
+        .option('-s, --source [source]', 'The library source.')
+        .option('-d, --destination [destination]', 'The library destination.')
+        .option('-V, --ver [version]', 'The version of the library.')
+        .option('-m, --main [main]', 'The library entry point or main js file.')
+        .option('-a, --author [author]', 'The library author.')
+        .option('--dependencies [dependencies]', 'The library dependencies.')
         .option(
-            '-o, --overwrite [overwrite]',
-            'Overwrite existing library file.',
+            '--devDependencies [devDependencies]',
+            'The library devDependencies',
         )
-        .option(
-            '-f, --from [from]',
-            `The component import path relative to the ${chalk.cyan(
-                'library.js',
-            )} file. Default: ${chalk.cyan('./index')}`,
-        )
+        .option('--repo [repo]', 'The repo url.')
+        .option('--repoType [repoType]', 'The repo type.')
+        .option('--keywords [keywords]', 'The NPM keywords.')
         .on('--help', HELP);
 
 /**

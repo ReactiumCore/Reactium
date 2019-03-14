@@ -2,8 +2,10 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const _ = require('underscore');
+const run = require('gulp-run');
 const op = require('object-path');
-const handlebars = require('handlebars').compile;
+const prettier = require('prettier');
+const globby = require('globby');
 
 module.exports = spinner => {
     const message = text => {
@@ -13,39 +15,69 @@ module.exports = spinner => {
     };
 
     return {
+        package: ({ action, params, props }) => {
+            const { destination, package, source } = params;
+
+            const fpath = path.join(source, 'package.json');
+            const dpath = path.join(destination, 'package.json');
+
+            let pkg;
+
+            try {
+                message(`Updating ${chalk.cyan('package.json')}...`);
+                pkg = require(fpath);
+            } catch (err) {
+                message(`Creating ${chalk.cyan('package.json')}...`);
+                pkg = {};
+            }
+
+            pkg = { ...pkg, ...package };
+
+            const content = prettier.format(JSON.stringify(pkg), {
+                parser: 'json-stringify',
+            });
+
+            fs.writeFileSync(fpath, content);
+            fs.ensureDirSync(destination);
+            //fs.copySync(fpath, dpath);
+
+            return Promise.resolve({ action, status: 200 });
+        },
+        assets: ({ action, params, props }) => {
+            const { destination, source } = params;
+
+            const globs = [`${source}/**/*`, `!{*.js}`];
+            const files = globby
+                .sync(globs)
+                .filter(file =>
+                    Boolean(
+                        file.substr(-3) !== '.js' && file.substr(-3) !== 'jsx',
+                    ),
+                );
+
+            files.forEach(file => {
+                const dpath = file.replace(source, destination);
+                fs.ensureFileSync(dpath);
+                fs.copySync(file, dpath);
+            });
+
+            return Promise.resolve({ action, status: 200 });
+        },
         create: ({ action, params, props }) => {
-            const { cwd } = props;
-            const { destination, component } = params;
+            const { source, destination } = params;
 
             message(
-                `Creating ${chalk.white(component)} ${chalk.cyan(
-                    'library.js',
-                )}...`,
+                `Creating library from ${chalk.cyan(path.basename(source))}...`,
             );
 
-            const filepath = path.normalize(
-                path.join(destination, 'library.js'),
+            let babel = new run.Command(
+                `cross-env NODE_ENV=production babel "${source}" --out-dir "${destination}"`,
+                { verbosity: 3 },
             );
 
-            fs.ensureDirSync(path.normalize(destination));
+            babel.exec();
 
-            const template = path.normalize(
-                `${__dirname}/template/library.hbs`,
-            );
-
-            const content = handlebars(fs.readFileSync(template, 'utf-8'))(
-                params,
-            );
-
-            return new Promise((resolve, reject) => {
-                fs.writeFile(filepath, content, error => {
-                    if (error) {
-                        reject(error.Error);
-                    } else {
-                        setTimeout(resolve, 1000, { action, status: 200 });
-                    }
-                });
-            });
+            return Promise.resolve({ action, status: 200 });
         },
     };
 };

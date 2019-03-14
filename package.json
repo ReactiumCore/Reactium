@@ -12,7 +12,6 @@
         "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
         "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src",
         "static": "npm-run-all build:* && gulp static",
-        "library": "gulp library",
         "local": "gulp local",
         "local:ssr": "gulp local:ssr",
         "clean": "gulp clean",
