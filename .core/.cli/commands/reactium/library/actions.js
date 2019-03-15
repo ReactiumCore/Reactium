@@ -45,8 +45,8 @@ module.exports = spinner => {
         },
         assets: ({ action, params, props }) => {
             const { destination, source } = params;
-
-            const globs = [`${source}asssets/**`, `!{*.js}`];
+            const p = path.join(source, 'assets', '**');
+            const globs = [p, `!{*.js}`];
             const files = globby
                 .sync(globs)
                 .filter(file =>
@@ -56,7 +56,8 @@ module.exports = spinner => {
                 );
 
             files.forEach(file => {
-                const dpath = file.replace(source, destination);
+                let src = path.join(source, '/');
+                const dpath = file.replace(src, destination);
                 fs.ensureFileSync(dpath);
                 fs.copySync(file, dpath);
             });
