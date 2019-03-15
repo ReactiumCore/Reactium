@@ -39,14 +39,14 @@ module.exports = spinner => {
 
             fs.writeFileSync(fpath, content);
             fs.ensureDirSync(destination);
-            //fs.copySync(fpath, dpath);
+            fs.copySync(fpath, dpath);
 
             return Promise.resolve({ action, status: 200 });
         },
         assets: ({ action, params, props }) => {
             const { destination, source } = params;
 
-            const globs = [`${source}/**/*`, `!{*.js}`];
+            const globs = [`${source}asssets/**`, `!{*.js}`];
             const files = globby
                 .sync(globs)
                 .filter(file =>
