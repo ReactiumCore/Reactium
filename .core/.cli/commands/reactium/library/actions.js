@@ -45,8 +45,8 @@ module.exports = spinner => {
         },
         assets: ({ action, params, props }) => {
             const { destination, source } = params;
-            const p = path.join(source, 'assets', '**');
-            const globs = [p, `!{*.js}`];
+            const globs = [path.join(source, '**'), `!{*.js}`];
+            
             const files = globby
                 .sync(globs)
                 .filter(file =>
