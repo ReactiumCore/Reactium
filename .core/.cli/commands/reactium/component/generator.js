@@ -81,24 +81,6 @@ module.exports = ({ params, props }) => {
         }
     }
 
-    if (op.get(params, 'library', false)) {
-        try {
-            const libraryActions = require('../library/actions')(spinner);
-            const libraryParams = {
-                destination: params.destination,
-                component: params.name,
-                from: './index',
-            };
-            actions['library'] = ({ params, props }) =>
-                ActionSequence({
-                    actions: libraryActions,
-                    options: { params: libraryParams, props },
-                });
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    }
-
     if (op.get(params, 'test', false)) {
         try {
             const testActions = require('../test/actions')(spinner);
