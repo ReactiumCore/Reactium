@@ -26,6 +26,7 @@ const formatsource = (val, props) => {
         `${cwd}/src/app/components/common-ui/`,
     );
     val = String(val).replace(/^\/cwd\/|^cwd\/|^cwd/i, `${cwd}/`);
+    val = (val.substr(-1) !== '/') ? val + '/' : val;
 
     return path.normalize(val);
 };
