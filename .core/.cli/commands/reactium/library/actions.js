@@ -15,8 +15,8 @@ module.exports = spinner => {
     };
 
     return {
-        package: ({ action, params, props }) => {
-            const { destination, package, source } = params;
+        buildPackage: ({ action, params, props }) => {
+            const { destination, newPackage, source } = params;
 
             const fpath = path.join(source, 'package.json');
             const dpath = path.join(destination, 'package.json');
@@ -31,7 +31,7 @@ module.exports = spinner => {
                 pkg = {};
             }
 
-            pkg = { ...pkg, ...package };
+            pkg = { ...pkg, ...newPackage };
 
             const content = prettier.format(JSON.stringify(pkg), {
                 parser: 'json-stringify',
@@ -46,7 +46,7 @@ module.exports = spinner => {
         assets: ({ action, params, props }) => {
             const { destination, source } = params;
             const globs = [path.join(source, '**'), `!{*.js}`];
-            
+
             const files = globby
                 .sync(globs)
                 .filter(file =>
