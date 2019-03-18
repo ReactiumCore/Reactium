@@ -17,6 +17,7 @@ module.exports = {
                     '@babel/preset-env': '^7.1.0',
                     '@babel/preset-react': '^7.0.0',
                     '@babel/plugin-proposal-class-properties': '^7.1.0',
+                    '@babel/plugin-proposal-export-default-from': '^7.2.0',
                     'babel-loader': '^8.0.4',
                     camelcase: '^5.0.0',
                     'cli-spinners': '^1.3.1',

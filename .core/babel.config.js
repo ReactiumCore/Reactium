@@ -39,6 +39,7 @@ module.exports = {
                 loose: true,
             },
         ],
+        ['@babel/plugin-proposal-export-default-from'],
     ],
     env: {
         test: {
