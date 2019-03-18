@@ -15,8 +15,8 @@ module.exports = spinner => {
     };
 
     return {
-        package: ({ action, params, props }) => {
-            const { destination, package, source } = params;
+        buildPackage: ({ action, params, props }) => {
+            const { destination, newPackage, source } = params;
 
             const fpath = path.join(source, 'package.json');
             const dpath = path.join(destination, 'package.json');
@@ -31,7 +31,7 @@ module.exports = spinner => {
                 pkg = {};
             }
 
-            pkg = { ...pkg, ...package };
+            pkg = { ...pkg, ...newPackage };
 
             const content = prettier.format(JSON.stringify(pkg), {
                 parser: 'json-stringify',
@@ -39,14 +39,14 @@ module.exports = spinner => {
 
             fs.writeFileSync(fpath, content);
             fs.ensureDirSync(destination);
-            //fs.copySync(fpath, dpath);
+            fs.copySync(fpath, dpath);
 
             return Promise.resolve({ action, status: 200 });
         },
         assets: ({ action, params, props }) => {
             const { destination, source } = params;
+            const globs = [path.join(source, '**'), `!{*.js}`];
 
-            const globs = [`${source}/**/*`, `!{*.js}`];
             const files = globby
                 .sync(globs)
                 .filter(file =>
@@ -56,7 +56,8 @@ module.exports = spinner => {
                 );
 
             files.forEach(file => {
-                const dpath = file.replace(source, destination);
+                let src = path.join(source, '/');
+                const dpath = file.replace(src, destination);
                 fs.ensureFileSync(dpath);
                 fs.copySync(file, dpath);
             });

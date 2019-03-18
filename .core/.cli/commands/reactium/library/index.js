@@ -26,6 +26,7 @@ const formatsource = (val, props) => {
         `${cwd}/src/app/components/common-ui/`,
     );
     val = String(val).replace(/^\/cwd\/|^cwd\/|^cwd/i, `${cwd}/`);
+    val = val.substr(-1) !== '/' ? val + '/' : val;
 
     return path.normalize(val);
 };
@@ -105,7 +106,7 @@ const CONFORM = ({ input, props }) => {
 
     return Object.keys(input).reduce((output, key) => {
         let val = input[key];
-        const pkg = op.get(output, 'package', {});
+        const pkg = op.get(output, 'newPackage', {});
 
         switch (key) {
             case 'destination':
@@ -119,7 +120,7 @@ const CONFORM = ({ input, props }) => {
             case 'author':
                 if (val != '') {
                     pkg[key] = val;
-                    output['package'] = pkg;
+                    output['newPackage'] = pkg;
                 }
                 break;
 
@@ -139,7 +140,7 @@ const CONFORM = ({ input, props }) => {
                             return obj;
                         }, {});
 
-                        output['package'] = pkg;
+                        output['newPackage'] = pkg;
                     }
                 }
 
@@ -147,12 +148,12 @@ const CONFORM = ({ input, props }) => {
 
             case 'repo':
                 op.set(pkg, 'repository.url', val);
-                output['package'] = pkg;
+                output['newPackage'] = pkg;
                 break;
 
             case 'repoType':
                 op.set(pkg, 'repository.type', val);
-                output['package'] = pkg;
+                output['newPackage'] = pkg;
                 break;
 
             case 'keywords':
@@ -165,7 +166,7 @@ const CONFORM = ({ input, props }) => {
                 if (Array.isArray(val)) {
                     if (val.length > 0) {
                         pkg[key] = val;
-                        output['package'] = pkg;
+                        output['newPackage'] = pkg;
                     }
                 }
 
