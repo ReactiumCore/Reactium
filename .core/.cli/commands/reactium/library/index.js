@@ -138,8 +138,8 @@ const CONFORM = ({ input, props }) => {
                             const v = op.get(packageJSON, `${key}.${dep}`);
                             if (v) {
                                 obj[dep] = v;
-                                return obj;
                             }
+                            return obj;
                         }, {});
 
                         output['newPackage'] = pkg;
