@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.1',
+    version: '3.0.2',
     semver: '^3.0.0',
     update: {
         package: {
@@ -42,6 +42,7 @@ module.exports = {
                     'webpack-visualizer-plugin': '^0.1.11',
                     eslint: '^5.12.0',
                     'eslint-plugin-react': '^7.11.1',
+                    'eslint-plugin-react-hooks': '^1.5.1',
                     'babel-eslint': '^10.0.1',
                     'node-sass': '^4.11.0',
                     'node-sass-functions-json': '^1.0.0',
@@ -172,6 +173,12 @@ module.exports = {
                     version: '>=2.3.16',
                     destination: '/src/app/toolkit/icons/Feather',
                     source: '/tmp/update/src/app/toolkit/icons/Feather',
+                },
+                {
+                    overwrite: true,
+                    version: '>=3.0.2',
+                    destination: '/.eslintrc',
+                    source: '/tmp/update/.eslintrc',
                 },
             ],
             remove: [],
