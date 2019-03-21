@@ -135,9 +135,11 @@ const CONFORM = ({ input, props }) => {
                 if (Array.isArray(val)) {
                     if (val.length > 0) {
                         pkg[key] = val.reduce((obj, dep) => {
-                            const v = op.get(packageJSON, `${key}.${dep}`, '*');
-                            obj[dep] = v;
-                            return obj;
+                            const v = op.get(packageJSON, `${key}.${dep}`);
+                            if (v) {
+                                obj[dep] = v;
+                                return obj;
+                            }
                         }, {});
 
                         output['newPackage'] = pkg;
