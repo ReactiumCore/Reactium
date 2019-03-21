@@ -74,6 +74,7 @@ module.exports = {
                     '@babel/node': '^7.2.2',
                     '@babel/polyfill': '^7.2.5',
                     '@babel/plugin-syntax-dynamic-import': '^7.2.0',
+                    classnames: '^2.2.6',
                     eslint: '^5.14.1',
                     globby: '^9.0.0',
                     gsap: '^2.1.0',
