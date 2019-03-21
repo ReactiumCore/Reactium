@@ -120,6 +120,7 @@
         "enzyme": "^3.8.0",
         "enzyme-adapter-react-16": "^1.7.1",
         "eslint-plugin-react": "^7.11.1",
+        "eslint-plugin-react-hooks": "^1.5.1",
         "fast-diff": "^1.2.0",
         "fs-extra": "^7.0.1",
         "fs-readdir-recursive": "^1.1.0",
