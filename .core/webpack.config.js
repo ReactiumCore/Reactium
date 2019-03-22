@@ -74,11 +74,6 @@ module.exports = config => {
         }),
     );
 
-    if (Boolean(env !== 'production')) {
-        const WebpackVisualizer = require('webpack-visualizer-plugin');
-        plugins.push(new WebpackVisualizer());
-    }
-
     const defaultConfig = {
         target: target,
         entry: entries,

@@ -29,17 +29,30 @@ export default (elms = []) => {
                     }
 
                     if (req) {
-                        const Found = lazy(() => req);
-                        const Component = () => (
-                            <Suspense
-                                fallback={
-                                    <div className='get-components-loading'>
-                                        Loading...
-                                    </div>
-                                }>
-                                <Found />
-                            </Suspense>
-                        );
+                        let Component;
+                        if ('default' in req) {
+                            // sync context
+                            Component = req.default;
+                        } else {
+                            let FallBack = () => (
+                                <div className='get-components-loading' />
+                            );
+                            try {
+                                FallBack = require('components/Fallback')
+                                    .default;
+                            } catch (err) {
+                                // left intentionally blank
+                            }
+
+                            // async context
+                            const Found = lazy(() => req);
+                            Component = () => (
+                                <Suspense fallback={<Fallback />}>
+                                    <Found />
+                                </Suspense>
+                            );
+                        }
+
                         cmps[type] = Component;
                     }
                 });

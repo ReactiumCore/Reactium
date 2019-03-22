@@ -134,6 +134,19 @@ const reactium = (gulp, config, webpackConfig) => {
     const local = ({ ssr = false } = {}) => () => {
         const SSR_MODE = ssr ? 'on' : 'off';
 
+        // warnings here
+        try {
+            module.resolve('components/src/app/components/Fallback');
+        } catch (err) {
+            console.log('');
+            console.log(
+                chalk.magenta(
+                    'Create a `src/app/components/Fallback` component with default export to support lazy loaded components and remove the webpack warning you see below.',
+                ),
+            );
+            console.log('');
+        }
+
         let watch = new run.Command(
             `cross-env SSR_MODE=${SSR_MODE} NODE_ENV=development gulp`,
             { verbosity: 3 },

@@ -79,3 +79,6 @@ src/app/toolkit/.tmp
 
 # CLI
 .cli-cache
+
+# Manifest
+src/manifest.js

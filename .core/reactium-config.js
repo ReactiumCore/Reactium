@@ -1,9 +1,20 @@
+const contextMode = () => {
+    if (
+        process.env.NODE_ENV !== 'development' ||
+        process.env.LAZY_GET_COMPONENTS === 'on'
+    ) {
+        return 'lazy-once';
+    }
+
+    return 'sync';
+};
+
 /**
  * Use liberally for additional core configuration.
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.2',
+    version: '3.0.3',
     semver: '^3.0.0',
     update: {
         package: {
@@ -180,6 +191,12 @@ module.exports = {
                     destination: '/.eslintrc',
                     source: '/tmp/update/.eslintrc',
                 },
+                {
+                    overwrite: false,
+                    version: '>=3.0.3',
+                    destination: '/src/app/components/Fallback',
+                    source: '/tmp/src/app/components/Fallback',
+                },
             ],
             remove: [],
         },
@@ -246,23 +263,23 @@ module.exports = {
         contexts: {
             components: {
                 modulePath: 'components',
-                filePattern: '.jsx?$',
-                mode: 'lazy-once',
+                filePattern: '.js?$',
+                mode: contextMode(),
             },
             common: {
                 modulePath: 'components/common-ui/',
-                filePattern: '.jsx?$',
-                mode: 'lazy-once',
+                filePattern: '.js?$',
+                mode: contextMode(),
             },
             toolkit: {
                 modulePath: 'toolkit',
-                filePattern: '.jsx?$',
-                mode: 'lazy-once',
+                filePattern: '.js?$',
+                mode: contextMode(),
             },
             core: {
                 modulePath: 'reactium-core/components',
-                filePattern: '.jsx?$',
-                mode: 'lazy-once',
+                filePattern: '.js?$',
+                mode: contextMode(),
             },
         },
     },
