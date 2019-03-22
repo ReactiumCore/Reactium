@@ -34,13 +34,15 @@ export default (elms = []) => {
                             // sync context
                             Component = req.default;
                         } else {
-                            let FallBack = () => (
+                            let Fallback = () => (
                                 <div className='get-components-loading' />
                             );
+
                             try {
-                                FallBack = require('components/Fallback')
+                                Fallback = require('components/Fallback')
                                     .default;
                             } catch (err) {
+                                console.log(err);
                                 // left intentionally blank
                             }
 

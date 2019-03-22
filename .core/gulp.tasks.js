@@ -135,9 +135,7 @@ const reactium = (gulp, config, webpackConfig) => {
         const SSR_MODE = ssr ? 'on' : 'off';
 
         // warnings here
-        try {
-            module.resolve('components/src/app/components/Fallback');
-        } catch (err) {
+        if (!fs.existsSync(rootPath, 'src/app/components/Fallback/index.js')) {
             console.log('');
             console.log(
                 chalk.magenta(
