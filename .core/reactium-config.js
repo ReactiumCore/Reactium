@@ -195,7 +195,7 @@ module.exports = {
                     overwrite: false,
                     version: '>=3.0.3',
                     destination: '/src/app/components/Fallback',
-                    source: '/tmp/src/app/components/Fallback',
+                    source: '/tmp/update/src/app/components/Fallback',
                 },
             ],
             remove: [],
