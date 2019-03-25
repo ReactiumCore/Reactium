@@ -17,7 +17,6 @@ module.exports = {
             '@babel/env',
             {
                 useBuiltIns: 'usage',
-                corejs: 2,
                 debug: false,
                 targets: {
                     browsers: ['> 1%', 'IE 11'],
