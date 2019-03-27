@@ -14,7 +14,7 @@ const sass = require('gulp-sass');
 const jsonFunctions = require('node-sass-functions-json').default;
 const tildeImporter = require('node-sass-tilde-importer');
 const less = require('gulp-less');
-const csso = require('gulp-csso');
+const cleanCSS = require('gulp-clean-css');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 const chalk = require('chalk');
@@ -320,7 +320,7 @@ const reactium = (gulp, config, webpackConfig) => {
             )
             .pipe(gulpif(isLess, less({ paths: config.src.includes })))
             .pipe(prefix(config.browsers))
-            .pipe(gulpif(!isDev, csso()))
+            .pipe(gulpif(!isDev, cleanCSS()))
             .pipe(gulpif(isDev, sourcemaps.write()))
             .pipe(rename({ dirname: '' }))
             .pipe(gulp.dest(config.dest.style))
