@@ -14,7 +14,7 @@ const contextMode = () => {
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.3',
+    version: '3.0.4',
     semver: '^3.0.0',
     update: {
         package: {
@@ -42,6 +42,7 @@ module.exports = {
                     'gulp-autoprefixer': '^6.0.0',
                     'gulp4-run-sequence': '^0.3.1',
                     'gulp-sourcemaps': '^2.6.5',
+                    'gulp-clean-css': '^4.0.0',
                     handlebars: '^4.0.12',
                     jest: '^24.1.0',
                     'module-alias': '^2.1.0',
@@ -73,6 +74,7 @@ module.exports = {
                     'gulp-autoprefixer',
                     'gulp-sourcemaps',
                     'gulp4-run-sequence',
+                    'gulp-csso',
                     'jest',
                     'run-sequence',
                     'webpack',
