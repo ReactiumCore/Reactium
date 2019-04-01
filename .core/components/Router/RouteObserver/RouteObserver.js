@@ -8,7 +8,14 @@ export default class RouteObserver extends Component {
      * e.g. appdir/product-page/route
      */
     processRoute() {
-        const { location, Router, updateRoute, routes = [] } = this.props;
+        const {
+            history,
+            location,
+            match,
+            Router,
+            updateRoute,
+            routes = [],
+        } = this.props;
 
         const pathChanged =
             !Router.pathname || location.pathname !== Router.pathname;
@@ -29,7 +36,13 @@ export default class RouteObserver extends Component {
                     routeParams = matchPath(location.pathname, route).params;
                 }
 
-                updateRoute(location, route, routeParams);
+                updateRoute({
+                    history,
+                    location,
+                    match,
+                    route,
+                    params: routeParams,
+                });
             }
         }
     }

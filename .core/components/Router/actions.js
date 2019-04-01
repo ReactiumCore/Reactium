@@ -2,7 +2,10 @@ import deps from 'dependencies';
 import queryString from 'querystring-browser';
 
 export default {
-    updateRoute: (location, route = {}, params) => (dispatch, getState) => {
+    updateRoute: ({ history, location, match, route = {}, params }) => (
+        dispatch,
+        getState,
+    ) => {
         const { Router } = getState();
 
         const defaultOnRouteChange = () => {
@@ -25,19 +28,18 @@ export default {
         }
 
         // load route data
+        let search = queryString.parse(location.search.replace(/^\?/, ''));
         if ('load' in route) {
-            dispatch(
-                route.load(
-                    params,
-                    queryString.parse(location.search.replace(/^\?/, '')),
-                ),
-            );
+            dispatch(route.load(params, search));
         }
 
         dispatch({
             type: deps().actionTypes.UPDATE_ROUTE,
+            history,
             location,
+            match,
             params,
+            search,
         });
     },
 };
