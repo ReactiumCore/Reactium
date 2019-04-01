@@ -4,10 +4,14 @@ import { combineReducers } from 'redux';
 const Router = (state = {}, action) => {
     switch (action.type) {
         case deps().actionTypes.UPDATE_ROUTE: {
-            const { location, params } = action;
+            const { location, history, match, params, search } = action;
+
             return {
                 ...location,
+                history,
+                match,
                 params,
+                urlParams: search,
             };
         }
         default: {
