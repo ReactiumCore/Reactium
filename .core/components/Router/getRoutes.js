@@ -32,6 +32,7 @@ export default () => {
                 };
             }),
         )
+        .filter(route => route)
         .reduce((rts, route) => {
             // Support multiple routable components per route file
             if (Array.isArray(route)) {
