@@ -6,7 +6,7 @@ export default (state = {}, action) => {
 
     switch (action.type) {
 
-        case deps().actionTypes.{{ID}}_LOAD:
+        case deps().actionTypes.{{name}}.LOAD:
             newState = { ...state, ...action.data };
             return newState;
 
