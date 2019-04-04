@@ -15,5 +15,8 @@ export const ec = Component => {
 /**
  * Custom React hooks for accessing store or specific data from the store.
  */
-export const useStore = () => op.get(useContext(ReactReduxContext), 'store');
-export const useSelect = select => op.get(useStore().getState(), select);
+export const useStore = () =>
+    op.get(useContext(ReactReduxContext), 'store', { getState: () => ({}) });
+
+export const useSelect = (...select) =>
+    op.get(useStore().getState(), ...select);
