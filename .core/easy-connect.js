@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { connect, ReactReduxContext } from 'react-redux';
 import op from 'object-path';
 
@@ -18,5 +18,30 @@ export const ec = Component => {
 export const useStore = () =>
     op.get(useContext(ReactReduxContext), 'store', { getState: () => ({}) });
 
-export const useSelect = (...select) =>
-    op.get(useStore().getState(), ...select);
+/**
+ * Module Constructor
+ * @description Internal constructor of the module that is being exported.
+ * @param select [Function] select function passed the full redux state, returns the
+ * @param shouldUpdate [Function] passed object with newState and prevState.
+ * Returns true if state should be updated in hook.
+ */
+export const useSelect = ({
+    select = newState => newState,
+    shouldUpdate = ({ prevState, nextState }) => true,
+}) => {
+    const { getState, subscribe } = useStore();
+    const [state, updatedState] = useState(select(getState()));
+
+    subscribe(() => {
+        const newState = getState();
+        if (
+            shouldUpdate({
+                newState,
+                prevState: state,
+            })
+        ) {
+            updatedState(select(newState));
+        }
+    });
+    return state;
+};
