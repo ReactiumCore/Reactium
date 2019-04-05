@@ -30,18 +30,21 @@ export const useSelect = ({
     shouldUpdate = ({ prevState, nextState }) => true,
 }) => {
     const { getState, subscribe } = useStore();
-    const [state, updatedState] = useState(select(getState()));
+    const [value, setValue] = useState(select(getState()));
 
     subscribe(() => {
-        const newState = getState();
+        const newState = select(getState());
+        const prevState = value;
         if (
             shouldUpdate({
                 newState,
-                prevState: state,
+                prevState,
             })
         ) {
-            updatedState(select(newState));
+            console.log('updating', { newState, prevState });
+            setValue(newState);
         }
     });
-    return state;
+
+    return value;
 };
