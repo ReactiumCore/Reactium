@@ -11,6 +11,7 @@ const gulpwatch = require('gulp-watch');
 const run = require('gulp-run');
 const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
+const gzip = require('gulp-gzip');
 const jsonFunctions = require('node-sass-functions-json').default;
 const tildeImporter = require('node-sass-tilde-importer');
 const less = require('gulp-less');
@@ -32,6 +33,8 @@ const reactium = (gulp, config, webpackConfig) => {
     const task = require('./get-task')(gulp);
 
     const env = process.env.NODE_ENV || 'development';
+    const isDev = env === 'development';
+
     const assetPath = p => {
         p.dirname = p.dirname.split('assets').pop();
     };
@@ -170,6 +173,7 @@ const reactium = (gulp, config, webpackConfig) => {
         task('manifest'),
         gulp.parallel(task('scripts'), task('assets'), task('styles')),
         gulp.parallel(task('markup'), task('json')),
+        task('compress'),
         task('postBuild'),
     );
 
@@ -208,8 +212,6 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const scripts = done => {
         // Compile js
-        let isDev = env === 'development';
-
         if (!isDev) {
             webpack(webpackConfig, (err, stats) => {
                 if (err) {
@@ -299,7 +301,6 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const stylesCompile = () => {
         // Compile Sass & Less
-        let isDev = env === 'development';
         let isSass = config.cssPreProcessor === 'sass';
         let isLess = config.cssPreProcessor === 'less';
 
@@ -329,6 +330,14 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const styles = gulp.series(task('styles:colors'), task('styles:compile'));
 
+    const compress = done =>
+        isDev
+            ? done()
+            : gulp
+                  .src(config.src.compress)
+                  .pipe(gzip())
+                  .pipe(gulp.dest(config.dest.assets));
+
     const watchFork = done => {
         // Watch for file changes
         gulp.watch(config.watch.colors, gulp.task('styles:colors'));
@@ -348,6 +357,7 @@ const reactium = (gulp, config, webpackConfig) => {
         assets,
         preBuild: noop,
         build,
+        compress,
         postBuild: noop,
         postServe: noop,
         clean,

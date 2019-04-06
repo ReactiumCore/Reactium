@@ -14,6 +14,7 @@ import apiConfig from 'appdir/api/config';
 import path from 'path';
 import fs from 'fs';
 import op from 'object-path';
+import staticGzip from 'express-static-gzip';
 
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
@@ -158,7 +159,8 @@ const staticAssets =
 
 middlewares.push({
     name: 'static',
-    use: express.static(staticAssets),
+    // use: express.static(staticAssets),
+    use: staticGzip(staticAssets),
 });
 
 // default route handler

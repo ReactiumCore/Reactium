@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const env = process.env.NODE_ENV || 'development';
 const rootPath = path.resolve(__dirname, '..');
 
@@ -73,6 +74,10 @@ module.exports = config => {
             exclude: /Critical dependency: the request of a dependency is an expression/i,
         }),
     );
+
+    if (env === 'production') {
+        plugins.push(new CompressionPlugin());
+    }
 
     const defaultConfig = {
         target: target,
