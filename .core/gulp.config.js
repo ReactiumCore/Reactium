@@ -75,6 +75,7 @@ const defaultConfig = {
             '!{src/assets/style,src/assets/style/**}',
             '!{src/assets/js,src/assets/js/**}',
         ],
+        compress: ['public/assets/**/*', '!public/assets/js/**'],
         includes: ['./node_modules'],
         appdir: path.resolve(__dirname, 'src/app'),
         rootdir: path.resolve(__dirname),
