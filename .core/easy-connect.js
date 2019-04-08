@@ -13,13 +13,14 @@ export const ec = Component => {
 };
 
 /**
+ * useStore hook - just gimme the store damnit!
  * Custom React hooks for accessing store or specific data from the store.
  */
 export const useStore = () =>
     op.get(useContext(ReactReduxContext), 'store', { getState: () => ({}) });
 
 /**
- * Module Constructor
+ * useSelect hook
  * @description Internal constructor of the module that is being exported.
  * @param select [Function] select function passed the full redux state, returns the
  * @param shouldUpdate [Function] passed object with newState and prevState.
