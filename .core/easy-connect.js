@@ -41,7 +41,6 @@ export const useSelect = ({
                 prevState,
             })
         ) {
-            console.log('updating', { newState, prevState });
             setValue(newState);
         }
     });
