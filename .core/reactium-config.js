@@ -44,6 +44,7 @@ module.exports = {
                     'gulp4-run-sequence': '^0.3.1',
                     'gulp-sourcemaps': '^2.6.5',
                     'gulp-clean-css': '^4.0.0',
+                    'gulp-gzip': '^1.4.2',
                     handlebars: '^4.0.12',
                     jest: '^24.1.0',
                     'module-alias': '^2.1.0',
