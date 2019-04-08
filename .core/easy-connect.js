@@ -21,7 +21,7 @@ export const useStore = () =>
 
 /**
  * useSelect hook
- * @description Internal constructor of the module that is being exported.
+ * @description select subtree from redux state, and govern when to inform component of changes.
  * @param select [Function] select function passed the full redux state, returns the
  * @param shouldUpdate [Function] passed object with newState and prevState.
  * Returns true if state should be updated in hook.
