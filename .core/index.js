@@ -159,7 +159,6 @@ const staticAssets =
 
 middlewares.push({
     name: 'static',
-    // use: express.static(staticAssets),
     use: staticGzip(staticAssets),
 });
 
