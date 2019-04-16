@@ -12,7 +12,7 @@
     },
     "plugins": ["react", "react-hooks"],
     "rules": {
-        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "indent": "off",
         "linebreak-style": ["warn", "unix"],
         "quotes": ["warn", "single"],
         "semi": ["warn", "always"],

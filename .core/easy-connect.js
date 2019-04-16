@@ -19,6 +19,7 @@ const noop = () => {};
  */
 export const ec = Component => {
     return connect(state => ({
+        ...op.get(state, Component.name, {}),
         getState: () => state,
     }))(Component);
 };

@@ -14,7 +14,7 @@ const contextMode = () => {
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.5',
+    version: '3.0.6',
     semver: '^3.0.0',
     update: {
         package: {
