@@ -42,27 +42,43 @@ export const useStore = () =>
  * @param select [Function] select function is passed the full redux state, returns your
  * custom derived object / substate.
  * @param shouldUpdate [Function] passed object with newState and prevState.
+ * @param debounce [Boolean] (false) debounce updates if true
+ * @param wait [Integer] (250) if debounce is true, this is number of milliseconds before taking a value
  * Returns true if state should be updated in hook.
- * @return {mixed} The selected or derived state as react hook. Subscribed to updates.
  */
 export const useSelect = ({
     select = newState => newState,
     shouldUpdate = ({ prevState, nextState }) => true,
+    debounce = false,
+    wait = 250,
 }) => {
     const { getState, subscribe } = useStore();
     const [value, setValue] = useState(select(getState()));
 
-    subscribe(() => {
-        const newState = select(getState());
-        const prevState = value;
-        if (
-            shouldUpdate({
-                newState,
-                prevState,
-            })
-        ) {
-            setValue(newState);
+    useEffect(() => {
+        let handleStateChange = () => {
+            const newState = select(getState());
+            const prevState = value;
+
+            if (
+                shouldUpdate({
+                    newState,
+                    prevState,
+                })
+            ) {
+                setValue(newState);
+            }
+        };
+
+        if (debounce) {
+            handleStateChange = _.debounce(handleStateChange, wait);
         }
+
+        const unsubscribe = subscribe(handleStateChange);
+
+        return () => {
+            unsubscribe();
+        };
     });
 
     return value;
