@@ -16,7 +16,6 @@ import React, { Component, Fragment } from 'react';
 import { Plugins } from 'reactium-core/components/Plugable';
 import config from 'appdir/toolkit';
 
-console.log({ config });
 const assetPath = op.get(config, 'assets.path', '/assets');
 
 /**
