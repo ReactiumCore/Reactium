@@ -1,13 +1,15 @@
 import _ from 'underscore';
 import op from 'object-path';
 import deps from 'dependencies';
-import { themes } from 'appdir/toolkit';
+import { themes, assets } from 'appdir/toolkit';
 import { TweenMax, Power2 } from 'gsap/umd/TweenMax';
 
 const isToolkit = path => {
     let exp = /^\/toolkit/i;
     return exp.test(path);
 };
+
+const assetPath = op.get(assets, 'path', '/assets');
 
 export default {
     load: data => dispatch =>
@@ -165,7 +167,7 @@ export default {
     setTheme: theme => dispatch => {
         theme =
             op.get(_.findWhere(themes, { css: theme }), 'css') ||
-            '/assets/style/style.css';
+            `${assetPath}/style/style.css`;
         return dispatch({
             type: deps().actionTypes.TOOLKIT_THEME,
             theme,

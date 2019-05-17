@@ -53,6 +53,9 @@ module.exports = {
             css: '/assets/style/achromatomaly.css',
         },
     ],
+    assets: {
+        path: '/assets',
+    },
     sidebar: {
         closed: false,
         position: 'left',

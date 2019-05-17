@@ -6,7 +6,7 @@
 import { getDisplayName } from 'reactium-core/components/Toolkit/_lib/tools';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 import React, { Component, Fragment } from 'react';
-import { themes } from 'appdir/toolkit';
+import { themes, assets } from 'appdir/toolkit';
 import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import op from 'object-path';
@@ -21,14 +21,16 @@ const Empty = props => {
     return () => null;
 };
 
+const assetPath = op.get(assets, 'path', '/assets');
+
 export default class Preview extends Component {
     static defaultProps = {
         visible: true,
         component: null,
         group: null,
         id: null,
-        style: '/assets/style/style.css',
-        toolkit: '/assets/style/toolkit.css',
+        style: `${assetPath}/style/style.css`,
+        toolkit: `${assetPath}/style/toolkit.css`,
     };
 
     static contextTypes = {
@@ -109,7 +111,7 @@ export default class Preview extends Component {
         }
 
         const theme = _.findWhere(themes, { css: style }) || themes[0];
-        style = op.get(theme, 'css');
+        style = op.get(theme, 'css').replace(/^\/assets/, assetPath);
 
         return `
             <!DOCTYPE html>
