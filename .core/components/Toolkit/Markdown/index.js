@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
+import { vs, vs2015 } from 'react-syntax-highlighter/dist/styles/hljs';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { renderToStaticMarkup } from 'react-dom/server';
 import marked from 'marked';
