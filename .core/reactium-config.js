@@ -185,7 +185,7 @@ module.exports = {
                     'local:ssr': 'gulp local:ssr',
                 },
                 remove: [
-                    'build-cleanup',
+                    'build:cleanup',
                     'local-fe-start',
                     'local-fe:gulp',
                     'local-fe:babel-node',
