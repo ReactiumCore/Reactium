@@ -8,7 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import React, { Component, Fragment } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { vs, vs2015 } from 'react-syntax-highlighter/styles/hljs';
+import { vs, vs2015 } from 'react-syntax-highlighter/dist/styles/hljs';
 import copy from 'copy-to-clipboard';
 import op from 'object-path';
 import PropTypes from 'prop-types';
