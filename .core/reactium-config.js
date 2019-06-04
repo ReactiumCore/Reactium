@@ -185,6 +185,7 @@ module.exports = {
                     'local:ssr': 'gulp local:ssr',
                 },
                 remove: [
+                    'build-cleanup',
                     'local-fe-start',
                     'local-fe:gulp',
                     'local-fe:babel-node',
@@ -198,6 +199,12 @@ module.exports = {
         },
         files: {
             add: [
+                {
+                    overwrite: true,
+                    version: '>=3.0.0',
+                    destination: '/Dockerfile',
+                    source: '/tmp/update/Dockerfile',
+                },
                 {
                     overwrite: true,
                     version: '>=2.3.16',
