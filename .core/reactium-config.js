@@ -21,7 +21,7 @@ module.exports = {
             devDependencies: {
                 add: {
                     'gulp-run': '^1.7.1',
-                    'atomic-reactor-cli': '^2.0.21',
+                    'atomic-reactor-cli': '^2.1.4',
                     'babel-core': '^7.0.0-bridge.0',
                     'babel-jest': '^24.8.0',
                     '@babel/core': '^7.4.5',
