@@ -1,7 +1,7 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { connect, ReactReduxContext } from 'react-redux';
 import op from 'object-path';
-import _ from 'underscore';
+import * as equals from 'shallow-equals';
 
 const noop = () => {};
 
@@ -38,45 +38,47 @@ export const useStore = () =>
     });
 
 /**
+ * Default to shallow equals.
+ */
+const defaultShouldUpdate = ({ prevState, nextState }) =>
+    !equals(prevState, nextState);
+
+/**
  * useSelect hook - subscribe to subtree of redux and control updates.
  * @description select subtree from redux state, and govern when to inform component of changes.
  * @param select [Function] select function is passed the full redux state, returns your
  * custom derived object / substate.
  * @param shouldUpdate [Function] passed object with newState and prevState.
- * @param debounce [Boolean] (false) debounce updates if true
- * @param wait [Integer] (250) if debounce is true, this is number of milliseconds before taking a value
+ *
  * Returns true if state should be updated in hook.
  */
 export const useSelect = ({
     select = newState => newState,
-    shouldUpdate = ({ prevState, nextState }) => true,
-    debounce = false,
-    wait = 250,
+    shouldUpdate = defaultShouldUpdate,
 }) => {
     const { getState, subscribe } = useStore();
-    const [value, setValue] = useState(select(getState()));
+    const stateRef = useRef(select(getState()));
+    const [value, setValue] = useState(stateRef.current);
+
+    const setState = () => {
+        const newState = select(getState());
+        const prevState = stateRef.current;
+        if (
+            shouldUpdate({
+                newState,
+                prevState,
+            })
+        ) {
+            stateRef.current = {
+                ...prevState,
+                ...newState,
+            };
+            setValue(stateRef.current);
+        }
+    };
 
     useEffect(() => {
-        let handleStateChange = () => {
-            const newState = select(getState());
-            const prevState = value;
-
-            if (
-                shouldUpdate({
-                    newState,
-                    prevState,
-                })
-            ) {
-                setValue(newState);
-            }
-        };
-
-        if (debounce) {
-            handleStateChange = _.debounce(handleStateChange, wait);
-        }
-
-        const unsubscribe = subscribe(handleStateChange);
-
+        const unsubscribe = subscribe(setState);
         return () => {
             unsubscribe();
         };

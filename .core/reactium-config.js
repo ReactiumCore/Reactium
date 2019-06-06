@@ -140,6 +140,7 @@ module.exports = {
                     'redux-local-persist': '0.1.0',
                     'redux-super-thunk': '^0.0.7',
                     'run-script-os': '^1.0.5',
+                    'shallow-equals': '^1.0.0',
                     xss: '^1.0.3',
                 },
                 remove: [
