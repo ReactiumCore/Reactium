@@ -14,7 +14,7 @@ const contextMode = () => {
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.8',
+    version: '3.0.9',
     semver: '^3.0.0',
     update: {
         package: {
@@ -31,7 +31,7 @@ module.exports = {
                     '@babel/plugin-proposal-export-default-from': '^7.2.0',
                     '@babel/plugin-syntax-dynamic-import': '^7.2.0',
                     'babel-loader': '^8.0.6',
-                    'browser-sync': '^2.26.5',
+                    'browser-sync': '^2.26.7',
                     camelcase: '^5.0.0',
                     'compression-webpack-plugin': '^2.0.0',
                     'cli-spinners': '^1.3.1',
