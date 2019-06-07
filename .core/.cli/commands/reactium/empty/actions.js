@@ -101,8 +101,6 @@ module.exports = spinner => {
 
                 const demoPaths = [
                     path.normalize(`${cwd}/src/app/components/Demo`),
-                    path.normalize(`${cwd}/src/app/components/common-ui/form`),
-                    path.normalize(`${cwd}/src/app/components/common-ui/Icon`),
                 ].forEach(p => fs.removeSync(p));
             }
 
@@ -114,6 +112,14 @@ module.exports = spinner => {
 
                 fs.readdirSync(toolkitPath)
                     .filter(file => Boolean(!toolkitExclude.includes(file)))
+                    .concat([
+                        path.normalize(
+                            `${cwd}/src/app/components/common-ui/form`,
+                        ),
+                        path.normalize(
+                            `${cwd}/src/app/components/common-ui/Icon`,
+                        ),
+                    ])
                     .forEach(file =>
                         fs.removeSync(path.normalize(`${toolkitPath}/${file}`)),
                     );

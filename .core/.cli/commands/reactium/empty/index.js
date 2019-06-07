@@ -100,6 +100,16 @@ const CONFORM = ({ input, props }) => {
         }
     });
 
+    if (!Object.entries(output).length) {
+        output = {
+            demo: true,
+            font: true,
+            images: true,
+            style: true,
+            toolkit: true,
+        };
+    }
+
     return output;
 };
 
@@ -122,26 +132,6 @@ const HELP = () => {
 };
 
 /**
- * SCHEMA Function
- * @description used to describe the input for the prompt function.
- * @see https://www.npmjs.com/package/prompt
- * @since 2.0.0
- */
-const SCHEMA = ({ props }) => {
-    const { cwd, prompt } = props;
-
-    return {
-        properties: {
-            // sample: {
-            //     description: chalk.white('Sample:'),
-            //     required: true,
-            //     default: true,
-            // },
-        },
-    };
-};
-
-/**
  * ACTION Function
  * @description Function used as the commander.action() callback.
  * @see https://www.npmjs.com/package/commander
@@ -153,8 +143,6 @@ const ACTION = ({ opt, props }) => {
     console.log('');
 
     const { cwd, prompt } = props;
-
-    const schema = SCHEMA({ props });
 
     const ovr = ['demo', 'font', 'images', 'style', 'toolkit'].reduce(
         (obj, key) => {
@@ -168,31 +156,19 @@ const ACTION = ({ opt, props }) => {
         {},
     );
 
-    prompt.override = ovr;
-    prompt.start();
-    prompt.get(schema, (err, input) => {
-        // Keep this conditional as the first line in this function.
-        // Why? because you will get a js error if you try to set or use anything related to the input object.
-        if (err) {
-            prompt.stop();
-            error(`${NAME} ${err.message}`);
-            return;
-        }
+    const params = CONFORM({ input: ovr, props });
 
-        const params = { ...CONFORM({ input, props }), ...ovr };
-
-        CONFIRM({ props, params })
-            .then(() => {
+    CONFIRM({ props, params })
+        .then(() => {
+            console.log('');
+            generator({ params, props }).then(success => {
                 console.log('');
-                generator({ params, props }).then(success => {
-                    console.log('');
-                });
-            })
-            .catch(err => {
-                prompt.stop();
-                message(CANCELED);
             });
-    });
+        })
+        .catch(err => {
+            prompt.stop();
+            message(CANCELED);
+        });
 };
 
 /**
@@ -204,23 +180,11 @@ const COMMAND = ({ program, props }) =>
         .command(NAME)
         .description(DESC)
         .action(opt => ACTION({ opt, props }))
-        .option('-D, --no-demo [demo]', 'Keep the demo site and components.')
-        .option(
-            '-T, --no-toolkit [toolkit]',
-            'Keep the default toolkit elements.',
-        )
-        .option(
-            '-S, --no-style [style]',
-            'Do not empty the ~/src/assets/style/style.scss file.',
-        )
-        .option(
-            '-F, --no-font [font]',
-            'Do not empty the ~/src/assets/fonts directory.',
-        )
-        .option(
-            '-I, --no-images [images]',
-            'Do not empty the ~/src/assets/images directory.',
-        )
+        .option('-D, --demo', 'Empty the demo.')
+        .option('-T, --toolkit', 'Empty toolkit elements.')
+        .option('-S, --style', 'Empty ~/src/assets/style/style.scss file.')
+        .option('-F, --font', 'Empty ~/src/assets/fonts directory.')
+        .option('-I, --images', 'Empty ~/src/assets/images directory.')
         .on('--help', HELP);
 
 /**
