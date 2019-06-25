@@ -279,11 +279,12 @@ const SCHEMA_SOURCE = ({ params, props }) => {
     };
 };
 
-const SCHEMA_NAME = ({ props }) => {
+const SCHEMA_NAME = ({ params, props }) => {
     let pkg;
+    let p = path.join(params.source, 'package.json');
 
     try {
-        pkg = require(`${params.source}/package.json`);
+        pkg = require(p);
     } catch (err) {
         pkg = {};
     }
@@ -293,7 +294,8 @@ const SCHEMA_NAME = ({ props }) => {
             name: {
                 description: chalk.white('Name:'),
                 message: `Enter the ${chalk.cyan('Library name')}`,
-                required: !op.has(pkg, 'name'),
+                default: op.get(pkg, 'name'),
+                required: true,
             },
         },
     };
@@ -386,10 +388,10 @@ const ACTION = ({ opt, props }) => {
     prompt.override = ovr;
     prompt.start();
 
-    let params = {};
+    let params = CONFORM({ input: ovr, props });
 
     return new Promise((resolve, reject) => {
-        prompt.get(SCHEMA_NAME({ props }), (err, input = {}) => {
+        prompt.get(SCHEMA_NAME({ params, props }), (err, input = {}) => {
             if (err) {
                 prompt.stop();
                 reject(`${NAME} ${err.message} 386`);
