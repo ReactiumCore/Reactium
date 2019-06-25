@@ -90,7 +90,7 @@ module.exports = spinner => {
                 action,
                 params,
                 props,
-                templateFile: 'index-functional',
+                templateFile: `index-${params.type}`,
                 fileName: 'index.js',
             }),
 

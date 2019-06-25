@@ -1,0 +1,84 @@
+import _ from 'underscore';
+import cn from 'classnames';
+import op from 'object-path';
+import PropTypes from 'prop-types';
+
+import React, {
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
+
+const noop = () => {};
+
+const ENUMS = {};
+
+/**
+ * -----------------------------------------------------------------------------
+ * Hook Component: {{name}}
+ * -----------------------------------------------------------------------------
+ */
+let {{name}} = (props, ref) => {
+    // Refs
+    const containerRef = useRef();
+    const stateRef = useRef({
+        ...props,
+    });
+
+    // State
+    const [state, setNewState] = useState(stateRef.current);
+
+    // Internal Interface
+    const setState = newState => {
+
+        // Update the stateRef
+        stateRef.current = {
+            ...stateRef.current,
+            ...newState,
+        };
+
+        // Trigger useEffect()
+        setNewState(stateRef.current);
+    };
+
+    // External Interface
+    useImperativeHandle(ref, () => ({
+        setState,
+        state,
+    }));
+
+    // Side Effects
+    useEffect(() => setState(props), Object.values(props));
+
+    const render = () => {
+        const { children } = props;
+        const { className, namespace } = stateRef.current;
+        const cname = cn({ [className]: !!className, [namespace]: true });
+
+        return (
+            <div ref={containerRef} className={cname}>
+                {{name}}
+            </div>
+        );
+    };
+
+    return render();
+};
+
+{{name}} = forwardRef({{name}});
+
+{{name}}.ENUMS = ENUMS;
+
+{{name}}.propTypes = {
+    className: PropTypes.string,
+    namespace: PropTypes.string,
+};
+
+{{name}}.defaultProps = {
+
+};
+
+export { {{name}} as default };

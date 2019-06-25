@@ -103,6 +103,7 @@ module.exports = ({ params, props }) => {
 
     switch (params.type) {
         case 'functional':
+        case 'hook':
             delete actions.class;
             break;
 
