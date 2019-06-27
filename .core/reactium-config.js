@@ -9,6 +9,8 @@ const contextMode = () => {
     return 'sync';
 };
 
+const gulpConfig = require('./gulp.config');
+
 /**
  * Use liberally for additional core configuration.
  * @type {Object}
@@ -16,6 +18,7 @@ const contextMode = () => {
 module.exports = {
     version: '3.0.9',
     semver: '^3.0.0',
+    build: gulpConfig,
     update: {
         package: {
             devDependencies: {
