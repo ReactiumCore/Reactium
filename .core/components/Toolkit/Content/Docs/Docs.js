@@ -14,6 +14,8 @@ import deps from 'dependencies';
  * React Component: Docs
  * -----------------------------------------------------------------------------
  */
+
+const noop = () => {};
 export default class Docs extends Component {
     static defaultProps = {
         title: null,
@@ -22,6 +24,7 @@ export default class Docs extends Component {
         speed: 0.2,
         id: null,
         update: null,
+        onInit: noop,
     };
 
     constructor(props) {
@@ -29,6 +32,7 @@ export default class Docs extends Component {
 
         this.state = {
             height: this.props.height,
+            init: false,
         };
 
         this.prefs = {};
@@ -40,6 +44,15 @@ export default class Docs extends Component {
 
     componentDidMount() {
         this.applyPrefs();
+        const { init } = this.state;
+
+        if (init === false) {
+            const { onInit } = this.props;
+
+            onInit(this);
+
+            this.setState({ init: true });
+        }
     }
 
     componentDidUpdate(prevProps) {
