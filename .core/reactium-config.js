@@ -16,7 +16,7 @@ const gulpConfig = require('./gulp.config');
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.9',
+    version: '3.0.10',
     semver: '^3.0.0',
     build: gulpConfig,
     update: {
