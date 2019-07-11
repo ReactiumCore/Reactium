@@ -90,6 +90,7 @@ const defaultConfig = {
         static: 'dist',
         library: 'lib',
         build: 'build/src',
+        buildCore: 'build/core',
         colors: 'src/assets/style/_scss/_colors.scss',
         startPath: '/',
     },
