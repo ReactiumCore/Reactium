@@ -5,8 +5,8 @@
  * Includes
  * -----------------------------------------------------------------------------
  */
-import 'core-js/es/string/starts-with';
-import 'core-js/es/object/entries';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';

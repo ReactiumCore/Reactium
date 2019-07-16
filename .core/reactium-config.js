@@ -16,15 +16,16 @@ const gulpConfig = require('./gulp.config');
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.14',
+    version: '3.0.15',
     semver: '^3.0.0',
     build: gulpConfig,
     update: {
         package: {
             dependencies: {
                 remove: [
-                    'ajv',
                     '@babel/plugin-syntax-dynamic-import',
+                    '@babel/polyfill',
+                    'ajv',
                     'beautify',
                     'express-http-proxy',
                     'htmltojsx',
