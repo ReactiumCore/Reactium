@@ -72,7 +72,7 @@ module.exports = spinner => {
             );
 
             let babel = new run.Command(
-                `cross-env NODE_ENV=production babel "${source}" --out-dir "${destination}"`,
+                `cross-env NODE_ENV=library babel "${source}" --out-dir "${destination}"`,
                 { verbosity: 3 },
             );
 
