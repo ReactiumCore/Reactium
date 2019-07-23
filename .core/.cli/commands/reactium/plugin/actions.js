@@ -20,18 +20,23 @@ module.exports = spinner => {
             const { destination } = params;
             const pluginFile = path.normalize(`${destination}/plugin.js`);
 
-            const plugin = JSON.stringify(
-                _.pick(params, 'id', 'component', 'order', 'zone'),
+            // Template content
+            const template = path.normalize(`${__dirname}/template/plugin.hbs`);
+            const content = handlebars(fs.readFileSync(template, 'utf-8'))(
+                params,
             );
 
-            const cont =
-                '\n\n' +
-                prettier.format(`export default ${plugin}`, {
-                    parser: 'babel',
-                });
-
             fs.ensureFileSync(pluginFile);
-            fs.writeFileSync(pluginFile, cont);
+            fs.writeFileSync(
+                pluginFile,
+                prettier.format(content, {
+                    parser: 'babel',
+                    trailingComma: 'all',
+                    singleQuote: true,
+                    tabWidth: 4,
+                    useTabs: false,
+                }),
+            );
 
             return Promise.resolve({ action, status: 200 });
         },

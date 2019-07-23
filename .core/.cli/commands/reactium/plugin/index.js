@@ -17,21 +17,6 @@ const { error, message } = require(`${mod}/lib/messenger`);
 const pad = require(`${mod}/lib/pad`);
 const M = require('../zones/manifest')();
 
-const overwritable = prompt => {
-    let overwrite;
-
-    try {
-        overwrite =
-            prompt.override['overwrite'] || prompt.history('overwrite').value;
-    } catch (err) {
-        overwrite = true;
-    }
-
-    overwrite = overwrite === '' ? true : overwrite;
-
-    return overwrite;
-};
-
 const formatDestination = ({ val, props }) => {
     const { cwd } = props;
 
@@ -133,7 +118,7 @@ Example:
   $ arcli plugin --destination cwd/components/MyComponent --id "my-plugin"
 `);
 
-const FLAGS = ['overwrite', 'destination', 'zone', 'id', 'component', 'order'];
+const FLAGS = ['destination', 'zone', 'id', 'component', 'order'];
 
 const FLAGS_TO_PARAMS = ({ opt = {} }) =>
     FLAGS.reduce((obj, key) => {
@@ -182,47 +167,19 @@ const SCHEMA = ({ props }) => {
                 required: true,
                 message: ' Plugin destination is required',
             },
-            overwrite: {
-                required: true,
-                pattern: /^y|n|Y|N/,
-                message: '',
-                description: `${chalk.white(
-                    'Overwrite existing plugin?',
-                )} ${chalk.cyan('(Y/N):')}`,
-                ask: () => {
-                    try {
-                        let val =
-                            prompt.override['destination'] ||
-                            prompt.history('destination').value;
-                        val = formatDestination({ val, props });
-
-                        return fs.existsSync(
-                            path.normalize(`${val}/plugin.js`),
-                        );
-                    } catch (err) {
-                        return false;
-                    }
-                },
-                before: val => {
-                    return String(val).toUpperCase() === 'Y';
-                },
-            },
             id: {
                 required: true,
                 message: ' Plugin ID is required',
                 description: chalk.white('Plugin ID:'),
-                ask: () => overwritable(prompt),
             },
             component: {
                 required: true,
                 message: ' Component is required',
                 description: chalk.white('Component:'),
-                ask: () => overwritable(prompt),
             },
             zone: {
                 message: ' Zone is required',
                 description: chalk.white('Zones:'),
-                ask: () => overwritable(prompt),
             },
             zone: {
                 description: `${chalk.white('Zone:')}\n\t ${ZONE_LIST().join(
@@ -231,7 +188,6 @@ const SCHEMA = ({ props }) => {
                 type: 'string',
                 required: true,
                 message: ' Select zones',
-                ask: () => overwritable(prompt),
                 before: val =>
                     String(val)
                         .replace(/, /, ' ')
@@ -243,7 +199,6 @@ const SCHEMA = ({ props }) => {
                 required: true,
                 message: ' Order must be valid integer',
                 description: chalk.white('Order:'),
-                ask: () => overwritable(prompt),
             },
         },
     };
@@ -279,12 +234,6 @@ const ACTION = ({ opt, props }) => {
             input = { ...ovr, ...input };
             params = CONFORM({ input, props });
 
-            if (op.get(params, 'overwrite', false) !== true) {
-                prompt.stop();
-                reject(CANCELED);
-                return;
-            }
-
             PREFLIGHT({ params, props });
 
             resolve(params);
@@ -312,7 +261,6 @@ const COMMAND = ({ program, props }) =>
         .description(DESC)
         .action(opt => ACTION({ opt, props }))
         .option('-d, --destination [destination]', 'Plugin parent directory.')
-        .option('--overwrite [overwrite]', 'Overwrite existing plugin file.')
         .option(
             '-i, --id [id]',
             'Unique identifier for the plugin. Used when rendering the plugin to the dom.',
