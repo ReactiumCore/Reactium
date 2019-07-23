@@ -1,14 +1,21 @@
 import apiConfig from './config';
 
-// Isomorphic Parse
 let Parse = null;
 
-if ( typeof window !== 'undefined' ) {
+/**
+ * Isomorphic Parse SDK
+ *
+ * @see https://reactium.io/docs/guide/using-apis
+ */
+if (typeof window !== 'undefined') {
+    // [browser]: client side version of parse
     Parse = require('parse');
 } else {
+    // [server]: node SDK for parse
     Parse = require('parse/node');
 }
-if ( Parse ) {
+
+if (Parse) {
     Parse.initialize(apiConfig.parseAppId);
     Parse.serverURL = apiConfig.restAPI;
 }
