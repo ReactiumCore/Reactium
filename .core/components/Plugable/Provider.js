@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import PlugableContext from '../Context';
+import PlugableContext from './Context';
 import deps from 'dependencies';
 import op from 'object-path';
 
