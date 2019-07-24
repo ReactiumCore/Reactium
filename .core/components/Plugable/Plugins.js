@@ -158,7 +158,9 @@ const useCombinedZonePlugins = (plugins, zone) => {
             const prevIds = prevState.map(mapId);
             const newIds = newState.map(mapId);
             const same = _.intersection(prevIds, newIds);
-            return same.length !== newIds.length;
+            return (
+                same.length !== newIds.length || same.length != prevIds.length
+            );
         },
     });
 
