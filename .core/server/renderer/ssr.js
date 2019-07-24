@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { PlugableProvider } from 'reactium-core/components/Plugable';
 import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import querystring from 'querystring';
@@ -49,12 +50,14 @@ const renderer = template => (req, res, context) => {
         let html = '';
         const body = renderToString(
             <Provider store={store}>
-                <Router
-                    server={true}
-                    location={req.path}
-                    context={context}
-                    routes={routes}
-                />
+                <PlugableProvider {...app.dependencies().plugableConfig}>
+                    <Router
+                        server={true}
+                        location={req.path}
+                        context={context}
+                        routes={routes}
+                    />
+                </PlugableProvider>
             </Provider>,
         );
 
