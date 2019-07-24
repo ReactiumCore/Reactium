@@ -110,7 +110,7 @@ export const usePlugins = props => {
         filter: providedFilter,
         mapper: providedMapper,
         sort: providedSort,
-    } = useContext(Context);
+    } = useContext(Context) || {};
 
     const {
         children,
@@ -144,7 +144,7 @@ const pluginZones = ({ zone }) => {
     return zones.filter(_ => _);
 };
 
-const useCombinedZonePlugins = (plugins, zone) => {
+const useCombinedZonePlugins = (plugins = [], zone) => {
     const zoneFilter = plugin => pluginZones(plugin).find(pz => pz === zone);
     const mapId = plugin => plugin.id;
     const reduxPlugins = useSelect({
