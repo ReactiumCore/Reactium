@@ -6,7 +6,7 @@
 import React, { Component, Fragment } from 'react';
 import PlugableContext from './Context';
 import PlugableProvider from './Provider';
-import Plugins, { usePlugins } from './Plugins';
+import Plugins, { usePlugins, SimplePlugins } from './Plugins';
 
 export {
     usePlugins,
