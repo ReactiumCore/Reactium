@@ -154,11 +154,11 @@ const useCombinedZonePlugins = (plugins, zone) => {
             );
         },
 
-        shouldUpdate({ prevState, nextState }) {
+        shouldUpdate({ prevState = [], newState = [] }) {
             const prevIds = prevState.map(mapId);
-            const nextIds = nextState.map(mapId);
-            const same = _.intersection(prevIds, nextIds);
-            return same.length !== nextIds.length;
+            const newIds = newState.map(mapId);
+            const same = _.intersection(prevIds, newIds);
+            return same.length !== newIds.length;
         },
     });
 

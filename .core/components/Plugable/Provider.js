@@ -9,7 +9,16 @@ import op from 'object-path';
  * -----------------------------------------------------------------------------
  */
 export default class PlugableProvider extends Component {
-    defaultProps = {};
+    static defaultProps = {
+        filter: _ => true,
+        mapper: _ => _,
+        sort: (a, b) => {
+            const aOrder = op.get(a, 'order', 0);
+            const bOrder = op.get(b, 'order', 0);
+
+            return aOrder - bOrder;
+        },
+    };
 
     render() {
         const { filter, sort, mapper } = this.props;
@@ -27,14 +36,3 @@ export default class PlugableProvider extends Component {
         );
     }
 }
-
-PlugableProvider.defaultProps = {
-    filter: _ => true,
-    mapper: _ => _,
-    sort: (a, b) => {
-        const aOrder = op.get(a, 'order', 0);
-        const bOrder = op.get(b, 'order', 0);
-
-        return aOrder - bOrder;
-    },
-};
