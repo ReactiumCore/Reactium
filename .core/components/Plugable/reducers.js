@@ -21,7 +21,7 @@ const byId = (state = {}, action) => {
             };
         }
 
-        case deps().actionTypes.DELETE_PLUGIN: {
+        case deps().actionTypes.REMOVE_PLUGIN: {
             const newState = {
                 ...state,
             };
