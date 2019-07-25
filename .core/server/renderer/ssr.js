@@ -17,7 +17,7 @@ const renderer = template => (req, res, context) => {
     const routes = getRoutes();
 
     const store = storeCreator({ server: true });
-    const matches = matchRoutes(routes, req.path);
+    const matches = matchRoutes(routes, req.originalUrl);
     const loaders = matches
         .map(({ route, match }) => {
             return {
@@ -53,7 +53,7 @@ const renderer = template => (req, res, context) => {
                 <PlugableProvider {...app.dependencies().plugableConfig}>
                     <Router
                         server={true}
-                        location={req.path}
+                        location={req.originalUrl}
                         context={context}
                         routes={routes}
                     />
