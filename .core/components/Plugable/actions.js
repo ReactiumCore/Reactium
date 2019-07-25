@@ -16,8 +16,8 @@ export default {
         ...pluginProps,
     }),
 
-    deletePlugin: id => ({
-        type: deps().actionTypes.DELETE_PLUGIN,
+    removePlugin: id => ({
+        type: deps().actionTypes.REMOVE_PLUGIN,
         id,
     }),
 };

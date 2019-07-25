@@ -63,16 +63,14 @@ export const useSelect = ({
     const setState = () => {
         const newState = select(getState());
         const prevState = stateRef.current;
+
         if (
             shouldUpdate({
                 newState,
                 prevState,
             })
         ) {
-            stateRef.current = {
-                ...prevState,
-                ...newState,
-            };
+            stateRef.current = newState;
             setValue(stateRef.current);
         }
     };

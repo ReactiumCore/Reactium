@@ -6,6 +6,12 @@
 import React, { Component, Fragment } from 'react';
 import PlugableContext from './Context';
 import PlugableProvider from './Provider';
-import Plugins from './Plugins';
+import Plugins, { usePlugins, SimplePlugins } from './Plugins';
 
-export { Plugins, PlugableContext, PlugableProvider };
+export {
+    usePlugins,
+    Plugins,
+    SimplePlugins,
+    PlugableContext,
+    PlugableProvider,
+};

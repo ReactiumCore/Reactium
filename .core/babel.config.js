@@ -85,5 +85,24 @@ module.exports = {
                 ['@babel/plugin-syntax-dynamic-import'],
             ],
         },
+        library: {
+            presets: ['@babel/react', '@babel/env'],
+            plugins: [
+                [
+                    'module-resolver',
+                    {
+                        cwd: rootPath,
+                        alias,
+                    },
+                ],
+                [
+                    '@babel/plugin-proposal-class-properties',
+                    {
+                        loose: true,
+                    },
+                ],
+                ['@babel/plugin-syntax-dynamic-import'],
+            ],
+        },
     },
 };

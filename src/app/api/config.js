@@ -1,16 +1,29 @@
 let apiConfig = {};
 
-// the api from the browser's perspective
+/**
+ * Isomorphic block of api configuration.
+ *
+ * @see https://reactium.io/docs/guide/using-apis
+ * @see ./index.js for Parse SDK setup
+ */
 if (typeof window !== 'undefined') {
+    // the api configuration from the browser's perspective
     apiConfig = {
-        parseAppId: window.parseAppId,
-        restAPI: window.restAPI,
+        // [browser]: parse app id provided by window
+        parseAppId: window.parseAppId || 'Actinium',
+
+        // [browser]: REST API base url provided by window
+        // if /api default, proxies to REST_API_URL
+        restAPI: window.restAPI || '/api',
     };
-    // the api from the server's perspective
 } else {
+    // the api from the server's perspective
     apiConfig = {
+        // [server]: default app id for local dev with Actinium
         parseAppId: process.env.PARSE_APP_ID || 'Actinium',
-        restAPI: process.env.REST_API_URL || 'http://demo3914762.mockable.io',
+
+        // [server]: default api url for local dev with Actinium
+        restAPI: process.env.REST_API_URL || 'http://localhost:9000/api',
     };
 }
 
