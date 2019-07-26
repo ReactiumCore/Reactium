@@ -2,16 +2,16 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const _ = require('underscore');
+const run = require('gulp-run');
 const moment = require('moment');
 const op = require('object-path');
-const { spawn } = require('child_process');
 const prettier = require('prettier').format;
 const handlebars = require('handlebars').compile;
 
 const timestamp = () => `[${chalk.magenta(moment().format('HH:mm:ss'))}]`;
-
 const msg = (...msg) => console.log(timestamp(), ...msg);
-const override = `
+
+const gulpOverride = `
 module.${chalk.cyan('exports')} = ${chalk.magenta('config')} => {
     config.${chalk.cyan('dest')}.${chalk.cyan('electron')} = ${chalk.magenta(
     "'build-electron'",
@@ -35,8 +35,22 @@ module.${chalk.cyan('exports')} = ${chalk.magenta('config')} => {
 };
 `;
 
+const manifestOverride = `
+module.${chalk.cyan('exports')} = ${chalk.magenta('config')} => {
+    config.${chalk.cyan('contexts.components.mode')} = ${chalk.magenta(
+    "'sync'",
+)};
+    config.${chalk.cyan('contexts.common.mode')} = ${chalk.magenta("'sync'")};
+    config.${chalk.cyan('contexts.toolkit.mode')} = ${chalk.magenta("'sync'")};
+    config.${chalk.cyan('contexts.core.mode')} = ${chalk.magenta("'sync'")};
+
+    return ${chalk.magenta('config')};
+};
+`;
+
 let cwd;
 let gulpConfig;
+let manifestConfig;
 let reactiumConfig;
 
 module.exports = () => {
@@ -49,23 +63,44 @@ module.exports = () => {
                     '.core',
                     'reactium-config.js',
                 ));
+
                 gulpConfig = reactiumConfig.build;
+                manifestConfig = reactiumConfig.manifest;
 
                 if (!op.has(gulpConfig, 'dest.electron')) {
-                    console.log('\n');
                     msg(
                         `The following ${chalk.cyan(
                             'gulp.config.override.js',
-                        )} values need to be added:`,
+                        )} values need to be set:`,
                     );
                     console.log('\n');
-                    console.log(override);
+                    console.log(gulpOverride);
+                    console.log(`${chalk.magenta('Action cancelled')}!`);
                     console.log('\n');
+
+                    process.exit(0);
+                }
+
+                if (
+                    op.get(manifestConfig, 'contexts.components.mode') !==
+                    'sync'
+                ) {
+                    msg(
+                        `The following ${chalk.cyan(
+                            'manifest.config.override.js',
+                        )} values need to be set:`,
+                    );
+                    console.log('\n');
+                    console.log(manifestOverride);
+                    console.log(`${chalk.magenta('Action cancelled')}!`);
+                    console.log('\n');
+
                     process.exit(0);
                 }
 
                 resolve({ action, status: 200 });
             }),
+
         config: ({ action, props }) =>
             new Promise(resolve => {
                 const configFile = path.join(
@@ -108,124 +143,78 @@ module.exports = () => {
 
         build: ({ action, props }) =>
             new Promise(resolve => {
-                const exec = spawn('gulp', ['--color'], {
-                    env: {
-                        ...process.env,
-                        cwd,
-                        NODE_ENV: 'production',
-                    },
-                });
-
-                exec.on('exit', () => resolve({ action, status: 200 }));
-                exec.stderr.pipe(process.stderr);
-                exec.stdout.pipe(process.stdout);
-            }),
-
-        babelConfig: ({ action, props }) =>
-            new Promise(resolve => {
-                msg('Generating', chalk.cyan('babel.config.js') + '...');
-
-                const babelBuildFile = path.join(
-                    cwd,
-                    op.get(reactiumConfig, 'dest.electron', 'build-electron'),
-                    'babel.config.js',
+                msg('Building', chalk.cyan('app') + '...');
+                const cmd = new run.Command(
+                    `cross-env NODE_ENV=production gulp --color`,
+                    { verbosity: 0 },
                 );
-                const babelConfigFile = path.join(cwd, 'babel.config.js');
-
-                fs.ensureFileSync(babelBuildFile);
-                fs.copySync(babelConfigFile, babelBuildFile);
-
-                resolve({ action, status: 200 });
-            }),
-
-        babelConfigUpdate: ({ action, props }) =>
-            new Promise(resolve => {
-                msg('Updating', chalk.cyan('babel.config.js paths') + '...');
-                const babelBuildFile = path.normalize(
-                    path.join(
-                        cwd,
-                        op.get(
-                            reactiumConfig,
-                            'dest.electron',
-                            'build-electron',
-                        ),
-                        'babel.config.js',
-                    ),
+                setTimeout(
+                    () =>
+                        cmd.exec(null, () => resolve({ action, status: 200 })),
+                    1,
                 );
-                const cont = String(
-                    fs.readFileSync(babelBuildFile, 'utf-8'),
-                ).replace(/\'\.\/\.core/gi, "'../.core");
-
-                fs.writeFileSync(babelBuildFile, cont);
-
-                resolve({ action, status: 200 });
             }),
 
         compileCore: ({ action, props }) =>
             new Promise(resolve => {
-                msg('Compiling', chalk.cyan('.core') + '...');
+                msg('Compiling', chalk.cyan('core') + '...');
+                const srcDir = path.join(cwd, '.core');
                 const outDir = path.join(
                     cwd,
                     op.get(gulpConfig, 'dest.build', 'build/.core'),
                 );
-                const srcDir = path.join(cwd, '.core');
-
-                const exec = spawn(
-                    'babel',
-                    [srcDir, '--out-dir', outDir, '--color'],
-                    {
-                        env: {
-                            ...process.env,
-                            cwd,
-                            NODE_ENV: 'production',
-                        },
-                    },
+                const cmd = new run.Command(
+                    `cross-env NODE_ENV=production babel "${srcDir}" --out-dir "${outDir}"`,
+                    { verbosity: 0 },
                 );
-
-                exec.on('exit', () => resolve({ action, status: 200 }));
-                //exec.stderr.pipe(process.stderr);
-                exec.stdout.pipe(process.stdout);
+                setTimeout(
+                    () =>
+                        cmd.exec(null, () => resolve({ action, status: 200 })),
+                    1,
+                );
             }),
 
         compileSrc: ({ action, props }) =>
             new Promise(resolve => {
                 msg('Compiling', chalk.cyan('src') + '...');
+                const srcDir = path.join(cwd, 'src');
                 const outDir = path.join(
                     cwd,
                     op.get(gulpConfig, 'dest.buildSrc', 'build/src'),
                 );
-                const srcDir = path.join(cwd, 'src');
-
-                const exec = spawn(
-                    'babel',
-                    [srcDir, '--out-dir', outDir, '--color'],
-                    {
-                        env: {
-                            ...process.env,
-                            cwd,
-                            NODE_ENV: 'production',
-                        },
-                    },
+                const cmd = new run.Command(
+                    `cross-env NODE_ENV=production babel "${srcDir}" --out-dir "${outDir}"`,
+                    { verbosity: 0 },
                 );
-
-                exec.on('exit', () => resolve({ action, status: 200 }));
-                //exec.stderr.pipe(process.stderr);
-                exec.stdout.pipe(process.stdout);
+                setTimeout(
+                    () =>
+                        cmd.exec(null, () => resolve({ action, status: 200 })),
+                    1,
+                );
             }),
+
         static: ({ action, props }) =>
             new Promise(resolve => {
-                msg('Copying', chalk.cyan('static assets') + '...');
-                const exec = spawn('gulp', ['static', '--color'], {
-                    env: {
-                        ...process.env,
+                // Clear output directory
+                fs.removeSync(
+                    path.join(
                         cwd,
-                        NODE_ENV: 'production',
-                    },
-                });
+                        op.get(
+                            gulpConfig,
+                            'dest.static',
+                            'build-electron/app/public',
+                        ),
+                    ),
+                );
 
-                exec.on('exit', () => resolve({ action, status: 200 }));
-                exec.stderr.pipe(process.stderr);
-                exec.stdout.pipe(process.stdout);
+                const cmd = new run.Command(`gulp static --color`, {
+                    verbosity: 0,
+                });
+                setTimeout(
+                    () =>
+                        cmd.exec(null, () => resolve({ action, status: 200 })),
+                    1,
+                );
             }),
 
         main: ({ action, props }) =>
@@ -261,6 +250,7 @@ module.exports = () => {
                 );
 
                 if (!fs.existsSync(destDir)) {
+                    msg(`Copying ${chalk.cyan('resources')}...`);
                     const templateDir = path.join(
                         __dirname,
                         'template',
@@ -268,7 +258,7 @@ module.exports = () => {
                     );
 
                     fs.ensureDirSync(destDir);
-                    fs.copySync(templateDir, destdir);
+                    fs.copySync(templateDir, destDir);
                 }
 
                 resolve({ action, status: 200 });
@@ -283,6 +273,8 @@ module.exports = () => {
                 );
 
                 if (!fs.existsSync(destFile)) {
+                    msg(`Generating ${chalk.cyan('package.json')}...`);
+
                     const templateFile = path.join(
                         __dirname,
                         'template',
@@ -296,11 +288,58 @@ module.exports = () => {
                 resolve({ action, status: 200 });
             }),
 
-        complete: ({ action }) => {
-            console.log('');
-            msg('Build', chalk.cyan('Complete') + '!');
-            console.log('');
-            return Promise.resolve({ action, status: 200 });
-        },
+        icon: ({ action, props }) =>
+            new Promise(resolve => {
+                msg(`Generating ${chalk.cyan('icons')}...`);
+
+                const shFile = path.join(
+                    cwd,
+                    gulpConfig.dest.electron,
+                    'resources',
+                    'icon_gen.sh',
+                );
+
+                const icon = path.join(
+                    cwd,
+                    gulpConfig.dest.electron,
+                    'resources',
+                    'icon.png',
+                );
+
+                const output = path.join(
+                    cwd,
+                    gulpConfig.dest.electron,
+                    'resources',
+                );
+
+                const cmd = new run.Command(
+                    `sh "${shFile}" "${icon}" "${output}"`,
+                    { verbosity: 0 },
+                );
+                cmd.exec(null, () => resolve({ action, status: 200 }));
+            }),
+
+        install: ({ action, props }) =>
+            new Promise(resolve => {
+                msg(`Installing ${chalk.cyan('dependencies')}...`);
+                const cmd = new run.Command(
+                    `cd ${gulpConfig.dest.electron} && npm install`,
+                    { verbosity: 0 },
+                );
+                setTimeout(
+                    () =>
+                        cmd.exec(null, () => resolve({ action, status: 200 })),
+                    1,
+                );
+            }),
+
+        complete: ({ action }) =>
+            new Promise(resolve => {
+                setTimeout(() => {
+                    msg('Build', chalk.cyan('Complete') + '!');
+                    console.log('\n');
+                    resolve({ action, status: 200 });
+                }, 3000);
+            }),
     };
 };

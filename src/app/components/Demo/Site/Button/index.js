@@ -3,8 +3,8 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 /**
  * -----------------------------------------------------------------------------
@@ -25,16 +25,16 @@ export default class Button extends Component {
     }
 
     render() {
-        let { type = "button" } = this.state;
+        let { type = 'button' } = this.state;
 
         switch (type) {
-            case "link":
+            case 'link':
                 return <Link {...this.state} />;
 
-            case "nav":
+            case 'nav':
                 return <NavLink {...this.state} />;
 
-            case "label":
+            case 'label':
                 return <label {...this.state} />;
 
             default:
@@ -50,8 +50,8 @@ class PrimaryButton extends Button {
 }
 
 PrimaryButton.defaultProps = {
-    className: "btn btn-primary",
-    type: "button"
+    className: 'btn btn-primary',
+    type: 'button',
 };
 
 export { PrimaryButton };

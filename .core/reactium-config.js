@@ -11,6 +11,91 @@ const contextMode = () => {
 
 const gulpConfig = require('./gulp.config');
 
+const defaultManifestConfig = {
+    patterns: [
+        {
+            name: 'allActions',
+            type: 'actions',
+            pattern: /actions.jsx?$/,
+        },
+        {
+            name: 'allActionTypes',
+            type: 'actionTypes',
+            pattern: /actionTypes.jsx?$/,
+        },
+        {
+            name: 'allReducers',
+            type: 'reducers',
+            pattern: /reducers.jsx?$/,
+        },
+        {
+            name: 'allInitialStates',
+            type: 'state',
+            pattern: /state.jsx?$/,
+        },
+        {
+            name: 'allRoutes',
+            type: 'route',
+            pattern: /route.jsx?$/,
+        },
+        {
+            name: 'allServices',
+            type: 'services',
+            pattern: /services.jsx?$/,
+        },
+        {
+            name: 'allMiddleware',
+            type: 'middleware',
+            pattern: /middleware.jsx?$/,
+            ignore: /server\/middleware/,
+        },
+        {
+            name: 'allEnhancers',
+            type: 'enhancer',
+            pattern: /enhancer.jsx?$/,
+        },
+        {
+            name: 'allPlugins',
+            type: 'plugin',
+            pattern: /plugin.jsx?$/,
+        },
+    ],
+    sourceMappings: [
+        {
+            from: 'src/app/',
+            to: '',
+        },
+        {
+            from: '.core/',
+            to: 'reactium-core/',
+        },
+    ],
+    contexts: {
+        components: {
+            modulePath: 'components',
+            filePattern: '.js?$',
+            mode: contextMode(),
+        },
+        common: {
+            modulePath: 'components/common-ui/',
+            filePattern: '.js?$',
+            mode: contextMode(),
+        },
+        toolkit: {
+            modulePath: 'toolkit',
+            filePattern: '.js?$',
+            mode: contextMode(),
+        },
+        core: {
+            modulePath: 'reactium-core/components',
+            filePattern: '.js?$',
+            mode: contextMode(),
+        },
+    },
+};
+
+const manifestConfig = require('./manifest.config')(defaultManifestConfig);
+
 /**
  * Use liberally for additional core configuration.
  * @type {Object}
@@ -132,86 +217,5 @@ module.exports = {
             remove: [],
         },
     },
-    manifest: {
-        patterns: [
-            {
-                name: 'allActions',
-                type: 'actions',
-                pattern: /actions.jsx?$/,
-            },
-            {
-                name: 'allActionTypes',
-                type: 'actionTypes',
-                pattern: /actionTypes.jsx?$/,
-            },
-            {
-                name: 'allReducers',
-                type: 'reducers',
-                pattern: /reducers.jsx?$/,
-            },
-            {
-                name: 'allInitialStates',
-                type: 'state',
-                pattern: /state.jsx?$/,
-            },
-            {
-                name: 'allRoutes',
-                type: 'route',
-                pattern: /route.jsx?$/,
-            },
-            {
-                name: 'allServices',
-                type: 'services',
-                pattern: /services.jsx?$/,
-            },
-            {
-                name: 'allMiddleware',
-                type: 'middleware',
-                pattern: /middleware.jsx?$/,
-                ignore: /server\/middleware/,
-            },
-            {
-                name: 'allEnhancers',
-                type: 'enhancer',
-                pattern: /enhancer.jsx?$/,
-            },
-            {
-                name: 'allPlugins',
-                type: 'plugin',
-                pattern: /plugin.jsx?$/,
-            },
-        ],
-        sourceMappings: [
-            {
-                from: 'src/app/',
-                to: '',
-            },
-            {
-                from: '.core/',
-                to: 'reactium-core/',
-            },
-        ],
-        contexts: {
-            components: {
-                modulePath: 'components',
-                filePattern: '.js?$',
-                mode: contextMode(),
-            },
-            common: {
-                modulePath: 'components/common-ui/',
-                filePattern: '.js?$',
-                mode: contextMode(),
-            },
-            toolkit: {
-                modulePath: 'toolkit',
-                filePattern: '.js?$',
-                mode: contextMode(),
-            },
-            core: {
-                modulePath: 'reactium-core/components',
-                filePattern: '.js?$',
-                mode: contextMode(),
-            },
-        },
-    },
+    manifest: manifestConfig,
 };
