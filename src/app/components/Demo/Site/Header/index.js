@@ -3,8 +3,8 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from 'react';
-import HeaderNav from './HeaderNav';
+import React, { Component } from "react";
+import HeaderNav from "./HeaderNav";
 
 /**
  * -----------------------------------------------------------------------------
@@ -16,14 +16,14 @@ export default class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ...this.props,
+            ...this.props
         };
 
         this.container = null;
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
+        if (this.state.hasOwnProperty("mount")) {
             this.state.mount(this);
         }
     }
@@ -31,7 +31,7 @@ export default class Header extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps,
+            ...nextProps
         }));
     }
 
@@ -39,7 +39,7 @@ export default class Header extends Component {
         let { backgroundImage, children, style = {}, nav } = this.state;
 
         if (backgroundImage) {
-            style['backgroundImage'] = backgroundImage;
+            style["backgroundImage"] = backgroundImage;
         }
 
         return (
@@ -47,7 +47,8 @@ export default class Header extends Component {
                 style={style}
                 ref={elm => {
                     this.container = elm;
-                }}>
+                }}
+            >
                 <div className={`shadow`} />
                 <HeaderNav links={nav} />
                 {children}
@@ -58,17 +59,17 @@ export default class Header extends Component {
 
 Header.defaultProps = {
     style: { marginBottom: 0 },
-    backgroundImage: 'url(assets/images/demo-site/header.png)',
+    backgroundImage: "url(/assets/images/demo-site/header.png)",
     nav: [
         {
-            to: '/demo/site',
-            label: 'Home',
+            to: "/demo/site",
+            label: "Home"
         },
         {
-            to: 'https://www.instagram.com/explore/tags/hotdogs',
-            icon: '/assets/images/demo-site/icon-instagram.png',
-            label: '#hotdogs',
-            target: '_blank',
-        },
-    ],
+            to: "https://www.instagram.com/explore/tags/hotdogs",
+            icon: "/assets/images/demo-site/icon-instagram.png",
+            label: "#hotdogs",
+            target: "_blank"
+        }
+    ]
 };
