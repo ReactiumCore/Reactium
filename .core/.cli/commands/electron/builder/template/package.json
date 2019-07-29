@@ -54,6 +54,7 @@
     "electron-builder": "^20.44.4"
   },
   "dependencies": {
+    "get-port": "^5.0.0",
     "globby": "^9.2.0"
   }
 }

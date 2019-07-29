@@ -7,7 +7,7 @@ const config = require(path.join(__dirname, 'app.config'));
 
 let mainWindow;
 
-const createWindow = () => {
+const createWindow = async () => {
     // Create the browser window.
     mainWindow = new BrowserWindow(config.electron.mainWindow);
 
@@ -34,6 +34,7 @@ const createWindow = () => {
     } else {
         const fs = require('fs');
         const http = require('http');
+        const getPort = require('get-port');
         const server = http.createServer((req, res) => {
             if (req.url === '/') {
                 const rs = fs.createReadStream(
@@ -51,8 +52,10 @@ const createWindow = () => {
                 res.end();
             }
         });
-        server.listen(30303, () =>
-            mainWindow.loadURL(`http://localhost:30303`),
+
+        const port = await getPort();
+        server.listen(port, () =>
+            mainWindow.loadURL(`http://localhost:${port}`),
         );
     }
 };
