@@ -1,7 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Switch, Route } from 'react-router-dom';
 import RouteObserver from './RouteObserver';
 import op from 'object-path';
+
+const Router =
+    typeof window !== 'undefined' && window.process && window.process.type
+        ? MemoryRouter
+        : BrowserRouter;
 
 export default class AppRouter extends Component {
     shouldComponentUpdate({ updated }) {
@@ -12,7 +17,7 @@ export default class AppRouter extends Component {
         const { routes = [] } = this.props;
 
         return (
-            <BrowserRouter>
+            <Router>
                 <Fragment>
                     <RouteObserver routes={routes} />
                     <Switch>
@@ -24,7 +29,7 @@ export default class AppRouter extends Component {
                         ))}
                     </Switch>
                 </Fragment>
-            </BrowserRouter>
+            </Router>
         );
     }
 }
