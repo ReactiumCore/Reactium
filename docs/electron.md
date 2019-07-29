@@ -50,7 +50,9 @@ From the project root run the following:
 $ arcli electron-build
 ```
 
-You should now have a directory in the project root called `build-electron` _(if you haven't changed the name in the gulp config overrides)_ You're free to edit the package.json and add new resources like a different icon or make changes to the Electron setup via the `main.js` file.
+You should now have a directory in the project root called `build-electron` _(if you haven't changed the name in the gulp config overrides)_. You're free to edit the package.json and add new resources like a different icon or make changes to the Electron setup via the `main.js` file.
+
+> _**Note:**_ If a file is protected or generated via the `electron-build` command, it will have a loud header telling you so :)
 
 #### App Icon
 
