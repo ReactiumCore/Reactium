@@ -32,8 +32,27 @@ const createWindow = () => {
         const port = config.port.browsersync || 3000;
         mainWindow.loadURL(`http://localhost:${port}`);
     } else {
-        mainWindow.loadFile(
-            path.join(__dirname, 'app', 'public', 'index.html'),
+        const fs = require('fs');
+        const http = require('http');
+        const server = http.createServer((req, res) => {
+            if (req.url === '/') {
+                const rs = fs.createReadStream(
+                    path.join(__dirname, 'app', 'public', 'index.html'),
+                );
+                rs.pipe(res);
+            } else if (req.url.match(/^\/assets/)) {
+                const asset = req.url.replace(/^\/assets/, '');
+                const rs = fs.createReadStream(
+                    path.join(__dirname, 'app', 'public', 'assets', asset),
+                );
+                rs.pipe(res);
+            } else {
+                res.writeHead(404);
+                res.end();
+            }
+        });
+        server.listen(30303, () =>
+            mainWindow.loadURL(`http://localhost:30303`),
         );
     }
 };
