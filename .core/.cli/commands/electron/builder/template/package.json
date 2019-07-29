@@ -1,0 +1,60 @@
+{
+  "name": "reactium-electron",
+  "version": "0.0.1",
+  "description": "Electron app build with Reactium.",
+  "productName": "Reactium App",
+  "author": "Reactium LLC",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "build": {
+    "appId": "com.reactium.demo",
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 250
+        },
+        {
+          "x": 320,
+          "y": 250,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "build/icon.ico"
+    }
+  },
+  "repository": "https://github.com/Atomic-Reactor/Reactium.git",
+  "keywords": [
+    "Electron",
+    "React",
+    "Reactium"
+  ],
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "electron": "^2.0.18",
+    "electron-builder": "^20.44.4"
+  },
+  "dependencies": {
+    "get-port": "^5.0.0",
+    "globby": "^9.2.0"
+  }
+}
