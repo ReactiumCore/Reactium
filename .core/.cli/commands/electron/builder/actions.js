@@ -35,6 +35,7 @@ module.${chalk.cyan('exports')} = ${chalk.magenta('config')} => {
 };
 `;
 
+/*
 const manifestOverride = `
 module.${chalk.cyan('exports')} = ${chalk.magenta('config')} => {
     config.${chalk.cyan('contexts.components.mode')} = ${chalk.magenta(
@@ -47,6 +48,7 @@ module.${chalk.cyan('exports')} = ${chalk.magenta('config')} => {
     return ${chalk.magenta('config')};
 };
 `;
+*/
 
 let cwd;
 let gulpConfig;
@@ -81,6 +83,7 @@ module.exports = () => {
                     process.exit(0);
                 }
 
+                /*
                 if (
                     op.get(manifestConfig, 'contexts.components.mode') !==
                     'sync'
@@ -97,6 +100,7 @@ module.exports = () => {
 
                     process.exit(0);
                 }
+                */
 
                 resolve({ action, status: 200 });
             }),

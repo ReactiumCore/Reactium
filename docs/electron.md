@@ -42,22 +42,6 @@ module.exports = config => {
 
 > _You can apply custom Electron configuration in the `config.electron.config` object._
 
-#### Manifest Config Overrides
-
-Open the `~/manifest.config.override.js` file and apply the following overrides:
-
-```js
-module.exports = config => {
-    // Disable code splitting for Electron projects
-    config.contexts.components.mode = 'sync';
-    config.contexts.common.mode = 'sync';
-    config.contexts.toolkit.mode = 'sync';
-    config.contexts.core.mode = 'sync';
-
-    return config;
-};
-```
-
 #### Build the App
 
 From the project root run the following:
