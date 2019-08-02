@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/.core/index.js",
-    "electron:run": "cross-env NODE_ENV=development arcli electron-run -e cwd/build-electron -u cwd",
-    "electron:build": "arcli electron-build",
     "test": "jest",
-    "manifest": "node ./.core/createManifest.js",
     "build": "npm-run-all build:*",
     "build:gulp": "cross-env NODE_ENV=production gulp",
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
@@ -20,7 +17,6 @@
     "docker": "npm-run-all -s clean docker:*",
     "docker:build": "cross-env docker image build -t $npm_package_name:$npm_package_version -t $npm_package_name:latest .",
     "docker:push": "cross-env docker push $npm_package_name:$npm_package_version && cross-env docker push $npm_package_name:$npm_package_version:latest",
-    "deploy": "cf push",
     "precommit": "lint-staged"
   },
   "keywords": [
