@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const gulpTasks = require('./gulp.tasks');
-const gulpwatch = require('gulp-watch');
+const gulpwatch = require('@atomic-reactor/gulp-watch');
 const task = require('./get-task')(gulp);
 
 process.on('message', ({ config, webpackConfig, restart }) => {
