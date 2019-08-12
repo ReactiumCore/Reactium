@@ -82,5 +82,5 @@ export const useSelect = ({
         };
     });
 
-    return value;
+    return stateRef.current;
 };
