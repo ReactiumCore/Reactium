@@ -40,8 +40,8 @@ export const useStore = () =>
 /**
  * Default to shallow equals.
  */
-const defaultShouldUpdate = ({ prevState, nextState }) =>
-    !equals(prevState, nextState);
+const defaultShouldUpdate = ({ prevState, newState }) =>
+    !equals(prevState, newState);
 
 /**
  * useSelect hook - subscribe to subtree of redux and control updates.
