@@ -6,13 +6,11 @@ import PropTypes from 'prop-types';
 import React, {
     forwardRef,
     useEffect,
-    useImperativeHandle,
+    useLayoutEffect as useWindowEffect,
     useLayoutEffect,
     useRef,
     useState,
 } from 'react';
-
-const noop = () => {};
 
 const ENUMS = {};
 
@@ -21,7 +19,8 @@ const ENUMS = {};
  * Hook Component: {{name}}
  * -----------------------------------------------------------------------------
  */
-let {{name}} = (props, ref) => {
+let {{name}} = ({ children, ...props }, ref) => {
+    
     // Refs
     const containerRef = useRef();
     const stateRef = useRef({
@@ -29,7 +28,7 @@ let {{name}} = (props, ref) => {
     });
 
     // State
-    const [state, setNewState] = useState(stateRef.current);
+    const [, setNewState] = useState(stateRef.current);
 
     // Internal Interface
     const setState = newState => {
@@ -44,27 +43,33 @@ let {{name}} = (props, ref) => {
         setNewState(stateRef.current);
     };
 
-    // External Interface
-    useImperativeHandle(ref, () => ({
-        setState,
-        state,
-    }));
+    const cx = () => {
+        const { className, namespace } = stateRef.current;
+        return cn({ [className]: !!className, [namespace]: true });
+    };
 
     // Side Effects
     useEffect(() => setState(props), Object.values(props));
 
+    // Renderer
     const render = () => {
-        const { children } = props;
-        const { className, namespace } = stateRef.current;
-        const cname = cn({ [className]: !!className, [namespace]: true });
 
         return (
-            <div ref={containerRef} className={cname}>
+            <div ref={containerRef} className={cx()}>
                 {{name}}
             </div>
         );
     };
 
+    // External Interface
+    useImperativeHandle(ref, () => ({
+        container: containerRef.current,
+        ref,
+        setState,
+        state: stateRef.current,
+    }));
+
+    // Render
     return render();
 };
 
@@ -78,7 +83,7 @@ let {{name}} = (props, ref) => {
 };
 
 {{name}}.defaultProps = {
-
+    namespace: 'ui-component',
 };
 
 export { {{name}} as default };
