@@ -20,7 +20,7 @@ const ENUMS = {};
  * -----------------------------------------------------------------------------
  */
 let {{name}} = ({ children, ...props }, ref) => {
-    
+
     // Refs
     const containerRef = useRef();
     const stateRef = useRef({
@@ -45,7 +45,7 @@ let {{name}} = ({ children, ...props }, ref) => {
 
     const cx = () => {
         const { className, namespace } = stateRef.current;
-        return cn({ [className]: !!className, [namespace]: true });
+        return cn({ [className]: !!className, [namespace]: !!namespace });
     };
 
     // Side Effects
