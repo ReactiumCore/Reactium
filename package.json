@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/.core/index.js",
-    "electron:run": "cross-env NODE_ENV=development arcli electron-run -e cwd/build-electron -u cwd",
-    "electron:build": "arcli electron-build",
     "test": "jest",
-    "manifest": "node ./.core/createManifest.js",
     "build": "npm-run-all build:*",
     "build:gulp": "cross-env NODE_ENV=production gulp",
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
@@ -20,7 +17,6 @@
     "docker": "npm-run-all -s clean docker:*",
     "docker:build": "cross-env docker image build -t $npm_package_name:$npm_package_version -t $npm_package_name:latest .",
     "docker:push": "cross-env docker push $npm_package_name:$npm_package_version && cross-env docker push $npm_package_name:$npm_package_version:latest",
-    "deploy": "cf push",
     "precommit": "lint-staged"
   },
   "keywords": [
@@ -96,6 +92,7 @@
     "xss": "^1.0.6"
   },
   "devDependencies": {
+    "@atomic-reactor/gulp-watch": "^5.0.1-patched",
     "@babel/core": "^7.5.4",
     "@babel/plugin-proposal-class-properties": "^7.5.0",
     "@babel/plugin-proposal-export-default-from": "^7.5.2",
@@ -134,7 +131,6 @@
     "gulp-run": "^1.7.1",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
-    "gulp-watch": "^5.0.1",
     "gulp4-run-sequence": "^0.4.0",
     "handlebars": "^4.1.2",
     "husky": "^3.0.0",
