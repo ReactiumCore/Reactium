@@ -47,10 +47,6 @@ const loadDependencyStack = (dependency, items, isServer) => {
 
 const noop = cb => {};
 export default ({ server = false, registrations = noop } = {}) => {
-    // Initialize middlewares and enhancers
-    let middlewares = [];
-    let enhancers = [];
-
     // Load InitialState first from modules
     let importedStates = allInitialStates;
     initialState = {
@@ -58,7 +54,7 @@ export default ({ server = false, registrations = noop } = {}) => {
         ...initialState,
     };
 
-    middlewares = loadDependencyStack(allMiddleware, middlewares, server);
+    let middlewares = loadDependencyStack(allMiddleware, [], server);
 
     // Get localized state and apply it
     if (!server && typeof window !== 'undefined') {
@@ -80,16 +76,28 @@ export default ({ server = false, registrations = noop } = {}) => {
         }
     }
 
-    const createStoreWithMiddleware = applyMiddleware(
-        ...middlewares.sort((a, b) => a.order - b.order).map(({ mw }) => mw),
-    )(createStore);
-
     // Combine all Top-level reducers into one
     let rootReducer = combineReducers(allReducers);
 
     // add redux enhancers
-    enhancers = loadDependencyStack(allEnhancers, enhancers, server)
-        .sort((a, b) => a.order - b.order)
+    let enhancers = loadDependencyStack(
+        allEnhancers,
+        [
+            {
+                name: 'applyMiddleware',
+                enhancer: applyMiddleware(
+                    ...middlewares
+                        .sort((a, b) =>
+                            a.order < b.order ? -1 : a.order > b.order ? 1 : 0,
+                        )
+                        .map(({ mw }) => mw),
+                ),
+                order: 1000,
+            },
+        ],
+        server,
+    )
+        .sort((a, b) => (a.order < b.order ? -1 : a.order > b.order ? 1 : 0))
         .map(({ enhancer }) => enhancer);
 
     // Avoid replacing existing store.
@@ -102,11 +110,7 @@ export default ({ server = false, registrations = noop } = {}) => {
         .forEach(({ pre }) => pre({ initialState, rootReducer, enhancers }));
 
     // Create the store
-    store = createStoreWithMiddleware(
-        rootReducer,
-        initialState,
-        compose(...enhancers),
-    );
+    store = compose(...enhancers)(createStore)(rootReducer, initialState);
 
     // Execute post store creation callbacks
     middlewares
@@ -114,6 +118,7 @@ export default ({ server = false, registrations = noop } = {}) => {
         .filter(({ post }) => post)
         .forEach(({ post }) => post({ store }));
 
+    // Allow plugins the ability to interact with store directly
     pluginRegistration.setStore({ store, allReducers, middlewares });
 
     return store;

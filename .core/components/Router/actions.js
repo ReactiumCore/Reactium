@@ -1,12 +1,15 @@
 import deps from 'dependencies';
 import queryString from 'querystring-browser';
+import op from 'object-path';
 
 export default {
     updateRoute: ({ history, location, match, route = {}, params }) => (
         dispatch,
         getState,
     ) => {
-        const { Router } = getState();
+        const state = getState();
+        const Router = op.get(state, 'Router', {});
+        const prevLocation = op.get(Router, 'location', {});
 
         const defaultOnRouteChange = () => {
             if (
@@ -37,6 +40,7 @@ export default {
             type: deps().actionTypes.UPDATE_ROUTE,
             history,
             location,
+            prevLocation,
             match,
             params,
             search,

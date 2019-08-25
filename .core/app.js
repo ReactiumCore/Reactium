@@ -79,8 +79,8 @@ if (elements.length > 0) {
  * -----------------------------------------------------------------------------
  */
 // Create the Redux store
-const store = storeCreator();
 deps().init();
+const store = storeCreator();
 pluginRegistration.setDeps(deps);
 if (typeof window !== 'undefined') {
     window.reactium = register;

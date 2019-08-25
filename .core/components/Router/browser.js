@@ -1,12 +1,22 @@
-import React, { Component, Fragment } from 'react';
-import { BrowserRouter, MemoryRouter, Switch, Route } from 'react-router-dom';
-import RouteObserver from './RouteObserver';
+import React, { Component } from 'react';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory, createMemoryHistory } from 'history';
+import getRoutes from './getRoutes';
 import op from 'object-path';
 
-const Router =
-    typeof window !== 'undefined' && window.process && window.process.type
-        ? MemoryRouter
-        : BrowserRouter;
+let history;
+export const getHistory = () => {
+    const createHistory =
+        typeof window !== 'undefined' && window.process && window.process.type
+            ? createMemoryHistory
+            : createBrowserHistory;
+
+    if (!history) {
+        history = createHistory();
+    }
+
+    return history;
+};
 
 export default class AppRouter extends Component {
     shouldComponentUpdate({ updated }) {
@@ -14,21 +24,17 @@ export default class AppRouter extends Component {
     }
 
     render() {
-        const { routes = [] } = this.props;
-
+        const routes = op.get(this.props, 'routes', getRoutes());
         return (
-            <Router>
-                <Fragment>
-                    <RouteObserver routes={routes} />
-                    <Switch>
-                        {routes.map(route => (
-                            <Route
-                                {...route}
-                                key={route.path ? route.path : 'not-found'}
-                            />
-                        ))}
-                    </Switch>
-                </Fragment>
+            <Router history={getHistory()}>
+                <Switch>
+                    {routes.map(route => (
+                        <Route
+                            {...route}
+                            key={route.path ? route.path : 'not-found'}
+                        />
+                    ))}
+                </Switch>
             </Router>
         );
     }

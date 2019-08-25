@@ -3,26 +3,17 @@ import React from 'react';
 import ClientRouter from './browser';
 import actions from './Routes/actions';
 import getRoutes from './getRoutes';
+import op from 'object-path';
 
-const mapStateToProps = ({ Routes = {} }) => {
-    if (Object.values(Routes).length) {
-        return { Routes };
-    }
-
-    return {};
-};
+const mapStateToProps = state => ({
+    Routes: op.get(state, 'Routes', { routes: getRoutes() }),
+});
 
 const mapDispatchToProps = dispatch => ({
     init: routes => dispatch(actions.init(routes)),
 });
 
 class Router extends React.Component {
-    constructor(props) {
-        super(props);
-        this.initRoutes = getRoutes();
-        props.init(this.initRoutes);
-    }
-
     render() {
         const {
             server = false,

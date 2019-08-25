@@ -6,8 +6,10 @@ import moment from 'moment';
 let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
 
 export default () => {
-    if (!Object.values(deps().allRoutes).length) {
-        return undefined;
+    const allRoutes = op.get(require('manifest').get(), 'allRoutes', {});
+
+    if (!Object.values(allRoutes || {}).length) {
+        return [];
     }
 
     let dynamicRoutes = [];
@@ -21,7 +23,7 @@ export default () => {
         }
     }
 
-    let routes = Object.values(deps().allRoutes)
+    let routes = Object.values(allRoutes || {})
         .concat(
             dynamicRoutes.map(route => {
                 let Found = getComponents([{ type: route.component }]);
@@ -67,7 +69,7 @@ export default () => {
             }
             return [...rts, route];
         }, [])
-        .sort((a, b) => a.order - b.order)
+        .sort((a, b) => (a.order < b.order ? -1 : a.order > b.order ? 1 : 0))
         .concat([{ component: NotFound, order: 1000 }]);
     return routes;
 };

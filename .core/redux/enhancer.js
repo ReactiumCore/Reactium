@@ -4,12 +4,12 @@ export default (enhancers = [], isServer = false) => {
     return [
         {
             name: 'devtools',
-            order: -1000,
+            order: 1001,
             enhancer:
                 process.env.NODE_ENV === 'development'
                     ? DevTools.instrument()
-                    : _ => _
+                    : _ => _,
         },
-        ...enhancers
+        ...enhancers,
     ];
 };
