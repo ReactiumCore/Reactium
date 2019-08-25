@@ -12,9 +12,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router';
-import storeCreator from 'reactium-core/storeCreator';
+import storeCreator from 'reactium-core/redux/storeCreator';
 import deps from 'dependencies';
 import getComponents from 'dependencies/getComponents';
+import register, { pluginRegistration } from 'reactium-core/pluginRegistration';
 
 // Placeholder for the bindable elements
 const bindPoints = [];
@@ -79,8 +80,11 @@ if (elements.length > 0) {
  */
 // Create the Redux store
 const store = storeCreator();
-
 deps().init();
+pluginRegistration.setDeps(deps);
+if (typeof window !== 'undefined') {
+    window.reactium = register;
+}
 
 export const App = () => {
     if (typeof document !== 'undefined') {

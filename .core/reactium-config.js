@@ -101,7 +101,7 @@ const manifestConfig = require('./manifest.config')(defaultManifestConfig);
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.18',
+    version: '3.0.19',
     semver: '^3.0.0',
     build: gulpConfig,
     update: {

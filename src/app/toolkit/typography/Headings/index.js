@@ -43,7 +43,7 @@ export default class Headings extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
@@ -63,7 +63,7 @@ export default class Headings extends Component {
                     <div>
                         <H index={i}>Heading {i}</H>
                     </div>
-                </div>
+                </div>,
             );
         }
 

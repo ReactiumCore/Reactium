@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import querystring from 'querystring';
 import { matchRoutes } from 'react-router-config';
-import storeCreator from 'reactium-core/storeCreator';
+import storeCreator from 'reactium-core/redux/storeCreator';
 import Router from 'reactium-core/components/Router/server';
 import getRoutes from 'reactium-core/components/Router/getRoutes';
 

@@ -170,7 +170,7 @@ Two advanced DDD component architecture files that are searched for in front-end
 
 When found in a Reactium `src/component` domain, Reactium core will attempt to add them to Redux store construction.
 
-See `.core/storeCreator.js` for built-in Redux middleware and store enhancers.
+See `.core/redux/storeCreator.js` for built-in Redux middleware and store enhancers.
 
 #### Example Custom Redux Middleware
 

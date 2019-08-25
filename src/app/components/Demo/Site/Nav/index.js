@@ -3,8 +3,8 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 /**
  * -----------------------------------------------------------------------------
@@ -16,17 +16,17 @@ class Nav extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ...this.props
+            ...this.props,
         };
 
         this.container = null;
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return {
                 ...prevState,
-                ...nextProps
+                ...nextProps,
             };
         });
     }
@@ -36,11 +36,10 @@ class Nav extends Component {
 
         return (
             <nav
-                className={fixed === true ? "main fixed" : "main"}
+                className={fixed === true ? 'main fixed' : 'main'}
                 ref={elm => {
                     this.container = elm;
-                }}
-            >
+                }}>
                 <div>
                     <ul>
                         {buttons.map((item, i) => {
@@ -60,16 +59,21 @@ class Nav extends Component {
 Nav.defaultProps = {
     fixed: false,
     buttons: [
-        { type: "nav", exact: true, to: "/demo/site/menu", label: "Menu" },
+        { type: 'nav', exact: true, to: '/demo/site/menu', label: 'Menu' },
         {
-            type: "nav",
+            type: 'nav',
             exact: true,
-            to: "/demo/site/catering",
-            label: "Catering"
+            to: '/demo/site/catering',
+            label: 'Catering',
         },
-        { type: "nav", exact: true, to: "/demo/site/about", label: "About Us" },
-        { type: "nav", exact: true, to: "/demo/site/contact", label: "Contact" }
-    ]
+        { type: 'nav', exact: true, to: '/demo/site/about', label: 'About Us' },
+        {
+            type: 'nav',
+            exact: true,
+            to: '/demo/site/contact',
+            label: 'Contact',
+        },
+    ],
 };
 
 export default Nav;

@@ -8,6 +8,8 @@ const {
     allEnhancers,
 } = require('manifest').get();
 
+import { pluginRegistration } from 'reactium-core/pluginRegistration';
+
 let store;
 
 /**
@@ -43,7 +45,8 @@ const loadDependencyStack = (dependency, items, isServer) => {
     );
 };
 
-export default ({ server = false } = {}) => {
+const noop = cb => {};
+export default ({ server = false, registrations = noop } = {}) => {
     // Initialize middlewares and enhancers
     let middlewares = [];
     let enhancers = [];
@@ -110,6 +113,8 @@ export default ({ server = false } = {}) => {
         .sort((a, b) => a.order - b.order)
         .filter(({ post }) => post)
         .forEach(({ post }) => post({ store }));
+
+    pluginRegistration.setStore({ store, allReducers, middlewares });
 
     return store;
 };

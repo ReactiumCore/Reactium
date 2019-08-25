@@ -27,7 +27,7 @@ class TextAlign extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
@@ -46,8 +46,7 @@ class TextAlign extends Component {
                                 <div
                                     className={
                                         'text-xs-right text-sm-left number'
-                                    }
-                                >
+                                    }>
                                     <span className={'hide-xs-only'}>
                                         text-sm-left
                                     </span>
@@ -89,8 +88,7 @@ class TextAlign extends Component {
                                 <div
                                     className={
                                         'text-sm-right text-xs-left number'
-                                    }
-                                >
+                                    }>
                                     <span className={'hide-xs-only'}>
                                         text-sm-right
                                     </span>

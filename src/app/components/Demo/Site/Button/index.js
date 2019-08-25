@@ -18,7 +18,7 @@ export default class Button extends Component {
         this.state = Object.assign({}, this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });

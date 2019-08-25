@@ -9,6 +9,7 @@ import op from 'object-path';
 import getComponents from 'dependencies/getComponents';
 import { useSelect } from 'reactium-core/easy-connect';
 import _ from 'underscore';
+import { pluginAddons } from 'reactium-core/pluginRegistration';
 
 const findComponent = (type, path, paths) => {
     let search = [
@@ -39,67 +40,143 @@ const findComponent = (type, path, paths) => {
 const resolveZone = ({
     zone,
     plugins,
-    providedFilter,
+    globalFilter,
     localFilterOverride,
-    providedMapper,
+    globalMapper,
     localMapperOverride,
-    providedSort,
+    globalSort,
     localSortOverride,
     props,
 }) => {
-    let pluginFilter = _ => true;
-    if (typeof providedFilter === 'function') {
-        pluginFilter = providedFilter;
-    }
-    if (typeof localFilterOverride === 'function') {
-        pluginFilter = localFilterOverride;
-    }
-
-    let pluginMapper = _ => _;
-    if (typeof providedMapper === 'function') {
-        pluginMapper = providedMapper;
-    }
-    if (typeof localMapperOverride === 'function') {
-        pluginMapper = localMapperOverride;
-    }
-
-    let pluginSort = _ => 0;
-    if (typeof providedSort === 'function') {
-        pluginSort = providedSort;
-    }
-    if (typeof localSortOverride === 'function') {
-        pluginSort = localSortOverride;
-    }
-
-    const combined = useCombinedZonePlugins(plugins, zone);
-
-    const PluginComponents = combined
-        .filter(pluginFilter)
-        .map(pluginMapper)
-        .sort(pluginSort)
-        .reduce(
-            (
-                PluginComponents,
-                { id, component, path, paths, ...pluginProps },
-            ) => {
-                let Component = component;
-                let name = id;
-                if (typeof component === 'string') {
-                    name = component;
-                    Component = findComponent(component, path, paths);
-                }
-                PluginComponents[name] = {
-                    Component,
-                    id,
-                    key: id,
-                    ...pluginProps,
-                    ...props,
-                };
-
-                return PluginComponents;
+    let controls = {
+        mappers: {
+            default: {
+                order: 0,
+                mapper: _ => _,
             },
-            {},
-        );
+        },
+        filters: {
+            default: {
+                order: 0,
+                filter: _ => true,
+            },
+        },
+        sorts: {
+            default: {
+                order: 0,
+                sort: _ => 0,
+            },
+        },
+    };
+
+    if (typeof globalMapper === 'function') {
+        controls.mappers.default = {
+            order: 0,
+            mapper: globalMapper,
+        };
+    }
+
+    if (typeof localMapperOverride === 'function') {
+        controls.mappers.default = {
+            order: 0,
+            mapper: localMapperOverride,
+        };
+    }
+
+    if (typeof globalFilter === 'function') {
+        controls.filters.default = {
+            order: 0,
+            filter: globalFilter,
+        };
+    }
+
+    if (typeof localFilterOverride === 'function') {
+        controls.filters.default = {
+            order: 0,
+            filter: localFilterOverride,
+        };
+    }
+
+    if (typeof globalSort === 'function') {
+        controls.sorts.default = {
+            order: 0,
+            sort: globalSort,
+        };
+    }
+
+    if (typeof localSortOverride === 'function') {
+        controls.sorts.default = {
+            order: 0,
+            sort: localSortOverride,
+        };
+    }
+
+    // add addons controls to this plugin zone
+    controls = Object.entries(pluginAddons).reduce(
+        (controls, [, addonControls]) => {
+            const {
+                name,
+                pluginMappers,
+                pluginFilters,
+                pluginSorts,
+            } = addonControls;
+
+            const mapper = pluginMappers.find(
+                ({ zone: pluginZone }) => zone === pluginZone,
+            );
+            if (mapper) controls.mappers[name] = { order: 0, ...mapper };
+
+            const filter = pluginFilters.find(
+                ({ zone: pluginZone }) => zone === pluginZone,
+            );
+            if (filter) controls.filters[name] = { order: 0, ...filter };
+
+            const sort = pluginSorts.find(
+                ({ zone: pluginZone }) => zone === pluginZone,
+            );
+            if (sort) controls.sorts[name] = { order: 0, ...sort };
+            return controls;
+        },
+        controls,
+    );
+
+    const controlSort = (ca, cb) =>
+        ca.order < cb.order ? -1 : ca.order > cb.order ? 1 : 0;
+    controls.mappers = Object.values(controls.mappers).sort(controlSort);
+    controls.filters = Object.values(controls.filters).sort(controlSort);
+    controls.sorts = Object.values(controls.sorts).sort(controlSort);
+
+    let PluginComponents = useCombinedZonePlugins(plugins, zone);
+    controls.mappers.forEach(
+        ({ mapper }) => (PluginComponents = PluginComponents.map(mapper)),
+    );
+    controls.filters.forEach(
+        ({ filter }) => (PluginComponents = PluginComponents.filter(filter)),
+    );
+    controls.sorts.forEach(
+        ({ sort }) => (PluginComponents = PluginComponents.sort(sort)),
+    );
+
+    PluginComponents = PluginComponents.reduce(
+        (PluginComponents, { id, component, path, paths, ...pluginProps }) => {
+            let Component = component;
+            let name = id;
+            if (typeof component === 'string') {
+                name = component;
+                Component = findComponent(component, path, paths);
+            }
+            PluginComponents[name] = {
+                Component,
+                id,
+                key: id,
+                ...pluginProps,
+                ...props,
+            };
+
+            return PluginComponents;
+        },
+        {},
+    );
 
     return PluginComponents;
 };

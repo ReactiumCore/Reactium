@@ -26,10 +26,10 @@ class Checkbox extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps
+            ...nextProps,
         }));
     }
 
@@ -53,7 +53,7 @@ class Checkbox extends Component {
                         evt = {
                             type: 'change',
                             currentTarget: item.input,
-                            target: item
+                            target: item,
                         };
                         item.state.onChange(evt);
                     }
@@ -108,7 +108,7 @@ class Checkbox extends Component {
             checked,
             disabled,
             style,
-            className = ''
+            className = '',
         } = this.state;
         let iprop = Object.assign({}, this.state);
         delete iprop.align;
@@ -133,8 +133,7 @@ class Checkbox extends Component {
                 tabIndex={0}
                 ref={elm => {
                     this.label = elm;
-                }}
-            >
+                }}>
                 {text ? <span>{text}</span> : null}
                 <input
                     onChange={this.onChange}
@@ -157,7 +156,7 @@ Checkbox.defaultProps = {
     required: false,
     text: null,
     type: 'checkbox',
-    value: null
+    value: null,
 };
 
 export default Checkbox;

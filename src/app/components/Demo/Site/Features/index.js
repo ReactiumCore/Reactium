@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -15,14 +15,14 @@ export default class Features extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ...this.props
+            ...this.props,
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps
+            ...nextProps,
         }));
     }
 
@@ -31,7 +31,7 @@ export default class Features extends Component {
         let { items = [], layout = [] } = this.state;
 
         return items.length < 1 ? null : (
-            <section className={"feature"}>
+            <section className={'feature'}>
                 {items.map((item, i) => {
                     let { title, caption, backgroundImage } = item;
 
@@ -45,8 +45,7 @@ export default class Features extends Component {
                             <div
                                 className={`feature-block ${
                                     layout[0]
-                                } order-${orderLeft}`}
-                            >
+                                } order-${orderLeft}`}>
                                 <div className={`feature-caption`}>
                                     <h2>{title}</h2>
                                     <p>{caption}</p>
@@ -68,5 +67,5 @@ export default class Features extends Component {
 
 Features.defaultProps = {
     layout: [],
-    items: []
+    items: [],
 };

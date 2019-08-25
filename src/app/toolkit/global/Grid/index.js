@@ -27,7 +27,7 @@ export default class Grid extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
@@ -60,7 +60,7 @@ export default class Grid extends Component {
                 ) : null;
 
             let row = (
-                <div className="row" key={`row-${i}`}>
+                <div className='row' key={`row-${i}`}>
                     {colLeft}
                     {colRight}
                 </div>
@@ -80,7 +80,7 @@ export default class Grid extends Component {
             let r = 12 - i;
 
             let row = (
-                <div className="row" key={`row-${i}`}>
+                <div className='row' key={`row-${i}`}>
                     <div className={`col-xs-12 col-sm-${r} col-sm-offset-${l}`}>
                         <div className={'re-box-row'}>
                             <span className={'hide-xs-only'}>
@@ -152,10 +152,9 @@ export default class Grid extends Component {
             return (
                 <div
                     className={`row ${opp}-xs ${align}-sm`}
-                    key={`grid-align-h-${i}`}
-                >
-                    <div className="col-xs-4">
-                        <div className="re-box-row">
+                    key={`grid-align-h-${i}`}>
+                    <div className='col-xs-4'>
+                        <div className='re-box-row'>
                             <span className={'hide-xs-only'}>{align}-sm</span>
                             <span className={'hide-sm'}>{opp}-xs</span>
                         </div>
@@ -171,13 +170,12 @@ export default class Grid extends Component {
             return (
                 <div
                     className={`row ${opp}-xs ${align}-sm`}
-                    key={`grid-align-v-${i}`}
-                >
-                    <div className="col-xs-3">
-                        <div className="re-box-row" style={{ height: 100 }} />
+                    key={`grid-align-v-${i}`}>
+                    <div className='col-xs-3'>
+                        <div className='re-box-row' style={{ height: 100 }} />
                     </div>
-                    <div className="col-xs-9">
-                        <div className="re-box-row">
+                    <div className='col-xs-9'>
+                        <div className='re-box-row'>
                             <span className={'hide-xs-only'}>{align}-sm</span>
                             <span className={'hide-sm'}>{opp}-xs</span>
                         </div>
@@ -186,7 +184,7 @@ export default class Grid extends Component {
             );
         });
 
-        output = output.concat(h, [<h5 key="v-align">Vertical</h5>], v);
+        output = output.concat(h, [<h5 key='v-align'>Vertical</h5>], v);
 
         return output;
     }
@@ -201,15 +199,15 @@ export default class Grid extends Component {
                             <kbd>.between-xs</kbd>
                         </small>
                     </div>
-                    <div className="row between-xs">
-                        <div className="col-xs-2">
-                            <div className="re-box-row" />
+                    <div className='row between-xs'>
+                        <div className='col-xs-2'>
+                            <div className='re-box-row' />
                         </div>
-                        <div className="col-xs-2">
-                            <div className="re-box-row" />
+                        <div className='col-xs-2'>
+                            <div className='re-box-row' />
                         </div>
-                        <div className="col-xs-2">
-                            <div className="re-box-row" />
+                        <div className='col-xs-2'>
+                            <div className='re-box-row' />
                         </div>
                     </div>
                 </div>
@@ -220,15 +218,15 @@ export default class Grid extends Component {
                         <kbd>.around-xs</kbd>
                     </small>
                 </div>
-                <div className="row around-xs">
-                    <div className="col-xs-2">
-                        <div className="re-box-row" />
+                <div className='row around-xs'>
+                    <div className='col-xs-2'>
+                        <div className='re-box-row' />
                     </div>
-                    <div className="col-xs-2">
-                        <div className="re-box-row" />
+                    <div className='col-xs-2'>
+                        <div className='re-box-row' />
                     </div>
-                    <div className="col-xs-2">
-                        <div className="re-box-row" />
+                    <div className='col-xs-2'>
+                        <div className='re-box-row' />
                     </div>
                 </div>
             </Fragment>
@@ -245,15 +243,15 @@ export default class Grid extends Component {
                             <kbd>.first-sm</kbd>
                         </small>
                     </div>
-                    <div className="row">
-                        <div className="col-xs-4">
-                            <div className="re-box-row text-center">1</div>
+                    <div className='row'>
+                        <div className='col-xs-4'>
+                            <div className='re-box-row text-center'>1</div>
                         </div>
-                        <div className="col-xs-4">
-                            <div className="re-box-row text-center">2</div>
+                        <div className='col-xs-4'>
+                            <div className='re-box-row text-center'>2</div>
                         </div>
-                        <div className="col-xs-4 first-sm text-center bg-grey">
-                            <div className="re-box-row">3</div>
+                        <div className='col-xs-4 first-sm text-center bg-grey'>
+                            <div className='re-box-row'>3</div>
                         </div>
                     </div>
                 </div>
@@ -264,15 +262,15 @@ export default class Grid extends Component {
                         <kbd>.last-sm</kbd>
                     </small>
                 </div>
-                <div className="row">
-                    <div className="col-xs-4 last-sm bg-grey">
-                        <div className="re-box-row text-center">1</div>
+                <div className='row'>
+                    <div className='col-xs-4 last-sm bg-grey'>
+                        <div className='re-box-row text-center'>1</div>
                     </div>
-                    <div className="col-xs-4">
-                        <div className="re-box-row text-center">2</div>
+                    <div className='col-xs-4'>
+                        <div className='re-box-row text-center'>2</div>
                     </div>
-                    <div className="col-xs-4 text-center">
-                        <div className="re-box-row">3</div>
+                    <div className='col-xs-4 text-center'>
+                        <div className='re-box-row'>3</div>
                     </div>
                 </div>
             </Fragment>
@@ -287,18 +285,18 @@ export default class Grid extends Component {
                         <kbd>.reverse-sm</kbd>
                     </small>
                 </div>
-                <div className="row reverse-sm">
-                    <div className="col-xs-3">
-                        <div className="re-box-row text-center">1</div>
+                <div className='row reverse-sm'>
+                    <div className='col-xs-3'>
+                        <div className='re-box-row text-center'>1</div>
                     </div>
-                    <div className="col-xs-3">
-                        <div className="re-box-row text-center">2</div>
+                    <div className='col-xs-3'>
+                        <div className='re-box-row text-center'>2</div>
                     </div>
-                    <div className="col-xs-3">
-                        <div className="re-box-row text-center">3</div>
+                    <div className='col-xs-3'>
+                        <div className='re-box-row text-center'>3</div>
                     </div>
-                    <div className="col-xs-3">
-                        <div className="re-box-row text-center">4</div>
+                    <div className='col-xs-3'>
+                        <div className='re-box-row text-center'>4</div>
                     </div>
                 </div>
             </Fragment>
@@ -320,14 +318,12 @@ export default class Grid extends Component {
                     <div className={'col-xs'}>
                         <div
                             className={'show-xs-only re-box-row'}
-                            style={{ display: 'none' }}
-                        >
+                            style={{ display: 'none' }}>
                             .show-xs-only
                         </div>
                         <div
                             className={'show-sm re-box-row'}
-                            style={{ display: 'none' }}
-                        >
+                            style={{ display: 'none' }}>
                             .show-sm
                         </div>
                     </div>
@@ -338,7 +334,7 @@ export default class Grid extends Component {
 
     render() {
         return (
-            <div className="re-demo">
+            <div className='re-demo'>
                 <section>
                     <p>
                         Responsive modifiers enable specifying different column

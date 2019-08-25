@@ -3,8 +3,8 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * -----------------------------------------------------------------------------
@@ -16,20 +16,20 @@ export default class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ...this.props
+            ...this.props,
         };
     }
 
     componentDidMount() {
-        if (this.state.hasOwnProperty("mount")) {
+        if (this.state.hasOwnProperty('mount')) {
             this.state.mount(this);
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => ({
             ...prevState,
-            ...nextProps
+            ...nextProps,
         }));
     }
 
@@ -38,8 +38,8 @@ export default class Footer extends Component {
 
         return (
             <footer>
-                <div className={"row"}>
-                    <div className={"col-xs-12 col-md-5"}>
+                <div className={'row'}>
+                    <div className={'col-xs-12 col-md-5'}>
                         <ul>
                             <li>
                                 <span>
@@ -48,9 +48,9 @@ export default class Footer extends Component {
                             </li>
                         </ul>
                     </div>
-                    <div className={"col-xs-12 col-md-7 row end-md"}>
+                    <div className={'col-xs-12 col-md-7 row end-md'}>
                         {nav.length < 1 ? null : (
-                            <ul className={"mt-xs-5 mt-sm-5 mt-md-0"}>
+                            <ul className={'mt-xs-5 mt-sm-5 mt-md-0'}>
                                 {nav.map((item, i) => {
                                     let { label, url } = item;
 
@@ -76,8 +76,8 @@ export default class Footer extends Component {
 Footer.defaultProps = {
     year: new Date().getFullYear(),
     nav: [
-        { label: "123 Sesame Str. Columbus, Ohio 43215" },
-        { label: "614.555.0422" },
-        { label: "Contact Us", url: "/demo/site/contact" }
-    ]
+        { label: '123 Sesame Str. Columbus, Ohio 43215' },
+        { label: '614.555.0422' },
+        { label: 'Contact Us', url: '/demo/site/contact' },
+    ],
 };

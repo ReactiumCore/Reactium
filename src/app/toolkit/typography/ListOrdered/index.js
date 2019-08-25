@@ -22,7 +22,7 @@ export default class ListOrdered extends Component {
         this.state = Object.assign({}, this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
@@ -35,7 +35,7 @@ export default class ListOrdered extends Component {
             output.push(
                 <li key={`item-${i}`}>
                     <Lipsum length={58} />
-                </li>
+                </li>,
             );
         }
 

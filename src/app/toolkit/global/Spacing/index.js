@@ -27,7 +27,7 @@ export default class Spacing extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState(prevState => {
             return Object.assign({}, prevState, nextProps);
         });
@@ -41,7 +41,7 @@ export default class Spacing extends Component {
             'b:bottom',
             'l:left',
             'x:left and right',
-            'y:top and bottom'
+            'y:top and bottom',
         ];
         let breaks = ['xs', 'sm', 'md', 'lg', 'xl'];
         let sizes = [
@@ -63,7 +63,7 @@ export default class Spacing extends Component {
             56,
             64,
             72,
-            80
+            80,
         ];
 
         return (
@@ -84,8 +84,7 @@ export default class Spacing extends Component {
                                 return (
                                     <span
                                         key={`prop-${i}`}
-                                        className={'number'}
-                                    >
+                                        className={'number'}>
                                         {item}
                                         <br />
                                     </span>
@@ -101,8 +100,7 @@ export default class Spacing extends Component {
                                 return (
                                     <span
                                         key={`side-${i}`}
-                                        className={'number'}
-                                    >
+                                        className={'number'}>
                                         {item}
                                         <br />
                                     </span>
@@ -139,8 +137,7 @@ export default class Spacing extends Component {
                             <div
                                 className={
                                     'mt-sm-20 mb-sm-20 px-sm-20 py-sm-20 mt-xs-10 mb-xs-10 px-xs-10 py-xs-10 bg-blue'
-                                }
-                            >
+                                }>
                                 <span className={'hide-xs-only white number'}>
                                     mt-sm-20, mb-sm-20, px-sm-20, py-sm-20
                                 </span>
@@ -181,8 +178,7 @@ export default class Spacing extends Component {
                                     className={
                                         'mx-xs-auto bg-blue text-center p-6'
                                     }
-                                    style={{ width: 200 }}
-                                >
+                                    style={{ width: 200 }}>
                                     <span className={'white number'}>
                                         mx-xs-auto
                                     </span>
