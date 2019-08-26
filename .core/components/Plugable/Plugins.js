@@ -9,7 +9,6 @@ import op from 'object-path';
 import getComponents from 'dependencies/getComponents';
 import { useSelect } from 'reactium-core/easy-connect';
 import _ from 'underscore';
-import { pluginAddons } from 'reactium-core/pluginRegistration';
 
 const findComponent = (type, path, paths) => {
     let search = [
@@ -37,16 +36,14 @@ const findComponent = (type, path, paths) => {
     return Component;
 };
 
-const resolveZone = ({
+const usePluginControls = ({
     zone,
-    plugins,
-    globalFilter,
+    providedFilter,
     localFilterOverride,
-    globalMapper,
+    providedMapper,
     localMapperOverride,
-    globalSort,
+    providedSort,
     localSortOverride,
-    props,
 }) => {
     let controls = {
         mappers: {
@@ -111,15 +108,14 @@ const resolveZone = ({
         };
     }
 
+    const allPluginControls = useSelect({
+        select: state => op.get(state, 'Plugable.controls', {}),
+    });
+
     // add addons controls to this plugin zone
-    controls = Object.entries(pluginAddons).reduce(
-        (controls, [, addonControls]) => {
-            const {
-                name,
-                pluginMappers,
-                pluginFilters,
-                pluginSorts,
-            } = addonControls;
+    controls = Object.entries(allPluginControls).reduce(
+        (controls, [name, addonControls]) => {
+            const { pluginMappers, pluginFilters, pluginSorts } = addonControls;
 
             const mapper = pluginMappers.find(
                 ({ zone: pluginZone }) => zone === pluginZone,
@@ -146,6 +142,10 @@ const resolveZone = ({
     controls.filters = Object.values(controls.filters).sort(controlSort);
     controls.sorts = Object.values(controls.sorts).sort(controlSort);
 
+    return controls;
+};
+
+const resolveZone = ({ zone, plugins, controls, props }) => {
     let PluginComponents = useCombinedZonePlugins(plugins, zone);
     controls.mappers.forEach(
         ({ mapper }) => (PluginComponents = PluginComponents.map(mapper)),
@@ -198,15 +198,20 @@ export const usePlugins = props => {
         ...otherProps
     } = props;
 
-    return resolveZone({
+    const controls = usePluginControls({
         zone,
-        plugins,
         providedFilter,
         localFilterOverride,
         providedMapper,
         localMapperOverride,
         providedSort,
         localSortOverride,
+    });
+
+    return resolveZone({
+        zone,
+        plugins,
+        controls,
         props: otherProps,
     });
 };

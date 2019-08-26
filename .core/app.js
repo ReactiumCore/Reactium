@@ -81,9 +81,14 @@ if (elements.length > 0) {
 // Create the Redux store
 deps().init();
 const store = storeCreator();
+
+// Setup plugin registration
 pluginRegistration.setDeps(deps);
 if (typeof window !== 'undefined') {
     window.reactium = register;
+    window.react = require('react');
+    window.React = require('react');
+    window.redux = require('redux');
 }
 
 export const App = () => {
@@ -109,8 +114,13 @@ export const App = () => {
 
             if (window && 'ssr' in window && window.ssr) {
                 // Reactium SSR Mode
-
-                console.log('[Reactium] SSR Mode: Hydrating Reactium.');
+                console.log(
+                    '%c [Reactium] SSR Mode: %c⚡💡 %cHydrating Reactium. %c⚡💡 ',
+                    'font-size: 16px; color: #fff; background-color: #4F82BA',
+                    'font-size: 16px; color: #F4F19C; background-color: #4F82BA',
+                    'font-size: 16px; color: #fff; background-color: #4F82BA',
+                    'font-size: 16px; color: #F4F19C; background-color: #4F82BA',
+                );
 
                 // Hydrate the Routed component
                 ReactDOM.hydrate(
@@ -126,7 +136,13 @@ export const App = () => {
             } else {
                 // Reactium FE Mode
 
-                console.log('[Reactium] FE Mode: Binding Reactium.');
+                console.log(
+                    '%c [Reactium] FE Mode: %c⚡💡 %cBinding Reactium. %c⚡💡 ',
+                    'font-size: 16px; color: #fff; background-color: #4F82BA',
+                    'font-size: 16px; color: #F4F19C; background-color: #4F82BA',
+                    'font-size: 16px; color: #fff; background-color: #4F82BA',
+                    'font-size: 16px; color: #F4F19C; background-color: #4F82BA',
+                );
 
                 // Bind the Routed component
                 ReactDOM.render(

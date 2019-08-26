@@ -20,4 +20,15 @@ export default {
         type: deps().actionTypes.REMOVE_PLUGIN,
         id,
     }),
+
+    addControls: ({ name, controls }) => ({
+        type: deps().actionTypes.ADD_PLUGIN_CONTROLS,
+        name,
+        controls,
+    }),
+
+    removeControls: name => ({
+        type: deps().actionTypes.REMOVE_PLUGIN_CONTROLS,
+        name,
+    }),
 };

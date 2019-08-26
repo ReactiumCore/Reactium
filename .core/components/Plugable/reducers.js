@@ -50,4 +50,23 @@ const allIds = (state = [], action) => {
     }
 };
 
-export default combineReducers({ byId, allIds });
+const controls = (state = {}, action) => {
+    switch (action.type) {
+        case deps().actionTypes.ADD_PLUGIN_CONTROLS: {
+            return {
+                ...state,
+                [action.name]: action.controls,
+            };
+        }
+        case deps().actionTypes.REMOVE_PLUGIN_CONTROLS: {
+            const newState = { ...state };
+            delete newState[action.name];
+            return newState;
+        }
+        default: {
+            return state;
+        }
+    }
+};
+
+export default combineReducers({ byId, allIds, controls });
