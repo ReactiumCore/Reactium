@@ -30,21 +30,23 @@ const routeListener = (store, history) => location => {
                     return match.isExact;
                 }) || {};
 
-        store.dispatch(
-            deps().actions.Router.updateRoute({
-                history,
-                location: {
-                    pathname: location.pathname,
-                    search: location.search,
-                    hash: location.hash,
-                    state: location.state,
-                    key: location.key,
-                },
-                match,
-                route,
-                params: match.params,
-            }),
-        );
+        if (match) {
+            store.dispatch(
+                deps().actions.Router.updateRoute({
+                    history,
+                    location: {
+                        pathname: location.pathname,
+                        search: location.search,
+                        hash: location.hash,
+                        state: location.state,
+                        key: location.key,
+                    },
+                    match,
+                    route,
+                    params: match.params,
+                }),
+            );
+        }
     }
 };
 
