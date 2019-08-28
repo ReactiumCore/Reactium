@@ -323,13 +323,28 @@ module.exports = () => {
                 cmd.exec(null, () => resolve({ action, status: 200 }));
             }),
 
+        installElectron: ({ action, props }) =>
+            new Promise(resolve => {
+                msg(`Installing ${chalk.cyan('Electron')}...`);
+                let cmd = new run.Command(`npm install --save-dev electron`, {
+                    verbosity: 0,
+                });
+
+                setTimeout(
+                    () =>
+                        cmd.exec(null, () => resolve({ action, status: 200 })),
+                    1,
+                );
+            }),
+
         install: ({ action, props }) =>
             new Promise(resolve => {
                 msg(`Installing ${chalk.cyan('dependencies')}...`);
-                const cmd = new run.Command(
+                let cmd = new run.Command(
                     `cd ${gulpConfig.dest.electron} && npm install`,
                     { verbosity: 0 },
                 );
+
                 setTimeout(
                     () =>
                         cmd.exec(null, () => resolve({ action, status: 200 })),
