@@ -38,11 +38,11 @@ const findComponent = (type, path, paths) => {
 
 const usePluginControls = ({
     zone,
-    providedFilter,
+    globalFilter,
     localFilterOverride,
-    providedMapper,
+    globalMapper,
     localMapperOverride,
-    providedSort,
+    globalSort,
     localSortOverride,
 }) => {
     let controls = {
@@ -184,9 +184,9 @@ const resolveZone = ({ zone, plugins, controls, props }) => {
 export const usePlugins = props => {
     const {
         plugins,
-        filter: providedFilter,
-        mapper: providedMapper,
-        sort: providedSort,
+        filter: globalFilter,
+        mapper: globalMapper,
+        sort: globalSort,
     } = useContext(Context) || {};
 
     const {
@@ -200,11 +200,11 @@ export const usePlugins = props => {
 
     const controls = usePluginControls({
         zone,
-        providedFilter,
+        globalFilter,
         localFilterOverride,
-        providedMapper,
+        globalMapper,
         localMapperOverride,
-        providedSort,
+        globalSort,
         localSortOverride,
     });
 
