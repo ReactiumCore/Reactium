@@ -46,16 +46,24 @@ const defaultShouldUpdate = ({ prevState, newState }) =>
 /**
  * useSelect hook - subscribe to subtree of redux and control updates.
  * @description select subtree from redux state, and govern when to inform component of changes.
+ * @param params [Object|function] - select function or object with select and shouldUpdate properties
+ *
  * @param select [Function] select function is passed the full redux state, returns your
  * custom derived object / substate.
  * @param shouldUpdate [Function] passed object with newState and prevState.
  *
  * Returns true if state should be updated in hook.
  */
-export const useSelect = ({
-    select = newState => newState,
-    shouldUpdate = defaultShouldUpdate,
-}) => {
+export const useSelect = params => {
+    let select = newState => newState;
+    let shouldUpdate = defaultShouldUpdate;
+    if (typeof params === 'function') {
+        select = params;
+    } else {
+        select = op.get(params, 'select', select);
+        shouldUpdate = op.get(params, 'shouldUpdate', shouldUpdate);
+    }
+
     const { getState, subscribe } = useStore();
     const stateRef = useRef(select(getState()));
     const [value, setValue] = useState(stateRef.current);
