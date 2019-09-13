@@ -84,10 +84,8 @@ export const useSelect = params => {
     };
 
     useEffect(() => {
-        const unsubscribe = subscribe(setState);
-        return () => {
-            unsubscribe();
-        };
+        setState();
+        return subscribe(setState);
     });
 
     return stateRef.current;
