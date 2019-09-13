@@ -2,15 +2,17 @@ import _ from 'underscore';
 import cn from 'classnames';
 import op from 'object-path';
 import PropTypes from 'prop-types';
-
 import React, {
     forwardRef,
+    useImperativeHandle,
     useEffect,
     useLayoutEffect as useWindowEffect,
-    useLayoutEffect,
     useRef,
     useState,
 } from 'react';
+
+// Server-Side Render safe useLayoutEffect (useEffect when node)
+const useLayoutEffect = typeof window !== 'undefined' ? useWindowEffect : useEffect;
 
 const ENUMS = {};
 

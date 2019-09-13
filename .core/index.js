@@ -15,6 +15,7 @@ import path from 'path';
 import fs from 'fs';
 import op from 'object-path';
 import staticGzip from 'express-static-gzip';
+import moment from 'moment';
 
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
@@ -188,7 +189,11 @@ middlewares
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {
-    console.log(`[00:00:00] Reactium Server running on port '${port}'...`);
+    console.log(
+        `[${moment().format(
+            'HH:mm:ss',
+        )}] Reactium Server running on port '${port}'...`,
+    );
 });
 
 // Provide opportunity for ssl server

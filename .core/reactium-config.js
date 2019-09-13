@@ -101,7 +101,7 @@ const manifestConfig = require('./manifest.config')(defaultManifestConfig);
  * @type {Object}
  */
 module.exports = {
-    version: '3.0.19',
+    version: '3.0.20',
     semver: '^3.0.0',
     build: gulpConfig,
     update: {
@@ -212,6 +212,12 @@ module.exports = {
                     version: '>=3.0.3',
                     destination: '/src/app/components/Fallback',
                     source: '/tmp/update/src/app/components/Fallback',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.0.19',
+                    destination: '/jest.config.js',
+                    source: '/tmp/update/jest.config.js',
                 },
             ],
             remove: [],
