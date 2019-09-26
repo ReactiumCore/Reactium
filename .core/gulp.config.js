@@ -94,6 +94,21 @@ const defaultConfig = {
         colors: 'src/assets/style/_scss/_colors.scss',
         startPath: '/',
     },
+    umd: {
+        defaultWorker: path.resolve(
+            __dirname,
+            '../public/assets/js/umd/service-worker/service-worker.js',
+        ),
+        manifest: path.normalize(`${rootPath}/.tmp/umd-manifest.json`),
+        outputPath: path.resolve(__dirname, '../public/assets/js/umd'),
+    },
+    sw: {
+        globDirectory: 'public',
+        globPatterns: ['**/*.{html,js,css}'],
+        swDest: 'public/assets/js/sw/sw.js',
+        clientsClaim: true,
+        skipWaiting: true,
+    },
 };
 
 let gulpConfigOverride = _ => _;

@@ -101,7 +101,7 @@ module.exports = config => {
             rules: [
                 {
                     test: [/\.jsx|js($|\?)/],
-                    exclude: [/node_modules/],
+                    exclude: [/node_modules/, /umd\.js/],
                     resolve: {
                         extensions: ['.js', '.jsx', '.json'],
                     },

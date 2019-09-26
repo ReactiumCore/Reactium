@@ -1,6 +1,6 @@
 const tree = require('directory-tree');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const _ = require('underscore');
 const op = require('object-path');
 const prettier = require('prettier');
@@ -20,15 +20,10 @@ const flattenRegistry = (registry = { children: [] }, manifest = []) =>
         return manifest;
     }, manifest);
 
-const jsSources = sourcePath =>
-    flattenRegistry(
-        tree(sourcePath, {
-            extensions: /\.jsx?$/,
-            exclude: [/.ds_store/i, /.core\/.cli\//i, /.cli\//i],
-        }),
-    );
+const sources = (sourcePath, searchParams) =>
+    flattenRegistry(tree(sourcePath, searchParams));
 
-const find = (searches = [], sourceMappings) => {
+const find = (searches = [], sourceMappings = [], searchParams) => {
     let mappings = searches.reduce((mappings, { name, type }) => {
         mappings[name] = {
             type,
@@ -38,7 +33,7 @@ const find = (searches = [], sourceMappings) => {
     }, {});
 
     sourceMappings.forEach(sourceMapping => {
-        mappings = jsSources(sourceMapping.from)
+        mappings = sources(sourceMapping.from)
             .map(file => file.path)
             .reduce((mappings, file) => {
                 searches.forEach(({ name, pattern, ignore }) => {
@@ -65,30 +60,35 @@ module.exports = function({
     manifestTemplateFilePath,
     manifestProcessor,
 }) {
-    const manifest = find(
-        manifestConfig.patterns,
-        manifestConfig.sourceMappings,
-    );
+    const patterns = op.get(manifestConfig, 'patterns', []);
+    const sourceMappings = op.get(manifestConfig, 'sourceMappings', []);
+    const searchParams = op.get(manifestConfig, 'searchParams', {
+        extensions: /\.jsx?$/,
+        exclude: [/.ds_store/i, /.core\/.cli\//i, /.cli\//i],
+    });
+
+    const manifest = find(patterns, sourceMappings, searchParams);
 
     const template = hb.compile(
         fs.readFileSync(manifestTemplateFilePath, 'utf-8'),
     );
 
-    const fileContents = prettier.format(
-        template(
-            manifestProcessor({
-                manifest,
-                contexts: manifestConfig.contexts,
-            }),
-        ),
-        {
+    let fileContents = template(
+        manifestProcessor({
+            manifest,
+            contexts: manifestConfig.contexts,
+        }),
+    );
+
+    if (/.jsx?$/.test(manifestFilePath)) {
+        fileContents = prettier.format(fileContents, {
             parser: 'babel',
             trailingComma: 'all',
             singleQuote: true,
             tabWidth: 4,
             useTabs: false,
-        },
-    );
+        });
+    }
 
     const manifestHasChanged = () => {
         const prevFileContents = fs.readFileSync(manifestFilePath, 'utf-8');
@@ -105,7 +105,8 @@ module.exports = function({
                 manifestFilePath,
             )}'...`,
         );
-
+        const dir = path.dirname(manifestFilePath);
+        fs.ensureDirSync(dir);
         fs.writeFileSync(manifestFilePath, fileContents);
     }
 };
