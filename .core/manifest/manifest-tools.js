@@ -77,6 +77,7 @@ module.exports = function({
         manifestProcessor({
             manifest,
             contexts: manifestConfig.contexts,
+            manifestConfig,
         }),
     );
 

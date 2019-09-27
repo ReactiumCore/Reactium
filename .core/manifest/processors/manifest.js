@@ -1,3 +1,5 @@
+const op = require('object-path');
+
 module.exports = data => {
     const types = Object.entries(data.manifest).map(([name, typeDomains]) => {
         const domainRegExp = new RegExp(`\/([A-Za-z_0-9]+?)\/[A-Za-z_0-9]+$`);
@@ -29,9 +31,19 @@ module.exports = data => {
         };
     });
 
+    const externals = Object.values(
+        op.get(data, 'manifestConfig.pluginExternals', {}),
+    );
+
+    const externalAliases = externals.filter(
+        ({ defaultAlias }) => defaultAlias,
+    );
+
     return {
         types,
         contexts,
+        externals,
+        externalAliases,
         contextObj: JSON.stringify(data.contexts, null, 2),
         manifest: JSON.stringify(data.manifest, null, 2),
     };

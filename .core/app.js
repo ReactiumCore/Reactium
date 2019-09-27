@@ -83,12 +83,12 @@ deps().init();
 const store = storeCreator();
 
 // Setup plugin registration
+require('manifest').externals();
 pluginRegistration.setDeps(deps);
 if (typeof window !== 'undefined') {
-    window.reactium = register;
-    window.react = require('react');
-    window.React = require('react');
-    window.redux = require('redux');
+    window.Reactium = {
+        register,
+    };
 }
 
 export const App = () => {

@@ -21,6 +21,13 @@ module.exports = data => {
             return configs;
         }, {});
 
+    const defaultLibraryExternals = Object.values(
+        op.get(data, 'manifestConfig.defaultLibraryExternals', {}),
+    ).reduce((externals, { externalName }) => {
+        externals[externalName] = externalName;
+        return externals;
+    }, {});
+
     return JSON.stringify(
         op.get(data, 'manifest.allUmdEntries.imports', []).map(entryPath => {
             const dir = path.dirname(entryPath);
@@ -40,7 +47,11 @@ module.exports = data => {
                 'outputFile',
                 `${libraryName}.js`,
             );
-            const externals = op.get(umdConfig, 'externals', {});
+            const externals = op.get(
+                umdConfig,
+                'externals',
+                defaultLibraryExternals,
+            );
             const globalObject = op.get(umdConfig, 'globalObject', 'window');
 
             return {

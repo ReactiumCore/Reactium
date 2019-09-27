@@ -20,6 +20,16 @@ module.exports = {
         '{{context}}': typeof window !== 'undefined' && require.context('{{modulePath}}', true, /{{filePattern}}/, '{{mode}}'),
         {{/each}}
     },
+    externals: () => {
+        if (typeof window !== 'undefined') {
+            {{#each externals}}
+            window['{{externalName}}'] = require('{{requirePath}}');
+            {{/each}}
+            {{#each externalAliases}}
+            window['{{defaultAlias}}'] = window['{{externalName}}'];
+            {{/each}}
+        }
+    },
     listContexts: () => {
         return {{{contextObj}}}
     },

@@ -14,6 +14,59 @@ const contextMode = () => {
     return 'sync';
 };
 
+const defaultLibraryExternals = {
+    react: {
+        externalName: 'react',
+        requirePath: 'react',
+        // to provide both es6 named exports and React default alias
+        defaultAlias: 'React',
+    },
+    redux: {
+        externalName: 'redux',
+        requirePath: 'redux',
+    },
+    'gsap/umd/TweenMax': {
+        externalName: 'gsap/umd/TweenMax',
+        requirePath: 'gsap/umd/TweenMax',
+    },
+    'reactium-core/easy-connect': {
+        externalName: 'reactium-core/easy-connect',
+        requirePath: 'reactium-core/easy-connect',
+    },
+    underscore: {
+        externalName: 'underscore',
+        requirePath: 'underscore',
+    },
+    'object-path': {
+        externalName: 'object-path',
+        requirePath: 'object-path',
+    },
+    semver: {
+        externalName: 'semver',
+        requirePath: 'semver',
+    },
+    moment: {
+        externalName: 'moment',
+        requirePath: 'moment',
+    },
+    classnames: {
+        externalName: 'classnames',
+        requirePath: 'classnames',
+    },
+    'prop-types': {
+        externalName: 'prop-types',
+        requirePath: 'prop-types',
+    },
+    'react-router-dom': {
+        externalName: 'react-router-dom',
+        requirePath: 'react-router-dom',
+    },
+    'redux-super-thunk': {
+        externalName: 'redux-super-thunk',
+        requirePath: 'redux-super-thunk',
+    },
+};
+
 const defaultManifestConfig = {
     patterns: [
         {
@@ -73,6 +126,7 @@ const defaultManifestConfig = {
             to: 'reactium-core/',
         },
     ],
+    pluginExternals: defaultLibraryExternals,
     contexts: {
         components: {
             modulePath: 'components',
@@ -96,6 +150,7 @@ const defaultManifestConfig = {
         },
     },
     umd: {
+        defaultLibraryExternals,
         patterns: [
             {
                 name: 'allUmdEntries',

@@ -1,4 +1,5 @@
 {
     "libraryName": "service-worker",
-    "globalObject": "this"
+    "globalObject": "this",
+    "externals": {}
 }
