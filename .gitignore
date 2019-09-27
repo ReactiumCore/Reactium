@@ -71,8 +71,8 @@ ehthumbs.db
 Thumbs.db
 
 # Toolkit hidden directories
-src/app/toolkit/.backup
-src/app/toolkit/.tmp
+.backup
+.tmp
 
 # Backup directory
 .BACKUP/

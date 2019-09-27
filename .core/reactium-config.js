@@ -1,3 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const rootPath = path.resolve(__dirname, '..');
+const gulpConfig = require('./gulp.config');
+
 const contextMode = () => {
     if (
         process.env.NODE_ENV !== 'development' ||
@@ -8,8 +13,6 @@ const contextMode = () => {
 
     return 'sync';
 };
-
-const gulpConfig = require('./gulp.config');
 
 const defaultManifestConfig = {
     patterns: [
@@ -92,9 +95,45 @@ const defaultManifestConfig = {
             mode: contextMode(),
         },
     },
+    umd: {
+        patterns: [
+            {
+                name: 'allUmdEntries',
+                type: 'umd',
+                pattern: /umd.js$/,
+                ignore: /assets/,
+            },
+            {
+                name: 'allUmdConfig',
+                type: 'config',
+                pattern: /umd-config.json$/,
+                ignore: /assets/,
+            },
+        ],
+        sourceMappings: [
+            {
+                from: 'src/',
+                to: path.resolve(rootPath, 'src') + '/',
+            },
+        ],
+        searchParams: {
+            extensions: /\.(js|json)$/,
+            exclude: [
+                /.ds_store/i,
+                /.core/i,
+                /.cli\//i,
+                /src\/assets/,
+                /src\/app\/toolkit/,
+            ],
+        },
+    },
 };
 
-const manifestConfig = require('./manifest.config')(defaultManifestConfig);
+let manifestConfigOverride = _ => _;
+if (fs.existsSync(`${rootPath}/manifest.config.override.js`)) {
+    manifestConfigOverride = require(`${rootPath}/manifest.config.override.js`);
+}
+const manifestConfig = manifestConfigOverride(defaultManifestConfig);
 
 /**
  * Use liberally for additional core configuration.
