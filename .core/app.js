@@ -15,7 +15,7 @@ import Router from 'reactium-core/components/Router';
 import storeCreator from 'reactium-core/redux/storeCreator';
 import deps from 'dependencies';
 import getComponents from 'dependencies/getComponents';
-import register, { pluginRegistration } from 'reactium-core/pluginRegistration';
+import { pluginRegistration } from 'reactium-core/pluginRegistration';
 
 // Placeholder for the bindable elements
 const bindPoints = [];
@@ -85,11 +85,6 @@ const store = storeCreator();
 // Setup plugin registration
 require('manifest').externals();
 pluginRegistration.setDeps(deps);
-if (typeof window !== 'undefined') {
-    window.Reactium = {
-        register,
-    };
-}
 
 export const App = () => {
     if (typeof document !== 'undefined') {

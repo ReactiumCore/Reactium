@@ -15,6 +15,12 @@ const contextMode = () => {
 };
 
 const defaultLibraryExternals = {
+    Reactium: {
+        externalName: 'Reactium',
+        requirePath: 'reactium-core/pluginRegistration',
+        // to provide both es6 named exports and Reactium default alias
+        defaultAlias: 'React',
+    },
     react: {
         externalName: 'react',
         requirePath: 'react',
