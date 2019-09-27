@@ -20,10 +20,35 @@ module.exports = umd => {
                 {
                     test: /(\.jsx|\.js)$/,
                     loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/react'],
+                        plugins: [
+                            [
+                                '@babel/plugin-proposal-class-properties',
+                                {
+                                    loose: true,
+                                },
+                            ],
+                            ['module-resolver'],
+                        ],
+                    },
                 },
             ],
         },
-        externals: umd.externals,
+        externals: Object.entries(umd.externals).reduce(
+            (externals, [key, value]) => {
+                // regex key
+                if (/^\/.*\/i?$/.test(key)) {
+                    const args = [key.replace(/^\//, '').replace(/\/i?$/, '')];
+                    if (/i$/.test(key)) args.push('i');
+                    externals.push(new RegExp(...args));
+                    return externals;
+                }
+                externals.push(value);
+                return externals;
+            },
+            [],
+        ),
     };
 
     let override = (umd, config) => config;

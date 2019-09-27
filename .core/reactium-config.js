@@ -16,10 +16,11 @@ const contextMode = () => {
 
 const defaultLibraryExternals = {
     Reactium: {
-        externalName: 'Reactium',
+        externalName: '/pluginRegistration$/',
+        // relative to src/manifest.js
         requirePath: 'reactium-core/pluginRegistration',
         // to provide both es6 named exports and Reactium default alias
-        defaultAlias: 'React',
+        defaultAlias: 'Reactium',
     },
     react: {
         externalName: 'react',
@@ -32,11 +33,12 @@ const defaultLibraryExternals = {
         requirePath: 'redux',
     },
     'gsap/umd/TweenMax': {
-        externalName: 'gsap/umd/TweenMax',
+        externalName: '/^gsap.*$/',
         requirePath: 'gsap/umd/TweenMax',
     },
     'reactium-core/easy-connect': {
-        externalName: 'reactium-core/easy-connect',
+        externalName: '/easy-connect$/',
+        // relative to src/manifest.js
         requirePath: 'reactium-core/easy-connect',
     },
     underscore: {
