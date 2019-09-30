@@ -280,7 +280,6 @@ const reactium = (gulp, config, webpackConfig) => {
                         }
 
                         let result = stats.toJson();
-
                         if (result.errors.length > 0) {
                             result.errors.forEach(error => {
                                 console.log(error);
@@ -435,7 +434,10 @@ const reactium = (gulp, config, webpackConfig) => {
         gulpwatch(config.watch.assets, watcher);
         const scriptWatcher = gulp.watch(
             config.watch.js,
-            gulp.task('manifest'),
+            gulp.parallel(
+                task('manifest'),
+                gulp.series(task('umdManifest'), task('umdLibraries')),
+            ),
         );
         done();
     };
