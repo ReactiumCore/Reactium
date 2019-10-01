@@ -104,7 +104,7 @@ const defaultConfig = {
     },
     sw: {
         globDirectory: 'public',
-        globPatterns: ['**/*.{html,js,css}'],
+        globPatterns: ['**/*.{html,js,css,js.gz,css.gz}'],
         swDest: 'public/assets/js/sw/sw.js',
         clientsClaim: true,
         skipWaiting: true,
