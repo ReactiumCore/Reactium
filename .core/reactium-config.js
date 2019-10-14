@@ -81,6 +81,7 @@ const defaultManifestConfig = {
             name: 'allActions',
             type: 'actions',
             pattern: /actions.jsx?$/,
+            ignore: /\.cli/,
         },
         {
             name: 'allActionTypes',
