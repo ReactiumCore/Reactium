@@ -16,9 +16,9 @@ const contextMode = () => {
 
 const defaultLibraryExternals = {
     Reactium: {
-        externalName: '/pluginRegistration$/',
+        externalName: '/sdk$/',
         // relative to src/manifest.js
-        requirePath: 'reactium-core/pluginRegistration',
+        requirePath: 'reactium-core/sdk',
         // to provide both es6 named exports and Reactium default alias
         defaultAlias: 'Reactium',
     },
