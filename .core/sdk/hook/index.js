@@ -1,7 +1,7 @@
-const uuid = require('uuid/v4');
-const _ = require('underscore');
-const op = require('object-path');
-const ActionSequence = require('action-sequence');
+import uuid from 'uuid/v4';
+import _ from 'underscore';
+import op from 'object-path';
+import ActionSequence from 'action-sequence';
 
 const noop = () => Promise.resolve();
 
@@ -53,4 +53,4 @@ Hook.run = (name, ...params) => {
     });
 };
 
-module.exports = Hook;
+export default Hook;
