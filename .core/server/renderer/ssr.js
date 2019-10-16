@@ -6,7 +6,7 @@ import querystring from 'querystring';
 import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
 import Reactium from 'reactium-core/sdk';
-import storeCreator from 'reactium-core/redux/storeCreator';
+import 'reactium-core/redux/storeCreator';
 import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router/server';
 import getRoutes from 'reactium-core/components/Router/getRoutes';
@@ -15,9 +15,12 @@ const app = {};
 app.dependencies = global.dependencies = require('dependencies').default;
 
 const renderer = template => async (req, res, context) => {
-    app.dependencies().init();
+    await Reactium.Hook.run('dependencies-load');
+
     const routes = getRoutes();
-    const store = storeCreator({ server: true });
+
+    const { store } = await Reactium.Hook.run('store-create', { server: true });
+
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);
 

@@ -1,14 +1,8 @@
+import Reactium from 'reactium-core/sdk';
 import { createStore, combineReducers, compose } from 'redux';
 import { applyMiddleware } from 'redux-super-thunk';
-
-const {
-    allInitialStates,
-    allReducers,
-    allMiddleware,
-    allEnhancers,
-} = require('manifest').get();
-
 import { pluginRegistration } from 'reactium-core/pluginRegistration';
+import { manifest } from 'dependencies';
 
 let store;
 
@@ -29,7 +23,7 @@ if (typeof window !== 'undefined') {
 // Make sure initial loaded state matches reducers
 const sanitizeInitialState = state =>
     Object.keys(state)
-        .filter(s => s in allReducers)
+        .filter(s => s in manifest.allReducers)
         .reduce(
             (states, key) => ({
                 ...states,
@@ -46,15 +40,18 @@ const loadDependencyStack = (dependency, items, isServer) => {
 };
 
 const noop = cb => {};
-export default ({ server = false, registrations = noop } = {}) => {
+const storeCreator = ({ server = false } = {}) => {
+    // Avoid replacing existing store.
+    if (store) return store;
+
     // Load InitialState first from modules
-    let importedStates = allInitialStates;
+    let importedStates = manifest.allInitialStates;
     initialState = {
         ...sanitizeInitialState(importedStates),
         ...initialState,
     };
 
-    let middlewares = loadDependencyStack(allMiddleware, [], server);
+    let middlewares = loadDependencyStack(manifest.allMiddleware, [], server);
 
     // Get localized state and apply it
     if (!server && typeof window !== 'undefined') {
@@ -68,7 +65,7 @@ export default ({ server = false, registrations = noop } = {}) => {
             initialState = {
                 ...initialState,
                 ...sanitizeInitialState(
-                    lsLoad({ initialState: allInitialStates }),
+                    lsLoad({ initialState: manifest.allInitialStates }),
                 ),
             };
         } else {
@@ -77,11 +74,11 @@ export default ({ server = false, registrations = noop } = {}) => {
     }
 
     // Combine all Top-level reducers into one
-    let rootReducer = combineReducers(allReducers);
+    let rootReducer = combineReducers(manifest.allReducers);
 
     // add redux enhancers
     let enhancers = loadDependencyStack(
-        allEnhancers,
+        manifest.allEnhancers,
         [
             {
                 name: 'applyMiddleware',
@@ -100,9 +97,6 @@ export default ({ server = false, registrations = noop } = {}) => {
         .sort((a, b) => (a.order < b.order ? -1 : a.order > b.order ? 1 : 0))
         .map(({ enhancer }) => enhancer);
 
-    // Avoid replacing existing store.
-    if (store) return store;
-
     // Execute pre store creation callbacks
     middlewares
         .sort((a, b) => a.order - b.order)
@@ -119,7 +113,17 @@ export default ({ server = false, registrations = noop } = {}) => {
         .forEach(({ post }) => post({ store }));
 
     // Allow plugins the ability to interact with store directly
-    pluginRegistration.setStore({ store, allReducers, middlewares });
+    pluginRegistration.setStore({
+        store,
+        allReducers: manifest.allReducers,
+        middlewares,
+    });
 
     return store;
 };
+
+Reactium.Hook.register('store-create', async (config, context) => {
+    context.store = storeCreator(config);
+    console.log('Redux store created.');
+    return Promise.resolve();
+});

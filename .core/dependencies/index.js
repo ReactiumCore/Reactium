@@ -1,7 +1,9 @@
 import op from 'object-path';
+import Reactium from 'reactium-core/sdk';
 
 class ReactiumDependencies {
     constructor() {
+        this.loaded = false;
         this.actions = {};
         this.actionTypes = {};
         this.services = {};
@@ -20,24 +22,10 @@ class ReactiumDependencies {
         ];
     }
 
-    setManifest(manifest) {
-        this.manifest = manifest;
+    _init() {
+        if (this.loaded) return;
 
-        // Provide placeholder for non-core types
-        Object.keys(this.manifest).forEach(type => {
-            if (!this.coreTypes.find(coreType => coreType === type)) {
-                this[type] = {};
-            }
-        });
-    }
-
-    update() {
-        this.setManifest(require('manifest').get());
-        this.init();
-        console.log('[Reactium HMR] - Refreshing dependencies');
-    }
-
-    init() {
+        this.loaded = true;
         this.reducers = this.manifest.allReducers;
         this.actions = this.manifest.allActions;
         this.actionTypes = Object.keys(this.manifest.allActionTypes).reduce(
@@ -65,12 +53,23 @@ class ReactiumDependencies {
                 this[type] = this.manifest[type];
             }
         });
+
+        console.log('Dependencies loaded.');
     }
 }
 
 const dependencies = new ReactiumDependencies();
 
-export default () => dependencies;
+export default () => {
+    if (!dependencies.loaded) {
+        console.warning(
+            new Error('Use of dependencies before dependencies-loaded.'),
+        );
+        throw dependencyError;
+    }
+
+    return dependencies;
+};
 
 export const restHeaders = () => {
     return {};
@@ -78,3 +77,26 @@ export const restHeaders = () => {
 
 // File scoped
 dependencies.manifest = require('manifest').get();
+export const manifest = dependencies.manifest;
+
+Reactium.Hook.register(
+    'dependencies-load',
+    () =>
+        new Promise(resolve => {
+            if (dependencies.loaded) resolve();
+
+            const interval = setInterval(() => {
+                const loaded =
+                    typeof window !== 'undefined' ||
+                    Object.values(dependencies.manifest).reduce(
+                        (loaded, dependency) => loaded && !!dependency,
+                        true,
+                    );
+                if (loaded) {
+                    clearInterval(interval);
+                    dependencies._init();
+                    resolve();
+                }
+            }, 100);
+        }),
+);

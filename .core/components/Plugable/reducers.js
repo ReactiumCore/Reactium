@@ -69,4 +69,5 @@ const controls = (state = {}, action) => {
     }
 };
 
-export default combineReducers({ byId, allIds, controls });
+export default (...reducerArgs) =>
+    combineReducers({ byId, allIds, controls })(...reducerArgs);
