@@ -1,9 +1,8 @@
 import deps from 'dependencies';
-import queryString from 'querystring-browser';
 import op from 'object-path';
 
 export default {
-    updateRoute: ({ history, location, match, route = {}, params }) => (
+    updateRoute: ({ history, location, match, route = {}, params, search }) => (
         dispatch,
         getState,
     ) => {
@@ -28,12 +27,6 @@ export default {
             Router.pathname !== location.pathname
         ) {
             onRouteChange(defaultOnRouteChange);
-        }
-
-        // load route data
-        let search = queryString.parse(location.search.replace(/^\?/, ''));
-        if ('load' in route) {
-            dispatch(route.load(params, search));
         }
 
         dispatch({

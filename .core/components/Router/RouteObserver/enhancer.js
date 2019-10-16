@@ -1,10 +1,12 @@
+import Reactium from 'reactium-core/sdk';
+import queryString from 'querystring-browser';
 import { getHistory } from 'reactium-core/components/Router/browser';
 import { matchPath } from 'react-router';
 import op from 'object-path';
 import getRoutes from '../getRoutes';
 import deps from 'dependencies';
 
-const routeListener = (store, history) => location => {
+const routeListener = (store, history) => async location => {
     const state = store.getState();
     const Router = op.get(state, 'Router', {});
     let routes = op.get(state, 'Routes.routes');
@@ -31,6 +33,24 @@ const routeListener = (store, history) => location => {
                 }) || {};
 
         if (match) {
+            // optionally load route data
+            const search = queryString.parse(
+                location.search.replace(/^\?/, ''),
+            );
+            if ('load' in route && typeof route.load === 'function') {
+                await Promise.resolve(route.load(match.params, search))
+                    .then(thunk => thunk(store.dispatch, store.getState, store))
+                    .then(data =>
+                        Reactium.Hook.run(
+                            'data-loaded',
+                            data,
+                            route,
+                            match.params,
+                            search,
+                        ),
+                    );
+            }
+
             store.dispatch(
                 deps().actions.Router.updateRoute({
                     history,
@@ -44,6 +64,7 @@ const routeListener = (store, history) => location => {
                     match,
                     route,
                     params: match.params,
+                    search,
                 }),
             );
         }
