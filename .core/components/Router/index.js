@@ -1,39 +1,50 @@
-import { connect } from 'react-redux';
-import React from 'react';
-import ClientRouter from './browser';
-import actions from './Routes/actions';
-import getRoutes from './getRoutes';
+import Reactium from 'reactium-core/sdk';
+import React, { useRef, useState, useEffect } from 'react';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 import op from 'object-path';
 
-const mapStateToProps = state => ({
-    Routes: op.get(state, 'Routes', { routes: getRoutes() }),
-});
+export const useRouting = () => {
+    const routesRef = useRef(Reactium.Routing.get());
+    const [value, setValue] = useState(routesRef.current);
 
-const mapDispatchToProps = dispatch => ({
-    init: routes => dispatch(actions.init(routes)),
-});
+    const setState = () => {
+        routesRef.current = Reactium.Routing.get();
+        setValue(routesRef.current);
+    };
 
-class Router extends React.Component {
-    render() {
-        const {
-            server = false,
-            location,
-            context,
-            init,
-            Routes = {},
-        } = this.props;
-        const { routes = [], updated } = Routes;
+    useEffect(() => {
+        setState();
+        return Reactium.Routing.subscribe(setState);
+    }, [Reactium.Routing.updated]);
 
-        return (
-            <ClientRouter
-                updated={updated}
-                routes={routes.length ? routes : this.initRoutes}
-            />
-        );
+    return routesRef.current;
+};
+
+let history;
+export const getHistory = () => {
+    const createHistory =
+        typeof window !== 'undefined' && window.process && window.process.type
+            ? createMemoryHistory
+            : createBrowserHistory;
+
+    if (!history) {
+        history = createHistory();
     }
-}
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Router);
+    return history;
+};
+
+export default () => {
+    const routes = useRouting();
+
+    return (
+        <Router history={getHistory()}>
+            <Switch>
+                {routes.map(({ id, ...route }) => (
+                    <Route {...route} key={id} />
+                ))}
+            </Switch>
+        </Router>
+    );
+};

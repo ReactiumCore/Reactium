@@ -9,18 +9,16 @@ import Reactium from 'reactium-core/sdk';
 import 'reactium-core/redux/storeCreator';
 import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router/server';
-import getRoutes from 'reactium-core/components/Router/getRoutes';
+import 'reactium-core/components/Router/reactium-hooks';
 
 const app = {};
 app.dependencies = global.dependencies = require('dependencies').default;
 
 const renderer = template => async (req, res, context) => {
     await Reactium.Hook.run('dependencies-load');
-
-    const routes = getRoutes();
-
+    await Reactium.Routing.load();
+    const routes = Reactium.Routing.get();
     const { store } = await Reactium.Hook.run('store-create', { server: true });
-
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);
 

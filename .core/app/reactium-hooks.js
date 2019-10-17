@@ -1,6 +1,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import 'reactium-core/redux/storeCreator';
+import 'reactium-core/components/Router/reactium-hooks';
 import deps from 'dependencies';
 import Reactium from 'reactium-core/sdk';
 import { Provider } from 'react-redux';

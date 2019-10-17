@@ -1,11 +1,8 @@
+import Reactium from 'reactium-core/sdk';
 import op from 'object-path';
-import deps from 'dependencies';
 import getComponents from 'dependencies/getComponents';
-import moment from 'moment';
 
-let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
-
-export default () => {
+Reactium.Hook.register('routes-init', async context => {
     const allRoutes = op.get(require('manifest').get(), 'allRoutes', {});
 
     if (!Object.values(allRoutes || {}).length) {
@@ -23,7 +20,7 @@ export default () => {
         }
     }
 
-    let routes = Object.values(allRoutes || {})
+    context.routes = Object.values(allRoutes || {})
         .concat(
             dynamicRoutes.map(route => {
                 let Found = getComponents([{ type: route.component }]);
@@ -68,8 +65,14 @@ export default () => {
                 ];
             }
             return [...rts, route];
-        }, [])
-        .sort((a, b) => (a.order < b.order ? -1 : a.order > b.order ? 1 : 0))
-        .concat([{ component: NotFound, order: 1000 }]);
-    return routes;
-};
+        }, []);
+
+    return Promise.resolve();
+});
+
+Reactium.Hook.register('404-component', async context => {
+    let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
+    context.NotFound = NotFound;
+
+    return Promise.resolve();
+});

@@ -1,19 +1,14 @@
 import Reactium from 'reactium-core/sdk';
 import queryString from 'querystring-browser';
-import { getHistory } from 'reactium-core/components/Router/browser';
+import { getHistory } from './index';
 import { matchPath } from 'react-router';
 import op from 'object-path';
-import getRoutes from '../getRoutes';
 import deps from 'dependencies';
 
 const routeListener = (store, history) => async location => {
     const state = store.getState();
     const Router = op.get(state, 'Router', {});
-    let routes = op.get(state, 'Routes.routes');
-    if (!routes) {
-        routes = getRoutes();
-        store.dispatch(deps().actions.Routes.init(routes));
-    }
+    let routes = Reactium.Routing.get();
 
     const pathChanged =
         !Router.pathname || location.pathname !== Router.pathname;
