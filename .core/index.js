@@ -199,7 +199,7 @@ if (fs.existsSync(`${rootPath}/src/app/server/middleware.js`)) {
     );
 }
 
-_.sortBy(middlewares.filter(_ => _), 'order').forEach(({ use }) => {
+_.sortBy(_.compact(middlewares), 'order').forEach(({ use }) => {
     if (Array.isArray(use)) {
         app.use(...use);
     } else {

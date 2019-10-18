@@ -54,7 +54,7 @@ const usePluginControls = ({ zone, ...defaults }) => {
             op.get(defaults, 'localSortOverride'),
         ],
     }).reduce((defaultControls, [type, options]) => {
-        let defaultControl = _.last(options.filter(option => option));
+        let defaultControl = _.last(_.compact(options));
         op.set(defaultControls, `${type}s.default`, {
             order: 0,
             [type]: defaultControl,
@@ -196,7 +196,7 @@ const pluginZones = ({ zone }) => {
     } else {
         zones.push(zone);
     }
-    return zones.filter(_ => _);
+    return _.compact(zones);
 };
 
 const useCombinedZonePlugins = (plugins = [], zone) => {
