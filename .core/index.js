@@ -14,8 +14,10 @@ import apiConfig from 'appdir/api/config';
 import path from 'path';
 import fs from 'fs';
 import op from 'object-path';
+import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
 import moment from 'moment';
+import Enums from 'reactium-core/sdk/enums';
 
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
@@ -73,15 +75,18 @@ let middlewares = [
         ? {
               name: 'logging',
               use: morgan('combined'),
+              order: Enums.priority.highest,
           }
         : false,
     {
         name: 'cors',
         use: cors(),
+        order: Enums.priority.highest,
     },
     {
         name: 'placeholder',
         use: require('./server/middleware/placeholder'),
+        order: Enums.priority.highest,
     },
     {
         name: 'api',
@@ -94,27 +99,41 @@ let middlewares = [
             logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
             ws: true,
         }),
+        order: Enums.priority.highest,
     },
     // parsers
     {
         name: 'jsonParser',
         use: bodyParser.json(),
+        order: Enums.priority.high,
     },
     {
         name: 'urlEncoded',
         use: bodyParser.urlencoded({ extended: true }),
+        order: Enums.priority.high,
     },
 
     // cookies
     {
         name: 'cookieParser',
         use: cookieParser(),
+        order: Enums.priority.high,
     },
     {
         name: 'cookieSession',
         use: cookieSession({
-            name: 'aljtka4',
-            keys: ['Q2FtZXJvbiBSdWxlcw', 'vT3GtyZKbnoNSdWxlcw'],
+            name: op.get(process.env, 'COOKIE_SESSION_NAME', 'aljtka4'),
+            keys: JSON.parse(
+                op.get(
+                    process.env,
+                    'COOKIE_SESSION_KEYS',
+                    JSON.stringify([
+                        'Q2FtZXJvbiBSdWxlcw',
+                        'vT3GtyZKbnoNSdWxlcw',
+                    ]),
+                ),
+            ),
+            order: Enums.priority.high,
         }),
     },
 ];
@@ -145,12 +164,14 @@ if (process.env.NODE_ENV === 'development') {
             path: '/',
             publicPath,
         }),
+        order: Enums.priority.high,
     });
     middlewares.push({
         name: 'hmr',
         use: wpHotMiddlware(compiler, {
             reload: true,
         }),
+        order: Enums.priority.high,
     });
 }
 
@@ -161,12 +182,14 @@ const staticAssets =
 middlewares.push({
     name: 'static',
     use: staticGzip(staticAssets),
+    order: Enums.priority.neutral,
 });
 
 // default route handler
 middlewares.push({
     name: 'router',
     use: router,
+    order: Enums.priority.neutral,
 });
 
 // Give app an opportunity to change middlewares
@@ -176,16 +199,13 @@ if (fs.existsSync(`${rootPath}/src/app/server/middleware.js`)) {
     );
 }
 
-middlewares
-    .filter(_ => _)
-    .sort(({ order: aOrder = 0 }, { order: bOrder = 0 }) => bOrder - aOrder)
-    .forEach(({ use }) => {
-        if (Array.isArray(use)) {
-            app.use(...use);
-        } else {
-            app.use(use);
-        }
-    });
+_.sortBy(middlewares.filter(_ => _), 'order').forEach(({ use }) => {
+    if (Array.isArray(use)) {
+        app.use(...use);
+    } else {
+        app.use(use);
+    }
+});
 
 // start server on the specified port and binding host
 app.listen(port, '0.0.0.0', function() {

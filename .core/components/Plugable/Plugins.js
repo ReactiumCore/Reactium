@@ -61,7 +61,10 @@ const usePluginControls = ({
         sorts: {
             default: {
                 order: 0,
-                sort: _ => 0,
+                sort: {
+                    sortBy: 'order',
+                    reverse: false,
+                },
             },
         },
     };
@@ -94,17 +97,23 @@ const usePluginControls = ({
         };
     }
 
-    if (typeof globalSort === 'function') {
+    if (typeof globalSort === 'object') {
         controls.sorts.default = {
             order: 0,
-            sort: globalSort,
+            sort: {
+                sortBy: op.get(globalSort, 'sortBy', 'order'),
+                reverse: op.get(globalSort, 'reverse', false),
+            },
         };
     }
 
-    if (typeof localSortOverride === 'function') {
+    if (typeof localSortOverride === 'object') {
         controls.sorts.default = {
             order: 0,
-            sort: localSortOverride,
+            sort: {
+                sortBy: op.get(localSortOverride, 'sortBy', 'order'),
+                reverse: op.get(localSortOverride, 'reverse', false),
+            },
         };
     }
 
@@ -130,17 +139,23 @@ const usePluginControls = ({
             const sort = pluginSorts.find(
                 ({ zone: pluginZone }) => zone === pluginZone,
             );
-            if (sort) controls.sorts[name] = { order: 0, ...sort };
+
+            if (sort)
+                controls.sorts[name] = {
+                    order: 0,
+                    sort: {
+                        sortBy: op.get(sort, 'sort.sortBy', 'order'),
+                        reverse: op.get(sort, 'sort.reverse', false),
+                    },
+                };
             return controls;
         },
         controls,
     );
 
-    const controlSort = (ca, cb) =>
-        ca.order < cb.order ? -1 : ca.order > cb.order ? 1 : 0;
-    controls.mappers = Object.values(controls.mappers).sort(controlSort);
-    controls.filters = Object.values(controls.filters).sort(controlSort);
-    controls.sorts = Object.values(controls.sorts).sort(controlSort);
+    controls.mappers = _.sortBy(Object.values(controls.mappers), 'order');
+    controls.filters = _.sortBy(Object.values(controls.filters), 'order');
+    controls.sorts = _.sortBy(Object.values(controls.sorts), 'order');
 
     return controls;
 };
@@ -153,9 +168,11 @@ const resolveZone = ({ zone, plugins, controls, props }) => {
     controls.filters.forEach(
         ({ filter }) => (PluginComponents = PluginComponents.filter(filter)),
     );
-    controls.sorts.forEach(
-        ({ sort }) => (PluginComponents = PluginComponents.sort(sort)),
-    );
+    controls.sorts.forEach(({ sort }) => {
+        PluginComponents = _.sortBy(PluginComponents, sort.sortBy);
+        if (sort.reverse) PluginComponents = PluginComponents.reverse();
+        return PluginComponents;
+    });
 
     PluginComponents = PluginComponents.reduce(
         (PluginComponents, { id, component, path, paths, ...pluginProps }) => {

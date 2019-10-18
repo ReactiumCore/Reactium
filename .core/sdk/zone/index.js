@@ -15,7 +15,7 @@ const addControl = (
     type,
     name,
     zone,
-    callback,
+    argument,
     order = Enums.priority.neutral,
 ) => {
     const controlType = `plugin${types[type]}s`;
@@ -37,10 +37,10 @@ const addControl = (
         },
     );
 
-    if (name && zone && typeof callback === 'function') {
+    if (name && zone && argument) {
         controls[controlType].push({
             zone,
-            [type]: callback,
+            [type]: argument,
             order,
         });
 
@@ -95,5 +95,13 @@ const removeControl = (type, name, zone) => {
         removeControl(type, ...params);
     };
 });
+
+Zone.addSort = (
+    name,
+    zone,
+    sortBy = 'order',
+    reverse = false,
+    order = Enums.priority.neutral,
+) => addControl('sort', name, zone, { sortBy, reverse }, order);
 
 export default Zone;

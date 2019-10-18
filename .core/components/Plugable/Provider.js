@@ -12,11 +12,9 @@ export default class PlugableProvider extends Component {
     static defaultProps = {
         filter: _ => true,
         mapper: _ => _,
-        sort: (a, b) => {
-            const aOrder = op.get(a, 'order', 0);
-            const bOrder = op.get(b, 'order', 0);
-
-            return aOrder - bOrder;
+        sort: {
+            sortBy: 'order',
+            reverse: false,
         },
     };
 
