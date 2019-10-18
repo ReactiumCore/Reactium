@@ -1,8 +1,8 @@
 import Reactium from 'reactium-core/sdk';
 import { createStore, combineReducers, compose } from 'redux';
 import { applyMiddleware } from 'redux-super-thunk';
-import { pluginRegistration } from 'reactium-core/pluginRegistration';
 import { manifest } from 'dependencies';
+import _ from 'underscore';
 
 let store;
 
@@ -40,7 +40,7 @@ const loadDependencyStack = (dependency, items, isServer) => {
 };
 
 const noop = cb => {};
-const storeCreator = ({ server = false } = {}) => {
+const storeCreator = async ({ server = false } = {}) => {
     // Avoid replacing existing store.
     if (store) return store;
 
@@ -77,43 +77,28 @@ const storeCreator = ({ server = false } = {}) => {
     let rootReducer = combineReducers(manifest.allReducers);
 
     // add redux enhancers
-    let enhancers = loadDependencyStack(
-        manifest.allEnhancers,
-        [
-            {
-                name: 'applyMiddleware',
-                enhancer: applyMiddleware(
-                    ...middlewares
-                        .sort((a, b) =>
-                            a.order < b.order ? -1 : a.order > b.order ? 1 : 0,
-                        )
-                        .map(({ mw }) => mw),
-                ),
-                order: 1000,
-            },
-        ],
-        server,
-    )
-        .sort((a, b) => (a.order < b.order ? -1 : a.order > b.order ? 1 : 0))
-        .map(({ enhancer }) => enhancer);
-
-    // Execute pre store creation callbacks
-    middlewares
-        .sort((a, b) => a.order - b.order)
-        .filter(({ pre }) => pre)
-        .forEach(({ pre }) => pre({ initialState, rootReducer, enhancers }));
+    let enhancers = _.sortBy(
+        loadDependencyStack(
+            manifest.allEnhancers,
+            [
+                {
+                    name: 'applyMiddleware',
+                    enhancer: applyMiddleware(
+                        ..._.sortBy(middlewares, 'order').map(({ mw }) => mw),
+                    ),
+                    order: 1000,
+                },
+            ],
+            server,
+        ),
+        'order',
+    ).map(({ enhancer }) => enhancer);
 
     // Create the store
     store = compose(...enhancers)(createStore)(rootReducer, initialState);
 
-    // Execute post store creation callbacks
-    middlewares
-        .sort((a, b) => a.order - b.order)
-        .filter(({ post }) => post)
-        .forEach(({ post }) => post({ store }));
-
     // Allow plugins the ability to interact with store directly
-    pluginRegistration.setStore({
+    await Reactium.Hook.run('store-created', {
         store,
         allReducers: manifest.allReducers,
         middlewares,
@@ -122,8 +107,12 @@ const storeCreator = ({ server = false } = {}) => {
     return store;
 };
 
-Reactium.Hook.register('store-create', async (config, context) => {
-    context.store = storeCreator(config);
-    console.log('Redux store created.');
-    return Promise.resolve();
-});
+Reactium.Hook.register(
+    'store-create',
+    async (config, context) => {
+        context.store = await storeCreator(config);
+        console.log('Redux store created.');
+        return Promise.resolve();
+    },
+    Reactium.Enums.priority.highest,
+);

@@ -22,11 +22,9 @@ export const App = async () => {
 
     await Reactium.Hook.run('dependencies-load');
     await Reactium.Routing.load();
-
     const { store } = await Reactium.Hook.run('store-create', {
         server: false,
     });
-
     await Reactium.Hook.run('plugin-dependencies');
 
     if (typeof window !== 'undefined') {

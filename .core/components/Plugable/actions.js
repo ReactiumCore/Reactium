@@ -1,4 +1,5 @@
 import deps from 'dependencies';
+import moment from 'moment';
 
 export default {
     addPlugin: ({ id, component, zone, order = 0, ...pluginProps }) => ({
@@ -24,7 +25,10 @@ export default {
     addControls: ({ name, controls }) => ({
         type: deps().actionTypes.ADD_PLUGIN_CONTROLS,
         name,
-        controls,
+        controls: {
+            ...controls,
+            updated: moment().format('HH:mm:ss'),
+        },
     }),
 
     removeControls: name => ({

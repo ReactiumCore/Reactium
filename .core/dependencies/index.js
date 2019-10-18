@@ -99,4 +99,5 @@ Reactium.Hook.register(
                 }
             }, 100);
         }),
+    Reactium.Enums.priority.highest,
 );

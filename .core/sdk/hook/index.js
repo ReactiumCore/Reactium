@@ -2,6 +2,7 @@ import uuid from 'uuid/v4';
 import _ from 'underscore';
 import op from 'object-path';
 import ActionSequence from 'action-sequence';
+import Enums from '../enums';
 
 const noop = () => Promise.resolve();
 
@@ -28,7 +29,7 @@ Hook.unregister = id =>
         op.del(Hook.action, `${action}.${id}`);
     });
 
-Hook.register = (name, callback, order = 100, id) => {
+Hook.register = (name, callback, order = Enums.priority.neutral, id) => {
     id = id || uuid();
     op.set(Hook.action, `${name}.${id}`, { id, order, callback });
     return id;
