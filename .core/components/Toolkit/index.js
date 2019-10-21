@@ -3,9 +3,12 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
+import React from 'react';
 import { connect } from 'react-redux';
-import Toolkit from './Toolkit';
 import deps from 'dependencies';
+import { Plugins } from 'reactium-core/components/Plugable';
+
+const Toolkit = props => <Plugins zone='toolkit' {...props} />;
 
 /**
  * -----------------------------------------------------------------------------
