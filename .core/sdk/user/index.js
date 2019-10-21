@@ -160,14 +160,14 @@ User.can = async (caps, userId) => {
     }
 
     if (op.has(u, ['roles', 'super-admin'])) {
-        return true;
+        return Promise.resolve(true);
     }
 
     await Hook.run('user.can', caps, u);
 
-    return (
+    return Promise.resolve(
         _.intersection(caps, op.get(u, 'capabilities', [])).length ===
-        caps.length
+            caps.length,
     );
 };
 
