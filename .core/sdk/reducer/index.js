@@ -5,6 +5,23 @@ import Enums from '../enums';
 const Reducer = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 
+/**
+  * @api {Function} Reducer.register() register a new redux reducer
+  * @apiName Reducer.register
+  * @apiDescription Register a Redux reducer.
+  * @apiParam {String} pluginName the unique name of your plugin
+  * @apiParam {String} reducer the reducer function
+  * @apiGroup Reducer
+  * @apiExample Example Usage
+const reducer = (state, action) => {
+    if (action.type === 'SOME_ACTION') {
+        return 'some state';
+    }
+    return state;
+};
+
+Reactium.Reducer.register('myPlugin', reducer);
+  */
 Reducer.register = (ID, reducer) => {
     if (!Plugin.ready) {
         console.error(new Error(prematureCallError('Reducer.register()')));
@@ -19,6 +36,15 @@ Reducer.register = (ID, reducer) => {
     }
 };
 
+/**
+  * @api {Function} Reducer.unregister() unregister a new redux reducer
+  * @apiName Reducer.unregister
+  * @apiDescription Remove a Redux reducer.
+  * @apiParam {String} pluginName the unique name of your plugin
+  * @apiGroup Reducer
+  * @apiExample Example Usage
+Reactium.Reducer.unregister('myPlugin');
+  */
 Reducer.unregister = ID => {
     if (!Plugin.ready) {
         console.error(new Error(prematureCallError('Reducer.unregister()')));
