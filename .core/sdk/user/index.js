@@ -98,7 +98,7 @@ User.register = async user => {
 };
 
 /**
- * @function User.find({ objectId, username, email })
+ * @function User.find({ userId, username, email })
  * @description Asyncronously find a user.
  * @param params Query parameters.
  * @property params.email {String} Search by the email field.
@@ -134,7 +134,7 @@ User.find = async ({ userId, username, email }) => {
  * @erturns {Boolean}
  */
 User.isRole = async (role, userId) => {
-    const u = userId ? await User.find({ objectId: userId }) : User.current();
+    const u = userId ? await User.find({ userId }) : User.current();
 
     if (!u) {
         return Promise.reject('invalid userId');
@@ -151,9 +151,9 @@ User.isRole = async (role, userId) => {
  * @erturns {Boolean}
  */
 User.can = async (caps, userId) => {
-    caps = _.isSring(caps) ? String(caps).replace(' ', '') : caps;
+    caps = _.isString(caps) ? String(caps).replace(' ', '') : caps;
     caps = Array.isArray(caps) ? caps : caps.split(',');
-    const u = userId ? await User.find({ objectId: userId }) : User.current();
+    const u = userId ? await User.find({ userId }) : User.current();
 
     if (!u) {
         return Promise.reject('invalid userId');
