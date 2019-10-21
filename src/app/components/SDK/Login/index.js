@@ -165,7 +165,7 @@ let Login = (props, ref) => {
                 <button
                     type='button'
                     onClick={can}
-                    data-caps='Blueprint.creates'
+                    data-caps='Blueprint.create'
                     data-user='HrIE319DdZ'>
                     Can Cam Make Blueprints?
                 </button>
