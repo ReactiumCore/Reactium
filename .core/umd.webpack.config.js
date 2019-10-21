@@ -2,8 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const env = process.env.NODE_ENV || 'development';
 const rootPath = path.resolve(__dirname, '..');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = umd => {
+    const plugins = [];
+    if (env === 'production') {
+        plugins.push(new CompressionPlugin());
+    }
+
     const config = {
         mode: env,
         entry: umd.entry,
@@ -49,6 +55,7 @@ module.exports = umd => {
             },
             [],
         ),
+        plugins,
     };
 
     let override = (umd, config) => config;
