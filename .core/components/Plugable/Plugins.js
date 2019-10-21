@@ -92,7 +92,7 @@ const usePluginControls = ({ zone, ...defaults }) => {
         {},
     );
 
-    const controlSorter = controls => {
+    const controlSorter = (controls = {}) => {
         let controlsEntries = Object.entries(controls);
         // remove default if controls added by plugin
         controlsEntries = controlsEntries.filter(
