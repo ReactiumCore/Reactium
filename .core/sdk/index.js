@@ -5,6 +5,11 @@ import Middleware from './middleware';
 import Zone from './zone';
 import Routing from './routing';
 import Enums from './enums';
+import User from './user';
+import Roles from './roles';
+import Parse from 'appdir/api';
+
+const Cloud = Parse.Cloud;
 
 export default {
     Hook,
@@ -14,4 +19,7 @@ export default {
     Zone,
     Routing,
     Enums,
+    User,
+    Roles,
+    Cloud,
 };
