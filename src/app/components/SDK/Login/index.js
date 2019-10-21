@@ -127,6 +127,11 @@ let Login = (props, ref) => {
         Reactium.User.Role.remove(role, user).then(console.log);
     };
 
+    const getRoles = async e => {
+        const roles = await Reactium.Roles.get();
+        console.log(roles);
+    };
+
     // Renderers
     const render = () => {
         const { form } = stateRef.current;
@@ -182,6 +187,9 @@ let Login = (props, ref) => {
                     data-role='moderator'
                     data-user='zI3KfBsmXF'>
                     Remove Lisa from Moderators
+                </button>
+                <button type='button' onClick={getRoles}>
+                    Roles
                 </button>
             </>
         );
