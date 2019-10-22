@@ -267,8 +267,8 @@ module.exports = {
                 {
                     overwrite: true,
                     version: '>=2.3.16',
-                    destination: '/src/app/plugable',
-                    source: '/tmp/update/src/app/plugable',
+                    destination: '/src/app/plugable/index.js',
+                    source: '/tmp/update/src/app/plugable/index.js',
                 },
                 {
                     overwrite: false,
