@@ -28,11 +28,14 @@ const User = { Role: {} };
  */
 
 /**
- * @function User.auth(username, password)
- * @description Authenticate with the Actinium server.
- * @param username {String}
- * @param password {String}
- * @returns {Promise}
+ * @api {Function} User.auth(username,password) Authenticate with the Actinium server.
+ * @apiDescription Authenticate with the Actinium server.
+ * @apiName User.auth
+ * @apiParam {String} username
+ * @apiParam {String} password
+ * @apiSuccess {Promise}
+ * @apiGroup User
+ *
  */
 User.auth = (username, password) =>
     Parse.User.logIn(username, password)
@@ -44,16 +47,19 @@ User.auth = (username, password) =>
         });
 
 /**
- * @function User.login(username, password)
- * @description Alias of User.auth()
- * @see User.auth()
+ * @api {Function} User.login(username,password) Alias of User.auth()
+ * @apiDescription Alias of User.auth()
+ * @apiName User.login
+ * @apiGroup User
  */
 User.logIn = User.auth;
 
 /**
- * @function User.logOut()
- * @description Invalidate the current user.
- * @returns {Promise}
+ * @api {Function} User.logOut() Invalidate the current user.
+ * @apiDescription Invalidate the current user.
+ * @apiName User.logOut
+ * @apiSuccess {Promise}
+ * @apiGroup User
  */
 User.logOut = async () => {
     const u = Uesr.current();
@@ -71,9 +77,11 @@ User.logOut = async () => {
 };
 
 /**
- * @function User.current()
- * @description Retrieve the current authenticated user.
- * @returns {Object}
+ * @api {Function} User.current() Retrieve the current authenticated user.
+ * @apiDescription Retrieve the current authenticated user.
+ * @apiName User.current
+ * @apiSuccess {Object} user the current user
+ * @apiGroup User
  */
 User.current = () => {
     const u = Parse.User.current();
@@ -81,14 +89,15 @@ User.current = () => {
 };
 
 /**
- * @function User.register({...params})
- * @description Asyncronously create a new user.
- * @param params New user object.
- * @prop params.username {String} [required] Unique username used when authenticating.
- * @prop params.password {String} [required] Password used when authenticating.
- * @prop params.confirm {String} [required] Password confirmation.
- * @prop params.email {String} [required] Email address used when resetting password and for system messaging.
- * @returns {Object} The new user object.
+ * @api {Function} User.register({...params}) Asyncronously create a new user.
+ * @apiDescription Asyncronously create a new user.
+ * @apiName User.register
+ * @apiParam {String} username Unique username used when authenticating.
+ * @apiParam {String} password Password used when authenticating.
+ * @apiParam {String} confirm Password confirmation.
+ * @apiParam {String} email Email address used when resetting password and for system messaging.
+ * @apiSuccess {Promise} user The new user object.
+ * @apiGroup User
  */
 User.register = async user => {
     await Hook.run('user.before.register', user);
@@ -98,13 +107,14 @@ User.register = async user => {
 };
 
 /**
- * @function User.find({ userId, username, email })
- * @description Asyncronously find a user.
- * @param params Query parameters.
- * @property params.email {String} Search by the email field.
- * @property params.userId {String} Search by the objectId field.
- * @property params.username {String} Search by the username field.
- * @returns {Object} The user object.
+ * @api {Function} User.find({userId,username,email}) Asyncronously find a user.
+ * @apiDescription Asyncronously find a user.
+ * @apiName User.find
+ * @apiParam {String} email Search by the email field.
+ * @apiParam {String} userId Search by the objectId field.
+ * @apiParam {String} username Search by the username field.
+ * @apiSuccess {Promise} user The new user object.
+ * @apiGroup User
  */
 User.find = async ({ userId, username, email }) => {
     const current = User.current();
@@ -127,11 +137,12 @@ User.find = async ({ userId, username, email }) => {
 };
 
 /**
- * @function User.isRole(role, userId)
- * @description Asyncronously find out if a user is a member of a specific role.
- * @param role {String} The role to check for.
- * @param userId {String} [optional] The objectId of the user. If empty the current user is used.
- * @erturns {Boolean}
+ * @api {Function} User.isRole(role,userId) Asyncronously find out if a user is a member of a specific role.
+ * @apiDescription Asyncronously find out if a user is a member of a specific role.
+ * @apiName User.isRole
+ * @apiParam {String} role The role to check for.
+ * @apiSuccess {Boolean}
+ * @apiGroup User
  */
 User.isRole = async (role, userId) => {
     const u = userId ? await User.find({ userId }) : User.current();
@@ -144,11 +155,13 @@ User.isRole = async (role, userId) => {
 };
 
 /**
- * @function User.can(capabilities, userId)
- * @description Asyncronously find out if a user has a set of capabilities.
- * @param capabilities {String|Array} The capabilities to check for. **Note: User must have all of the capabilities you are checking for.
- * @param userId {String} [optional] The objectId of the user. If empty the current user is used.
- * @erturns {Boolean}
+ * @api {Function} User.can(capabilities,userId) Asyncronously find out if a user has a set of capabilities.
+ * @apiDescription Asyncronously find out if a user has a set of capabilities.
+ * @apiName User.can
+ * @apiParam {String|Array} capabilities The capabilities to check for. **Note: User must have all of the capabilities you are checking for.
+ * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
+ * @apiSuccess {Boolean}
+ * @apiGroup User
  */
 User.can = async (caps, userId) => {
     caps = _.isString(caps) ? String(caps).replace(' ', '') : caps;
@@ -172,11 +185,13 @@ User.can = async (caps, userId) => {
 };
 
 /**
- * @function User.Role.add(role, userId)
- * @description Asyncronously add a user to a role.
- * @param role {String} The role name. Example: 'super-admin'.
- * @param userId {String} [optional] The objectId of the user. If empty the current user is used.
- * @returns {Object} The updated user object.
+ * @api {Function} User.Role.add(role, userId) Asyncronously add a user to a role.
+ * @apiDescription Asyncronously add a user to a role.
+ * @apiName User.Role.add
+ * @apiParam {String} role The role name. Example: 'super-admin'.
+ * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
+ * @apiSuccess {Promise} user The updated user object.
+ * @apiGroup User
  */
 User.Role.add = async (role, userId) => {
     const u = userId || op.get(User.current(), 'objectId');
@@ -193,11 +208,13 @@ User.Role.add = async (role, userId) => {
 };
 
 /**
- * @function User.Role.remove(role, userId)
- * @description Asyncronously remove a user to a role.
- * @param role {String} The role name. Example: 'super-admin'.
- * @param userId {String} [optional] The objectId of the user. If empty the current user is used.
- * @returns {Object} The updated user object.
+ * @api {Function} User.Role.remove(role, userId) Asyncronously remove a user to a role.
+ * @apiDescription Asyncronously remove a user to a role.
+ * @apiName User.Role.remove
+ * @apiParam {String} role The role name. Example: 'super-admin'.
+ * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
+ * @apiSuccess {Promise} user The updated user object.
+ * @apiGroup User
  */
 User.Role.remove = (role, userId) => {
     const u = userId || op.get(User.current(), 'objectId');
