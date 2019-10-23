@@ -7,6 +7,7 @@ import Routing from './routing';
 import Enums from './enums';
 import User from './user';
 import Roles from './roles';
+import Cache from './cache';
 import Parse from 'appdir/api';
 
 const Cloud = Parse.Cloud;
@@ -22,4 +23,5 @@ export default {
     User,
     Roles,
     Cloud,
+    Cache,
 };
