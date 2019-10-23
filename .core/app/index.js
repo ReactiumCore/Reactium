@@ -5,10 +5,10 @@
  * Includes
  * -----------------------------------------------------------------------------
  */
-import './reactium-hooks';
 import Reactium from 'reactium-core/sdk';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -35,6 +35,8 @@ export const App = async () => {
         const { PlugableProvider } = await Reactium.Hook.run(
             'app-plugable-provider',
         );
+
+        const { history } = await Reactium.Hook.run('history-create');
         const { Router } = await Reactium.Hook.run('app-router');
 
         // Render the React Components
@@ -64,7 +66,7 @@ export const App = async () => {
                 <Provider store={store}>
                     <PlugableProvider {...plugableConfig}>
                         <>
-                            <Router />
+                            <Router history={history} />
                         </>
                     </PlugableProvider>
                 </Provider>,

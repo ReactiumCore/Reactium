@@ -1,6 +1,7 @@
 import Reactium from 'reactium-core/sdk';
 import op from 'object-path';
 import getComponents from 'dependencies/getComponents';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 
 Reactium.Hook.register(
     'routes-init',
@@ -79,6 +80,30 @@ Reactium.Hook.register(
     async context => {
         let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
         context.NotFound = NotFound;
+
+        return Promise.resolve();
+    },
+    Reactium.Enums.priority.highest,
+);
+
+let history;
+const getHistory = () => {
+    const createHistory =
+        typeof window !== 'undefined' && window.process && window.process.type
+            ? createMemoryHistory
+            : createBrowserHistory;
+
+    if (!history) {
+        history = createHistory();
+    }
+
+    return history;
+};
+
+Reactium.Hook.register(
+    'history-create',
+    async context => {
+        context.history = getHistory();
 
         return Promise.resolve();
     },

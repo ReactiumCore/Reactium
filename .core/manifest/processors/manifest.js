@@ -2,7 +2,7 @@ const op = require('object-path');
 
 module.exports = data => {
     const types = Object.entries(data.manifest).map(([name, typeDomains]) => {
-        const domainRegExp = new RegExp(`\/([A-Za-z_0-9]+?)\/[A-Za-z_0-9]+$`);
+        const domainRegExp = new RegExp(`\/([A-Za-z_0-9-]+?)\/[A-Za-z_0-9-]+$`);
         const { imports, type } = typeDomains;
         const domains = imports
             .map(file => file.replace(/\\/g, '/'))

@@ -49,7 +49,11 @@ class ReactiumDependencies {
 
         // Resolve non-core types as dependencies
         Object.keys(this.manifest).forEach(type => {
-            if (!this.coreTypes.find(coreType => coreType === type)) {
+            if (
+                !this.coreTypes.find(
+                    coreType => coreType === type || type === 'allHooks',
+                )
+            ) {
                 this[type] = this.manifest[type];
             }
         });
@@ -88,10 +92,12 @@ Reactium.Hook.register(
             const interval = setInterval(() => {
                 const loaded =
                     typeof window !== 'undefined' ||
-                    Object.values(dependencies.manifest).reduce(
-                        (loaded, dependency) => loaded && !!dependency,
-                        true,
-                    );
+                    Object.entries(dependencies.manifest)
+                        .filter(([type]) => type !== 'allHooks')
+                        .reduce(
+                            (loaded, [, dependency]) => loaded && !!dependency,
+                            true,
+                        );
                 if (loaded) {
                     clearInterval(interval);
                     dependencies._init();

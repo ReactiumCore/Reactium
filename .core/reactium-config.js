@@ -124,6 +124,11 @@ const defaultManifestConfig = {
             type: 'plugin',
             pattern: /plugin.jsx?$/,
         },
+        {
+            name: 'allHooks',
+            type: 'hooks',
+            pattern: /reactium-hooks.js$/,
+        },
     ],
     sourceMappings: [
         {

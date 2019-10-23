@@ -1,6 +1,5 @@
 import Reactium from 'reactium-core/sdk';
 import queryString from 'querystring-browser';
-import { getHistory } from './index';
 import { matchPath } from 'react-router';
 import op from 'object-path';
 import deps from 'dependencies';
@@ -75,9 +74,18 @@ export default (enhancers = [], isServer = false) => {
                 ? _ => _
                 : storeCreator => (...args) => {
                       const store = storeCreator(...args);
-                      const history = getHistory();
-                      routeListener(store, history)(window.location);
-                      history.listen(routeListener(store, history));
+
+                      Reactium.Hook.register(
+                          'history-create',
+                          async ({ history }) => {
+                              routeListener(store, history)(window.location);
+                              history.listen(routeListener(store, history));
+
+                              return Promise.resolve();
+                          },
+                          Reactium.Enums.priority.high,
+                      );
+
                       return store;
                   },
         },

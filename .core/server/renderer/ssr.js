@@ -9,10 +9,10 @@ import Reactium from 'reactium-core/sdk';
 import 'reactium-core/redux/storeCreator';
 import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router/server';
-import 'reactium-core/components/Router/reactium-hooks';
+import deps from 'dependencies';
 
 const app = {};
-app.dependencies = global.dependencies = require('dependencies').default;
+app.dependencies = global.dependencies = deps;
 
 const renderer = template => async (req, res, context) => {
     await Reactium.Hook.run('dependencies-load');
