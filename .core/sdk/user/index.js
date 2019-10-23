@@ -170,10 +170,15 @@ User.can = async (caps, userId, strict) => {
     caps = Array.isArray(caps) ? caps : caps.split(',');
 
     userId = userId || op.get(User.current(), 'objectId');
+
+    if (!userId) {
+        return Promise.resolve(false);
+    }
+
     const u = await User.find({ userId });
 
     if (!u) {
-        return Promise.reject('invalid userId');
+        return Promise.resolve(false);
     }
 
     if (op.has(u, ['roles', 'super-admin'])) {
