@@ -20,6 +20,7 @@ import 'dependencies';
 export const App = async () => {
     const context = {};
 
+    await Reactium.Hook.run('init');
     await Reactium.Hook.run('dependencies-load');
     await Reactium.Routing.load();
     const { store } = await Reactium.Hook.run('store-create', {
