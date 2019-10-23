@@ -145,7 +145,8 @@ User.find = async ({ userId, username, email }) => {
  * @apiGroup User
  */
 User.isRole = async (role, userId) => {
-    const u = userId ? await User.find({ userId }) : User.current();
+    userId = userId || op.get(User.current(), 'objectId');
+    const u = await User.find({ userId });
 
     if (!u) {
         return Promise.reject('invalid userId');
@@ -160,13 +161,16 @@ User.isRole = async (role, userId) => {
  * @apiName User.can
  * @apiParam {String|Array} capabilities The capabilities to check for. **Note: User must have all of the capabilities you are checking for.
  * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
+ * @apiParam {Boolean} [strict=false] Compare capabilities where the user must have all capabilities `[true]`, or at least 1 `[false]`.
  * @apiSuccess {Boolean}
  * @apiGroup User
  */
-User.can = async (caps, userId) => {
+User.can = async (caps, userId, strict) => {
     caps = _.isString(caps) ? String(caps).replace(' ', '') : caps;
     caps = Array.isArray(caps) ? caps : caps.split(',');
-    const u = userId ? await User.find({ userId }) : User.current();
+
+    userId = userId || op.get(User.current(), 'objectId');
+    const u = await User.find({ userId });
 
     if (!u) {
         return Promise.reject('invalid userId');
@@ -178,10 +182,16 @@ User.can = async (caps, userId) => {
 
     await Hook.run('user.can', caps, u);
 
-    return Promise.resolve(
-        _.intersection(caps, op.get(u, 'capabilities', [])).length ===
-            caps.length,
-    );
+    if (strict === true) {
+        return Promise.resolve(
+            _.intersection(caps, op.get(u, 'capabilities', [])).length ===
+                caps.length,
+        );
+    } else {
+        return Promise.resolve(
+            _.intersection(caps, op.get(u, 'capabilities', [])).length > 0,
+        );
+    }
 };
 
 /**
