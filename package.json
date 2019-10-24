@@ -43,7 +43,7 @@
     "@babel/cli": "^7.6.2",
     "@babel/node": "^7.6.2",
     "@loadable/component": "^5.10.3",
-    "action-sequence": "^1.0.6",
+    "action-sequence": "^1.1.1",
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "classnames": "^2.2.6",

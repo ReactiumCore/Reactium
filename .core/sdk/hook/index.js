@@ -84,20 +84,16 @@ Hook.list = () => Object.keys(Hook.action).sort();
  * @apiGroup Hook
  */
 Hook.run = (name, ...params) => {
-    const context = { hook: name, params };
-
     const actions = _.sortBy(
         Object.values(op.get(Hook.action, `${name}`, {})),
         'order',
     ).reduce((acts, action) => {
         const { callback = noop, id } = action;
-        acts[id] = () => callback(...params, context);
+        acts[id] = ({ context }) => callback(...params, context);
         return acts;
     }, {});
 
-    return ActionSequence({ actions }).then(() => {
-        return context;
-    });
+    return ActionSequence({ actions, context: { hook: name, params } });
 };
 
 export default Hook;

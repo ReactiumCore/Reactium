@@ -51,34 +51,31 @@ Roles.create = (roleObj = {}, options = { useMasterKey }) => {
         },
     ];
 
-    let updatedRoles = {};
-
     return ActionSequence({
+        context: { updatedRoles: {} },
         actions: {
             create: () =>
                 Parse.Cloud.run('role-create', { roleArray }, options),
-            roles: async () => {
-                updateRoles = await Roles.get();
-                return Promise.resolve();
+            roles: async ({ context }) => {
+                context.updatedRoles = await Roles.get();
             },
-            hook: () => Hook.run('role.created', role, updatedRoles),
+            hook: ({ context }) =>
+                Hook.run('role.created', role, context.updatedRoles),
         },
     });
 };
 
-Roles.remove = (role, options = { useMasterKey }) => {
-    let updatedRoles = {};
-
-    return ActionSequence({
+Roles.remove = (role, options = { useMasterKey }) =>
+    ActionSequence({
+        context: { updatedRoles: {} },
         actions: {
             remove: () => Parse.Cloud.run('role-remove', { role }, options),
-            roles: async () => {
-                updateRoles = await Roles.get();
-                return Promise.resolve();
+            roles: async ({ context }) => {
+                context.updatedRoles = await Roles.get();
             },
-            hook: () => Hook.run('role.removed', role, updatedRoles),
+            hook: ({ context }) =>
+                Hook.run('role.removed', role, context.updatedRoles),
         },
     });
-};
 
 export default Roles;
