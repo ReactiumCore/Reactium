@@ -62,7 +62,7 @@ User.logIn = User.auth;
  * @apiGroup User
  */
 User.logOut = async () => {
-    const u = Uesr.current();
+    const u = User.current();
 
     await Hook.run('user.before.logout', u);
 
