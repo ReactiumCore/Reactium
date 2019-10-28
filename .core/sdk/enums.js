@@ -1,4 +1,7 @@
 export default {
+    cache: {
+        settings: 1000 * 90,
+    },
     priority: {
         highest: -1000,
         high: -500,

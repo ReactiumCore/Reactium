@@ -89,6 +89,21 @@ User.current = () => {
 };
 
 /**
+ * @api {Function} User.getSessionToken() Get the current session token.
+ * @apiDescription If the user is logged in, get the current session token.
+ * @apiName User.getSessionToken
+ * @apiGroup User
+ */
+User.getSessionToken = () => {
+    const u = User.current();
+    if ('getSessionToken' in u) {
+        return u.getSessionToken();
+    }
+
+    return false;
+};
+
+/**
  * @api {Function} User.register({...params}) Asyncronously create a new user.
  * @apiDescription Asyncronously create a new user.
  * @apiName User.register
