@@ -95,7 +95,7 @@ User.current = () => {
  * @apiGroup User
  */
 User.getSessionToken = () => {
-    const u = User.current();
+    const u = Parse.User.current();
     if ('getSessionToken' in u) {
         return u.getSessionToken();
     }

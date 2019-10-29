@@ -92,11 +92,8 @@ Reactium.Setting.get('site.hostname');
  */
 Setting.get = async (key, refresh = false) => {
     const session = User.getSessionToken();
-    let cached = Cache.get(
-        _.compact(['setting', key, 'session', session]),
-        value,
-        Enums.cache.settings,
-    );
+
+    const cached = Cache.get(_.compact(['setting', key, 'session', session]));
     if (cached && !refresh) return cached;
     const { value } = await Parse.Cloud.run('setting-get', { key });
 
