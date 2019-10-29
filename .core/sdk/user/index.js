@@ -96,11 +96,7 @@ User.current = () => {
  */
 User.getSessionToken = () => {
     const u = Parse.User.current();
-    if ('getSessionToken' in u) {
-        return u.getSessionToken();
-    }
-
-    return false;
+    return op.get(u, 'getSessionToken', () => false)();
 };
 
 /**
