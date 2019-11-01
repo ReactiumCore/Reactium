@@ -33,7 +33,6 @@ const User = { Role: {} };
  * @apiName User.auth
  * @apiParam {String} username
  * @apiParam {String} password
- * @apiSuccess {Promise}
  * @apiGroup User
  *
  */
@@ -58,7 +57,6 @@ User.logIn = User.auth;
  * @api {Function} User.logOut() Invalidate the current user.
  * @apiDescription Invalidate the current user.
  * @apiName User.logOut
- * @apiSuccess {Promise}
  * @apiGroup User
  */
 User.logOut = async () => {
@@ -152,7 +150,6 @@ User.find = async ({ userId, username, email }) => {
  * @apiDescription Asyncronously find out if a user is a member of a specific role.
  * @apiName User.isRole
  * @apiParam {String} role The role to check for.
- * @apiSuccess {Boolean}
  * @apiGroup User
  */
 User.isRole = async (role, userId) => {
@@ -170,10 +167,9 @@ User.isRole = async (role, userId) => {
  * @api {Function} User.can(capabilities,userId) Asyncronously find out if a user has a set of capabilities.
  * @apiDescription Asyncronously find out if a user has a set of capabilities.
  * @apiName User.can
- * @apiParam {String|Array} capabilities The capabilities to check for. **Note: User must have all of the capabilities you are checking for.
+ * @apiParam {Mixed} capabilities The capability(s) to check for (string or array). **Note: User must have all of the capabilities you are checking for.
  * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
  * @apiParam {Boolean} [strict=false] Compare capabilities where the user must have all capabilities `[true]`, or at least 1 `[false]`.
- * @apiSuccess {Boolean}
  * @apiGroup User
  */
 User.can = async (caps, userId, strict) => {

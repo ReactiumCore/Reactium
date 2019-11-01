@@ -24,7 +24,7 @@ const reactiumConfig = require('./reactium-config');
 const regenManifest = require('./manifest/manifest-tools');
 const umdWebpackGenerator = require('./umd.webpack.config');
 const rootPath = path.resolve(__dirname, '..');
-const { fork } = require('child_process');
+const { fork, spawn } = require('child_process');
 const workbox = require('workbox-build');
 
 // For backward compatibility with gulp override tasks using run-sequence module
@@ -179,8 +179,33 @@ const reactium = (gulp, config, webpackConfig) => {
         task('umdLibraries'),
         task('serviceWorker'),
         task('compress'),
+        task('apidocs'),
         task('postBuild'),
     );
+
+    const apidocs = done => {
+        if (!isDev) done();
+
+        const args = ['docs', '-s', config.docs.src, '-d', config.docs.dest];
+
+        if (config.docs.verbose) args.push('-V');
+
+        const ps = spawn('arcli', args);
+        ps.stderr.on('data', data => {
+            console.error(data.toString());
+        });
+
+        if (config.docs.verbose) {
+            ps.stdout.on('data', data => {
+                console.log(data.toString());
+            });
+        }
+
+        ps.on('close', code => {
+            if (code !== 0) console.log('Error creating apidocs.');
+            done();
+        });
+    };
 
     const clean = done => {
         // Remove build files
@@ -443,6 +468,7 @@ const reactium = (gulp, config, webpackConfig) => {
     };
 
     const tasks = {
+        apidocs,
         local: local(),
         'local:ssr': local({ ssr: true }),
         assets,

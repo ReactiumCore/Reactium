@@ -118,6 +118,11 @@ const defaultConfig = {
             assets: '/assets',
         },
     },
+    docs: {
+        src: '.core,src/app',
+        dest: 'public/docs',
+        verbose: false,
+    },
 };
 
 let gulpConfigOverride = _ => _;

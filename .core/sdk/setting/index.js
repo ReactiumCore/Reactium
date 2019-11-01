@@ -10,6 +10,7 @@ const Setting = {};
 /**
  * @api {Function} Setting.load(autoRefresh) Load all settings, with cache.
  * @apiName Setting.load
+ * @apiGroup Setting
  * @apiDescription Load all settings, with cache. When called multiple times in the cache period,
  the result will come from memory cache.
  * @apiParam {Boolean} [autoRefresh=true] when true, settings will be automatically loaded again
