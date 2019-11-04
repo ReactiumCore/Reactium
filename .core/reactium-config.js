@@ -265,6 +265,12 @@ module.exports = {
             add: [
                 {
                     overwrite: true,
+                    version: '>=3.1.0',
+                    destination: '/apidoc.json',
+                    source: '/tmp/update/apidoc.json',
+                },
+                {
+                    overwrite: true,
                     version: '>=3.0.0',
                     destination: '/Dockerfile',
                     source: '/tmp/update/Dockerfile',

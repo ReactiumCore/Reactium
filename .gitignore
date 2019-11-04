@@ -63,6 +63,9 @@ public
 build
 lib
 
+# generated apidoc documentation
+./docs
+
 # OS generated files
 .DS_Store
 .Spotlight-V100

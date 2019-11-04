@@ -53,12 +53,12 @@ There are a many reasons why, but the most important ones to us are:
 ## Reactium Features
 
 -   **Fast Local Development Workflow:** Javascript tooling is hard, laborious, and annoying. We've spent a lot of time working through dozens of _"what if..."_ scenarios to deliver a minimal pain dev workflow!
--   **Built-in Design System:** No need to have a separate design system like Pattern Lab or Storybook. [Learn more](https://github.com/Atomic-Reactor/Reactium/blob/master/docs/design-system.md).
+-   **Built-in Design System:** No need to have a separate design system like Pattern Lab or Storybook. [Learn more](https://github.com/Atomic-Reactor/Reactium/blob/master/markdown/design-system.md).
 -   **Robust Command Line Interface:** Reactium heavily relies on boiler-plated code to normalize and ease the dev workflow. Creating a component or a design system element can be done with the stroke of a few keys. No need to memorize all the commands either, you can use `--flags` or follow prompts. You can even customize the CLI by replacing or creating your own commands. [Learn more](https://www.npmjs.com/package/atomic-reactor-cli).
 -   **Easy Deployment:** Reactium creates a Node server for both front-end and server side rendering making it easy to deploy to the host of your choice. We even have a docker setup included for you dev-opers.
 -   **Single Page App or Isolated Component Development:** Build anything from a full website to a single component and package for distribution.
 -   **Built-in Redux Support:** Learning Redux can be hard. Sure you might have the basics down but building an application with it can quickly escalate to frustration and nightmares. Our simple Redux pattern makes it super easy to build stateful applications. Learn more about [Redux](https://redux.js.org/).
 -   **Built-in React Router Support**: Build routed websites in a single application with no additional setup. Learn more about [React Router](https://reacttraining.com/react-router/web/guides/quick-start)
--   **Plugin Architecture**: Dynamic composition where there's no need to hard code `import` statements through out your codebase. Simply identify "zones" where components can be injected. [Learn more](https://github.com/Atomic-Reactor/Reactium/blob/master/docs/plugins.md).
+-   **Plugin Architecture**: Dynamic composition where there's no need to hard code `import` statements through out your codebase. Simply identify "zones" where components can be injected. [Learn more](https://github.com/Atomic-Reactor/Reactium/blob/master/markdown/plugins.md).
 
-[More documentation](https://github.com/Atomic-Reactor/Reactium/tree/master/docs).
+[More documentation](https://github.com/Atomic-Reactor/Reactium/tree/master/markdown).
