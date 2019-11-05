@@ -5,8 +5,8 @@ const gulpConfig = require('./gulp.config');
 
 const contextMode = () => {
     if (
-        process.env.NODE_ENV !== 'development' ||
-        process.env.LAZY_GET_COMPONENTS === 'on'
+        process.env.NODE_ENV !== 'development' &&
+        process.env.LAZY_GET_COMPONENTS !== 'off'
     ) {
         return 'lazy-once';
     }

@@ -1,6 +1,6 @@
 import Parse from 'appdir/api';
 import Cache from '../cache';
-import User from '../user';
+import Hook from '../hook';
 import Enums from '../enums';
 import _ from 'underscore';
 import moment from 'moment';
@@ -18,8 +18,6 @@ const Setting = {};
  * @apiSuccess {Object} settings an object with setting the current user has access to.
  */
 Setting.load = async (autoRefresh = true) => {
-    const session = User.getSessionToken();
-
     if (Cache.get('settings.loaded')) {
         const cached = Cache.get('setting');
         return cached;
@@ -30,12 +28,8 @@ Setting.load = async (autoRefresh = true) => {
     Cache.set('settings.loaded', ...cacheLoadedArgs);
 
     const settings = await Parse.Cloud.run('settings');
-    Object.entries(settings).forEach(([key, value]) => {
-        Cache.set(
-            _.compact(['setting', key, 'session', session]),
-            value,
-            Enums.cache.settings,
-        );
+    Object.entries(settings).forEach(([group = '', value]) => {
+        Cache.set(['setting', group], value, Enums.cache.settings);
     });
 
     return settings;
@@ -52,18 +46,20 @@ Setting.load = async (autoRefresh = true) => {
  * @apiExample Example Usage:
 Reactium.Setting.set('site', { title: 'My Awesome Site', hostname: 'mysite.com' });
  */
-Setting.set = async (key, value, setPublic = false) => {
-    const session = User.getSessionToken();
+Setting.set = async (key = '', value, setPublic = false) => {
+    const settingPath = key.split('.');
+    const [group] = settingPath;
+
+    // refresh entire setting group if needed
+    Setting.get(group);
+
     const setting = await Parse.Cloud.run('setting-set', {
         key,
         value,
         public: setPublic,
     });
-    Cache.set(
-        _.compact(['setting', key, 'session', session]),
-        value,
-        Enums.cache.settings,
-    );
+
+    Cache.set(['setting'].concat(settingPath), value, Enums.cache.settings);
 };
 
 /**
@@ -75,10 +71,9 @@ Setting.set = async (key, value, setPublic = false) => {
  * @apiExample Example Usage:
 Reactium.Setting.unset('site.title');
  */
-Setting.unset = async key => {
-    const session = User.getSessionToken();
+Setting.unset = async (key = '') => {
     const setting = await Parse.Cloud.run('setting-unset', { key });
-    Cache.del(_.compact(['setting', key]), value);
+    Cache.del(['setting'].concat(key.split('.')));
 };
 
 /**
@@ -91,19 +86,25 @@ Setting.unset = async key => {
  * @apiExample Example Usage:
 Reactium.Setting.get('site.hostname');
  */
-Setting.get = async (key, refresh = false) => {
-    const session = User.getSessionToken();
-
-    const cached = Cache.get(_.compact(['setting', key, 'session', session]));
+Setting.get = async (key = '', refresh = false) => {
+    const settingPath = key.split('.');
+    const [group] = settingPath;
+    const cached = Cache.get(['setting'].concat(settingPath));
     if (cached && !refresh) return cached;
-    const { value } = await Parse.Cloud.run('setting-get', { key });
 
-    Cache.set(
-        _.compact(['setting', key, 'session', session]),
-        value,
-        Enums.cache.settings,
-    );
-    return value;
+    // refresh the whole setting group
+    const value = await Parse.Cloud.run('setting-get', { key: group });
+    Cache.set(['setting', group], value, Enums.cache.settings);
+
+    return Cache.get(['setting'].concat(settingPath));
 };
+
+const clearSettings = async () => {
+    Cache.del('setting');
+    Cache.del('settings.loaded');
+};
+
+Hook.register('user.auth', clearSettings);
+Hook.register('user.after.logout', clearSettings);
 
 export default Setting;
