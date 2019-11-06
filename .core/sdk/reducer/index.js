@@ -15,7 +15,7 @@ const prematureCallError = Enums.Plugin.prematureCallError;
   3. or after `Reactium.Plugin.ready === true`.
   * @apiParam {String} pluginName the unique name of your plugin
   * @apiParam {String} reducer the reducer function
-  * @apiGroup Reducer
+  * @apiGroup Reactium.Reducer
   * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 const reducer = (state, action) => {
@@ -50,7 +50,7 @@ Reducer.register = (ID, reducer) => {
   1. within `Reactium.Plugin.register()` promise callback,
   2. or after the `plugin-dependencies` hook, (e.g. `plugin-init`)
   3. or after `Reactium.Plugin.ready === true`.
-  * @apiGroup Reducer
+  * @apiGroup Reactium.Reducer
   * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 Reactium.Reducer.unregister('myPlugin');

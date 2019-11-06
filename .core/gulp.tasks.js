@@ -188,14 +188,15 @@ const reactium = (gulp, config, webpackConfig) => {
 
         const args = ['docs', '-s', config.docs.src, '-d', config.docs.dest];
 
-        if (config.docs.verbose) args.push('-V');
+        const verbose = config.docs.verbose || process.env.VERBOSE_API_DOCS;
+        if (verbose) args.push('-V');
 
         const ps = spawn('arcli', args);
         ps.stderr.on('data', data => {
             console.error(data.toString());
         });
 
-        if (config.docs.verbose) {
+        if (verbose) {
             ps.stdout.on('data', data => {
                 console.log(data.toString());
             });

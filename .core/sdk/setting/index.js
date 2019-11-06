@@ -10,7 +10,7 @@ const Setting = {};
 /**
  * @api {Function} Setting.load(autoRefresh) Load all settings, with cache.
  * @apiName Setting.load
- * @apiGroup Setting
+ * @apiGroup Reactium.Setting
  * @apiDescription Load all settings, with cache. When called multiple times in the cache period,
  the result will come from memory cache.
  * @apiParam {Boolean} [autoRefresh=true] when true, settings will be automatically loaded again
@@ -37,7 +37,7 @@ Setting.load = async (autoRefresh = true) => {
 
 /**
  * @api {Function} Setting.set(key,value) Setting.set()
- * @apiGroup Setting
+ * @apiGroup Reactium.Setting
  * @apiName Setting.set
  * @apiDescription Create or update a setting value. Returns a `{Promise}`.
  * @apiParam {String} key The unique setting key.
@@ -64,7 +64,7 @@ Setting.set = async (key = '', value, setPublic = false) => {
 
 /**
  * @api {Function} Setting.unset(key) Unset a setting value
- * @apiGroup Setting
+ * @apiGroup Reactium.Setting
  * @apiName Setting.unset
  * @apiDescription Unset a setting value. Returns a `{Promise}`.
  * @apiParam {String} key The unique setting key.
@@ -78,7 +78,7 @@ Setting.unset = async (key = '') => {
 
 /**
  * @api {Function} Setting.get(key,refresh) Gett a setting value.
- * @apiGroup Setting
+ * @apiGroup Reactium.Setting
  * @apiName Setting.get
  * @apiDescription Get a setting value.
  * @apiParam {String} key The unique setting key.

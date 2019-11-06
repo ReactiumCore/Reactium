@@ -9,6 +9,10 @@ import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router';
 import getComponents from 'dependencies/getComponents';
 
+Reactium.Hook.register('init', async () => {
+    require('manifest').externals();
+});
+
 Reactium.Hook.register(
     'component-bindings',
     async context => {
@@ -79,7 +83,6 @@ Reactium.Hook.register(
     'plugin-dependencies',
     context => {
         // Setup plugin registration
-        require('manifest').externals();
         context.deps = deps();
 
         console.log('Plugin dependencies.');

@@ -36,11 +36,6 @@ const defaultLibraryExternals = {
         externalName: '/^gsap.*$/',
         requirePath: 'gsap/umd/TweenMax',
     },
-    'reactium-core/easy-connect': {
-        externalName: '/easy-connect$/',
-        // relative to src/manifest.js
-        requirePath: 'reactium-core/easy-connect',
-    },
     underscore: {
         externalName: 'underscore',
         requirePath: 'underscore',

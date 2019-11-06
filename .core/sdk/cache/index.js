@@ -2,14 +2,14 @@
  * @api {Object} Reactium.Cache Cache
  * @apiVersion 3.0.3
  * @apiName Cache
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiDescription Cache allows you to easily store application data in memory.
  */
 
 /**
  * @api {Function} Reactium.Cache.get(key) Cache.get()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.get
  * @apiDescription Retrieves the value for a given key. If the value is not cached `null` is returned.
  *
@@ -25,7 +25,7 @@
 /**
  * @api {Function} Reactium.Cache.set(key,value,timeout,timeoutCallback) Cache.set()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.set
  * @apiDescription Sets the value for a given key. If the value is an `{Object}` and is already cached, you can use an object path to update a specific part of the value. Returns the cached value.
  *
@@ -49,7 +49,7 @@
 /**
  * @api {Function} Reactium.Cache.del(key) Cache.del()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.del
  * @apiDescription Delete the value for a given key. Returns `{Boolean}`.
  *
@@ -64,7 +64,7 @@
 /**
  * @api {Function} Reactium.Cache.clear() Cache.clear()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.clear
  * @apiDescription Delete all cached values.
  *
@@ -77,7 +77,7 @@
 /**
  * @api {Function} Reactium.Cache.size() Cache.size()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.size
  * @apiDescription Returns the current number of entries in the cache.
  */
@@ -85,7 +85,7 @@
 /**
  * @api {Function} Reactium.Cache.memsize() Cache.memsize()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.memsize
  * @apiDescription Returns the number of entries taking up space in the cache.
  */
@@ -93,7 +93,7 @@
 /**
  * @api {Function} Reactium.Cache.merge(values) Cache.merge()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.merge
  * @apiDescription Merges the supplied values object with the current cache. Any existing entries will remain in cache. Duplicates will be overwritten unless `option.skipDuplicates` is `true`. Entries that would have exipired since being merged will expire upon merge but their timeoutCallback will not be invoked. Returns the new size of the cache.
  *
@@ -116,7 +116,7 @@
 /**
  * @api {Function} Reactium.Cache.keys() Cache.keys()
  * @apiVersion 3.0.3
- * @apiGroup Reactium
+ * @apiGroup Reactium.Cache
  * @apiName Cache.keys
  * @apiDescription Returns an array of the cached keys.
  */

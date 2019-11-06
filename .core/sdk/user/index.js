@@ -33,7 +33,7 @@ const User = { Role: {} };
  * @apiName User.auth
  * @apiParam {String} username
  * @apiParam {String} password
- * @apiGroup User
+ * @apiGroup Reactium.User
  *
  */
 User.auth = (username, password) =>
@@ -49,7 +49,7 @@ User.auth = (username, password) =>
  * @api {Function} User.login(username,password) Alias of User.auth()
  * @apiDescription Alias of User.auth()
  * @apiName User.login
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.logIn = User.auth;
 
@@ -57,7 +57,7 @@ User.logIn = User.auth;
  * @api {Function} User.logOut() Invalidate the current user.
  * @apiDescription Invalidate the current user.
  * @apiName User.logOut
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.logOut = async () => {
     const u = User.current();
@@ -84,7 +84,7 @@ User.reset = (token, password) =>
  * @apiDescription Retrieve the current authenticated user.
  * @apiName User.current
  * @apiSuccess {Object} user the current user
- * @apiGroup User
+ * @apiGroup Reactium.User
  * @apiParam {Boolean} parseObject By default the return value is an object. If you need the Parse.User object instead pass `true`.
  */
 User.current = (parseObject = false) => {
@@ -96,7 +96,7 @@ User.current = (parseObject = false) => {
  * @api {Function} User.getSessionToken() Get the current session token.
  * @apiDescription If the user is logged in, get the current session token.
  * @apiName User.getSessionToken
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.getSessionToken = () => {
     const u = Parse.User.current();
@@ -112,7 +112,7 @@ User.getSessionToken = () => {
  * @apiParam {String} confirm Password confirmation.
  * @apiParam {String} email Email address used when resetting password and for system messaging.
  * @apiSuccess {Promise} user The new user object.
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.register = async user => {
     await Hook.run('user.before.register', user);
@@ -129,7 +129,7 @@ User.register = async user => {
  * @apiParam {String} userId Search by the objectId field.
  * @apiParam {String} username Search by the username field.
  * @apiSuccess {Promise} user The new user object.
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.find = async ({ userId, username, email }) => {
     const current = User.current() || {};
@@ -156,7 +156,7 @@ User.find = async ({ userId, username, email }) => {
  * @apiDescription Asyncronously find out if a user is a member of a specific role.
  * @apiName User.isRole
  * @apiParam {String} role The role to check for.
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.isRole = async (role, userId) => {
     const current = User.current() || {};
@@ -178,7 +178,7 @@ User.isRole = async (role, userId) => {
  * @apiParam {Mixed} capabilities The capability(s) to check for (string or array). **Note: User must have all of the capabilities you are checking for.
  * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
  * @apiParam {Boolean} [strict=false] Compare capabilities where the user must have all capabilities `[true]`, or at least 1 `[false]`.
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.can = async (caps, userId, strict) => {
     caps = _.isString(caps) ? String(caps).replace(' ', '') : caps;
@@ -223,7 +223,7 @@ User.can = async (caps, userId, strict) => {
  * @apiParam {String} role The role name. Example: 'super-admin'.
  * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
  * @apiSuccess {Promise} user The updated user object.
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.Role.add = async (role, userId) => {
     const current = User.current() || {};
@@ -249,7 +249,7 @@ User.Role.add = async (role, userId) => {
  * @apiParam {String} role The role name. Example: 'super-admin'.
  * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
  * @apiSuccess {Promise} user The updated user object.
- * @apiGroup User
+ * @apiGroup Reactium.User
  */
 User.Role.remove = (role, userId) => {
     const current = User.current() || {};

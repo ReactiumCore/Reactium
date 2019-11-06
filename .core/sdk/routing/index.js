@@ -36,26 +36,26 @@ class Routing {
     }
 
     /**
-     * @api {Function} Routing.register(route) Dynamically register a new React router route.
-     * @apiDescription Dynamically register a new React router route.
-     * @apiParam {Object} route object to be used as properties of React Router `<Route />` component, including:
-     1. path - the routing pattern
-     2. exact - true/false if the pattern should be matched exactly
-     3. component - the React component to render on this route
-     4. order - (special) the priority of this route in the list of routes (which route will resolve first)
-     5. load - (special) high-order Redux action function (thunk) to run when this route is resolved (should return a promise)
-     6. ... any other property `<Route />` component accepts
+ * @api {Function} Routing.register(route) Dynamically register a new React router route.
+ * @apiDescription Dynamically register a new React router route.
+ * @apiParam {Object} route object to be used as properties of React Router `<Route />` component, including:
+ 1. path - the routing pattern
+ 2. exact - true/false if the pattern should be matched exactly
+ 3. component - the React component to render on this route
+ 4. order - (special) the priority of this route in the list of routes (which route will resolve first)
+ 5. load - (special) high-order Redux action function (thunk) to run when this route is resolved (should return a promise)
+ 6. ... any other property `<Route />` component accepts
 
-     ## Important Note
+ ## Important Note
 
-     Unless called in isomorphic javascript (ie. code executed both in browser and in node.js),
-     these routes will not yield Server-Side-Rendered html in SSR mode. The browser will still
-     render the route correctly (will not break the page), however the server will deliver a 404 status code on
-     cold loads of the page (i.e. hard-refresh of the browser).
-     * @apiName Routing.register
-     * @apiGroup Routing
-     * @apiSuccess {String} uuid unique id of the route
-     * @apiExample Example Usage:
+ Unless called in isomorphic javascript (ie. code executed both in browser and in node.js),
+ these routes will not yield Server-Side-Rendered html in SSR mode. The browser will still
+ render the route correctly (will not break the page), however the server will deliver a 404 status code on
+ cold loads of the page (i.e. hard-refresh of the browser).
+ * @apiName Routing.register
+ * @apiGroup Reactium.Routing
+ * @apiSuccess {String} uuid unique id of the route
+ * @apiExample Example Usage:
 import React from 'react';
 import op from 'object-path';
 import Reactium from 'reactium-core/sdk';
@@ -112,7 +112,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
      * @apiDescription Unregister an existing route, by id.
      Note: You can not unregister the 'NotFound' component. You can only replace it
      using the `404-component` hook.
-     * @apiGroup Routing
+     * @apiGroup Reactium.Routing
      */
     unregister(id) {
         this.routes = this.routes.filter(route => id !== route.id);
@@ -130,7 +130,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
      * @apiDescription Get sorted array of all route objects. This includes the NotFound
      component. If called prior to the `routes-init` hook completion, will contain
      only the NotFound component.
-     * @apiGroup Routing
+     * @apiGroup Reactium.Routing
      */
     get() {
         return _.sortBy(this.routes, 'order').concat([

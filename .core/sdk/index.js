@@ -1,4 +1,5 @@
 import Cache from './cache';
+import Component from './component';
 import Enums from './enums';
 import Hook from './hook';
 import Middleware from './middleware';
@@ -11,9 +12,12 @@ import Setting from './setting';
 import User from './user';
 import Zone from './zone';
 
+export * from './react/hooks';
+
 export default {
     ...Parse,
     Cache,
+    Component,
     Enums,
     Hook,
     Middleware,

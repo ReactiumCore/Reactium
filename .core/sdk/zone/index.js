@@ -99,7 +99,7 @@ const removeControl = (type, name, zone) => {
  * @apiParam {String} zone the zone this mapper will apply to
  * @apiParam {String} mapper the mapper function that will be passed each plugin object
  * @apiParam {String} [order=Enums.priority.neutral] the priority your mapper will take in list of mappers in this zone
- * @apiGroup Zone
+ * @apiGroup Reactium.Zone
  * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 import React from 'react';
@@ -126,7 +126,7 @@ This should be called only:
 3. or after `Reactium.Plugin.ready === true`.
 * @apiParam {String} pluginName the unique name of your plugin
 * @apiParam {String} zone the zone to remove this mapper from
-* @apiGroup Zone
+* @apiGroup Reactium.Zone
 * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 Reactium.Zone.removeMapper('myPlugin', 'zone-1');
@@ -144,7 +144,7 @@ This should be called only:
 * @apiParam {String} zone the zone this filter will apply to
 * @apiParam {String} filter the filter function that will be passed each plugin object
 * @apiParam {String} [order=Enums.priority.neutral] the priority your filter will take in list of filters in this zone
-* @apiGroup Zone
+* @apiGroup Reactium.Zone
 * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 // Hide this plugin if current user shouldn't see vip plugins
@@ -164,7 +164,7 @@ This should be called only:
 3. or after `Reactium.Plugin.ready === true`.
 * @apiParam {String} pluginName the unique name of your plugin
 * @apiParam {String} zone the zone to remove this filter from
-* @apiGroup Zone
+* @apiGroup Reactium.Zone
 * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 Reactium.Zone.removeFilter('myPlugin', 'zone-1');
@@ -183,7 +183,7 @@ Reactium.Zone.removeFilter('myPlugin', 'zone-1');
  * @apiParam {String} [sortBy=order] plugin property to sort the list of plugins by
  * @apiParam {Boolean} [reverse=false] reverse sort order
  * @apiParam {String} [order=Enums.priority.neutral] the priority your sort will take in list of sorts in this zone
- * @apiGroup Zone
+ * @apiGroup Reactium.Zone
  * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 
@@ -204,7 +204,7 @@ Reactium.Zone.addSort('myPlugin', 'zone-1', sort)
   3. or after `Reactium.Plugin.ready === true`.
   * @apiParam {String} pluginName the unique name of your plugin
   * @apiParam {String} zone the zone to remove this sort from
-  * @apiGroup Zone
+  * @apiGroup Reactium.Zone
   * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 Reactium.Zone.removeSort('myPlugin', 'zone-1');

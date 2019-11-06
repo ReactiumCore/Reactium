@@ -27,7 +27,7 @@ const Hook = {
  * @apiName Hook.flush
  * @apiDescription Clear all registered callbacks for a hook.
  * @apiParam {String} name the hook name
- * @apiGroup Hook
+ * @apiGroup Reactium.Hook
  */
 Hook.flush = name => op.set(Hook.action, name, {});
 
@@ -36,7 +36,7 @@ Hook.flush = name => op.set(Hook.action, name, {});
  * @apiName Hook.unregister
  * @apiDescription Unregister a registered callback by id.
  * @apiParam {String} id the unique id provided by Hook.register() or Hook.list()
- * @apiGroup Hook
+ * @apiGroup Reactium.Hook
  */
 Hook.unregister = id =>
     Object.keys(Hook.action).forEach(action => {
@@ -52,7 +52,7 @@ Hook.unregister = id =>
  The hook callback will receive any parameters provided to Hook.run, followed by a context object.
  * @apiParam {Integer} [order=Enums.priority.neutral] order of which the callback will be called when this hook is run.
  * @apiParam {String} [id] the unique id. If not provided, a uuid will be generated
- * @apiGroup Hook
+ * @apiGroup Reactium.Hook
  * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 Reactium.Hook.register('plugin-init', () => {
@@ -70,7 +70,7 @@ Hook.register = (name, callback, order = Enums.priority.neutral, id) => {
  * @api {Function} Hook.list() Register a hook callback.
  * @apiName Hook.list
  * @apiDescription Register a hook callback.
- * @apiGroup Hook
+ * @apiGroup Reactium.Hook
  */
 Hook.list = () => Object.keys(Hook.action).sort();
 
@@ -81,7 +81,7 @@ Hook.list = () => Object.keys(Hook.action).sort();
  * @apiParam {String} name the hook name
  * @apiParam {Mixed} ...params any number of arbitrary parameters (variadic)
  * @apiSuccess {Object} context context object passed to each callback (after other variadic parameters)
- * @apiGroup Hook
+ * @apiGroup Reactium.Hook
  */
 Hook.run = (name, ...params) => {
     const actions = _.sortBy(
