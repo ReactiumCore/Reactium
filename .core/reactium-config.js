@@ -204,7 +204,7 @@ const manifestConfig = manifestConfigOverride(defaultManifestConfig);
  * @type {Object}
  */
 module.exports = {
-    version: '3.1.7',
+    version: '3.1.8',
     semver: '^3.0.0',
     build: gulpConfig,
     update: {

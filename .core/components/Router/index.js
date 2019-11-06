@@ -1,5 +1,5 @@
 import Reactium from 'reactium-core/sdk';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Fragment } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
 import op from 'object-path';
 
@@ -27,7 +27,7 @@ export default ({ history }) => {
         <Router history={history}>
             <Switch>
                 {routes.map(({ id, ...route }) => (
-                    <Route {...route} key={id} />
+                    <Route {...route} key='route' />
                 ))}
             </Switch>
         </Router>
