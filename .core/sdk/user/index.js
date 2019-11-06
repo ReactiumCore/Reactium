@@ -85,10 +85,11 @@ User.reset = (token, password) =>
  * @apiName User.current
  * @apiSuccess {Object} user the current user
  * @apiGroup User
+ * @apiParam {Boolean} parseObject By default the return value is an object. If you need the Parse.User object instead pass `true`.
  */
-User.current = () => {
+User.current = (parseObject = false) => {
     const u = Parse.User.current();
-    return u ? u.toJSON() : {};
+    return u ? (parseObject === true ? u : u.toJSON()) : null;
 };
 
 /**
@@ -131,7 +132,7 @@ User.register = async user => {
  * @apiGroup User
  */
 User.find = async ({ userId, username, email }) => {
-    const current = User.current();
+    const current = User.current() || {};
 
     const u = await Parse.Cloud.run('user-find', {
         objectId: userId,
@@ -158,7 +159,9 @@ User.find = async ({ userId, username, email }) => {
  * @apiGroup User
  */
 User.isRole = async (role, userId) => {
-    userId = userId || op.get(User.current(), 'objectId');
+    const current = User.current() || {};
+
+    userId = userId || op.get(current, 'objectId');
     const u = await User.find({ userId });
 
     if (!u) {
@@ -181,7 +184,9 @@ User.can = async (caps, userId, strict) => {
     caps = _.isString(caps) ? String(caps).replace(' ', '') : caps;
     caps = Array.isArray(caps) ? caps : caps.split(',');
 
-    userId = userId || op.get(User.current(), 'objectId');
+    const current = User.current() || {};
+
+    userId = userId || op.get(current, 'objectId');
 
     if (!userId) {
         return Promise.resolve(false);
@@ -221,7 +226,10 @@ User.can = async (caps, userId, strict) => {
  * @apiGroup User
  */
 User.Role.add = async (role, userId) => {
-    const u = userId || op.get(User.current(), 'objectId');
+    const current = User.current() || {};
+
+    const u = userId || op.get(current, 'objectId');
+
     if (!u) {
         return Promise.reject('invalid userId');
     }
@@ -244,7 +252,10 @@ User.Role.add = async (role, userId) => {
  * @apiGroup User
  */
 User.Role.remove = (role, userId) => {
-    const u = userId || op.get(User.current(), 'objectId');
+    const current = User.current() || {};
+
+    const u = userId || op.get(current, 'objectId');
+
     if (!u) {
         return Promise.reject('invalid userId');
     }
