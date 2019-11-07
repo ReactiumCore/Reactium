@@ -14,7 +14,7 @@ const contextMode = () => {
     return 'sync';
 };
 
-const version = '3.1.9';
+const version = '3.1.10';
 
 const defaultLibraryExternals = {
     Reactium: {

@@ -60,10 +60,10 @@ Component.register = (hook, component, order) =>
     );
 
 /**
- * @api {Function} Component.unregister(uuid) Alias for Reactium.Hook.unregister.
+ * @api {Function} Component.unregister(uuid) Component.unregister()
  * @apiGroup Reactium.Component
  * @apiName Component.unregister
- * @apiDescription Unregister a component used in useHookComponent. This must be performed before useHookComponent is called. See Hook.unregister()
+ * @apiDescription Unregister a component used in useHookComponent. This must be performed before useHookComponent is called. Alias for Reactium.Hook.unregister. See Hook.unregister()
  * @apiParam {String} uuid the registered component hook uuid
  */
 Component.unregister = Hook.unregister;
