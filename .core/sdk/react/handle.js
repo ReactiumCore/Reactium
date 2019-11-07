@@ -28,7 +28,7 @@ export const useRegisterHandle = (ID, cb, deps = []) => {
 };
 
 /**
-* @api {ReactHook} useHandle(id) useHandle()
+* @api {ReactHook} useHandle(id,defaultValue) useHandle()
 * @apiDescription React hook to subscribe to a specific imperative handle reference. Useful for having one functional
 component control another.
 * @apiParam {Mixed} id Array of properties, or `.` separated object path. e.g. ['path','to','handle'] or 'path.to.handle'. Identifies the full path to an imperative handle.

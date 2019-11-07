@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:carbon as build
+FROM node:lts as build
 
 RUN mkdir /tmp/app
 
@@ -23,7 +23,7 @@ RUN npm install && npm run build
 RUN npm prune --production
 
 # Deployable Stage
-FROM node:carbon
+FROM node:lts
 
 # Create app directory
 WORKDIR /usr/src/app
