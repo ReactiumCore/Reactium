@@ -3,7 +3,7 @@ import Hook from '../hook';
 const Component = {};
 
 /**
- * @api {Function} Component.register(hook,component,order) Component.register
+ * @api {Function} Component.register(hook,component,order) Component.register()
  * @apiGroup Reactium.Component
  * @apiName Component.register
  * @apiDescription Register a React component to be used with a specific useHookComponent hook. This must be called before the useHookComponent that defines the hook.

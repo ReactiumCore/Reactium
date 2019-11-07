@@ -6,7 +6,7 @@ const Reducer = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 
 /**
-  * @api {Function} Reducer.register() register a new redux reducer
+  * @api {Function} Reducer.register(pluginName,reducer) Reducer.register()
   * @apiName Reducer.register
   * @apiDescription Register a Redux reducer.
   This should be called only:
@@ -42,7 +42,7 @@ Reducer.register = (ID, reducer) => {
 };
 
 /**
-  * @api {Function} Reducer.unregister() unregister a new redux reducer
+  * @api {Function} Reducer.unregister(pluginName) Reducer.unregister()
   * @apiName Reducer.unregister
   * @apiDescription Remove a Redux reducer.
   * @apiParam {String} pluginName the unique name of your plugin.

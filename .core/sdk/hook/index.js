@@ -23,7 +23,7 @@ const Hook = {
 };
 
 /**
- * @api {Function} Hook.flush(name) Clear all registered callbacks for a hook.
+ * @api {Function} Hook.flush(name) Hook.flush()
  * @apiName Hook.flush
  * @apiDescription Clear all registered callbacks for a hook.
  * @apiParam {String} name the hook name
@@ -32,7 +32,7 @@ const Hook = {
 Hook.flush = name => op.set(Hook.action, name, {});
 
 /**
- * @api {Function} Hook.unregister(id) Unregister a registered callback by id.
+ * @api {Function} Hook.unregister(id) Hook.unregister()
  * @apiName Hook.unregister
  * @apiDescription Unregister a registered callback by id.
  * @apiParam {String} id the unique id provided by Hook.register() or Hook.list()
@@ -44,7 +44,7 @@ Hook.unregister = id =>
     });
 
 /**
- * @api {Function} Hook.register(name,callback,order,id) Register a hook callback.
+ * @api {Function} Hook.register(name,callback,order,id) Hook.register()
  * @apiName Hook.register
  * @apiDescription Register a hook callback.
  * @apiParam {String} name the hook name
@@ -67,7 +67,7 @@ Hook.register = (name, callback, order = Enums.priority.neutral, id) => {
 };
 
 /**
- * @api {Function} Hook.list() Register a hook callback.
+ * @api {Function} Hook.list() Hook.list()
  * @apiName Hook.list
  * @apiDescription Register a hook callback.
  * @apiGroup Reactium.Hook
@@ -75,7 +75,7 @@ Hook.register = (name, callback, order = Enums.priority.neutral, id) => {
 Hook.list = () => Object.keys(Hook.action).sort();
 
 /**
- * @api {Function} Hook.run(name,...params) Run hook callbacks.
+ * @api {Function} Hook.run(name,...params) Hook.run()
  * @apiName Hook.run
  * @apiDescription Run hook callbacks.
  * @apiParam {String} name the hook name

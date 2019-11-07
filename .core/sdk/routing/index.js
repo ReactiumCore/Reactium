@@ -36,7 +36,7 @@ class Routing {
     }
 
     /**
- * @api {Function} Routing.register(route) Dynamically register a new React router route.
+ * @api {Function} Routing.register(route) Routing.register()
  * @apiDescription Dynamically register a new React router route.
  * @apiParam {Object} route object to be used as properties of React Router `<Route />` component, including:
  1. path - the routing pattern
@@ -107,7 +107,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
     }
 
     /**
-     * @api {Function} Routing.unregister(id) Unregister an existing route, by id.
+     * @api {Function} Routing.unregister(id) Routing.unregister()
      * @apiName Routing.unregister
      * @apiDescription Unregister an existing route, by id.
      Note: You can not unregister the 'NotFound' component. You can only replace it
@@ -125,7 +125,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
     }
 
     /**
-     * @api {Function} Routing.get() Get sorted array of all route objects.
+     * @api {Function} Routing.get() Routing.get()
      * @apiName Routing.get
      * @apiDescription Get sorted array of all route objects. This includes the NotFound
      component. If called prior to the `routes-init` hook completion, will contain

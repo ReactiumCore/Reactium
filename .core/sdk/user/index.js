@@ -6,29 +6,7 @@ import Parse from 'appdir/api';
 const User = { Role: {} };
 
 /**
- * ## User Hooks
- * ### user.auth
- * Triggered after the user has successfully authenticated. Parameters: `user`.
- * ### user.before.logout
- * Triggered before the user has been logged out. Parameters: `user`.
- * ### user.after.logout
- * Triggered after the user has successfully logged out. Parameters: `user`.
- * ### user.before.register
- * Triggered before the new user is created. Parameters: `user`.
- * ### user.after.register
- * Triggered after the new user has been created. Parameters: `user`.
- * ### user.find
- * Triggered after successfully finding a user. Parameters: `results`.
- * ### user.can
- * Triggered after the capabilities have been checked for a user. Parameters: `capabilities`, `user`.
- * ### user.role.add
- * Triggered after a user has been added to a role. Parameters: `role`, `user`.
- * ### user.role.remove
- * Triggered after a user has been removed from a role. Parameters: `role`, `user`.
- */
-
-/**
- * @api {Function} User.auth(username,password) Authenticate with the Actinium server.
+ * @api {Function} User.auth(username,password) User.auth()
  * @apiDescription Authenticate with the Actinium server.
  * @apiName User.auth
  * @apiParam {String} username
@@ -46,7 +24,7 @@ User.auth = (username, password) =>
         });
 
 /**
- * @api {Function} User.login(username,password) Alias of User.auth()
+ * @api {Function} User.login(username,password) Alias for User.auth()
  * @apiDescription Alias of User.auth()
  * @apiName User.login
  * @apiGroup Reactium.User
@@ -54,7 +32,7 @@ User.auth = (username, password) =>
 User.logIn = User.auth;
 
 /**
- * @api {Function} User.logOut() Invalidate the current user.
+ * @api {Function} User.logOut() User.logOut()
  * @apiDescription Invalidate the current user.
  * @apiName User.logOut
  * @apiGroup Reactium.User
@@ -80,12 +58,12 @@ User.reset = (token, password) =>
     Parse.Cloud.run('password-reset', { token, password });
 
 /**
- * @api {Function} User.current() Retrieve the current authenticated user.
+ * @api {Function} User.current(parseObject) User.current()
  * @apiDescription Retrieve the current authenticated user.
  * @apiName User.current
  * @apiSuccess {Object} user the current user
  * @apiGroup Reactium.User
- * @apiParam {Boolean} parseObject By default the return value is an object. If you need the Parse.User object instead pass `true`.
+ * @apiParam {Boolean} [parseObject=false] By default the return value is an object. If you need the Parse.User object instead pass `true`.
  */
 User.current = (parseObject = false) => {
     const u = Parse.User.current();
@@ -93,7 +71,7 @@ User.current = (parseObject = false) => {
 };
 
 /**
- * @api {Function} User.getSessionToken() Get the current session token.
+ * @api {Function} User.getSessionToken() User.getSessionToken()
  * @apiDescription If the user is logged in, get the current session token.
  * @apiName User.getSessionToken
  * @apiGroup Reactium.User
@@ -104,7 +82,7 @@ User.getSessionToken = () => {
 };
 
 /**
- * @api {Function} User.register({...params}) Asyncronously create a new user.
+ * @api {Function} User.register({...params}) User.register()
  * @apiDescription Asyncronously create a new user.
  * @apiName User.register
  * @apiParam {String} username Unique username used when authenticating.
@@ -122,7 +100,7 @@ User.register = async user => {
 };
 
 /**
- * @api {Function} User.find({userId,username,email}) Asyncronously find a user.
+ * @api {Function} User.find({userId,username,email}) User.find()
  * @apiDescription Asyncronously find a user.
  * @apiName User.find
  * @apiParam {String} email Search by the email field.
@@ -152,7 +130,7 @@ User.find = async ({ userId, username, email }) => {
 };
 
 /**
- * @api {Function} User.isRole(role,userId) Asyncronously find out if a user is a member of a specific role.
+ * @api {Function} User.isRole(role,userId) User.isRole()
  * @apiDescription Asyncronously find out if a user is a member of a specific role.
  * @apiName User.isRole
  * @apiParam {String} role The role to check for.
@@ -172,7 +150,7 @@ User.isRole = async (role, userId) => {
 };
 
 /**
- * @api {Function} User.can(capabilities,userId) Asyncronously find out if a user has a set of capabilities.
+ * @api {Function} User.can(capabilities,userId) User.can()
  * @apiDescription Asyncronously find out if a user has a set of capabilities.
  * @apiName User.can
  * @apiParam {Mixed} capabilities The capability(s) to check for (string or array). **Note: User must have all of the capabilities you are checking for.
@@ -217,7 +195,7 @@ User.can = async (caps, userId, strict) => {
 };
 
 /**
- * @api {Function} User.Role.add(role, userId) Asyncronously add a user to a role.
+ * @api {Function} User.Role.add(role, userId) User.Role.add()
  * @apiDescription Asyncronously add a user to a role.
  * @apiName User.Role.add
  * @apiParam {String} role The role name. Example: 'super-admin'.
@@ -243,7 +221,7 @@ User.Role.add = async (role, userId) => {
 };
 
 /**
- * @api {Function} User.Role.remove(role, userId) Asyncronously remove a user to a role.
+ * @api {Function} User.Role.remove(role, userId) User.Role.remove()
  * @apiDescription Asyncronously remove a user to a role.
  * @apiName User.Role.remove
  * @apiParam {String} role The role name. Example: 'super-admin'.

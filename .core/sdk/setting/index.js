@@ -8,7 +8,7 @@ import moment from 'moment';
 const Setting = {};
 
 /**
- * @api {Function} Setting.load(autoRefresh) Load all settings, with cache.
+ * @api {Function} Setting.load(autoRefresh) Setting.load()
  * @apiName Setting.load
  * @apiGroup Reactium.Setting
  * @apiDescription Load all settings, with cache. When called multiple times in the cache period,
@@ -63,7 +63,7 @@ Setting.set = async (key = '', value, setPublic = false) => {
 };
 
 /**
- * @api {Function} Setting.unset(key) Unset a setting value
+ * @api {Function} Setting.unset(key) Setting.unset()
  * @apiGroup Reactium.Setting
  * @apiName Setting.unset
  * @apiDescription Unset a setting value. Returns a `{Promise}`.
@@ -77,7 +77,7 @@ Setting.unset = async (key = '') => {
 };
 
 /**
- * @api {Function} Setting.get(key,refresh) Gett a setting value.
+ * @api {Function} Setting.get(key,refresh) Setting.get()
  * @apiGroup Reactium.Setting
  * @apiName Setting.get
  * @apiDescription Get a setting value.

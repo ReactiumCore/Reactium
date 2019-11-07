@@ -7,7 +7,7 @@ const Middleware = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 
 /**
- * @api {Function} Middleware.register(name,mw,order) Register a new Redux middleware.
+ * @api {Function} Middleware.register(name,mw,order) Middleware.register()
  * @apiName Middleware.register
  * @apiDescription Register a new Redux middleware.
  This should be called only:
@@ -45,7 +45,7 @@ Middleware.register = (name, mw, order = Enums.priority.neutral) => {
 };
 
 /**
- * @api {Function} Middleware.unregister(name) Unregister a Redux middleware.
+ * @api {Function} Middleware.unregister(name) Middleware.unregister()
  * @apiName Middleware.unregister
  * @apiDescription Unregister a Redux middleware.
  This should be called only:

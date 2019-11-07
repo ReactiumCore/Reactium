@@ -6,7 +6,7 @@ import * as equals from 'shallow-equals';
 const noop = () => {};
 
 /**
- * @api {Function} ec(Component) ec
+ * @api {Function} ec(Component) ec()
  * @apiDescription ec, short for "easy connect" is a stripped down version of the
 redux `connect` function, which will provide your component with any Redux state
 properties under the name matching your component class (if applicable),
@@ -54,7 +54,7 @@ export const ec = Component => {
 };
 
 /**
- * @api {ReactHook} useStore() useStore
+ * @api {ReactHook} useStore() useStore()
  * @apiDescription Just gimme the store damnit! This React hook provides the Redux
 store when used on a component declared within the Store Provider.
  * @apiName useStore
@@ -98,7 +98,7 @@ const defaultShouldUpdate = ({ prevState, newState }) =>
     !equals(prevState, newState);
 
 /**
- * @api {ReactHook} useSelect(params) useSelect
+ * @api {ReactHook} useSelect(params) useSelect()
  * @apiDescription React hook for subscribing to only the updates from Redux store
 that you care about, and no more. This is superior to `react-redux` connect, in
 that your component will not update on every dispatch, only those state changes

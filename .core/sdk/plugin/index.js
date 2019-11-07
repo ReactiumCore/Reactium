@@ -25,7 +25,7 @@ Plugin.init = ID => {
 };
 
 /**
- * @api {Function} Plugin.register(ID,order) Register a Reactium plugin.
+ * @api {Function} Plugin.register(ID,order) Plugin.register()
  * @apiName Plugin.register
  * @apiDescription Register a Reactium plugin.
  * @apiParam {String} ID the plugin id
@@ -67,7 +67,7 @@ Plugin.register = (ID, order = Enums.priority.neutral) => {
 };
 
 /**
- * @api {Function} Plugin.unregister(ID) Unregister a Reactium plugin.
+ * @api {Function} Plugin.unregister(ID) Plugin.unregister()
  * @apiName Plugin.unregister
  * @apiDescription Unregister a Reactium plugin by unique id. This can only be called prior to the `plugin-dependencies` hook, or `Reactium.Plugin.ready === true`.
  * @apiParam {String} ID the plugin id
@@ -98,7 +98,7 @@ Plugin.unregister = ID => {
 };
 
 /**
- * @api {Function} Plugin.addComponent(plugin) Register a component to a plugin zone.
+ * @api {Function} Plugin.addComponent(plugin) Plugin.addComponent()
  * @apiName Plugin.addComponent
  * @apiDescription Register a component to a plugin zone.
  * @apiParam {Object} plugin plugin component, determines what component renders in a zone, what order
@@ -160,7 +160,7 @@ Plugin.addComponent = plugin => {
 };
 
 /**
- * @api {Function} Plugin.removeComponent(ID) Removes a component added by `Plugin.addComponent()` from a plugin zone by id.
+ * @api {Function} Plugin.removeComponent(ID) Plugin.removeComponent()
  * @apiName Plugin.removeComponent
  * @apiDescription Removes a component added by `Plugin.addComponent()` from a plugin zone by id.
  * @apiParam {String} ID the unique plugin component id.

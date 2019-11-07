@@ -88,7 +88,7 @@ const removeControl = (type, name, zone) => {
 };
 
 /**
- * @api {Function} Zone.addMapper() add map function to a plugin Zone
+ * @api {Function} Zone.addMapper(pluginName,zone,mapper,order) Zone.addMapper()
  * @apiName Zone.addMapper
  * @apiDescription Add a plugin zone mapping function, used to augment the plugin object before passed to `<Plugins />`
  This should be called only:
@@ -117,7 +117,7 @@ Reactium.Zone.addMapper('myPlugin', 'zone-1', mapper)
  */
 
 /**
-* @api {Function} Zone.removeMapper() remove mapping functions from a plugin zone
+* @api {Function} Zone.removeMapper(pluginName,zone) Zone.removeMapper()
 * @apiName Zone.removeMapper
 * @apiDescription Remove mapping functions for a plugin zone for this plugin.
 This should be called only:
@@ -133,7 +133,7 @@ Reactium.Zone.removeMapper('myPlugin', 'zone-1');
 */
 
 /**
-* @api {Function} Zone.addFilter() add filter function to a plugin Zone
+* @api {Function} Zone.addFilter(pluginName,zone,filter,order) Zone.addFilter()
 * @apiName Zone.addFilter
 * @apiDescription Add a plugin zone filter function, used to filter which plugins will appear in `<Plugins />`
 This should be called only:
@@ -155,7 +155,7 @@ Reactium.Zone.addFilter('myPlugin', 'zone-1', filter)
 */
 
 /**
-* @api {Function} Zone.removeFilter() remove filter functions from a plugin zone
+* @api {Function} Zone.removeFilter(pluginName,zone) Zone.removeFilter()
 * @apiName Zone.removeFilter
 * @apiDescription Remove filter functions for a plugin zone for this plugin.
 This should be called only:
@@ -171,7 +171,7 @@ Reactium.Zone.removeFilter('myPlugin', 'zone-1');
 */
 
 /**
- * @api {Function} Zone.addSort() add sort criteria to a plugin Zone
+ * @api {Function} Zone.addSort(pluginName,zone,sortBy,reverse,order) Zone.addSort()
  * @apiName Zone.addSort
  * @apiDescription Add a plugin zone sort critera, used to augment the plugin object before passed to `<Plugins />`
  This should be called only:
@@ -195,7 +195,7 @@ Reactium.Zone.addSort('myPlugin', 'zone-1', sort)
  */
 
 /**
-  * @api {Function} Zone.removeSort() remove sort functions from a plugin zone
+  * @api {Function} Zone.removeSort(pluginName,zone) Zone.removeSort()
   * @apiName Zone.removeSort
   * @apiDescription Remove sort critera for a plugin zone for this plugin.
   This should be called only:
