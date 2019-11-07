@@ -14,6 +14,8 @@ const contextMode = () => {
     return 'sync';
 };
 
+const version = '3.1.9';
+
 const defaultLibraryExternals = {
     Reactium: {
         externalName: '/sdk$/',
@@ -204,7 +206,7 @@ const manifestConfig = manifestConfigOverride(defaultManifestConfig);
  * @type {Object}
  */
 module.exports = {
-    version: '3.1.8',
+    version,
     semver: '^3.0.0',
     build: gulpConfig,
     update: {

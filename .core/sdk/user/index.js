@@ -24,7 +24,7 @@ User.auth = (username, password) =>
         });
 
 /**
- * @api {Function} User.login(username,password) Alias for User.auth()
+ * @api {Function} User.login(username,password) User.login()
  * @apiDescription Alias of User.auth()
  * @apiName User.login
  * @apiGroup Reactium.User
@@ -195,7 +195,7 @@ User.can = async (caps, userId, strict) => {
 };
 
 /**
- * @api {Function} User.Role.add(role, userId) User.Role.add()
+ * @api {Function} User.Role.add(role,userId) User.Role.add()
  * @apiDescription Asyncronously add a user to a role.
  * @apiName User.Role.add
  * @apiParam {String} role The role name. Example: 'super-admin'.
@@ -221,7 +221,7 @@ User.Role.add = async (role, userId) => {
 };
 
 /**
- * @api {Function} User.Role.remove(role, userId) User.Role.remove()
+ * @api {Function} User.Role.remove(role,userId) User.Role.remove()
  * @apiDescription Asyncronously remove a user to a role.
  * @apiName User.Role.remove
  * @apiParam {String} role The role name. Example: 'super-admin'.
