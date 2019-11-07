@@ -32,10 +32,7 @@ export const useRegisterHandle = (ID, cb, deps = []) => {
 * @apiDescription React hook to subscribe to a specific imperative handle reference. Useful for having one functional
 component control another.
 * @apiParam {Mixed} id Array of properties, or `.` separated object path. e.g. ['path','to','handle'] or 'path.to.handle'. Identifies the full path to an imperative handle.
-* @apiParam {Function} cb Function that returns value to be assigned to the imperative handle reference.
-* @apiParam {Array} deps Array of values to watch for changes. When changed, your reference will be updated by calling `cb` again. All
-`Reactium.Handle.subscribe()` subscribers will be called on updates, and relevant `useHandle()` hooks will trigger
-rerenders.
+* @apiParam {Mixed} [defaultValue] the value to use for the handle if it does not exist.
 * @apiName useHandle
 * @apiGroup ReactHook
 * @apiExample Counter.js
@@ -63,9 +60,10 @@ export default Counter;
 import React from 'react';
 import { useHandle } from 'reactium-core/sdk';
 
+const noop = () => {};
 const CounterControl = () => {
     // Get increment control on handle identified at path 'counter.1'
-    const { increment } = useHandle('counter.1');
+    const { increment } = useHandle('counter.1', { increment: noop }});
 
     return (
         <div>
@@ -77,11 +75,11 @@ const CounterControl = () => {
 
 export default CounterControl;
  */
-export const useHandle = ID => {
-    const ref = useRef(op.get(Handle.get(ID), 'current'));
+export const useHandle = (ID, defaultValue) => {
+    const ref = useRef(op.get(Handle.get(ID), 'current', defaultValue));
     const [, update] = useState(ref.current);
     const setHandle = newRef => {
-        const handle = op.get(newRef, 'current');
+        const handle = op.get(newRef, 'current', defaultValue);
 
         if (op.has(newRef, 'current') && handle !== ref.current) {
             ref.current = handle;
