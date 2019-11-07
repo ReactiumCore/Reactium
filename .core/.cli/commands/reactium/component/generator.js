@@ -105,6 +105,7 @@ module.exports = ({ params, props }) => {
         case 'functional':
         case 'hook':
             delete actions.class;
+            delete actions.redux;
             break;
 
         case 'class':

@@ -371,19 +371,7 @@ const SCHEMA = ({ props }) => {
             },
             route: {
                 description: chalk.white('Route:'),
-                ask: () => {
-                    let type;
-
-                    try {
-                        type =
-                            prompt.override['type'] ||
-                            prompt.history('type').value;
-                    } catch (err) {
-                        type = 'class';
-                    }
-
-                    return type === 'class' && overwritable(prompt);
-                },
+                ask: () => overwritable(prompt),
                 before: val => {
                     const routes = val.split(' ') || [];
                     return _.compact(routes.map(route => formatRoute(route)));
@@ -394,19 +382,7 @@ const SCHEMA = ({ props }) => {
                 default: 'Y',
                 description: `${chalk.white('Redux?')} ${chalk.cyan('(Y/N):')}`,
                 required: true,
-                ask: () => {
-                    let type;
-
-                    try {
-                        type =
-                            prompt.override['type'] ||
-                            prompt.history('type').value;
-                    } catch (err) {
-                        type = 'class';
-                    }
-
-                    return type === 'class' && overwritable(prompt);
-                },
+                ask: () => overwritable(prompt),
                 before: val => {
                     return String(val).toUpperCase() === 'Y';
                 },
@@ -529,7 +505,7 @@ const SCHEMA = ({ props }) => {
             },
             test: {
                 pattern: /^y|n|Y|N/,
-                default: 'Y',
+                default: 'N',
                 description: `${chalk.white('Test?')} ${chalk.cyan('(Y/N):')}`,
                 ask: () => overwritable(prompt),
                 before: val => {

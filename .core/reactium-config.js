@@ -3,6 +3,8 @@ const path = require('path');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
+const version = '3.1.11';
+
 const contextMode = () => {
     if (
         process.env.NODE_ENV !== 'development' &&
@@ -13,8 +15,6 @@ const contextMode = () => {
 
     return 'sync';
 };
-
-const version = '3.1.10';
 
 const defaultLibraryExternals = {
     Reactium: {
