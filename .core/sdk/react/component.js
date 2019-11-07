@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import op from 'object-path';
 
 /**
- * @api {Hook} useHookComponent(hookName,defaultComponent,...params) useHookComponent()
+ * @api {ReactHook} useHookComponent(hookName,defaultComponent,...params) useHookComponent()
  * @apiDescription A React hook used to define React component(s) that can be overrided by Reactium plugins, using the Reactium.Component.register() function.
  * @apiParam {String} hookName the unique string used to register component(s).
  * @apiParam {Component} defaultComponent the default React component(s) to be returned by the hook.
