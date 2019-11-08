@@ -19,7 +19,9 @@ const pad = require(`${mod}/lib/pad`);
 
 const { error, message } = require(`${mod}/lib/messenger`);
 
-const { formatImport, topLevelStyles } = require('../style');
+const { formatImport, topLevelStyles } = require(path.normalize(
+    process.cwd() + '/.core/.cli/commands/reactium/style',
+));
 
 const formatDestination = (val, props) => {
     const { cwd } = props;
