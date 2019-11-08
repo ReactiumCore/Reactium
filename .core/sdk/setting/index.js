@@ -77,16 +77,17 @@ Setting.unset = async (key = '') => {
 };
 
 /**
- * @api {Function} Setting.get(key,refresh) Setting.get()
+ * @api {Function} Setting.get(key,defaultValue,refresh) Setting.get()
  * @apiGroup Reactium.Setting
  * @apiName Setting.get
  * @apiDescription Get a setting value.
  * @apiParam {String} key The unique setting key.
+ * @apiParam {Mixed} defaultValue The default value if the setting doesn't exist.
  * @apiParam {Boolean} refresh if true, get a fresh value, even if already cached.
  * @apiExample Example Usage:
 Reactium.Setting.get('site.hostname');
  */
-Setting.get = async (key = '', refresh = false) => {
+Setting.get = async (key = '', defaultValue, refresh = false) => {
     const settingPath = key.split('.');
     const [group] = settingPath;
     const cached = Cache.get(['setting'].concat(settingPath));
@@ -96,7 +97,7 @@ Setting.get = async (key = '', refresh = false) => {
     const value = await Parse.Cloud.run('setting-get', { key: group });
     Cache.set(['setting', group], value, Enums.cache.settings);
 
-    return Cache.get(['setting'].concat(settingPath));
+    return Cache.get(['setting'].concat(settingPath), defaultValue);
 };
 
 const clearSettings = async () => {
