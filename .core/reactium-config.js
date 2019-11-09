@@ -3,7 +3,7 @@ const path = require('path');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.1.14';
+const version = '3.1.15';
 
 const contextMode = () => {
     if (
@@ -283,34 +283,6 @@ module.exports = {
                     version: '>=2.3.16',
                     destination: '.stylelintrc',
                     source: '/tmp/update/.stylelintrc',
-                },
-                {
-                    overwrite: false,
-                    version: '>=2.3.16',
-                    destination:
-                        '/src/app/components/common-ui/Icon/defaultProps.js',
-                    source:
-                        '/tmp/update/src/app/components/common-ui/Icon/defaultProps.js',
-                },
-                {
-                    overwrite: false,
-                    version: '>=2.3.16',
-                    destination: '/src/app/components/common-ui/Icon/index.js',
-                    source:
-                        '/tmp/update/src/app/components/common-ui/Icon/index.js',
-                },
-                {
-                    overwrite: true,
-                    version: '>=2.3.16',
-                    destination: '/src/app/components/common-ui/Icon/Feather',
-                    source:
-                        '/tmp/update/src/app/components/common-ui/Icon/Feather',
-                },
-                {
-                    overwrite: true,
-                    version: '>=2.3.16',
-                    destination: '/src/app/toolkit/icons/Feather',
-                    source: '/tmp/update/src/app/toolkit/icons/Feather',
                 },
                 {
                     overwrite: true,
