@@ -6,14 +6,14 @@ import * as equals from 'shallow-equals';
 const noop = () => {};
 
 /**
- * @api {Function} ec(Component) ec()
+ * @api {Function} Reactium.ec(Component) Reactium.ec()
  * @apiDescription ec, short for "easy connect" is a stripped down version of the
 redux `connect` function, which will provide your component with any Redux state
 properties under the name matching your component class (if applicable),
 as well as a `getState` function property.
- * @apiName ec
+ * @apiName Reactium.ec
  * @apiParam {Component} Component the React component to be decorated with Redux state.
- * @apiGroup Reactium.utilities
+ * @apiGroup Reactium.Utilities
  * @apiExample MyComponent/index.js
 import MyComponent from './MyComponent';
 import { ec } from 'reactium-core/sdk';
