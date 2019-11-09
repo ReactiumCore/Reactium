@@ -477,21 +477,5 @@ module.exports = {
             hideEmpty: true,
             elements: {},
         },
-        icons: {
-            label: 'Icons',
-            route: '/toolkit/icons',
-            hideEmpty: true,
-            elements: {
-                'feather-icons': {
-                    type: 'atom',
-                    label: 'Feather Icons',
-                    route: '/toolkit/icons/feather-icons',
-                    dna: '/toolkit/icons/Feather',
-                    component: require('appdir/toolkit/icons/Feather').default,
-                    readme: require('appdir/toolkit/icons/Feather/readme')
-                        .default,
-                },
-            },
-        },
     },
 };
