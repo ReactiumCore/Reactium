@@ -1,10 +1,19 @@
 // Grid
-$grid-columns: 12; // Set number of columns in the grid
+$grid-columns: 12 !default; // Set number of columns in the grid
 
-$xs-max: 640px; // Set xs breakpoint's max width
-$sm-max: 991px; // Set sm breakpoint's max width
-$md-max: 1024px; // Set md breakpoint's max width
-$lg-max: 1500px; // Set lg breakpoint's max width
+// smallest to largest
+$breakpoints-max: (
+    'xs': 640,
+    'sm': 990,
+    'md': 1280,
+    'lg': 1440,
+    'xl': 1600,
+) !default;
+
+$xs-max: '#{map-get($breakpoints-max, 'xs')}px'; // Set xs breakpoint's max width
+$sm-max: '#{map-get($breakpoints-max, 'sm')}px'; // Set sm breakpoint's max width
+$md-max: '#{map-get($breakpoints-max, 'md')}px'; // Set md breakpoint's max width
+$lg-max: '#{map-get($breakpoints-max, 'lg')}px'; // Set lg breakpoint's max width
 
 $gutter: 0;
 
@@ -40,13 +49,13 @@ $breakpoints-all: (
     $breakpoint-lg-up,
     $breakpoint-lg-only,
     $breakpoint-xl-up
-);
+) !default;
 $breakpoint-ups: (
     $breakpoint-sm-up,
     $breakpoint-md-up,
     $breakpoint-lg-up,
     $breakpoint-xl-up
-);
+) !default;
 $breakpoint-all-prefixes: (
     'xs',
     'xs-only',
@@ -57,8 +66,8 @@ $breakpoint-all-prefixes: (
     'lg',
     'lg-only',
     'xl'
-);
-$breakpoint-up-prefixes: ('xs', 'sm', 'md', 'lg', 'xl');
+) !default;
+$breakpoint-up-prefixes: ('xs', 'sm', 'md', 'lg', 'xl') !default;
 
 $breakpoints: (
     'xs': $breakpoint-xs-up,
@@ -73,7 +82,7 @@ $breakpoints: (
     'lg-only': $breakpoint-lg-only,
     'lg-down': $breakpoint-lg-down,
     'xl': $breakpoint-xl-up,
-);
+) !default;
 
 body {
     &::before {
@@ -83,5 +92,14 @@ body {
         overflow: hidden;
         visibility: hidden;
         content: json-encode($breakpoints);
+    }
+
+    &::after {
+        display: block;
+        height: 0;
+        width: 0;
+        overflow: hidden;
+        visibility: hidden;
+        content: json-encode($breakpoints-max);
     }
 }
