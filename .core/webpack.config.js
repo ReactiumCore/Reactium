@@ -70,6 +70,14 @@ module.exports = config => {
         ),
     );
     plugins.push(
+        new webpack.ContextReplacementPlugin(
+            /reactium-translations$/,
+            context => {
+                context.request = path.resolve('./src/reactium-translations');
+            },
+        ),
+    );
+    plugins.push(
         new FilterWarningsPlugin({
             exclude: /Critical dependency: the request of a dependency is an expression/i,
         }),
@@ -99,6 +107,14 @@ module.exports = config => {
         },
         module: {
             rules: [
+                {
+                    test: [/\.pot?$/],
+                    use: [
+                        {
+                            loader: '@atomic-reactor/webpack-po-loader',
+                        },
+                    ],
+                },
                 {
                     test: [/\.jsx|js($|\?)/],
                     exclude: [/node_modules/, /umd.js$/],

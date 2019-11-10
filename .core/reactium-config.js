@@ -302,6 +302,18 @@ module.exports = {
                     destination: '/jest.config.js',
                     source: '/tmp/update/jest.config.js',
                 },
+                {
+                    overwrite: false,
+                    version: '>=3.1.0',
+                    destination: '/.gettext.json',
+                    source: '/tmp/update/.gettext.json',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.1.0',
+                    destination: '/src/reactium-translations',
+                    source: '/tmp/update/src/reactium-translations',
+                },
             ],
             remove: [],
         },

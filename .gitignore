@@ -85,3 +85,6 @@ Thumbs.db
 
 # Manifest
 src/manifest.js
+
+# Translation .mo
+*.mo

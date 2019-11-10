@@ -35,6 +35,7 @@ const alias = {
     'reactium-core': './.core',
     dependencies: './.core/dependencies',
     toolkit: './src/app/toolkit',
+    'reactium-translations': './src/reactium-translations',
 };
 
 const env = {
