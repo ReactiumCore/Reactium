@@ -4,13 +4,15 @@
  * -----------------------------------------------------------------------------
  */
 import { getDisplayName } from 'reactium-core/components/Toolkit/_lib/tools';
+import WindowProvider from 'reactium-core/components/WindowProvider';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { themes, assets } from 'appdir/toolkit';
 import { Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import op from 'object-path';
 import _ from 'underscore';
+import { MemoryRouter as Router } from 'react-router-dom';
 
 /**
  * -----------------------------------------------------------------------------
@@ -148,7 +150,14 @@ export default class Preview extends Component {
                 mountTarget='#router'>
                 <FrameContextConsumer>
                     {({ window: iWindow, document: iDocument }) => (
-                        <Component iWindow={iWindow} iDocument={iDocument} />
+                        <WindowProvider value={{ iWindow, iDocument }}>
+                            <Router>
+                                <Component
+                                    iWindow={iWindow}
+                                    iDocument={iDocument}
+                                />
+                            </Router>
+                        </WindowProvider>
                     )}
                 </FrameContextConsumer>
             </Frame>

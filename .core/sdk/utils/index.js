@@ -14,17 +14,44 @@ Reactium.Utils.isWindow();
 // Returns: true if executed in a browser.
 // Returns: false if executed in node (server side rendering).
  */
-Utils.isWindow = iWindow => {
-    const win = iWindow || window;
-    return typeof win !== 'undefined';
+Utils.isWindow = (iWindow = window) => {
+    return typeof iWindow !== 'undefined';
 };
 
 /**
- * @api {Function} Reactium.Utils.breakpoints Utils.breakpoints
+ * @api {Function} Reactium.Utils.isElectron(iframeWindow) Utils.isElectron()
+ * @apiVersion 3.1.14
+ * @apiGroup Reactium.Utilities
+ * @apiName Utils.isElectron
+ * @apiDescription Determine if window is an electron window. Useful for detecting electron usage.
+ * @apiParam {Window} [iframeWindow] iframe window reference.
+ * @apiExample Example Usage:
+Reactium.Utils.isElectron();
+// Returns: true if executed in electron.
+// Returns: false if executed in node or browser.
+ */
+Utils.isElectron = (iWindow = window) => {
+    return (
+        typeof iWindow !== 'undefined' &&
+        iWindow.process &&
+        iWindow.process.type
+    );
+};
+
+Utils.BREAKPOINTS_DEFAULT = {
+    xs: 640,
+    sm: 990,
+    md: 1280,
+    lg: 1440,
+    xl: 1600,
+};
+
+/**
+ * @api {Function} Reactium.Utils.breakpoints() Utils.breakpoints
  * @apiVersion 3.1.14
  * @apiGroup Reactium.Utilities
  * @apiName Utils.breakpoints
- * @apiDescription Object detailing the breakpoints.
+ * @apiDescription Get breakpoints from browser body:after psuedo element or `Utils.BREAKPOINTS_DEFAULT` if unset or node.
 
 | Breakpoint | Range |
 | ---------- | ------ |
@@ -34,12 +61,16 @@ Utils.isWindow = iWindow => {
 | lg | 1281 - 1440 |
 | xl | 1600+ |
  */
-Utils.breakpoints = {
-    xs: 640,
-    sm: 990,
-    md: 1280,
-    lg: 1440,
-    xl: 1600,
+Utils.breakpoints = (iWindow = window, iDocument = document) => {
+    try {
+        const after = iDocument.querySelector('body');
+        const content = iWindow
+            .getComputedStyle(after, ':after')
+            .getPropertyValue('content');
+        return JSON.parse(JSON.parse(content));
+    } catch (error) {
+        return Utils.BREAKPOINTS_DEFAULT;
+    }
 };
 
 /**
@@ -55,14 +86,14 @@ Reactium.Utils.breakpoint();
 Reactium.Utils.breakpoint(1024);
 // Returns: sm
  */
-Utils.breakpoint = width => {
-    width = width ? width : Utils.isWindow() ? window.innerWidth : null;
+Utils.breakpoint = (width, iWindow = window, iDocument = document) => {
+    width = width ? width : Utils.isWindow(iWindow) ? window.innerWidth : null;
 
     if (!width) {
         return 'sm';
     }
 
-    const breaks = { ...Utils.breakpoints };
+    const breaks = Utils.breakpoints(iWindow, iDocument);
     const keys = Object.keys(breaks);
     const vals = Object.values(breaks);
 
