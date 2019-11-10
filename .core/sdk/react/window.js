@@ -63,7 +63,7 @@ export const useWindowSize = (params = {}) => {
 
         iWin.addEventListener('resize', setWindowSize);
 
-        return () => iWin.removeEventListener('resize', resized);
+        return () => iWin.removeEventListener('resize', setWindowSize);
     }, [delay, defaultWidth, defaultHeight]);
 
     return sizeRef.current;
