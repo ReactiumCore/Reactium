@@ -28,6 +28,7 @@ const find = (searches = [], sourceMappings = [], searchParams) => {
         mappings[name] = {
             type,
             imports: [],
+            originals: {},
         };
         return mappings;
     }, {});
@@ -38,12 +39,13 @@ const find = (searches = [], sourceMappings = [], searchParams) => {
             .reduce((mappings, file) => {
                 searches.forEach(({ name, pattern, ignore }) => {
                     if (pattern.test(file) && (!ignore || !ignore.test(file))) {
-                        mappings[name].imports.push(
-                            file
-                                .replace(/\\/g, '/')
-                                .replace(sourceMapping.from, sourceMapping.to)
-                                .replace(/.jsx?$/, ''),
-                        );
+                        const normalized = file
+                            .replace(/\\/g, '/')
+                            .replace(sourceMapping.from, sourceMapping.to)
+                            .replace(/.jsx?$/, '');
+
+                        mappings[name].originals[normalized] = file;
+                        mappings[name].imports.push(normalized);
                     }
                 });
 
