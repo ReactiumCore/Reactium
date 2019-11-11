@@ -52,7 +52,6 @@ Component.register = (hook, component, order) =>
     Hook.register(
         hook,
         async (...params) => {
-            console.log({ params });
             const context = params.pop();
             context.component = component;
         },
