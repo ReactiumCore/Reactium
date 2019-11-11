@@ -179,5 +179,14 @@ module.exports = spinner => {
                 templateFile: 'state',
                 fileName: 'state.js',
             }),
+
+        domain: ({ action, params, props }) =>
+            generate({
+                action,
+                params,
+                props,
+                templateFile: 'domain',
+                fileName: 'domain.js',
+            }),
     };
 };

@@ -3,6 +3,7 @@ const path = require('path');
 const op = require('object-path');
 const ActionSequence = require('action-sequence');
 const mod = path.dirname(require.main.filename);
+const _ = require('underscore');
 
 module.exports = ({ params, props }) => {
     const spinner = ora({
@@ -99,6 +100,20 @@ module.exports = ({ params, props }) => {
         } catch (err) {
             return Promise.reject(err);
         }
+    }
+
+    if (
+        _.intersection(Object.keys(params).filter(key => op.get(params, key)), [
+            'route',
+            'redux',
+            'actions',
+            'actionTypes',
+            'reducers',
+            'plugin',
+            'services',
+        ]).length < 1
+    ) {
+        delete actions.domain;
     }
 
     switch (params.type) {
