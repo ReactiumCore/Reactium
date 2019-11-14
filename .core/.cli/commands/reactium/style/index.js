@@ -118,7 +118,7 @@ const CONFIRM = ({ props, params }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -200,7 +200,7 @@ const HELP = () => {
     console.log('Example:');
     console.log('');
     console.log(
-        `  arcli style --filename '_fubar.scss' --destination '~/src/assets/style' --overwrite`,
+        "  arcli style --filename '_fubar.scss' --destination '~/src/assets/style' --overwrite",
     );
     console.log('');
 };
@@ -234,7 +234,7 @@ const SCHEMA = ({ props }) => {
             },
             filename: {
                 type: 'string',
-                description: chalk.white(`File Name:`),
+                description: chalk.white('File Name:'),
                 message: 'File name is a required parameter',
                 required: true,
                 before: val => {
@@ -310,8 +310,6 @@ const SCHEMA = ({ props }) => {
  * @since 2.0.0
  */
 const ACTION = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     const ovr = {};
@@ -345,7 +343,7 @@ const ACTION = ({ opt, props }) => {
             return;
         }
 
-        message(`A style sheet will be created with the following parameters:`);
+        message('A style sheet will be created with the following parameters:');
         const preflight = { filepath: null, ...params };
 
         delete preflight.destination;
@@ -365,13 +363,12 @@ const ACTION = ({ opt, props }) => {
         );
 
         CONFIRM({ props, params })
-            .then(() => {
+            .then(async () => {
                 console.log('');
-
-                generator({ params, props }).then(success => {
-                    console.log('');
-                });
+                await generator({ params, props });
+                console.log('');
             })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 message(CANCELED);

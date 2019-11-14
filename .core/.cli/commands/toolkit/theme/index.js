@@ -140,7 +140,7 @@ const CONFIRM = ({ props, params, msg }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -161,7 +161,7 @@ const CONFIRM = ({ props, params, msg }) => {
                 } else {
                     resolve(params);
                 }
-            }
+            },
         );
     });
 };
@@ -225,22 +225,22 @@ const HELP = () => {
     console.log('');
     console.log('  <create>');
     console.log(
-        '  Create a new theme named My Theme with a top level stylesheet which will be compiled to ~/public/assets/style/my-theme.css'
+        '  Create a new theme named My Theme with a top level stylesheet which will be compiled to ~/public/assets/style/my-theme.css',
     );
     console.log(
-        `  $ arcli theme create --name 'My Theme' --stylesheet 'cwd/src/assets/styles/my-theme.scss' --active`
+        "  $ arcli theme create --name 'My Theme' --stylesheet 'cwd/src/assets/styles/my-theme.scss' --active",
     );
     console.log('');
     console.log('  <update>');
     console.log(
-        '  Rename theme and stylesheet, then move it to 2nd menu index position and deactivate it.'
+        '  Rename theme and stylesheet, then move it to 2nd menu index position and deactivate it.',
     );
     console.log(
-        `  $ arcli theme update --name 'My Theme' --newName 'Your Theme' --stylesheet 'cwd/src/assets/styles/your-theme.scss' --menu-order 2 --inactive`
+        "  $ arcli theme update --name 'My Theme' --newName 'Your Theme' --stylesheet 'cwd/src/assets/styles/your-theme.scss' --menu-order 2 --inactive",
     );
     console.log('');
     console.log('  <remove>');
-    console.log(`  $ arcli theme remove --name 'My Theme'`);
+    console.log("  $ arcli theme remove --name 'My Theme'");
     console.log('');
 };
 
@@ -258,7 +258,7 @@ const SCHEMA_ACTION = ({ props }) => {
                 item,
                 index,
                 padding: String(actions.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -268,7 +268,7 @@ const SCHEMA_ACTION = ({ props }) => {
                 required: true,
                 message: 'Select an action.',
                 description: `${chalk.white(
-                    'Action:'
+                    'Action:',
                 )} ${actionList}\n    ${chalk.white('Select:')}`,
                 before: val => actionBefore({ val, actions }),
             },
@@ -285,7 +285,7 @@ const SCHEMA_SELECT = ({ props }) => {
                 item,
                 index,
                 padding: String(themes.length).length,
-            })
+            }),
         )
         .join('');
 
@@ -295,7 +295,7 @@ const SCHEMA_SELECT = ({ props }) => {
                 required: true,
                 message: 'Select the theme.',
                 description: `${chalk.white(
-                    'Theme:'
+                    'Theme:',
                 )} ${themeList}\n    ${chalk.white('Select:')}`,
                 before: val => themeBefore({ val, themes }),
             },
@@ -323,7 +323,7 @@ const SCHEMA_NAME = ({ props }) => {
                 pattern: /^y|n|Y|N/,
                 message: '',
                 description: `${chalk.white(
-                    'Overwrite existing theme?'
+                    'Overwrite existing theme?',
                 )} ${chalk.cyan('(Y/N):')}`,
                 ask: () => {
                     try {
@@ -362,7 +362,7 @@ const SCHEMA_CREATE = ({ props, params }) => {
             },
             menuOrder: {
                 description: `${chalk.white('Menu Order')} ${chalk.cyan(
-                    `[0-${themes.length}]:`
+                    `[0-${themes.length}]:`,
                 )}`,
                 ask: () => {
                     return canOverwrite && themes.length > 0;
@@ -371,10 +371,10 @@ const SCHEMA_CREATE = ({ props, params }) => {
             },
             active: {
                 description: `${chalk.white('Selected?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 pattern: /^y|n|Y|N/,
-                message: ` `,
+                message: ' ',
                 ask: () => {
                     return canOverwrite && prompt.override['inactive'] !== true;
                 },
@@ -409,17 +409,17 @@ const SCHEMA_UPDATE = ({ props, params }) => {
             },
             menuOrder: {
                 description: `${chalk.white('Menu Order')} ${chalk.cyan(
-                    `[0-${themes.length}]:`
+                    `[0-${themes.length}]:`,
                 )}`,
                 default: String(menuOrder),
                 before: val => formatMenuOrder(val),
             },
             active: {
                 description: `${chalk.white('Selected?')} ${chalk.cyan(
-                    '(Y/N):'
+                    '(Y/N):',
                 )}`,
                 pattern: /^y|n|Y|N/,
-                message: ` `,
+                message: ' ',
                 default: selected === true ? 'y' : 'n',
                 before: val => {
                     return String(val).toLowerCase() === 'y';
@@ -472,8 +472,6 @@ const ACTION = ({ action, opt, props }) => {
 };
 
 const ACTION_CREATE = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     const { inactive, menuOrder, name, overwrite } = opt;
@@ -538,14 +536,14 @@ const ACTION_CREATE = ({ opt, props }) => {
         .then(input => {
             let params = CONFORM({ input, props });
 
-            message(`A new theme will be created with the following options:`);
+            message('A new theme will be created with the following options:');
             const preflight = { ...params };
             preflight['menuOrder'] = Number(input['menuOrder']);
 
             console.log(
                 prettier.format(JSON.stringify(preflight), {
                     parser: 'json-stringify',
-                })
+                }),
             );
 
             return CONFIRM({ props, params });
@@ -559,7 +557,7 @@ const ACTION_CREATE = ({ opt, props }) => {
                 css: path.normalize(
                     params.stylesheet
                         .replace(`${cwd}/src`, '')
-                        .replace('.scss', '.css')
+                        .replace('.scss', '.css'),
                 ),
             };
 
@@ -582,9 +580,10 @@ const ACTION_CREATE = ({ opt, props }) => {
             generator({ action, params: reducedParams, props }).then(
                 success => {
                     console.log('');
-                }
+                },
             );
         })
+        .then(() => prompt.stop())
         .catch(err => {
             if (err) {
                 error(`${NAME} ${err.message}`);
@@ -593,8 +592,6 @@ const ACTION_CREATE = ({ opt, props }) => {
 };
 
 const ACTION_UPDATE = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     const { inactive, menuOrder, name, overwrite } = opt;
@@ -660,9 +657,7 @@ const ACTION_UPDATE = ({ opt, props }) => {
             let params = CONFORM({ input, props });
 
             message(
-                `The ${
-                    params.name
-                } theme will be updated with the following options:`
+                `The ${params.name} theme will be updated with the following options:`,
             );
             const preflight = { ...params };
             preflight['menuOrder'] = Number(input['menuOrder']);
@@ -670,7 +665,7 @@ const ACTION_UPDATE = ({ opt, props }) => {
             console.log(
                 prettier.format(JSON.stringify(preflight), {
                     parser: 'json-stringify',
-                })
+                }),
             );
 
             return CONFIRM({ props, params });
@@ -685,7 +680,7 @@ const ACTION_UPDATE = ({ opt, props }) => {
                 css: path.normalize(
                     params.stylesheet
                         .replace(`${cwd}/src`, '')
-                        .replace('.scss', '.css')
+                        .replace('.scss', '.css'),
                 ),
             };
 
@@ -696,9 +691,10 @@ const ACTION_UPDATE = ({ opt, props }) => {
             generator({ action: 'update', params: reducedParams, props }).then(
                 success => {
                     console.log('');
-                }
+                },
             );
         })
+        .then(() => prompt.stop())
         .catch(err => {
             if (err) {
                 error(`${NAME} ${err.message}`);
@@ -707,8 +703,6 @@ const ACTION_UPDATE = ({ opt, props }) => {
 };
 
 const ACTION_REMOVE = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     let schema = SCHEMA_SELECT({ props });
@@ -737,10 +731,13 @@ const ACTION_REMOVE = ({ opt, props }) => {
                 params,
                 props,
                 msg: `${chalk.white('Are you sure?')} ${chalk.cyan('(Y/N):')}`,
-            })
+            }),
         )
-        .then(params => generator({ action: 'remove', params, props }))
-        .then(() => console.log(''))
+        .then(async () => {
+            await generator({ action: 'remove', params, props });
+            console.log('');
+        })
+        .then(() => prompt.stop())
         .catch(err => error(err.message));
 };
 

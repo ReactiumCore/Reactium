@@ -249,7 +249,7 @@ const CONFIRM = ({ props, params, description }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -415,9 +415,9 @@ const CONFORM_UPDATE = ({ props, input }) => {
     output.new['dna'] = `/toolkit/${output.new.group}/${output.new.name}`;
 
     // component path
-    output.new['component'] = `appdir/toolkit/${output.new.group}/${
-        output.new.name
-    }`;
+    output.new[
+        'component'
+    ] = `appdir/toolkit/${output.new.group}/${output.new.name}`;
 
     // readme
     if (op.get(output, 'new.documentation')) {
@@ -518,7 +518,7 @@ const SCHEMA_CREATE = ({ props }) => {
         properties: {
             type: {
                 required: true,
-                message: ` Select the element type`,
+                message: ' Select the element type',
                 description: `${chalk.white(
                     'Type:',
                 )} ${typeList}\n    ${chalk.white('Select:')}`,
@@ -743,7 +743,7 @@ const SCHEMA_UPDATE = ({ props, params }) => {
             type: {
                 required: true,
                 default: type,
-                message: ` Select the element type`,
+                message: ' Select the element type',
                 description: `${chalk.white(
                     'Type:',
                 )} ${typeList}\n    ${chalk.white('Select:')}`,
@@ -801,8 +801,6 @@ const SCHEMA_UPDATE = ({ props, params }) => {
 };
 
 const ACTION_CREATE = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     const { id, menuOrder, overwrite } = opt;
@@ -840,7 +838,7 @@ const ACTION_CREATE = ({ opt, props }) => {
             return;
         }
 
-        message(`A new element will be created with the following options:`);
+        message('A new element will be created with the following options:');
         const preflight = { ...params };
 
         console.log(
@@ -850,13 +848,12 @@ const ACTION_CREATE = ({ opt, props }) => {
         );
 
         CONFIRM({ props, params })
-            .then(() => {
+            .then(async () => {
                 console.log('');
-
-                generator({ params, props }).then(success => {
-                    console.log('');
-                });
+                await generator({ action: 'create', params, props });
+                console.log('');
             })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 message(CANCELED);
@@ -865,8 +862,6 @@ const ACTION_CREATE = ({ opt, props }) => {
 };
 
 const ACTION_REMOVE = ({ opt, props }) => {
-    console.log('');
-
     const { prompt } = props;
 
     const { id } = opt;
@@ -927,16 +922,14 @@ const ACTION_REMOVE = ({ opt, props }) => {
 
             return CONFIRM({ props, params, description });
         })
-        .then(confirmed => {
+        .then(async confirmed => {
             params['confirmed'] = confirmed;
 
             console.log('');
-
-            return generator({ params, props });
-        })
-        .then(success => {
+            await generator({ action: 'remove', params, props });
             console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message('Element remove canceled!');
@@ -944,8 +937,6 @@ const ACTION_REMOVE = ({ opt, props }) => {
 };
 
 const ACTION_UPDATE = ({ opt, props }) => {
-    console.log('');
-
     const { prompt } = props;
 
     const schemaGroup = SCHEMA_GROUP({ props });
@@ -1025,16 +1016,13 @@ const ACTION_UPDATE = ({ opt, props }) => {
 
             return CONFIRM({ props, params });
         })
-        .then(confirmed => {
+        .then(async confirmed => {
             params['update'] = confirmed;
-
             console.log('');
-
-            return generator({ params, props });
-        })
-        .then(success => {
+            await generator({ params, props });
             console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             console.log('');

@@ -172,13 +172,12 @@ const ACTION = ({ opt, props }) => {
             resolve(CONFORM({ input, props }));
         });
     })
-        .then(params => {
+        .then(async () => {
             console.log('');
-            return generator({ params, props });
-        })
-        .then(results => {
+            await generator({ params, props });
             console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message(op.get(err, 'message', CANCELED));

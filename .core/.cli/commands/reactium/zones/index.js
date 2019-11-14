@@ -70,7 +70,7 @@ const CONFIRM = ({ props, params, msg = 'Proceed?' }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -286,7 +286,7 @@ const PREFLIGHT = ({ action, params }) => {
             break;
 
         case 'purge':
-            msg = `Purging can not be undone. Are you sure?`;
+            msg = 'Purging can not be undone. Are you sure?';
             break;
     }
 
@@ -343,8 +343,12 @@ const ACTION = ({ action, opt, props, zone }) => {
             : CONFIRM({ props, params, msg });
 
         promise
-            .then(params => generator({ action, params, props }))
-            .then(success => console.log(''))
+            .then(async () => {
+                console.log('');
+                await generator({ action, params, props });
+                console.log('');
+            })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 if (err) {

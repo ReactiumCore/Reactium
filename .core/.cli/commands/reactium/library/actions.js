@@ -3,9 +3,9 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const _ = require('underscore');
 const run = require('gulp-run');
+const globby = require('globby');
 const op = require('object-path');
 const prettier = require('prettier');
-const globby = require('globby');
 
 module.exports = spinner => {
     const message = text => {
@@ -40,12 +40,10 @@ module.exports = spinner => {
             fs.writeFileSync(fpath, content);
             fs.ensureDirSync(destination);
             fs.copySync(fpath, dpath);
-
-            return Promise.resolve({ action, status: 200 });
         },
         assets: ({ action, params, props }) => {
             const { destination, source } = params;
-            const globs = [path.join(source, '**'), `!{*.js}`];
+            const globs = [path.join(source, '**'), '!{*.js}'];
 
             const files = globby
                 .sync(globs)
@@ -61,24 +59,20 @@ module.exports = spinner => {
                 fs.ensureFileSync(dpath);
                 fs.copySync(file, dpath);
             });
-
-            return Promise.resolve({ action, status: 200 });
         },
-        create: ({ action, params, props }) => {
+        create: async ({ action, params, props }) => {
             const { source, destination } = params;
 
             message(
                 `Creating library from ${chalk.cyan(path.basename(source))}...`,
             );
 
-            let babel = new run.Command(
+            const babel = new run.Command(
                 `cross-env NODE_ENV=library babel "${source}" --out-dir "${destination}"`,
-                { verbosity: 3 },
+                { verbosity: 0 },
             );
 
-            babel.exec();
-
-            return Promise.resolve({ action, status: 200 });
+            return new Promise(resolve => babel.exec(null, () => resolve()));
         },
     };
 };

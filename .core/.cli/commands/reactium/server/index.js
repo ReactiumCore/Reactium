@@ -63,7 +63,7 @@ const CONFIRM = ({ props, params, msg }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toUpperCase() === 'Y';
                         },
@@ -200,8 +200,6 @@ const SCHEMA = ({ props }) => {
  * @since 2.0.0
  */
 const ACTION = ({ action, opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
     const schema = SCHEMA({ props });
     const ovr = FLAGS_TO_PARAMS({ opt });
@@ -233,13 +231,12 @@ const ACTION = ({ action, opt, props }) => {
         .then(() => {
             return CONFIRM({ props, params });
         })
-        .then(() => {
+        .then(async () => {
             console.log('');
-            return generator({ action, params, props });
-        })
-        .then(results => {
+            await generator({ params, props });
             console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message(op.get(err, 'message', CANCELED));

@@ -9,8 +9,6 @@ const spinner = ora({
 const actions = require('./actions')(spinner);
 
 module.exports = ({ params, props }) => {
-    console.log('');
-
     spinner.start();
 
     return ActionSequence({

@@ -89,8 +89,6 @@ const SCHEMA = ({ props }) => {
 };
 
 const ACTION = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
     const schema = SCHEMA({ props });
     const ovr = FLAGS_TO_PARAMS({ opt });
@@ -113,13 +111,12 @@ const ACTION = ({ opt, props }) => {
             resolve(params);
         });
     })
-        .then(params => {
+        .then(async () => {
             console.log('');
-            return generator({ params, props });
-        })
-        .then(results => {
+            await generator({ params, props });
             console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message(op.get(err, 'message', CANCELED));

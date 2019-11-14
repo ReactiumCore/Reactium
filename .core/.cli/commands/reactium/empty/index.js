@@ -55,7 +55,7 @@ const CONFIRM = ({ props, params }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -159,12 +159,12 @@ const ACTION = ({ opt, props }) => {
     const params = CONFORM({ input: ovr, props });
 
     CONFIRM({ props, params })
-        .then(() => {
+        .then(async () => {
             console.log('');
-            generator({ params, props }).then(success => {
-                console.log('');
-            });
+            await generator({ params, props });
+            console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message(CANCELED);

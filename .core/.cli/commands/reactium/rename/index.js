@@ -74,12 +74,12 @@ const CONFIRM = ({ props, params }) => {
                 properties: {
                     confirmed: {
                         description: `${chalk.white('Proceed?')} ${chalk.cyan(
-                            '(Y/N):'
+                            '(Y/N):',
                         )}`,
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -98,7 +98,7 @@ const CONFIRM = ({ props, params }) => {
                 } else {
                     resolve(params);
                 }
-            }
+            },
         );
     });
 };
@@ -138,7 +138,7 @@ const SEARCH = ({ props, params }) => {
               const selections = search
                   .map((type, index) => {
                       return `\n\t    ${chalk.cyan(
-                          `${index + 1}.`
+                          `${index + 1}.`,
                       )} ${chalk.white(type)}`;
                   })
                   .join('');
@@ -148,11 +148,11 @@ const SEARCH = ({ props, params }) => {
                       properties: {
                           directory: {
                               description: `${chalk.white(
-                                  'Component Directory:'
+                                  'Component Directory:',
                               )} ${selections}\n    ${chalk.white('Select:')}`,
                               type: 'string',
                               required: true,
-                              message: ` please make a selection`,
+                              message: ' please make a selection',
                               before: val => {
                                   val = val
                                       .replace(/[^0-9\s]/g, '')
@@ -181,7 +181,7 @@ const SEARCH = ({ props, params }) => {
                       } else {
                           resolve(directory);
                       }
-                  }
+                  },
               );
           });
 };
@@ -261,11 +261,11 @@ const SCHEMA = () => {
             },
             replace: {
                 description: `${chalk.white(
-                    'Replace in other files?'
+                    'Replace in other files?',
                 )} ${chalk.cyan('(Y/N):')}`,
                 required: true,
                 pattern: /^y|n|Y|N/,
-                message: ` `,
+                message: ' ',
                 default: 'n',
                 before: val => {
                     return String(val).toLowerCase() === 'y';
@@ -284,8 +284,6 @@ const SCHEMA = () => {
  * @since 2.0.0
  */
 const ACTION = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     const ovr = {};
@@ -318,7 +316,7 @@ const ACTION = ({ opt, props }) => {
                 const params = CONFORM({ input, props });
                 const { replace } = params;
 
-                message(`Rename component with the following options:`);
+                message('Rename component with the following options:');
 
                 const preflight = { ...params };
                 const files = testflight({ params, props });
@@ -326,7 +324,7 @@ const ACTION = ({ opt, props }) => {
                 console.log(
                     prettier.format(JSON.stringify(preflight), {
                         parser: 'json-stringify',
-                    })
+                    }),
                 );
 
                 params['files'] = files;
@@ -349,13 +347,12 @@ const ACTION = ({ opt, props }) => {
 
                 return CONFIRM({ props, params });
             })
-            .then(params => {
+            .then(async () => {
                 console.log('');
-
-                generator({ params, props }).then(success => {
-                    console.log('');
-                });
+                await generator({ params, props });
+                console.log('');
             })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 if (err) {
@@ -380,7 +377,7 @@ const COMMAND = ({ program, props }) =>
         .option('-d, --directory [directory]', "Component's parent directory.")
         .option(
             '-r, --replace [replace]',
-            'Replace the component name in other files.'
+            'Replace the component name in other files.',
         )
         .on('--help', HELP);
 

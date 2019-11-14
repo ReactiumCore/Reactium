@@ -58,7 +58,7 @@ const CONFIRM = ({ props, params, msg }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -213,8 +213,6 @@ const ACTION = ({ opt, props }) => {
         );
     }
 
-    console.log('');
-
     let params;
     const { cwd, prompt } = props;
     const schema = SCHEMA({ props });
@@ -242,13 +240,12 @@ const ACTION = ({ opt, props }) => {
         .then(() => {
             return CONFIRM({ props, params });
         })
-        .then(() => {
+        .then(async () => {
             console.log('');
-            return generator({ action: 'create', params, props });
-        })
-        .then(results => {
+            await generator({ action: 'create', params, props });
             console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message(op.get(err, 'message', CANCELED));

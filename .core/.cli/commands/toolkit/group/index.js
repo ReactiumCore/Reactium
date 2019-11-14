@@ -107,7 +107,7 @@ const CONFIRM = ({ props, params, message = 'Proceed?' }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -424,8 +424,6 @@ const ACTION = ({ action, opt, props }) => {
 };
 
 const ACTION_CREATE = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     const schema = SCHEMA_CREATE({ props });
@@ -461,7 +459,7 @@ const ACTION_CREATE = ({ opt, props }) => {
             return;
         }
 
-        message(`A new group will be created with the following options:`);
+        message('A new group will be created with the following options:');
         const preflight = { ...input };
 
         console.log(
@@ -471,13 +469,12 @@ const ACTION_CREATE = ({ opt, props }) => {
         );
 
         CONFIRM({ props, params })
-            .then(() => {
+            .then(async () => {
                 console.log('');
-
-                generator({ action: 'create', params, props }).then(success => {
-                    console.log('');
-                });
+                await generator({ action: 'create', params, props });
+                console.log('');
             })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 message('Group create canceled!');
@@ -486,8 +483,6 @@ const ACTION_CREATE = ({ opt, props }) => {
 };
 
 const ACTION_REMOVE = ({ opt, props }) => {
-    console.log('');
-
     const { prompt } = props;
 
     const schema = SCHEMA_ID({ props });
@@ -516,13 +511,12 @@ const ACTION_REMOVE = ({ opt, props }) => {
         )} group?`;
 
         CONFIRM({ props, params, message: warning })
-            .then(() => {
+            .then(async () => {
                 console.log('');
-
-                generator({ action: 'remove', params, props }).then(success => {
-                    console.log('');
-                });
+                await generator({ action: 'remove', params, props });
+                console.log('');
             })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 message('Group remove canceled!');
@@ -531,8 +525,6 @@ const ACTION_REMOVE = ({ opt, props }) => {
 };
 
 const ACTION_UPDATE = ({ opt, props }) => {
-    console.log('');
-
     const { cwd, prompt } = props;
 
     let ovr = mapOverrides({ schema: SCHEMA_ID({ props }), opt });
@@ -600,13 +592,12 @@ const ACTION_UPDATE = ({ opt, props }) => {
 
             return CONFIRM({ props, params });
         })
-        .then(params => {
+        .then(async () => {
             console.log('');
-
-            generator({ action: 'update', params, props }).then(success => {
-                console.log('');
-            });
+            await generator({ action: 'update', params, props });
+            console.log('');
         })
+        .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
             message('Group update canceled');

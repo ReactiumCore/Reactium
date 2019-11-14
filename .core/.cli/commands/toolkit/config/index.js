@@ -55,12 +55,12 @@ const CONFIRM = ({ props, params }) => {
                 properties: {
                     confirmed: {
                         description: `${chalk.white('Proceed?')} ${chalk.cyan(
-                            '(Y/N):'
+                            '(Y/N):',
                         )}`,
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toLowerCase() === 'y';
                         },
@@ -81,7 +81,7 @@ const CONFIRM = ({ props, params }) => {
                 } else {
                     resolve(params);
                 }
-            }
+            },
         );
     });
 };
@@ -128,13 +128,13 @@ const HELP = () => {
     console.log('');
     console.log('Example:');
     console.log('');
-    console.log(`  $ arcli toolkit --header 'Style Guide'`);
+    console.log("  $ arcli toolkit --header 'Style Guide'");
     console.log('');
     console.log(
-        `  $ arcli toolkit --logo '/assets/images/atomic-reactor-logo.svg'`
+        "  $ arcli toolkit --logo '/assets/images/atomic-reactor-logo.svg'",
     );
     console.log('');
-    console.log(`  $ arcli toolkit --ver '2.1.1'`);
+    console.log("  $ arcli toolkit --ver '2.1.1'");
     console.log('');
 };
 
@@ -176,8 +176,6 @@ const SCHEMA = ({ props }) => {
  * @since 2.0.0
  */
 const ACTION = ({ opt, props }) => {
-    console.log('');
-
     Object.entries(manifest(props)).forEach(([key, value]) => {
         m[key] = value;
     });
@@ -208,18 +206,22 @@ const ACTION = ({ opt, props }) => {
 
         const params = CONFORM({ input, props });
 
-        message(`Toolkit config will be updated with the following options:`);
+        message('Toolkit config will be updated with the following options:');
         const preflight = { ...params };
 
         console.log(
             prettier.format(JSON.stringify(preflight), {
                 parser: 'json-stringify',
-            })
+            }),
         );
 
         CONFIRM({ props, params })
-            .then(params => generator({ params, props }))
-            .then(success => console.log(''))
+            .then(async () => {
+                console.log('');
+                await generator({ params, props });
+                console.log('');
+            })
+            .then(() => prompt.stop())
             .catch(err => {
                 prompt.stop();
                 message(CANCELED);

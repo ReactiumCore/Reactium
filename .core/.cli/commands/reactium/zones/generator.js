@@ -16,7 +16,6 @@ module.exports = ({ action, params, props }) => {
     const allActions = require('./actions')(spinner);
 
     if (spinner) {
-        console.log('');
         spinner.start();
     }
 
