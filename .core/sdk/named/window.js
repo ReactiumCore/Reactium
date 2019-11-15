@@ -184,7 +184,17 @@ export const useWindowSize = (params = {}) => {
     const [, update] = useState(sizeRef.current);
 
     const setWindowSize = _.debounce(() => {
-        sizeRef.current = getSize();
+        sizeRef.current = { ...sizeRef.current, ...getSize() };
+        update(sizeRef.current);
+    }, delay);
+
+    const setScrollPosition = _.debounce(() => {
+        sizeRef.current = {
+            ...sizeRef.current,
+            scrollX: iWin.scrollX,
+            scrollY: iWin.scrollY,
+        };
+
         update(sizeRef.current);
     }, delay);
 
@@ -194,8 +204,12 @@ export const useWindowSize = (params = {}) => {
         }
 
         iWin.addEventListener('resize', setWindowSize);
+        iWin.addEventListener('scroll', setScrollPosition);
 
-        return () => iWin.removeEventListener('resize', setWindowSize);
+        return () => {
+            iWin.removeEventListener('resize', setWindowSize);
+            iWin.removeEventListener('scroll', setScrollPosition);
+        };
     }, [delay, defaultWidth, defaultHeight]);
 
     return sizeRef.current;
