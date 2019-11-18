@@ -226,6 +226,12 @@ export const useReduxState = (...params) => {
         select = state => op.get(state, domain),
         shouldUpdate = defaultShouldUpdate,
     ] = params;
+
+    if (typeof select !== 'function')
+        throw 'select parameter must be a function';
+    if (typeof shouldUpdate !== 'function')
+        throw 'shouldUpdate parameter must be a function';
+
     const state = useSelect({ select, shouldUpdate });
     const { dispatch } = useStore();
     return [
