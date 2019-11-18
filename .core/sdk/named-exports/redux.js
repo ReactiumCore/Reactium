@@ -194,3 +194,47 @@ export const useSelect = params => {
 
     return stateRef.current;
 };
+
+/**
+ * @api {ReactHook} useReduxState(select,shouldUpdate,domain) useReduxState()
+ * @apiDescription Similar to React useState(), returns selected redux state, and action
+ * dispatching function, as the first and second elements of an array.
+ *
+ * Takes an optional shouldUpdate callback (see useSelect), which does a shallow comparison of
+ * previous and current selected state by default.
+ * The update callback returned expects to be called with an object, and will cause a dispatch:
+{
+    type: 'DOMAIN_UPDATE',
+    domain, // the passed domain
+    update, // object passed to update
+}
+ *
+ * Note: the boilerplate redux reducer created with `arcli component` will target action dispatched from this hoook.
+ * @apiParam {Function} [select] Optional select callback (see useSelect), which selects for the domain by default.
+ * @apiParam {Function} [shouldUpdate] Optional shouldUpdate callback (see useSelect), which does a shallow comparison of
+ * previous and current selected state by default.
+ * @apiParam {String} domain The targeted redux domain.
+ * @apiName useReduxState
+ * @apiGroup ReactHook
+ */
+export const useReduxState = (...params) => {
+    const domain = params.pop();
+    if (typeof domain !== 'string')
+        throw 'useReduxState domain parameter required.';
+
+    const [
+        select = state => op.get(state, domain),
+        shouldUpdate = defaultShouldUpdate,
+    ] = params;
+    const state = useSelect({ select, shouldUpdate });
+    const { dispatch } = useStore();
+    return [
+        state,
+        update =>
+            dispatch({
+                type: 'DOMAIN_UPDATE',
+                domain,
+                update,
+            }),
+    ];
+};

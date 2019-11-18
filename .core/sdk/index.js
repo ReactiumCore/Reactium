@@ -15,7 +15,7 @@ import User from './user';
 import Utils from './utils';
 import Zone from './zone';
 
-export * from './named';
+export * from './named-exports';
 
 export default {
     ...Parse,

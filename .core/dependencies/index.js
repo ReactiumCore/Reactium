@@ -35,6 +35,8 @@ class ReactiumDependencies {
             }),
             {},
         );
+        this.actionTypes.DOMAIN_UPDATE = 'DOMAIN_UPDATE';
+
         this.services = this.manifest.allServices;
 
         this.plugins = this.manifest.allPlugins;

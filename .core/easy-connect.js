@@ -1,4 +1,4 @@
-export * from 'reactium-core/sdk/named/redux';
+export * from 'reactium-core/sdk/named-exports/redux';
 
 console.log(
     '%cImporting from `reactium-core/easy-connect` is deprecated. Import from `reactium-core/sdk` instead.',
