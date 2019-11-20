@@ -137,7 +137,7 @@ const ACTION = ({ opt, props }) => {
     })
         .then(async () => {
             console.log('');
-            await generator({ params, props });
+            await generator({ props });
             console.log('');
         })
         .then(() => prompt.stop())

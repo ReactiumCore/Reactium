@@ -1,14 +1,18 @@
 import deps from 'dependencies';
+import domain from './domain';
 
 export default (state = {}, action) => {
-
-    let newState;
-
     switch (action.type) {
-
-        case deps().actionTypes.{{ID}}_LOAD:
-            newState = { ...state, ...action.data };
-            return newState;
+        case deps().actionTypes.DOMAIN_UPDATE: {
+            // "{{name}}" or domain.name
+            if ( action.domain === domain.name ) {
+                return {
+                    ...state,
+                    ...action.update,
+                };
+            }
+            return state;
+        }
 
         default:
             return state;
