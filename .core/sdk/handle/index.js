@@ -21,7 +21,7 @@ outside using a technique other than changing the component `props` (i.e. declar
 
  For developers that prefer the use of React hooks, Reactium provides two hooks for your use:
  `useRegisterHandle()` and `useHandle()` to register and use these handles respectively.
- * @apiGroup Reactium
+ * @apiGroup Reactium.Handle
  *
  */
 class Handle {
