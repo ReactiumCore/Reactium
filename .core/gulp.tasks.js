@@ -26,6 +26,8 @@ const umdWebpackGenerator = require('./umd.webpack.config');
 const rootPath = path.resolve(__dirname, '..');
 const { fork, spawn } = require('child_process');
 const workbox = require('workbox-build');
+const { File, FileReader } = require('file-api');
+const handlebars = require('handlebars');
 
 // For backward compatibility with gulp override tasks using run-sequence module
 // make compatible with gulp4
@@ -372,6 +374,69 @@ const reactium = (gulp, config, webpackConfig) => {
         done();
     };
 
+    const fileReader = file => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onerror = () => {
+                reader.abort();
+                reject();
+            };
+
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const pluginAssetsTemplate = data => {
+        const template = handlebars.compile(`
+// Generated Data URLs from plugin-assets.json
+$assets: (
+    {{#each this}}
+    '{{key}}': '{{{dataURL}}}',
+    {{/each}}
+);`);
+
+        return template(data);
+    };
+
+    const pluginAssets = async done => {
+        const files = globby.sync(config.src.pluginAssets);
+        for (const file of files) {
+            const manifest = path.resolve(file);
+            const base = path.dirname(manifest);
+
+            try {
+                let assets = fs.readFileSync(manifest);
+                assets = JSON.parse(assets);
+
+                const entries = Object.entries(assets);
+                const mappings = [];
+                for (const entry of entries) {
+                    const [key, fileName] = entry;
+                    const dataURL = await fileReader(
+                        new File(path.resolve(base, fileName)),
+                    );
+                    mappings.push({ key, dataURL });
+                }
+
+                fs.writeFileSync(
+                    path.resolve(base, '_plugin-assets.scss'),
+                    pluginAssetsTemplate(mappings),
+                    'utf8',
+                );
+            } catch (error) {
+                console.error(
+                    'error generating sass partial _plugin-assets.scss in ' +
+                        base,
+                    error,
+                );
+            }
+        }
+
+        done();
+    };
+
     const stylesColors = done => {
         if (config.cssPreProcessor === 'sass') {
             // Currently only works with sass
@@ -442,7 +507,11 @@ const reactium = (gulp, config, webpackConfig) => {
             .pipe(gulpif(isDev, browserSync.stream()));
     };
 
-    const styles = gulp.series(task('styles:colors'), task('styles:compile'));
+    const styles = gulp.series(
+        task('styles:colors'),
+        task('styles:pluginAssets'),
+        task('styles:compile'),
+    );
 
     const compress = done =>
         isDev
@@ -455,6 +524,7 @@ const reactium = (gulp, config, webpackConfig) => {
     const watchFork = done => {
         // Watch for file changes
         gulp.watch(config.watch.colors, gulp.task('styles:colors'));
+        gulp.watch(config.watch.pluginAssets, gulp.task('styles:pluginAssets'));
         gulp.watch(config.watch.style, gulp.task('styles:compile'));
         gulpwatch(config.watch.markup, watcher);
         gulpwatch(config.watch.assets, watcher);
@@ -492,6 +562,7 @@ const reactium = (gulp, config, webpackConfig) => {
         serviceWorker,
         static: staticTask,
         'static:copy': staticCopy,
+        'styles:pluginAssets': pluginAssets,
         'styles:colors': stylesColors,
         'styles:compile': stylesCompile,
         styles,
