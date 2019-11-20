@@ -150,7 +150,7 @@ User.isRole = async (role, userId) => {
 };
 
 /**
- * @api {Function} User.can(capabilities,userObject, strict) User.can()
+ * @api {Function} User.can(capabilities,userObject,strict) User.can()
  * @apiDescription Synchronously find out if a user has a set of capabilities. This check is done on the loaded user, and will not reflect
  * any asynch changed that have been made to the user (such as capability change on the users roles). As such, this should only be used
  * authoritatively on a recently loaded user, or when strict enforcement of the capabilities at every moment is not necessary. For example, when
