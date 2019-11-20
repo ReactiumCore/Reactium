@@ -172,7 +172,7 @@ const ACTION = ({ opt, props }) => {
             resolve(CONFORM({ input, props }));
         });
     })
-        .then(async () => {
+        .then(async params => {
             console.log('');
             await generator({ params, props });
             console.log('');
