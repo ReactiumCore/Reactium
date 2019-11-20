@@ -317,12 +317,14 @@ if (task.status === Pulse.ENUMS.STATUS.STOPPED) {
             this.status === ENUMS.STATUS.STOPPED ||
             this[_pending] === ENUMS.STATUS.STOPPED
         ) {
+            console.log(0);
             return this.stop();
         }
 
         this[_timer] = null;
         this[_error] = null;
         this[_attempt] = 1;
+        this[_status] = ENUMS.STATUS.READY;
 
         if (this[_repeat] === -1) {
             return this.start();

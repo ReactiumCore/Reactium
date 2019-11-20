@@ -14,11 +14,11 @@ const ENUMS = {
         REPEAT: -1,
     },
     STATUS: {
-        ERROR: Symbol(uuid()),
-        READY: Symbol(uuid()),
-        RUNNING: Symbol(uuid()),
-        STARTED: Symbol(uuid()),
-        STOPPED: Symbol(uuid()),
+        ERROR: 'ERROR',
+        READY: 'READY',
+        RUNNING: 'RUNNING',
+        STARTED: 'STARTED',
+        STOPED: 'STOPPED',
     },
 };
 
