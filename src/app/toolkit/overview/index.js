@@ -1,4 +1,4 @@
-import { ec } from 'reactium-core/easy-connect';
+import { ec } from 'reactium-core/sdk';
 import Overview from './Overview';
 
 export default ec(Overview);

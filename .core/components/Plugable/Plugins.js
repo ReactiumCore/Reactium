@@ -7,7 +7,7 @@ import React, { Component, useContext } from 'react';
 import Context from './Context';
 import op from 'object-path';
 import getComponents from 'dependencies/getComponents';
-import { useSelect } from 'reactium-core/easy-connect';
+import { useSelect } from 'reactium-core/sdk';
 import _ from 'underscore';
 
 const findComponent = (type, path, paths) => {
