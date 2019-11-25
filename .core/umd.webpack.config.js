@@ -3,17 +3,18 @@ const path = require('path');
 const env = process.env.NODE_ENV || 'development';
 const rootPath = path.resolve(__dirname, '..');
 const CompressionPlugin = require('compression-webpack-plugin');
+const op = require('object-path');
 
 module.exports = umd => {
     const plugins = [];
-    if (env === 'production') {
-        plugins.push(new CompressionPlugin());
-    }
+    const presets = [];
+
+    if (op.get(umd, 'babelPresetEnv', true)) presets.push('@babel/preset-env');
+    presets.push('@babel/react');
 
     const config = {
         mode: env,
         entry: umd.entry,
-        devtool: 'inline-source-map',
         output: {
             path: umd.outputPath,
             filename: umd.outputFile,
@@ -27,7 +28,7 @@ module.exports = umd => {
                     test: /(\.jsx|\.js)$/,
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env', '@babel/react'],
+                        presets,
                         plugins: [
                             [
                                 '@babel/plugin-proposal-class-properties',
@@ -57,6 +58,12 @@ module.exports = umd => {
         ),
         plugins,
     };
+
+    if (env === 'production') {
+        plugins.push(new CompressionPlugin());
+    } else {
+        config.devtool = 'inline-source-map';
+    }
 
     let override = (umd, config) => config;
     if (fs.existsSync(`${rootPath}/umd.webpack.override.js`)) {

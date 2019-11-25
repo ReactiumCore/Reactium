@@ -24,6 +24,12 @@ const defaultLibraryExternals = {
         // to provide both es6 named exports and Reactium default alias
         defaultAlias: 'Reactium',
     },
+    ReactDOM: {
+        externalName: 'react-dom',
+        requirePath: 'react-dom',
+        // to provide both es6 named exports and React default alias
+        defaultAlias: 'ReactDOM',
+    },
     react: {
         externalName: 'react',
         requirePath: 'react',
