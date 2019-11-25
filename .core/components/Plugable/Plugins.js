@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, useContext } from 'react';
+import React, { useContext } from 'react';
 import Context from './Context';
 import op from 'object-path';
 import getComponents from 'dependencies/getComponents';

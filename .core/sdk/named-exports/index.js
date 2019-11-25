@@ -1,3 +1,4 @@
+export { default as Plugins } from 'reactium-core/components/Plugable/Plugins';
 export * from './redux';
 export * from './component';
 export * from './handle';
