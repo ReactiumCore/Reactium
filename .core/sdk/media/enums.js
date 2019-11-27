@@ -10,6 +10,7 @@ const ENUMS = {
     MAX_BYTES: 5000,
     MAX_UPLOADS: 5,
     STATUS: {
+        CANCELED: 'canceled',
         COMPLETE: 'complete',
         QUEUED: 'queued',
         UPLOADING: 'uploading',
