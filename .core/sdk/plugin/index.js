@@ -1,6 +1,8 @@
 import Hook from '../hook';
 import _ from 'underscore';
 import Enums from '../enums';
+import User from '../user';
+import op from 'object-path';
 
 const plugins = {};
 const Plugin = {};
@@ -103,8 +105,10 @@ Plugin.unregister = ID => {
  * @apiDescription Register a component to a plugin zone.
  * @apiParam {Object} plugin plugin component, determines what component renders in a zone, what order
  * and additional properties to pass to the component.
+ * @apiParam {Array} [capabilities] list of capabilities to check before adding plugin to zone. Can also be added as property of plugin object.
+ * @apiParam {Boolean} [strict=true] true to only add plugin if all capabilities are allowed, otherwise only one capability is necessary
  * @apiGroup Reactium.Plugin
- * @apiExample Example Usage:
+ * @apiExample plugin-a.js
 import SomeComponent from './path/to/SomeComponent';
 import Reactium from 'reactium-core/sdk';
 
@@ -150,10 +154,18 @@ Reactium.Plugin.register('myPlugin').then(() => {
     })
 })
  */
-Plugin.addComponent = plugin => {
+Plugin.addComponent = async (plugin = {}, capabilities = [], strict = true) => {
     if (!Plugin.ready) {
         console.error(new Error(prematureCallError('Plugin.addComponent()')));
         return;
+    }
+
+    capabilities = op.get(plugin, 'capabilities', capabilities) || [];
+    strict = !!op.get(plugin, 'strict', strict);
+
+    if (Array.isArray(capabilities) && capabilities.length > 0) {
+        const permitted = await User.can(capabilities, strict);
+        if (!permitted) return;
     }
 
     Plugin.redux.store.dispatch(Plugin.deps.actions.Plugable.addPlugin(plugin));
