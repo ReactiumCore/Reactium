@@ -1,5 +1,6 @@
 {
     "libraryName": "service-worker",
     "globalObject": "this",
+    "babelPresetEnv": false,
     "externals": {}
 }

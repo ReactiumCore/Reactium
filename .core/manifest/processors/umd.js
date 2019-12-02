@@ -53,6 +53,11 @@ module.exports = data => {
                 defaultLibraryExternals,
             );
             const globalObject = op.get(umdConfig, 'globalObject', 'window');
+            const babelPresetEnv = op.get(
+                umdConfig,
+                'babelPresetEnv',
+                'window',
+            );
 
             return {
                 entry: path.normalize(entryPath + '.js'),
@@ -61,6 +66,7 @@ module.exports = data => {
                 outputFile,
                 externals,
                 globalObject,
+                babelPresetEnv,
             };
         }),
         null,
