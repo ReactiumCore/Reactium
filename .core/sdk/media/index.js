@@ -3,159 +3,175 @@ import uuid from 'uuid/v4';
 import ENUMS from './enums';
 import op from 'object-path';
 import Reactium from 'reactium-core/sdk';
-import { fileToChunks, fileUploadShim } from './utils';
+import api from 'appdir/api/config';
+import Parse from 'appdir/api';
+import moment from 'moment';
+
+const SCRIPT = '/assets/js/umd/media-uploader/media-uploader.js';
 
 const debug = (caller, ...args) =>
     ENUMS.DEBUG === true ? console.log(caller, ...args) : () => {};
 
-const valueToArray = value => _.compact(Array.isArray(value) ? value : [value]);
+const paramToArray = value => _.compact(Array.isArray(value) ? value : [value]);
 
-const reduxCheck = () => {
-    if (!Reactium.Plugin.redux) {
-        throw new Error(
-            'Reactium.Media.upload() requires the Reactium.Plugin.redux store.',
-        );
-        return true;
-    }
-};
+const mapFileToUpload = file => {
+    const {
+        ID,
+        name: filename,
+        progress = 0,
+        size: total,
+        status,
+        statusAt,
+    } = file;
 
-const cloudCheck = () => {
-    if (!Reactium.Cloud) {
-        throw new Error(
-            'Reactium.Media.uploadChunk() requires the Reactium.Cloud API.',
-        );
-        return true;
-    }
+    return {
+        ID,
+        action,
+        file,
+        filename,
+        progress,
+        status,
+        statusAt,
+        total,
+    };
 };
 
 class Media {
     constructor() {
         this.ENUMS = ENUMS;
-        this.fileToChunks = fileToChunks;
+        this.worker = null;
+
+        const Worker = typeof window !== 'undefined' ? window.Worker : null;
+
+        if (Worker !== null) {
+            const sessionToken = Parse.User.current().getSessionToken();
+
+            this.worker = new Worker(SCRIPT);
+            this.worker.addEventListener('message', e =>
+                this.__onWorkerMessage(e),
+            );
+            this.worker.postMessage({
+                action: 'initialize',
+                params: { ...api, sessionToken },
+            });
+        }
     }
 
-    async upload(files = [], directory = 'uploads') {
-        if (reduxCheck()) return;
+    __onStatus(params) {
+        const { uploads = {} } = this.state;
+        const { ID, progress, status, url } = params;
 
-        files = valueToArray(files);
+        op.set(uploads, [ID, 'status'], status);
+        op.set(uploads, [ID, 'statusAt'], Date.now());
 
-        if (files.length < 1) return;
-
-        const { dispatch, getState } = Reactium.Plugin.redux.store;
-        const { files: currentFiles = {}, uploads = {} } = getState().Media;
-
-        // Queue chunks
-        for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-
-            // Shim the file object if it's been uploaded outside of a Dropzone
-            if (!file.upload) {
-                upload = await fileUploadShim(file);
-            }
-
-            const { ID, upload } = file;
-
-            if (op.get(uploads, ID)) return;
-
-            file.action = ENUMS.STATUS.UPLOADING;
-            file.directory =
-                file.directory || op.get(file, 'directory', directory);
-
-            const obj = {
-                ID,
-                ...upload,
-                chunks: await fileToChunks(file),
-                directory: file.directory,
-                status: ENUMS.STATUS.QUEUED,
-            };
-
-            obj['totalChunkCount'] = Object.keys(obj.chunks).length;
-
-            if (!op.get(currentFiles, ID)) {
-                currentFiles[ID] = file;
-            }
-
-            uploads[ID] = obj;
+        if (progress > 0) {
+            op.set(uploads, [ID, 'progress'], Number(progress));
         }
 
-        // Update state
-        return dispatch({
-            domain: ENUMS.DOMAIN,
-            type: ENUMS.ACTION_TYPE,
-            update: { files: currentFiles, uploads },
-        });
+        if (op.has(params, 'url')) {
+            op.set(uploads, [ID, 'url'], params.url);
+        }
+
+        this.setState({ uploads });
     }
 
-    async uploadChunk(upload) {
-        if (reduxCheck() || cloudCheck()) return;
+    __onWorkerMessage(e) {
+        const { type, params } = e.data;
 
-        delete upload.chunks;
-
-        return Reactium.Cloud.run('upload-chunk', upload).then(result => {
-            const { chunk, ID, index, total } = upload;
-            const { dispatch, getState } = Reactium.Plugin.redux.store;
-            const {
-                completed = [],
-                files = {},
-                uploads = {},
-            } = getState().Media;
-
-            const bytesSent =
-                op.get(uploads, [ID, 'bytesSent'], 0) + chunk.length;
-
-            const progress = bytesSent / total;
-
-            const status =
-                progress >= 1 ? ENUMS.STATUS.COMPLETE : ENUMS.STATUS.UPLOADING;
-
-            op.set(uploads, [ID, 'bytesSent'], bytesSent);
-            op.set(uploads, [ID, 'progress'], progress);
-            op.set(uploads, [ID, 'action'], status);
-            op.set(files, [ID, 'action'], status);
-
-            if (status === ENUMS.STATUS.COMPLETE) {
-                const { file } = result;
-                op.set(uploads, [ID, 'url'], file.url);
-                op.set(files, [ID, 'url'], file.url);
-                completed.push(ID);
-            }
-
-            dispatch({
-                domain: ENUMS.DOMAIN,
-                type: ENUMS.ACTION_TYPE,
-                update: { completed, files, uploads },
-            });
-
-            result['upload'] = upload;
-            return result;
-        });
+        switch (type) {
+            case 'status':
+                this.__onStatus(params);
+                break;
+        }
     }
 
-    removeChunks(file) {
-        const { dispatch, getState } = Reactium.Plugin.redux.store;
-        const { files = {}, uploads = {} } = getState().Media;
+    get state() {
+        const { getState } = Reactium.Plugin.redux.store;
+        return getState().Media;
+    }
 
-        const { ID } = file;
-        delete files[ID];
-        delete uploads[ID];
-
+    setState(newState = {}) {
+        const { dispatch } = Reactium.Plugin.redux.store;
         dispatch({
-            domain: ENUMS.DOMAIN,
             type: ENUMS.ACTION_TYPE,
-            update: { files, uploads },
+            domain: ENUMS.DOMAIN,
+            update: newState,
         });
     }
 
-    async fetch({ directory, page = 1, search }) {
-        const { dispatch, getState } = Reactium.Plugin.redux.store;
-        const { library = {} } = getState().Media;
+    upload(files, directory = ENUMS.DIRECTORY) {
+        // 0.0 - convert single file to array of files
+        files = paramToArray(files);
 
+        // 1.0 - Get State
+        const { uploads = {} } = this.state;
+
+        // 2.0 - Loop through files array
+        files.forEach(file => {
+            // 2.1 - Update uploads state object
+            const upload = mapFileToUpload(file);
+            upload['directory'] = directory;
+            uploads[file.ID] = upload;
+            upload['status'] = ENUMS.STATUS.QUEUED;
+
+            // 2.2 - Send file to media-upload Web Worker
+            this.worker.postMessage({ action: 'addFile', params: upload });
+        });
+
+        // 3.0 - Update State
+        this.setState({ uploads });
+    }
+
+    cancel(files) {
+        // 0.0 - Covnert single file to array of files
+        files = paramToArray(files);
+
+        // 1.0 - Get State
+        const { uploads = {} } = this.state;
+
+        // 2.0 - Loop through files array
+        files.forEach(file => {
+            delete uploads[file.ID];
+            this.worker.postMessage({ action: 'removeFile', params: file.ID });
+        });
+
+        // 3.0 - Update State
+        this.setState({ uploads });
+    }
+
+    clear(expired = 5) {
+        // 1.0 - get state
+        const { uploads = {} } = this.state;
+        const len = Object.keys(uploads).length;
+        let changed = false;
+
+        // 2.0 - Get completed uploads
+        const completed = _.where(Object.values(uploads), {
+            status: ENUMS.STATUS.COMPLETE,
+        }).filter(item => {
+            const { ID, statusAt } = item;
+            const diff = moment().diff(moment(new Date(statusAt)), 'seconds');
+            return diff >= expired;
+        });
+
+        completed.forEach(item => {
+            changed = true;
+            delete uploads[item.ID];
+        });
+
+        if (changed) {
+            this.setState({ uploads });
+        }
+    }
+
+    async fetch({ page = 1, search }) {
+        const { library = {} } = this.state;
         const media = await Reactium.Cloud.run('media', {
-            directory,
             page,
             search,
+            limit: 50,
         });
-        const { directories = ['uploads'], files, ...pagination } = media;
+        const { directories = [ENUMS.DIRECTORY], files, ...pagination } = media;
 
         if (Object.keys(files).length > 0) {
             library[page] = files;
@@ -163,10 +179,11 @@ class Media {
             delete library[page];
         }
 
-        return await dispatch({
-            domain: ENUMS.DOMAIN,
-            type: ENUMS.ACTION_TYPE,
-            update: { directories, library, pagination, fetched: Date.now() },
+        this.setState({
+            directories,
+            library,
+            pagination,
+            fetched: Date.now(),
         });
     }
 }
