@@ -12,8 +12,5 @@ module.exports = () => {
     // Create the cli-cache directory
     fs.ensureDirSync(dir);
 
-    return fs.existsSync(manifestFile)
-        ? require(manifestFile)
-        : {};
-
+    return fs.existsSync(manifestFile) ? require(manifestFile) : {};
 };

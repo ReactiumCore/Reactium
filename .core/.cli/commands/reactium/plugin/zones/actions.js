@@ -83,7 +83,7 @@ module.exports = spinner => {
             return Promise.resolve({ action, status: 200 });
         }
 
-        const quick_scan = /\<Plugins/;
+        const quick_scan = /\<Plugins|Zone/;
 
         return globby(globs).then(files => {
             const zones = files.reduce((z, file) => {
@@ -92,7 +92,7 @@ module.exports = spinner => {
                     return z;
                 }
 
-                const reg_find = /<Plugins[\s\S](.*?)[\s\S]\/>/gm;
+                const reg_find = /<Plugins|Zone[\s\S](.*?)[\s\S]\/>/gm;
                 const matches = String(fs.readFileSync(file))
                     .replace(/["'\s+]/g, ' ')
                     .match(reg_find);

@@ -15,7 +15,7 @@ const { error, message } = require(`${mod}/lib/messenger`);
 const pad = require(`${mod}/lib/pad`);
 const M = require('./manifest')();
 
-const NAME = 'zones <action>';
+const NAME = 'plugin <zones>';
 
 const DESC = 'Reactium: Manage the current project Plugin Zones';
 
@@ -54,7 +54,7 @@ const FLAGS_TO_PARAMS = ({ opt = {} }) =>
         return obj;
     }, {});
 
-const CANCELED = 'zones ACTION canceled';
+const CANCELED = 'plugin zones ACTION canceled';
 
 const CONFIRM = ({ props, params, msg = 'Proceed?' }) => {
     const { prompt } = props;
@@ -123,11 +123,11 @@ ${chalk.cyan('list')} | ${chalk.cyan('scan')} | ${chalk.cyan(
 
 <${chalk.cyan('list')}>
   Output the plugin zones:
-    $ arcli zones ${chalk.cyan('list')}
+    $ arcli plugin zones ${chalk.cyan('list')}
 
   Output the plugin zones as JSON
-    $ arcli zones ${chalk.cyan('list')} --json
-    $ arcli zones ${chalk.cyan('list')} -j
+    $ arcli plugin zones ${chalk.cyan('list')} --json
+    $ arcli plugin zones ${chalk.cyan('list')} -j
 
     ${chalk.magenta(
         '* Note:',
@@ -135,8 +135,8 @@ ${chalk.cyan('list')} | ${chalk.cyan('scan')} | ${chalk.cyan(
 
 <${chalk.cyan('scan')}>
   Scan the '~/src' directory only, omiting the 'node_modules' directory:
-    $ arcli zones ${chalk.cyan('scan')} --no-node
-    $ arcli zones ${chalk.cyan('scan')} -N
+    $ arcli plugin zones ${chalk.cyan('scan')} --no-node
+    $ arcli plugin zones ${chalk.cyan('scan')} -N
 
     ${chalk.magenta(
         '* Note:',
@@ -144,10 +144,10 @@ ${chalk.cyan('list')} | ${chalk.cyan('scan')} | ${chalk.cyan(
 
 <${chalk.cyan('add')}> | <${chalk.cyan('update')}>
   Add a plugin zone to the manifest:
-    $ arcli zones ${chalk.cyan(
+    $ arcli plugin zones ${chalk.cyan(
         'add',
     )} --id "my-plugin-zone" --description "My awesome plugins go here!"
-    $ arcli zones ${chalk.cyan(
+    $ arcli plugin zones ${chalk.cyan(
         'add',
     )} -i "my-plugin-zone" -d "My awesome plugins go here!"
 
@@ -157,16 +157,16 @@ ${chalk.cyan('list')} | ${chalk.cyan('scan')} | ${chalk.cyan(
 
 <${chalk.cyan('remove')}>
   Remove a plugin zone from the manifest:
-    $ arcli zones ${chalk.cyan('remove')} --id "my-plugin-zone"
+    $ arcli plugin zones ${chalk.cyan('remove')} --id "my-plugin-zone"
 
 <${chalk.cyan('purge')}>
   Clear all entries from the plugin zone manifest:
-    $ arcli zones ${chalk.cyan('purge')}
+    $ arcli plugin zones ${chalk.cyan('purge')}
 
     ${chalk.magenta(
         '* Note:',
     )} Purging can not be undone. You can run ${chalk.cyan(
-        '$ arcli zones scan',
+        '$ arcli plugin zones scan',
     )} to regenerate the default manifest.
 
 `);
@@ -293,7 +293,7 @@ const PREFLIGHT = ({ action, params }) => {
     return msg;
 };
 
-const ACTION = ({ action, opt, props, zone }) => {
+const ACTION = ({ action, opt, props, zone, foo }) => {
     const id = op.get(opt, 'id');
 
     if (['update', 'remove'].includes(action) && !id) {
@@ -364,8 +364,8 @@ const ACTION_SELECT = ({ action, opt, props }) => {
     if (Object.keys(M).length < 1) {
         return error(
             `no zones found.\n\nRun:\n${chalk.cyan(
-                '  $ arcli zones scan',
-            )}\n or:\n${chalk.cyan('  $ arcli zones add')}`,
+                '  $ arcli plugin zones scan',
+            )}\n or:\n${chalk.cyan('  $ arcli plugin zones add')}`,
         );
     }
 
@@ -396,9 +396,11 @@ const ACTION_SELECT = ({ action, opt, props }) => {
 
 const COMMAND = ({ program, props }) =>
     program
-        .command(NAME)
+        .command(`${NAME} <subaction>`)
         .description(DESC)
-        .action((action, opt) => ACTION({ action, opt, props }))
+        .action((action, subaction, opt) =>
+            ACTION({ action: subaction, opt, props }),
+        )
         .option(
             '-i, --id <zone>',
             'The plugin zone id. Used when the <action> is add, update, or remove.',
@@ -435,6 +437,7 @@ const COMMAND = ({ program, props }) =>
  */
 module.exports = {
     ACTION,
+    CONFORM,
     COMMAND,
-    NAME,
+    ID: NAME,
 };
