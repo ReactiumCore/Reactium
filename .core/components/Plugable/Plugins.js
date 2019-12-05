@@ -37,6 +37,45 @@ const findComponent = (type, path, paths) => {
 };
 
 const usePluginControls = ({ zone, ...defaults }) => {
+    const allPluginControls = useSelect({
+        select: state => op.get(state, 'Plugable.controls', {}),
+    });
+
+    // add addons controls for this zone
+    let controls = Object.entries(allPluginControls).reduce(
+        (controls, [name, addonControls], index) => {
+            Object.entries({
+                mapper: op.get(addonControls, 'pluginMappers', []),
+                filter: op.get(addonControls, 'pluginFilters', []),
+                sort: op.get(addonControls, 'pluginSorts', []),
+            }).forEach(([type, items]) => {
+                const control = items.find(
+                    ({ zone: pluginZone }) => zone === pluginZone,
+                );
+
+                if (control) {
+                    op.set(controls, [`${type}s`, name], control);
+                }
+            });
+
+            return controls;
+        },
+        {},
+    );
+
+    const controlSorter = (controls = {}) => {
+        let controlsEntries = Object.entries(controls);
+
+        return _.sortBy(controlsEntries, ([, control]) => control.order).reduce(
+            (controls, [name, control]) => {
+                controls[name] = control;
+                return controls;
+            },
+            {},
+        );
+    };
+
+    // Order of precedence: local, global, hard-coded
     const defaultControls = Object.entries({
         mapper: [
             _ => _,
@@ -62,56 +101,16 @@ const usePluginControls = ({ zone, ...defaults }) => {
         return defaultControls;
     }, {});
 
-    const allPluginControls = useSelect({
-        select: state => op.get(state, 'Plugable.controls', {}),
-    });
-
-    // add addons controls for this zone
-    let controls = Object.entries(allPluginControls).reduce(
-        (controls, [name, addonControls], index) => {
-            Object.entries({
-                mapper: op.get(addonControls, 'pluginMappers', []),
-                filter: op.get(addonControls, 'pluginFilters', []),
-                sort: op.get(addonControls, 'pluginSorts', []),
-            }).forEach(([type, items]) => {
-                const control = items.find(
-                    ({ zone: pluginZone }) => zone === pluginZone,
-                );
-                op.set(
-                    controls,
-                    `${type}s.default`,
-                    op.get(defaultControls, `${type}s.default`),
-                );
-                if (control) {
-                    op.set(controls, [`${type}s`, name], control);
-                }
-            });
-
-            return controls;
-        },
-        {},
+    // get sorted list of controls for each, assign default if none provided
+    controls.mappers = controlSorter(
+        op.get(controls, 'mappers', op.get(defaultControls, 'mappers')),
     );
-
-    const controlSorter = (controls = {}) => {
-        let controlsEntries = Object.entries(controls);
-        // remove default if controls added by plugin
-        controlsEntries = controlsEntries.filter(
-            ([name, control]) =>
-                controlsEntries.length === 1 || name !== 'default',
-        );
-
-        return _.sortBy(controlsEntries, ([, control]) => control.order).reduce(
-            (controls, [name, control]) => {
-                controls[name] = control;
-                return controls;
-            },
-            {},
-        );
-    };
-
-    controls.mappers = controlSorter(controls.mappers);
-    controls.filters = controlSorter(controls.filters);
-    controls.sorts = controlSorter(controls.sorts);
+    controls.filters = controlSorter(
+        op.get(controls, 'filters', op.get(defaultControls, 'filters')),
+    );
+    controls.sorts = controlSorter(
+        op.get(controls, 'sorts', op.get(defaultControls, 'sorts')),
+    );
 
     return controls;
 };
@@ -199,6 +198,10 @@ const pluginZones = ({ zone }) => {
     return _.compact(zones);
 };
 
+/**
+ * Takes all DDD plugin components, and target zone.
+ * Adds in redux plugin components, and filter down to target zone.
+ */
 const useCombinedZonePlugins = (plugins = [], zone) => {
     const zoneFilter = plugin => pluginZones(plugin).find(pz => pz === zone);
     const mapId = plugin => plugin.id;
