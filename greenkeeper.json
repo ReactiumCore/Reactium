@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        ".core/.cli/commands/electron/builder/template/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
