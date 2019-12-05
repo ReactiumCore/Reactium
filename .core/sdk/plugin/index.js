@@ -95,6 +95,7 @@ Plugin.unregister = ID => {
     }
 
     if (ID && ID in plugins) {
+        Reactium.Hook.run('plugin-unregister', { ID });
         delete plugins[ID];
     }
 };
