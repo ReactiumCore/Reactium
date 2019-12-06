@@ -45,7 +45,8 @@ const CANCELED = 'Action canceled!';
  * @since 2.0.0
  */
 const CONFIRM = ({ props, params, msg }) => {
-    const { prompt } = props;
+    const { prompt, cwd } = props;
+    const { plugin } = params;
 
     msg = msg || chalk.white('Proceed?');
 
@@ -145,13 +146,13 @@ const PREFLIGHT = ({ msg, params, props }) => {
 
     message(msg);
 
-    // Transform the preflight object instead of the params object
-    const preflight = { ...params };
+    const { prompt, cwd } = props;
+    const { plugin } = params;
 
-    console.log(
-        prettier.format(JSON.stringify(preflight), {
-            parser: 'json-stringify',
-        }),
+    message(
+        `Reactium Plugin module will be created at ${chalk.cyan(
+            path.relative(cwd, getPluginPath(plugin, cwd)),
+        )}`,
     );
 };
 
@@ -163,8 +164,10 @@ const nameToPluginName = (name = '') => {
     return slugify(lower);
 };
 
+const getPluginPath = (name, cwd) =>
+    path.resolve(cwd, 'src/app/components/plugin-src', name);
 const pluginPathExists = (name, cwd) => {
-    const pluginPath = path.resolve(cwd, 'src/app/components/plugin-src', name);
+    const pluginPath = getPluginPath(name, cwd);
     return fs.existsSync(pluginPath);
 };
 
