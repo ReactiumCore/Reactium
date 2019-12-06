@@ -8,7 +8,6 @@ const webpack = require('webpack');
 const browserSync = require('browser-sync');
 const gulpif = require('gulp-if');
 const gulpwatch = require('@atomic-reactor/gulp-watch');
-const run = require('gulp-run');
 const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
 const gzip = require('gulp-gzip');
@@ -138,10 +137,24 @@ const reactium = (gulp, config, webpackConfig) => {
         });
     };
 
-    const local = ({ ssr = false } = {}) => () => {
+    const command = (cmd, args = [], done) => {
+        const ps = spawn(cmd, args);
+
+        ps.stdout.pipe(process.stdout, { end: false });
+        ps.stderr.pipe(process.stderr, { end: false });
+        process.stdin.resume();
+        process.stdin.pipe(ps.stdin, { end: false });
+        ps.on('close', code => {
+            if (code !== 0) console.log(`Error executing ${cmd}`);
+            done();
+        });
+    };
+
+    const local = ({ ssr = false } = {}) => done => {
         const SSR_MODE = ssr ? 'on' : 'off';
 
         // warnings here
+        // TODO: convert to useHookComponent
         if (!fs.existsSync(rootPath, 'src/app/components/Fallback/index.js')) {
             console.log('');
             console.log(
@@ -152,17 +165,24 @@ const reactium = (gulp, config, webpackConfig) => {
             console.log('');
         }
 
-        let watch = new run.Command(
-            `cross-env SSR_MODE=${SSR_MODE} NODE_ENV=development gulp`,
-            { verbosity: 3 },
-        );
-        let babel = new run.Command(
-            `cross-env SSR_MODE=${SSR_MODE} NODE_ENV=development nodemon ./.core/index.js --exec babel-node`,
-            { verbosity: 3 },
+        command(
+            'cross-env',
+            [`SSR_MODE=${SSR_MODE}`, 'NODE_ENV=development', 'gulp'],
+            done,
         );
 
-        watch.exec();
-        babel.exec();
+        command(
+            'cross-env',
+            [
+                `SSR_MODE=${SSR_MODE}`,
+                'NODE_ENV=development',
+                'nodemon',
+                './.core/index.js',
+                '--exec',
+                'babel-node',
+            ],
+            done,
+        );
     };
 
     const assets = () =>
@@ -192,22 +212,7 @@ const reactium = (gulp, config, webpackConfig) => {
 
         const verbose = config.docs.verbose || process.env.VERBOSE_API_DOCS;
         if (verbose) args.push('-V');
-
-        const ps = spawn('arcli', args);
-        ps.stderr.on('data', data => {
-            console.error(data.toString());
-        });
-
-        if (verbose) {
-            ps.stdout.on('data', data => {
-                console.log(data.toString());
-            });
-        }
-
-        ps.on('close', code => {
-            if (code !== 0) console.log('Error creating apidocs.');
-            done();
-        });
+        command('arcli', args, done);
     };
 
     const clean = done => {
