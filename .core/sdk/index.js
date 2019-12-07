@@ -4,7 +4,6 @@ import Enums from './enums';
 import Handle from './handle';
 import Hook from './hook';
 import i18n from './i18n';
-import Media from './media';
 import Middleware from './middleware';
 import Parse from 'appdir/api';
 import Plugin from './plugin';
@@ -27,7 +26,6 @@ export default {
     Handle,
     Hook,
     i18n,
-    Media,
     Middleware,
     Plugin,
     Pulse,
