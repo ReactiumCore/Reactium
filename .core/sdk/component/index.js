@@ -1,15 +1,19 @@
 import Hook from '../hook';
+import User from '../user';
+import op from 'object-path';
 
 const Component = {};
 
 /**
- * @api {Function} Component.register(hook,component,order) Component.register()
+ * @api {Function} Component.register(hook,component,order,capabilities,strict) Component.register()
  * @apiGroup Reactium.Component
  * @apiName Component.register
  * @apiDescription Register a React component to be used with a specific useHookComponent hook. This must be called before the useHookComponent that defines the hook.
  * @apiParam {String} hook The hook name
  * @apiParam {Mixed} component component(s) to be output by useHookComponent
  * @apiParam {Number} order precedent of this if Component.register is called multiple times (e.g. if you are trying to override core or another plugin)
+ * @apiParam {Array} [capabilities] list of capabilities to check registering the component.
+ * @apiParam {Boolean} [strict=true] true to only add component if all capabilities are allowed, otherwise only one capability is necessary
  * @apiExample reactium-hooks.js
 import React from 'react';
 import Reactium from 'reactium-core/sdk';
@@ -48,8 +52,19 @@ export props => {
     );
 };
  */
-Component.register = (hook, component, order) =>
-    Hook.register(
+Component.register = async (
+    hook,
+    component,
+    order,
+    capabilities = [],
+    strict = true,
+) => {
+    if (Array.isArray(capabilities) && capabilities.length > 0) {
+        const permitted = await User.can(capabilities, strict);
+        if (!permitted) return;
+    }
+
+    await Hook.register(
         hook,
         async (...params) => {
             const context = params.pop();
@@ -57,6 +72,7 @@ Component.register = (hook, component, order) =>
         },
         order,
     );
+};
 
 /**
  * @api {Function} Component.unregister(uuid) Component.unregister()

@@ -101,7 +101,7 @@ Plugin.unregister = ID => {
 };
 
 /**
- * @api {Function} Plugin.addComponent(plugin) Plugin.addComponent()
+ * @api {Function} Plugin.addComponent(plugin,capabilities,strict) Plugin.addComponent()
  * @apiName Plugin.addComponent
  * @apiDescription Register a component to a plugin zone.
  * @apiParam {Object} plugin plugin component, determines what component renders in a zone, what order
