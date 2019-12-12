@@ -164,10 +164,9 @@ Plugin.addComponent = async (plugin = {}, capabilities = [], strict = true) => {
     capabilities = op.get(plugin, 'capabilities', capabilities) || [];
     strict = !!op.get(plugin, 'strict', strict);
 
-    if (Array.isArray(capabilities) && capabilities.length > 0) {
-        const permitted = await User.can(capabilities, strict);
-        if (!permitted) return;
-    }
+    const context = await Hook.run('capability-check', capabilities, strict);
+    const permitted = op.get(context, 'permitted', true);
+    if (!permitted) return;
 
     Plugin.redux.store.dispatch(Plugin.deps.actions.Plugable.addPlugin(plugin));
 };

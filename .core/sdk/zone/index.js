@@ -146,13 +146,21 @@ This should be called only:
 * @apiParam {String} filter the filter function that will be passed each plugin object
 * @apiParam {String} [order=Enums.priority.neutral] the priority your filter will take in list of filters in this zone
 * @apiGroup Reactium.Zone
-* @apiExample Example Usage
+* @apiExample reactium-hooks.js
 import Reactium from 'reactium-core/sdk';
-// Hide this plugin if current user shouldn't see vip plugins
-const filter = (plugin) => {
-  return plugin.type !== 'vip' || Reactium.User.can('vip.view')
-};
-Reactium.Zone.addFilter('myPlugin', 'zone-1', filter)
+
+const registerPlugin = async () => {
+    await Reactium.Plugin.register('MyVIPView');
+    const permitted = await Reactium.User.can(['vip.view']);
+
+    // Hide this plugin if current user shouldn't see vip plugins
+    const filter = plugin => {
+      return plugin.type !== 'vip' || !permitted
+    };
+
+    Reactium.Zone.addFilter('myPlugin', 'zone-1', filter)
+}
+registerPlugin();
 */
 
 /**
@@ -188,11 +196,8 @@ Reactium.Zone.removeFilter('myPlugin', 'zone-1');
  * @apiExample Example Usage
 import Reactium from 'reactium-core/sdk';
 
-// Hide this plugin if current user shouldn't see vip plugins
-const sort = (plugin) => {
-  return plugin.type !== 'vip' || Reactium.User.can('vip.view')
-};
-Reactium.Zone.addSort('myPlugin', 'zone-1', sort)
+// sort by plugin.type property
+Reactium.Zone.addSort('myPlugin', 'zone-1', 'type')
  */
 
 /**
