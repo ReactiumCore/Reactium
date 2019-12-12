@@ -1,8 +1,9 @@
 import Plugin from '../plugin';
 import { combineMiddlewares } from 'redux';
-import Enums from '../enums';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 
+const { Enums } = SDK;
 const Middleware = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 

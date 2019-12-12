@@ -17,7 +17,9 @@ import op from 'object-path';
 import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
 import moment from 'moment';
-import Enums from 'reactium-core/sdk/enums';
+import SDK from 'reactium-core/sdk';
+
+const { Enums } = SDK;
 
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');

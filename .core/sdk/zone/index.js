@@ -1,8 +1,9 @@
 import Plugin from '../plugin';
 import { combineZones } from 'redux';
-import Enums from '../enums';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import op from 'object-path';
 
+const { Enums } = SDK;
 const Zone = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 const types = {

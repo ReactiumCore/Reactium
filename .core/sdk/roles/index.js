@@ -1,9 +1,10 @@
-import Hook from '../hook';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
 import Parse from 'appdir/api';
 import ActionSequence from 'action-sequence';
 
+const { Hook } = SDK;
 const Roles = {};
 
 /**

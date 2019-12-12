@@ -1,9 +1,9 @@
-import Hook from '../hook';
 import _ from 'underscore';
-import Enums from '../enums';
 import User from '../user';
 import op from 'object-path';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 
+const { Hook, Enums } = SDK;
 const plugins = {};
 const Plugin = {};
 const prematureCallError = Enums.Plugin.prematureCallError;

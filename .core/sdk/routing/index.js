@@ -1,7 +1,9 @@
-import Hook from '../hook';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import uuid from 'uuid/v4';
 import _ from 'underscore';
 import moment from 'moment';
+
+const { Hook } = SDK;
 
 class Routing {
     loaded = false;

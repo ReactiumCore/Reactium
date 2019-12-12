@@ -1,10 +1,9 @@
 import Parse from 'appdir/api';
-import Cache from '../cache';
-import Hook from '../hook';
-import Enums from '../enums';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import moment from 'moment';
 
+const { Hook, Cache, Enums } = SDK;
 const Setting = {};
 
 /**

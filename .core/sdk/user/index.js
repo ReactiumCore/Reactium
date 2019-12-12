@@ -1,8 +1,9 @@
-import Hook from '../hook';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
 import Parse from 'appdir/api';
 
+const { Hook } = SDK;
 const User = { Role: {} };
 
 /**

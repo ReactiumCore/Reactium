@@ -1,8 +1,10 @@
 import Context from 'reactium-core/components/WindowProvider/Context';
 import { useContext, useEffect, useState, useRef } from 'react';
-import Utils from '../utils';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
+
+const { Utils } = SDK;
 
 /**
  * @api {ReactHook} useWindow() useWindow()
