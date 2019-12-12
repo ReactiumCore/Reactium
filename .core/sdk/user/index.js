@@ -162,6 +162,14 @@ User.can = async (capabilities = [], strict = true) => {
     return Parse.Cloud.run('capability-check', { capabilities, strict });
 };
 
+Hook.register(
+    'capability-check',
+    async (capabilities = [], strict = true, context) => {
+        const permitted = await User.can(capabilities, strict);
+        op.set(context, 'permitted', permitted);
+    },
+);
+
 /**
  * @api {Function} User.Role.add(role,userId) User.Role.add()
  * @apiDescription Asyncronously add a user to a role.
