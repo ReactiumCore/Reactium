@@ -6,9 +6,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import deps from 'dependencies';
-import { Plugins } from 'reactium-core/components/Plugable';
+import { Zone } from 'reactium-core/sdk';
 
-const Toolkit = props => <Plugins zone='toolkit' {...props} />;
+const Toolkit = props => <Zone zone='toolkit' {...props} />;
 
 /**
  * -----------------------------------------------------------------------------
@@ -34,7 +34,4 @@ const mapDispatchToProps = dispatch => ({
     loaded: () => dispatch(deps().actions.Toolkit.loaded()),
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Toolkit);
+export default connect(mapStateToProps, mapDispatchToProps)(Toolkit);

@@ -3,7 +3,7 @@ import Parse from 'appdir/api';
 import { useRef, useState, useEffect } from 'react';
 
 /**
- * @api {ReactHook} useCapability(capability) useRegisterHandle()
+ * @api {ReactHook} useCapability(capability) useCapability()
  * @apiDescription React hook to get roles object. If search is provided, will retrieve a specific role.
  * @apiParam {String} capability the name/tag of the capability
  * @apiName useCapability

@@ -13,7 +13,7 @@ import Notify from './Notify';
 import Loading from './Loading';
 import { Helmet } from 'react-helmet';
 import React, { Component, Fragment } from 'react';
-import { Plugins } from 'reactium-core/components/Plugable';
+import { Zone } from 'reactium-core/sdk';
 import config from 'appdir/toolkit';
 
 const assetPath = op.get(config, 'assets.path', '/assets');
@@ -362,7 +362,7 @@ export default class Toolkit extends Component {
                     <html lang='en' />
                     <body className='re-toolkit' />
                 </Helmet>
-                <Plugins zone='toolkit-head' />
+                <Zone zone='toolkit-head' />
 
                 <Header
                     {...header}
