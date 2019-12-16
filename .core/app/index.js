@@ -22,6 +22,7 @@ export const App = async () => {
 
     await Reactium.Hook.run('init');
     await Reactium.Hook.run('dependencies-load');
+    await Reactium.Zone.init();
     await Reactium.Routing.load();
     const { store } = await Reactium.Hook.run('store-create', {
         server: false,
@@ -32,11 +33,6 @@ export const App = async () => {
         const { bindPoints } = await Reactium.Hook.run('component-bindings');
         const { appElement } = await Reactium.Hook.run('app-bindpoint');
         const { Provider } = await Reactium.Hook.run('app-redux-provider');
-        const { plugableConfig } = await Reactium.Hook.run('plugable-config');
-        const { PlugableProvider } = await Reactium.Hook.run(
-            'app-plugable-provider',
-        );
-
         const { history } = await Reactium.Hook.run('history-create');
         const { Router } = await Reactium.Hook.run('app-router');
 
@@ -44,11 +40,7 @@ export const App = async () => {
         if (bindPoints.length > 0) {
             bindPoints.forEach(item => {
                 ReactDOM.render(
-                    <Provider store={store}>
-                        <PlugableProvider {...plugableConfig}>
-                            <>{item.component}</>
-                        </PlugableProvider>
-                    </Provider>,
+                    <Provider store={store}>{item.component}</Provider>,
                     item.element,
                 );
             });
@@ -65,11 +57,7 @@ export const App = async () => {
 
             ReactDOM[ssr ? 'hydrate' : 'render'](
                 <Provider store={store}>
-                    <PlugableProvider {...plugableConfig}>
-                        <>
-                            <Router history={history} />
-                        </>
-                    </PlugableProvider>
+                    <Router history={history} />
                 </Provider>,
                 appElement,
             );

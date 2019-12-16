@@ -7,7 +7,6 @@ import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
 import Reactium from 'reactium-core/sdk';
 import 'reactium-core/redux/storeCreator';
-import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router/server';
 import deps from 'dependencies';
 
@@ -41,9 +40,9 @@ const renderer = template => async (req, res, context) => {
         // Wait for loader or go ahead and render on error
         console.log('[Reactium] Loading page data...');
         const data = await ('load' in route && typeof route.load === 'function'
-            ? Promise.resolve(route.load(route.params, route.query)).then(
-                  thunk => thunk(store.dispatch, store.getState, store),
-              )
+            ? Promise.resolve(
+                  route.load(route.params, route.query),
+              ).then(thunk => thunk(store.dispatch, store.getState, store))
             : Promise.resolve());
 
         await Reactium.Hook.run(
@@ -60,14 +59,12 @@ const renderer = template => async (req, res, context) => {
 
     const body = renderToString(
         <Provider store={store}>
-            <PlugableProvider {...app.dependencies().plugableConfig}>
-                <Router
-                    server={true}
-                    location={req.originalUrl}
-                    context={context}
-                    routes={routes}
-                />
-            </PlugableProvider>
+            <Router
+                server={true}
+                location={req.originalUrl}
+                context={context}
+                routes={routes}
+            />
         </Provider>,
     );
 

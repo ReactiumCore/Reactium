@@ -1,8 +1,7 @@
-import Plugin from '../plugin';
 import { combineReducers } from 'redux';
 import SDK from '@atomic-reactor/reactium-sdk-core';
 
-const { Enums } = SDK;
+const { Enums, Plugin } = SDK;
 const Reducer = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 
