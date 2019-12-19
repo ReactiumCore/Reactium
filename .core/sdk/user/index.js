@@ -159,32 +159,8 @@ User.isRole = async (role, userId) => {
  * @apiGroup Reactium.User
  */
 User.can = async (capabilities = [], strict = true) => {
-    // null request
-    if (!Array.isArray(capabilities) || capabilities.length < 1) {
-        return true;
-    }
-
-    // Prevent Rapid Duplicate Cap Checks from reaching server
-    const capCheckSignature = capabilities
-        .sort()
-        .concat([strict ? 'strict' : 'loose'])
-        .join('-');
-    let checking = Cache.get(capCheckSignature);
-    if (checking) return checking;
-
-    checking = Parse.Cloud.run('capability-check', { capabilities, strict });
-    Cache.set(capCheckSignature, checking, 200);
-    return checking;
+    return Hook.run('capabilities-check', capabilities, strict);
 };
-
-Hook.register(
-    'capability-check',
-    async (capabilities = [], strict = true, context) => {
-        const permitted = await User.can(capabilities, strict);
-        op.set(context, 'permitted', permitted);
-    },
-    Enums.priority.highest,
-);
 
 /**
  * @api {Function} User.Role.add(role,userId) User.Role.add()
