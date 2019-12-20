@@ -77,13 +77,4 @@ Capability.check = (capabilities = [], strict = true) => {
     return checking;
 };
 
-Hook.register(
-    'capability-check',
-    async (capabilities = [], strict = true, context) => {
-        const permitted = await Capability.check(capabilities, strict);
-        op.set(context, 'permitted', permitted);
-    },
-    Enums.priority.highest,
-);
-
 export default Capability;
