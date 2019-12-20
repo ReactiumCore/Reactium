@@ -5,9 +5,9 @@ import 'reactium-core/components/Router/reactium-hooks';
 import deps from 'dependencies';
 import Reactium from 'reactium-core/sdk';
 import { Provider } from 'react-redux';
-import { PlugableProvider } from 'reactium-core/components/Plugable';
 import Router from 'reactium-core/components/Router';
 import getComponents from 'dependencies/getComponents';
+import op from 'object-path';
 
 Reactium.Hook.register('init', async () => {
     require('manifest').externals();
@@ -100,30 +100,17 @@ Reactium.Hook.register(
     Reactium.Enums.priority.highest,
 );
 
-Reactium.Hook.register(
-    'plugable-config',
-    context => {
-        context.plugableConfig = deps().plugableConfig;
-        return Promise.resolve();
-    },
-    Reactium.Enums.priority.highest,
-);
+Reactium.Hook.register('zone-defaults', async context => {
+    op.set(context, 'controls', deps().plugableConfig);
+    op.set(context, 'components', Object.values(deps().plugins));
+    console.log('Initializing Content Zones');
+});
 
 Reactium.Hook.register(
     'app-redux-provider',
     context => {
         context.Provider = Provider;
         console.log('Defining Redux Provider.');
-        return Promise.resolve();
-    },
-    Reactium.Enums.priority.highest,
-);
-
-Reactium.Hook.register(
-    'app-plugable-provider',
-    context => {
-        context.PlugableProvider = PlugableProvider;
-        console.log('Defining PlugableProvider.');
         return Promise.resolve();
     },
     Reactium.Enums.priority.highest,

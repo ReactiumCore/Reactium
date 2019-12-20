@@ -137,13 +137,13 @@ const reactium = (gulp, config, webpackConfig) => {
         });
     };
 
-    const command = (cmd, args = [], done) => {
-        const ps = spawn(cmd, args);
-
-        ps.stdout.pipe(process.stdout, { end: false });
-        ps.stderr.pipe(process.stderr, { end: false });
-        process.stdin.resume();
-        process.stdin.pipe(ps.stdin, { end: false });
+    const command = (
+        cmd,
+        args = [],
+        done,
+        { stdin = 'ignore', stdout = 'inherit', stderr = 'inherit' } = {},
+    ) => {
+        const ps = spawn(cmd, args, { stdio: [stdin, stdout, stderr] });
         ps.on('close', code => {
             if (code !== 0) console.log(`Error executing ${cmd}`);
             done();
@@ -152,6 +152,18 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const local = ({ ssr = false } = {}) => done => {
         const SSR_MODE = ssr ? 'on' : 'off';
+        const crossEnvModulePath = path.resolve(
+            path.dirname(require.resolve('cross-env')),
+            '..',
+        );
+        const crossEnvPackage = require(path.resolve(
+            crossEnvModulePath,
+            'package.json',
+        ));
+        const crossEnvBin = path.resolve(
+            crossEnvModulePath,
+            crossEnvPackage.bin['cross-env'],
+        );
 
         // warnings here
         // TODO: convert to useHookComponent
@@ -166,14 +178,20 @@ const reactium = (gulp, config, webpackConfig) => {
         }
 
         command(
-            'cross-env',
-            [`SSR_MODE=${SSR_MODE}`, 'NODE_ENV=development', 'gulp'],
+            'node',
+            [
+                crossEnvBin,
+                `SSR_MODE=${SSR_MODE}`,
+                'NODE_ENV=development',
+                'gulp',
+            ],
             done,
         );
 
         command(
-            'cross-env',
+            'node',
             [
+                crossEnvBin,
                 `SSR_MODE=${SSR_MODE}`,
                 'NODE_ENV=development',
                 'nodemon',
@@ -182,6 +200,7 @@ const reactium = (gulp, config, webpackConfig) => {
                 'babel-node',
             ],
             done,
+            { stdin: 'inherit' },
         );
     };
 
@@ -208,11 +227,22 @@ const reactium = (gulp, config, webpackConfig) => {
     const apidocs = done => {
         if (!isDev) done();
 
-        const args = ['docs', '-s', config.docs.src, '-d', config.docs.dest];
+        const arcliBin = path.resolve(
+            path.dirname(require.resolve('atomic-reactor-cli')),
+            'arcli.js',
+        );
+        const args = [
+            arcliBin,
+            'docs',
+            '-s',
+            config.docs.src,
+            '-d',
+            config.docs.dest,
+        ];
 
         const verbose = config.docs.verbose || process.env.VERBOSE_API_DOCS;
         if (verbose) args.push('-V');
-        command('arcli', args, done);
+        command('node', args, done);
     };
 
     const clean = done => {

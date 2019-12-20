@@ -1,9 +1,9 @@
 # Plugin API
 
-Reactium comes with the built-in concept of **plugins.** Plugins are React components
+Reactium comes with the built-in concept of **plugins.** Zone are React components
 that will be rendered automatically through-out your application when you place plugins **zones**.
 
-Plugins are a helpful pattern for when you do not want to hard-code the composition of your component, often because you can't or shouldn't update the parent component manually, or you want to provide dynamic composition (not just data).
+Zone are a helpful pattern for when you do not want to hard-code the composition of your component, often because you can't or shouldn't update the parent component manually, or you want to provide dynamic composition (not just data).
 
 For example, I have an admin UI that specifies a generic layout with a **navigation** zone, a **footer** zone, a content **zone**, and a **sidebar** zone.
 
@@ -99,34 +99,34 @@ There are patterns to "clean" this up. We can extract these zones into new compo
 
 ## Plugin Zones
 
-Enter Reactium **Plugins**. This is where Reactium plugin zones can help make your composition more dynamic, and let you accomplish something like this in a more declarative way.
+Enter Reactium **Zone**. This is where Reactium plugin zones can help make your composition more dynamic, and let you accomplish something like this in a more declarative way.
 
-Let's start by defining plugin zones with the built-in `<Plugins />` component.
+Let's start by defining plugin zones with the built-in `<Zone />` component.
 
 ```js
 import React from 'react';
-import { Plugins } from 'reactium-core/components/Plugable';
+import { Zone } from 'reactium-core/sdk';
 
 export default class Template extends React {
     render() {
         return (
             <main>
                 <section className='navigation'>
-                    <Plugins zone='navigation' />
+                    <Zone zone='navigation' />
                 </section>
 
                 <section className='content'>
-                    <Plugins zone='content-pre' />
+                    <Zone zone='content-pre' />
                     {this.props.children}
-                    <Plugins zone='content-post' />
+                    <Zone zone='content-post' />
                 </section>
 
                 <aside className='sidebar'>
-                    <Plugins zone='sidebar' />
+                    <Zone zone='sidebar' />
                 </aside>
 
                 <section className='footer'>
-                    <Plugins zone='footer' />
+                    <Zone zone='footer' />
                 </section>
             </main>
         );
@@ -190,20 +190,20 @@ export default {
 };
 ```
 
-### Advanced Plugins Properties
+### Advanced Zone Properties
 
-When you define your `Plugins` zone, you can also optionally provide a `mapper` callback which will be called for each plugin in the zone, a `sort` callback to determine rendering order, and a `filter` callback to disqualify plugins from a zone.
+When you define your `Zone` zone, you can also optionally provide a `mapper` callback which will be called for each plugin in the zone, a `sort` callback to determine rendering order, and a `filter` callback to disqualify plugins from a zone.
 
 ```js
 import React from 'react';
-import { Plugins } from 'reactium-core/components/Plugable';
+import { Zone } from 'reactium-core/sdk';
 
 export default class Template extends React {
     render() {
         return (
             <main>
                 <section className='navigation'>
-                    <Plugins
+                    <Zone
                         zone='navigation'
                         mapper={plugin => {
                             // use mapper to augment plugins in zone
@@ -237,7 +237,7 @@ Template.defaultProps = {
 
 Now that we have a filter on the plugin zone, plugins will only appear when those conditions are met.
 
-### Redux Driven Plugins
+### Redux Driven Zone
 
 If you wish to use application state to determine what plugins are loaded in a zone, you can dispatch core actions to dynamically add / remove / update plugins in a zone.
 

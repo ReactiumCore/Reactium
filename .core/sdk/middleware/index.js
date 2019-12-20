@@ -1,9 +1,8 @@
-import Plugin from '../plugin';
 import { combineMiddlewares } from 'redux';
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 
-const { Enums } = SDK;
+const { Enums, Plugin } = SDK;
 const Middleware = {};
 const prematureCallError = Enums.Plugin.prematureCallError;
 
@@ -18,7 +17,7 @@ const prematureCallError = Enums.Plugin.prematureCallError;
  * @apiParam {String} name the middleware's unique name
  * @apiParam {Function} mw Redux middleware high-order function (store => action => next => {})
  * @apiParam {Integer} [order=Enums.priority.neutral] Priority of the middleware respective to other existing Redux middleware.
- * @apiGroup Reatium.Middleware
+ * @apiGroup Reactium.Middleware
  * @apiExample Example Usage:
 import Reactium from 'reactium-core/sdk';
 Reactium.Middleware.register('logger', store => action => next => {
