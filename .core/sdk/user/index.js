@@ -79,7 +79,7 @@ User.current = (parseObject = false) => {
  */
 User.getSessionToken = () => {
     const u = Parse.User.current();
-    return op.get(u, 'getSessionToken', () => false)();
+    return u ? u.getSessionToken() : false;
 };
 
 /**

@@ -34,4 +34,7 @@ const mapDispatchToProps = dispatch => ({
     loaded: () => dispatch(deps().actions.Toolkit.loaded()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Toolkit);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Toolkit);
