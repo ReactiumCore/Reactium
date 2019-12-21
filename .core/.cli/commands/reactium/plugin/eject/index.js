@@ -59,7 +59,7 @@ const CONFIRM = ({ props, params, msg }) => {
                         type: 'string',
                         required: true,
                         pattern: /^y|n|Y|N/,
-                        message: ` `,
+                        message: ' ',
                         before: val => {
                             return String(val).toUpperCase() === 'Y';
                         },
@@ -162,7 +162,7 @@ const SCHEMA_CHOOSE_PLUGIN = ({ props, plugins }) => {
                 message:
                     plugins.length > 1
                         ? chalk.white(`Select 1 to ${plugins.length}`)
-                        : chalk.white(`1 is only option.`),
+                        : chalk.white('1 is only option.'),
                 before: val => op.get(plugins, Number(val) - 1),
                 conform: val => op.has(plugins, Number(val) - 1),
                 default: 1,
@@ -196,7 +196,7 @@ const SCHEMA_CHOOSE_TARGET = ({ props, actiniumPlugins }) => {
                         ? chalk.white(
                               `Select 1 to ${pluginKeys.length} or a valid path`,
                           )
-                        : chalk.white(`Select a valid path`),
+                        : chalk.white('Select a valid path'),
                 before: val => {
                     const selected = op.has(pluginKeys, Number(val) - 1);
                     if (selected)
@@ -222,7 +222,7 @@ const SCHEMA_CHOOSE_TARGET = ({ props, actiniumPlugins }) => {
                 type: 'string',
                 required: true,
                 pattern: /^y|n|Y|N/,
-                message: ` `,
+                message: ' ',
                 before: val => {
                     return String(val).toUpperCase() === 'Y';
                 },
@@ -266,7 +266,10 @@ const SCHEMA_CHOOSE_TARGET = ({ props, actiniumPlugins }) => {
 const ACTION = ({ opt, props }) => {
     const { cwd, prompt, config } = props;
     const plugins = globby(
-        path.resolve(cwd, 'src/app/components/plugin-src/**/index.js'),
+        path
+            .resolve(cwd, 'src/app/components/plugin-src/*/index.js')
+            .split(/[\\\/]/g)
+            .join(path.posix.sep),
     ).map(mod => path.basename(path.dirname(mod)));
 
     prompt.start();
@@ -356,7 +359,7 @@ const ACTION = ({ opt, props }) => {
                                 type: 'string',
                                 required: true,
                                 pattern: /^y|n|Y|N/,
-                                message: ` `,
+                                message: ' ',
                                 before: val => {
                                     return String(val).toUpperCase() === 'Y';
                                 },
