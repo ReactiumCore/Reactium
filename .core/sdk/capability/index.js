@@ -55,7 +55,7 @@ Capability.get = capability =>
  * @apiName Capability.check
  * @apiGroup Reactium.Capability
  */
-Capability.check = (capabilities = [], strict = true) => {
+Capability.check = async (capabilities = [], strict = true) => {
     if (typeof capabilities === 'string') capabilities = [capabilities];
 
     // null request
