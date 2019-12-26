@@ -2,6 +2,7 @@ import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
 import Parse from 'appdir/api';
+import User from '../user';
 
 const { Hook, Enums, Cache } = SDK;
 
@@ -62,6 +63,9 @@ Capability.check = async (capabilities = [], strict = true) => {
     if (!Array.isArray(capabilities) || capabilities.length < 1) {
         return true;
     }
+
+    const valid = await User.hasValidSession();
+    if (!valid) return false;
 
     // Prevent Rapid Duplicate Cap Checks from reaching server
     const capCheckSignature = capabilities

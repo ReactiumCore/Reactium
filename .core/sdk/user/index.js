@@ -83,6 +83,29 @@ User.getSessionToken = () => {
 };
 
 /**
+ * @api {Function} hasValidSession() hasValidSession()
+ * @apiDescription Check to make sure the current user and associated session are valid.
+ * @apiName User.hasValidSession
+ * @apiGroup Reactium.User
+ */
+User.hasValidSession = async () => {
+    let valid = Cache.get('session-validate');
+    if (typeof valid === 'undefined') {
+        try {
+            await Parse.Cloud.run('session-validate');
+            valid = true;
+        } catch (error) {
+            // Clear front-end cache as soon as we know session is invalid
+            Cache.clear();
+            valid = false;
+        }
+        Cache.set('session-validate', valid, 5000);
+    }
+
+    return valid;
+};
+
+/**
  * @api {Function} User.register({...params}) User.register()
  * @apiDescription Asyncronously create a new user.
  * @apiName User.register
