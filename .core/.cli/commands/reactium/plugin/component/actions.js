@@ -15,13 +15,13 @@ module.exports = spinner => {
 
     return {
         plugin: ({ action, params, props }) => {
-            message(`Creating ${chalk.cyan('plugin')}...`);
+            message(`Creating ${chalk.cyan('zone component')}...`);
 
             const { destination } = params;
-            const pluginFile = path.normalize(`${destination}/plugin.js`);
+            const pluginFile = path.normalize(`${destination}/zone.js`);
 
             // Template content
-            const template = path.normalize(`${__dirname}/template/plugin.hbs`);
+            const template = path.normalize(`${__dirname}/template/zone.hbs`);
             const content = handlebars(fs.readFileSync(template, 'utf-8'))(
                 params,
             );

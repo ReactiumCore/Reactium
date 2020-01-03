@@ -61,21 +61,21 @@ module.exports = ({ params, props }) => {
         }
     }
 
-    if (op.get(params, 'plugin', false)) {
+    if (op.get(params, 'zone', false)) {
         try {
-            const pluginActions = require('../plugin/actions')(spinner);
-            const pluginParams = {
+            const zoneActions = require('../plugin/component/actions')(spinner);
+            const zoneParams = {
                 destination: params.destination,
-                id: `${String(params.name).toUpperCase()}-PLUGIN`,
+                id: `${String(params.name).toUpperCase()}-ZONE`,
                 component: params.name,
                 order: 1000,
                 zone: [],
             };
 
-            actions['plugin'] = ({ params, props }) =>
+            actions['zone'] = ({ params, props }) =>
                 ActionSequence({
-                    actions: pluginActions,
-                    options: { params: pluginParams, props },
+                    actions: zoneActions,
+                    options: { params: zoneParams, props },
                 });
         } catch (err) {
             return Promise.reject(err);
@@ -103,15 +103,18 @@ module.exports = ({ params, props }) => {
     }
 
     if (
-        _.intersection(Object.keys(params).filter(key => op.get(params, key)), [
-            'route',
-            'redux',
-            'actions',
-            'actionTypes',
-            'reducers',
-            'plugin',
-            'services',
-        ]).length < 1
+        _.intersection(
+            Object.keys(params).filter(key => op.get(params, key)),
+            [
+                'route',
+                'redux',
+                'actions',
+                'actionTypes',
+                'reducers',
+                'zone',
+                'services',
+            ],
+        ).length < 1
     ) {
         delete actions.domain;
     }

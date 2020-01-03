@@ -1,9 +1,29 @@
 # Plugin API
 
-Reactium comes with the built-in concept of **plugins.** Zone are React components
-that will be rendered automatically through-out your application when you place plugins **zones**.
+Reactium has a number of features that make it a plugable React application framework. Instead of monolithically composed applications
+that can only be maintained by one group of developers, with Reactium, it is possible to compose your
+application to be extensible with plugin modules. The key features of the Reactium Plugin API provided by the Reactium SDK:
 
-Zone are a helpful pattern for when you do not want to hard-code the composition of your component, often because you can't or shouldn't update the parent component manually, or you want to provide dynamic composition (not just data).
+-   Asynchronous Hooks to bind into your application
+-   Dynamic Component Rendering Zones
+-   Front-end runtime caching for improved data loading
+-   Front-end `Pulse` task runner
+-   Component registration for easy externalization
+-   Imperative handle registration for easy communication between components
+-   Helpful SDK features for interacting with the plugable node/express back-end partner of Reactium, `Actinium`.
+-   Internal or UMD plugin module development workflow and registration
+
+Many of the [SDK's core features](https://atomic-reactor.github.io/reactium-sdk-core/) can be even be used on non-Reactium projects.
+
+## Component Rendering Zones
+
+Reactium comes with the built-in concept of **zones.** Component zones are just
+React components themselves. Component rendering zones are used to dynamically gather components
+at runtime designated at that zone, and render them as children.
+
+Zones are a helpful pattern for when you do not want to hard-code the composition of your application, often because you can't or shouldn't update each large component manually, or you want to provide dynamic composition (not just data).
+
+### Scenario
 
 For example, I have an admin UI that specifies a generic layout with a **navigation** zone, a **footer** zone, a content **zone**, and a **sidebar** zone.
 
@@ -97,11 +117,11 @@ export default class Template extends React {
 
 There are patterns to "clean" this up. We can extract these zones into new components, create separate templates, but somewhere there is going to be a bunch of imperative code or I'm going to have to repeat myself.
 
-## Plugin Zones
+### Zone Solution
 
 Enter Reactium **Zone**. This is where Reactium plugin zones can help make your composition more dynamic, and let you accomplish something like this in a more declarative way.
 
-Let's start by defining plugin zones with the built-in `<Zone />` component.
+Let's start by defining plugin zones with the SDK's `<Zone />` component.
 
 ```js
 import React from 'react';
@@ -134,7 +154,7 @@ export default class Template extends React {
 }
 ```
 
-Now that we've defined the zones for our layout, let's add our existing `HomeNavigation` component as a plugin to the `navigation` zone.
+Now that we've defined the zones for our layout, let's add our existing `HomeNavigation` component to the `navigation` zone.
 
 Within our `components/HomeNavigation` directory, we will create a **plugin.js** file like so:
 
@@ -149,7 +169,7 @@ export default {
     id: 'home-page-main-navigation',
 
     /**
-     * By default plugins in zone are rendering in ascending order.
+     * By default components in zone are rendering in ascending order.
      * @type {Number}
      */
     order: 0,
@@ -183,131 +203,10 @@ export default {
      * Any additional properties you provide below, will be provided as params to the component when rendered.
      *
      * e.g. Below will be provided to the HomeNavigation, <HomeNavigation pageType="home" />
-     * These can also be used to help sort or filter plugins.
+     * These can also be used to help sort or filter zone components.
      * @type {Mixed}
      */
     pageType: 'home',
-};
-```
-
-### Advanced Zone Properties
-
-When you define your `Zone` zone, you can also optionally provide a `mapper` callback which will be called for each plugin in the zone, a `sort` callback to determine rendering order, and a `filter` callback to disqualify plugins from a zone.
-
-```js
-import React from 'react';
-import { Zone } from 'reactium-core/sdk';
-
-export default class Template extends React {
-    render() {
-        return (
-            <main>
-                <section className='navigation'>
-                    <Zone
-                        zone='navigation'
-                        mapper={plugin => {
-                            // use mapper to augment plugins in zone
-                            return {
-                                ...plugin,
-                                additionalProp: 'value',
-                            };
-                        }}
-                        sort={(pluginA, pluginB) => {
-                            // reverse order
-                            return pluginB.order - pluginA.order;
-                        }}
-                        filter={plugin => {
-                            // filter out plugins that aren't for this page type
-                            return plugin.pageType === this.props.pageType;
-                        }}
-                    />
-                </section>
-                {
-                    // snip to shorten example
-                }
-            </main>
-        );
-    }
-}
-
-Template.defaultProps = {
-    pageType: 'home',
-};
-```
-
-Now that we have a filter on the plugin zone, plugins will only appear when those conditions are met.
-
-### Redux Driven Zone
-
-If you wish to use application state to determine what plugins are loaded in a zone, you can dispatch core actions to dynamically add / remove / update plugins in a zone.
-
-```js
-deps().actions.Plugable.addPlugin(plugin);
-```
-
-> Add a dynamic redux plugin
-
-```js
-deps().actions.Plugable.updatePlugin(plugin);
-```
-
-> Update a redux plugin (must have same id)
-
-```js
-deps().actions.Plugable.removePlugin(pluginId);
-```
-
-> Remove a redux plugin by id
-
-```js
-import deps from 'dependencies';
-
-export default {
-    // on loading thunk, dynamically add this
-    // components/navs/SecondaryNav to the navigation zone, having it appear only on the home pageType
-    // (see custom filter above)
-    load: () => dispatch => {
-        dispatch(deps().actions.Plugable.addPlugin({
-            id: 'my-dynamic-plugin',
-            order: -1000,
-            component: 'SecondaryNav',
-            paths: ['navs']
-            zone: ['navigation'],
-            pageType: 'home',
-        }))
-    };
-};
-```
-
-> Some actions.js file
-
-Imagine the possibilities here, you could load the payload above from a REST service. Imagine the navs were loaded by calling an api endpoint `/api/navs`:
-
-```js
-import deps from 'dependencies';
-import api from 'appdir/api';
-
-export default {
-    load: () => dispatch => {
-        return api.get('/api/navs')
-            .then(({data: plugins}) => {
-                plugins.forEach(plugin => dispatch(deps().actions.Plugable.addPlugin(plugin)))
-            })
-            .catch(error => {
-                const errorId = `error-${new Date()}`;
-                dispatch(deps().actions.Plugable.addPlugin({
-                    id: errorId,
-                    component: 'ErrorMessage',
-                    zone: 'errors',
-                    error,
-                }))
-
-                // clear error after 2 seconds
-                setTimeout(() => {
-                    dispatch(deps().actions.Plugable.removePlugin(errorId));
-                }, 2000)
-            })
-    };
 };
 ```
 
@@ -331,10 +230,30 @@ arcli zones add -i "sidebar" -d "Sidebar zone in template"
 arcli zones add -i "content-pre" -d "Footer zone in template"
 ```
 
-> (Optional) Again, this just helps speed up your workflow with the CLI when creating new plugins.
+> (Optional) Again, this just helps speed up your workflow with the CLI when creating new zone components.
 
-For existing components, you can add the `plugin.js` file to register it as a plugin, by using:
+For existing components, you can add the `plugin.js` file to register it to a component `Zone`, by using:
 
 ```sh
-arcli plugins
+arcli plugin component
 ```
+
+## Hooks
+
+// TODO: Write Hooks Docs
+
+## Component Registration
+
+// TODO: Write Component Registration Docs
+
+## Handles
+
+// TODO: Write Handles Docs
+
+## Plugin Modules
+
+// TODO: Write Plugin Modules Docs
+
+## Actinium Extensions
+
+// TODO: Write Actinium Extensions Docs

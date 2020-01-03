@@ -7,7 +7,7 @@ export default {
      * Given to PluginProvider to determine by default what plugins are displayed.
      * Useful for example when you want to provide access controls.
      *
-     * Can be overriden per <Plugins /> component.
+     * Can be overriden per <Zone /> component.
      *
      * @param  {Object} plugin
      * @return {Boolean} true to keep plugin, false to remove it
@@ -18,7 +18,7 @@ export default {
      * Default plugin mapper. Useful for adding additional global context to
      * each plugin.
      *
-     * Can be overriden per <Plugins /> component.
+     * Can be overriden per <Zone /> component.
      *
      * @param  {Object} plugin
      * @return {Object} the modified plugin
@@ -28,7 +28,7 @@ export default {
     /**
      * Default plugin underscore _.sortBy
      *
-     * Can be overriden per <Plugins /> component.
+     * Can be overriden per <Zone /> component.
      *
      * @param  {String|Function} sortBy _.sortBy argument.
      * @param  {Boolean} reverse Reverse order

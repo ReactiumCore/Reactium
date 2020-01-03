@@ -452,10 +452,10 @@ const SCHEMA = ({ props }) => {
                     return String(val).toUpperCase() === 'Y';
                 },
             },
-            plugin: {
+            zone: {
                 pattern: /^y|n|Y|N/,
                 default: 'Y',
-                description: `${chalk.white('Plugin?')} ${chalk.cyan(
+                description: `${chalk.white('Add to Zone file?')} ${chalk.cyan(
                     '(Y/N):',
                 )}`,
                 ask: () => overwritable(prompt),
@@ -630,7 +630,7 @@ const COMMAND = ({ program, props }) => {
             'Include Redux actionTypes.js file.',
         )
         .option('--reducers [reducers]', 'Include Redux reducers.js file.')
-        .option('--plugin [plugin]', 'Include plugin.js file.')
+        .option('--zone [zone]', 'Include zone.js file.')
         .option('--services [services]', 'Include services.js file.')
         .option('--stylesheet [stylesheet]', 'Include style.scss file.')
         .on('--help', HELP);

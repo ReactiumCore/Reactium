@@ -125,7 +125,7 @@ const defaultManifestConfig = {
         {
             name: 'allPlugins',
             type: 'plugin',
-            pattern: /plugin.jsx?$/,
+            pattern: /(plugin|zone).jsx?$/,
         },
         {
             name: 'allHooks',
