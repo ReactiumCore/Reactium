@@ -104,6 +104,7 @@ Reactium.Hook.register(
     'history-create',
     async context => {
         context.history = getHistory();
+        Reactium.Routing.history = history;
 
         return Promise.resolve();
     },
