@@ -48,7 +48,7 @@ const env = {
 };
 
 module.exports = {
-    presets: ['@babel/react', ['@babel/env', env]],
+    presets: ['@babel/react', ['@babel/env', env], '@babel/preset-flow'],
     plugins: [
         ['@babel/plugin-syntax-dynamic-import'],
         [
@@ -68,7 +68,7 @@ module.exports = {
     ],
     env: {
         test: {
-            presets: ['@babel/react', '@babel/env'],
+            presets: ['@babel/react', '@babel/env', '@babel/preset-flow'],
             plugins: [
                 [
                     'module-resolver',
@@ -87,7 +87,7 @@ module.exports = {
             ],
         },
         library: {
-            presets: ['@babel/react', '@babel/env'],
+            presets: ['@babel/react', '@babel/env', '@babel/preset-flow'],
             plugins: [
                 [
                     'module-resolver',

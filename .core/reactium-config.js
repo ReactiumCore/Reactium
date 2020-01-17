@@ -320,6 +320,18 @@ module.exports = {
                     destination: '/src/reactium-translations',
                     source: '/tmp/update/src/reactium-translations',
                 },
+                {
+                    overwrite: false,
+                    version: '>=3.2.1',
+                    destination: '/.flowconfig',
+                    source: '/tmp/update/.flowconfig',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.2.1',
+                    destination: '/flow-typed',
+                    source: '/tmp/update/flow-typed',
+                },
             ],
             remove: [],
         },
