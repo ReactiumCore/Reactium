@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import Router from 'reactium-core/components/Router';
 import getComponents from 'dependencies/getComponents';
 import op from 'object-path';
+import _ from 'underscore';
 
 Reactium.Hook.register('init', async () => {
     require('manifest').externals();
@@ -100,9 +101,33 @@ Reactium.Hook.register(
     Reactium.Enums.priority.highest,
 );
 
+const getSaneZoneComponents = () => {
+    return (
+        // allow array of DDD zone components
+        _.flatten(_.compact(Object.values(deps().plugins)), true)
+            // remove DDD zone components missing zones
+            .filter(({ zone }) => {
+                if (!zone) return false;
+                if (Array.isArray(zone) && zone.length < 1) return false;
+                return true;
+            })
+            // normalize zone property
+            .map(component => {
+                let { zone } = component;
+                if (!Array.isArray(zone)) {
+                    zone = [zone];
+                }
+                return {
+                    ...component,
+                    zone,
+                };
+            })
+    );
+};
+
 Reactium.Hook.register('zone-defaults', async context => {
     op.set(context, 'controls', deps().plugableConfig);
-    op.set(context, 'components', Object.values(deps().plugins));
+    op.set(context, 'components', getSaneZoneComponents());
     console.log('Initializing Content Zones');
 });
 
