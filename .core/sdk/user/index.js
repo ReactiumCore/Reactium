@@ -6,6 +6,8 @@ import Parse from 'appdir/api';
 const { Hook, Enums, Cache } = SDK;
 const User = { Role: {} };
 
+Enums.cache.sessionValidate = 5000;
+
 /**
  * @api {Function} User.auth(username,password) User.auth()
  * @apiDescription Authenticate with the Actinium server.
@@ -89,20 +91,18 @@ User.getSessionToken = () => {
  * @apiGroup Reactium.User
  */
 User.hasValidSession = async () => {
-    let valid = Cache.get('session-validate');
-    if (typeof valid === 'undefined') {
-        try {
-            await Parse.Cloud.run('session-validate');
-            valid = true;
-        } catch (error) {
-            // Clear front-end cache as soon as we know session is invalid
-            Cache.clear();
-            valid = false;
-        }
-        Cache.set('session-validate', valid, 5000);
+    let request = Cache.get('session-validate');
+    if (request) {
+        return request;
     }
 
-    return valid;
+    request = Parse.Cloud.run('session-validate')
+        .then(() => Promise.resolve(true))
+        .catch(() => Promise.resolve(false));
+
+    Cache.set('session-validate', request, Enums.cache.sessionValidate);
+
+    return request;
 };
 
 /**
