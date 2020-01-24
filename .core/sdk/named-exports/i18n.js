@@ -7,7 +7,7 @@ import i18n from '../i18n';
  * @apiName __
  * @apiParam {StringLiteral} text the text to be translated. Important: this should not be a variable. It must be a string literal, or
  `arcli i18n` command will not be able to locate the string. This string may not be an ES6 template literal.
- * @apiGroup Translation (i18n)
+ * @apiGroup Translation
  * @apiExample Usage
 import React from 'react';
 import { __ } = 'reactium-core/sdk';
@@ -30,7 +30,7 @@ export const __ = (...params) => i18n.getJed().gettext(...params);
  * @apiParam {StringLiteral} plural the plural form text to be translated. Important: this should not be a variable. It must be a string literal, or
  `arcli i18n` command will not be able to locate the string. This string may not be an ES6 template literal.
  * @apiParam {Number} count the number related to singular or plural string
- * @apiGroup Translation (i18n)
+ * @apiGroup Translation
  * @apiExample Usage
 import React from 'react';
 import { _n } = 'reactium-core/sdk';
