@@ -5,6 +5,7 @@ import Parse from 'appdir/api';
 import User from '../user';
 
 const { Hook, Enums, Cache } = SDK;
+Enums.cache.capability = 5000;
 
 const Capability = {};
 
@@ -40,10 +41,23 @@ Capability.set = (capability, perms) =>
      if (allowed.includes('contributor')) console.log('Contributor allowed to do something');
  })
  */
-Capability.get = capability =>
-    Parse.Cloud.run('capability-get', {
+Capability.get = capability => {
+    const caps = _.chain([capability])
+        .flatten()
+        .uniq()
+        .value()
+        .sort();
+    const cacheKey = `capRequest-${capability.join('-').replace(/\./g, '_')}`;
+    let capRequest = Cache.get(cacheKey);
+
+    if (capRequest) return capRequest;
+    capRequest = Parse.Cloud.run('capability-get', {
         capability,
     });
+
+    Cache.set(cacheKey, capRequest, Enums.cache.capability);
+    return capRequest;
+};
 
 /**
  * @api {Function} Capability.check(capabilities,strict) Capability.check
@@ -71,13 +85,15 @@ Capability.check = async (capabilities = [], strict = true) => {
     const capCheckSignature = capabilities
         .sort()
         .concat([strict ? 'strict' : 'loose'])
-        .join('-');
+        .join('-')
+        .replace(/\./g, '_');
 
     let checking = Cache.get(capCheckSignature);
     if (checking) return checking;
 
     checking = Parse.Cloud.run('capability-check', { capabilities, strict });
-    Cache.set(capCheckSignature, checking, 200);
+    Cache.set(capCheckSignature, checking, Enums.cache.capability);
+
     return checking;
 };
 

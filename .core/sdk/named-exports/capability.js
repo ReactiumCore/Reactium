@@ -1,6 +1,9 @@
 import Capability from '../capability';
 import Parse from 'appdir/api';
+import { useAsyncEffect } from '@atomic-reactor/reactium-sdk-core';
 import { useRef, useState, useEffect } from 'react';
+import uuid from 'uuid/v4';
+import op from 'object-path';
 
 /**
  * @api {ReactHook} useCapabilityCheck(capabilities,strict) useCapabilityCheck()
@@ -12,15 +15,19 @@ import { useRef, useState, useEffect } from 'react';
  */
 export const useCapabilityCheck = (capabilities = [], strict = true) => {
     const allowedRef = useRef(false);
-    const [stat, update] = useState(1);
-    const updateAllowed = cap => {
-        allowedRef.current = cap;
-        update(stat + 1);
+    const [, update] = useState(uuid());
+    const setAllowed = allowed => {
+        allowedRef.current = allowed;
+        update(uuid());
     };
 
-    useEffect(() => {
-        Capability.check(capabilities).then(cap => updateAllowed(cap));
-    }, [capabilities.length, strict]);
+    useAsyncEffect(
+        async isMounted => {
+            const allowed = await Capability.check(capabilities);
+            if (isMounted()) setAllowed(allowed);
+        },
+        [capabilities.length, strict],
+    );
 
     return allowedRef.current;
 };
@@ -34,15 +41,20 @@ export const useCapabilityCheck = (capabilities = [], strict = true) => {
  */
 export const useCapability = capability => {
     const ref = useRef({});
-    const [stat, update] = useState(1);
+    const [, update] = useState(uuid());
     const updateCapRef = cap => {
         ref.current = cap;
-        update(stat + 1);
+        update(uuid);
     };
 
-    useEffect(() => {
-        Capability.get(capability).then(cap => updateCapRef(cap));
-    }, [capability]);
+    useAsyncEffect(
+        async isMounted => {
+            const cap = await Capability.get(capability);
+            console.log({ cap });
+            if (isMounted()) updateCapRef(cap);
+        },
+        [capability],
+    );
 
     return ref.current;
 };

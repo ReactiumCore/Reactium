@@ -4,8 +4,9 @@ import op from 'object-path';
 import Parse from 'appdir/api';
 import ActionSequence from 'action-sequence';
 
-const { Hook } = SDK;
+const { Hook, Enums, Cache } = SDK;
 const Roles = {};
+Enums.cache.roles = 10000;
 
 /**
  * Role Hooks
@@ -16,7 +17,15 @@ const Roles = {};
  */
 
 Roles.get = async search => {
-    const roles = await Parse.Cloud.run('roles');
+    const cacheKey = `Roles.get-${search}`;
+    let rolesRequest = Cache.get(cacheKey);
+
+    if (!rolesRequest) {
+        rolesRequest = Parse.Cloud.run('roles');
+        Cache.set(cacheKey, rolesRequest, Enums.cache.roles);
+    }
+
+    const roles = await rolesRequest;
 
     return _.chain(
         Object.values(roles).filter(
