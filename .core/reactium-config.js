@@ -3,7 +3,7 @@ const path = require('path');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.2.1';
+const version = '3.2.2';
 
 const contextMode = () => {
     if (
@@ -263,6 +263,9 @@ module.exports = {
                     'static:build',
                 ],
             },
+            husky: {
+                remove: ['hooks'],
+            },
         },
         files: {
             add: [
@@ -331,6 +334,12 @@ module.exports = {
                     version: '>=3.2.1',
                     destination: '/flow-typed',
                     source: '/tmp/update/flow-typed',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.2.2',
+                    destination: '/.huskyrc',
+                    source: '/tmp/update/.huskyrc',
                 },
             ],
             remove: [],
