@@ -108,6 +108,7 @@ const reactium = (gulp, config, webpackConfig) => {
                 open: open,
                 ghostMode: false,
                 startPath: config.dest.startPath,
+                ws: true,
             });
 
             done();
