@@ -18,6 +18,25 @@ if (typeof window !== 'undefined') {
 if (Parse) {
     Parse.initialize(apiConfig.parseAppId);
     Parse.serverURL = apiConfig.restAPI;
+
+    // Configure LiveQuery
+    if (typeof window !== 'undefined') {
+        const { host } = location;
+
+        // proxied through express
+        Parse.liveQueryServerURL = `ws://${host}${restAPI}`;
+
+        // direct connection (not proxied through express)
+        if (/^http/.test(apiConfig.restAPI)) {
+            const API = new URL(apiConfig.restAPI);
+            API.protocol = 'ws:';
+            Parse.liveQueryServerURL = API.toString();
+        }
+
+        Parse.LiveQuery.on('open', () => {
+            console.log('Parse LiveQuery connection established');
+        });
+    }
 }
 
 export default Parse;
