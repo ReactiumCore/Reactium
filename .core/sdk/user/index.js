@@ -4,7 +4,7 @@ import op from 'object-path';
 import Parse from 'appdir/api';
 
 const { Hook, Enums, Cache } = SDK;
-const User = { Role: {} };
+const User = { Meta: {}, Pref: {}, Role: {} };
 
 Enums.cache.sessionValidate = 5000;
 
@@ -25,6 +25,18 @@ User.auth = (username, password) =>
             await Hook.run('user.auth', u);
             return u;
         });
+
+/**
+ * @api {Function} User.serialize(user) User.serialize()
+ * @apiGroup Reactium.User
+ * @apiName User.serialize
+ * @apiParam {Object} Convert a `Parse.User` object into a JSON object. If the object is already serialized it is returned.
+ * @apiExample Usage:
+const u = User.serialize(user);
+ */
+User.serialize = user => {
+    return typeof user.toJSON === 'function' ? user.toJSON() : user;
+};
 
 /**
  * @api {Function} User.login(username,password) User.login()
@@ -55,8 +67,27 @@ User.logOut = async () => {
     }
 };
 
+/**
+ * @api {Asyncronous} User.forgot() User.forgot()
+ * @apiGroup Reactium.User
+ * @apiName User.forgot
+ * @apiDescription Intiates the forgot password routine.
+ * @apiParam {String} email The email address associated with a user object.
+ * @apiExample Usage:
+User.forgot('someone@email.com').then(response => {
+    console.log(response);
+});
+ */
 User.forgot = email => Parse.Cloud.run('password-reset-request', { email });
 
+/**
+ * @api {Asyncronous} User.reset() User.reset()
+ * @apiGroup Reactium.User
+ * @apiName User.reset
+ * @apiDescription Reset the user password.
+ * @apiParam {String} token The token received from the `User.forgot()` email message.
+ * @apiParam {String} password The new password.
+ */
 User.reset = (token, password) =>
     Parse.Cloud.run('password-reset', { token, password });
 
@@ -71,6 +102,29 @@ User.reset = (token, password) =>
 User.current = (parseObject = false) => {
     const u = Parse.User.current();
     return u ? (parseObject === true ? u : u.toJSON()) : null;
+};
+
+/**
+ * @api {Function} User.isCurrent(user) User.isCurrent()
+ * @apiGroup Reactium.User
+ * @apiName User.isCurrent
+ * @apiParam {Object} The User object to check.
+ * @apiExample Usage:
+// if signed in as steveMcQu33n this will return true.
+const isMe = User.isCurrent({ username: 'steveMcQu33n' });
+ */
+User.isCurrent = user => {
+    const current = User.current();
+
+    if (typeof user.toJSON === 'function') {
+        user = user.toJSON();
+    }
+
+    if (op.get(user, 'objectId') === op.get(current, 'objectId')) return true;
+    if (op.get(user, 'username') === op.get(current, 'username')) return true;
+    if (op.get(user, 'email') === op.get(current, 'email')) return true;
+
+    return false;
 };
 
 /**
@@ -332,6 +386,110 @@ User.Role.remove = (role, userId) => {
             await Hook.run('user.role.remove', role, u);
             return u;
         });
+};
+
+/**
+ * @api {Asyncronous} User.Meta.update(params) User.Meta.update()
+ * @apiGroup Reactium.User
+ * @apiName User.Meta.update
+ * @apiDescription Mutate the `Parse.User.meta` object. Calls the `user-meta-update` cloud function.
+ * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user meta object.
+ * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [email] Look up the user object by the email field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (hooks) {Hook} before-user-meta-update Triggered before the `user-meta-update` cloud function is called.
+```
+Arguments: params:Object
+```
+ * @apiParam (hooks) {Hook} user-meta-update-response Triggered after the `user-meta-update` cloud function is called.
+```
+Arguments: user:Parse.user, params:Object
+```
+ * @apiExample
+const updatedUser = await User.Meta.update({ objectId: 'slertjt5wzb', random: 'meta value' });
+ */
+User.Meta.update = async params => {
+    await Hook.run('before-user-meta-update', params);
+    const response = await Parse.Cloud.run('user-meta-update', params);
+    await Hook.run('user-meta-update-response', response, params);
+    return response;
+};
+
+/**
+ * @api {Asyncronous} User.Meta.delete(params) User.Meta.delete()
+ * @apiGroup Reactium.User
+ * @apiName User.Meta.delete
+ * @apiDescription Mutate the `Parse.User.meta` object by deleting a key value pair. Calls the `user-meta-delete` cloud function.
+ * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user meta object.
+ * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [email] Look up the user object by the email field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (hooks) {Hook} before-user-meta-delete Triggered before the `user-meta-delete` cloud function is called.
+```
+Arguments: params:Object
+```
+ * @apiParam (hooks) {Hook} user-meta-delete-response Triggered after the `user-meta-delete` cloud function is called.
+```
+Arguments: user:Parse.user, params:Object
+```
+ */
+User.Meta.delete = async params => {
+    await Hook.run('before-user-meta-delete', params);
+    const response = await Parse.Cloud.run('user-meta-delete', params);
+    await Hook.run('user-meta-delete-response');
+    return response;
+};
+
+/**
+ * @api {Asyncronous} User.Pref.update(params) User.Pref.update()
+ * @apiGroup Reactium.User
+ * @apiName User.Pref.update
+ * @apiDescription Mutate the `Parse.User.pref` object. Calls the `user-pref-update` cloud function.
+ * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user pref object.
+ * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [email] Look up the user object by the email field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (hooks) {Hook} before-user-pref-update Triggered before the `user-pref-update` cloud function is called.
+```
+Arguments: params:Object
+```
+ * @apiParam (hooks) {Hook} user-pref-update-response Triggered after the `user-pref-update` cloud function is called.
+```
+Arguments: user:Parse.user, params:Object
+```
+ * @apiExample
+const updatedUser = await User.Pref.update({ objectId: 'slertjt5wzb', random: 'pref value' });
+ */
+User.Pref.update = async params => {
+    await Hook.run('before-user-pref-update', params);
+    const response = await Parse.Cloud.run('user-pref-update', params);
+    await Hook.run('user-pref-update-response', response, params);
+    return response;
+};
+
+/**
+ * @api {Asyncronous} User.Pref.delete(params) User.Pref.delete()
+ * @apiGroup Reactium.User
+ * @apiName User.Pref.delete
+ * @apiDescription Mutate the `Parse.User.pref` object by deleting a key value pair. Calls the `user-pref-delete` cloud function.
+ * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user pref object.
+ * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (params) {String} [email] Look up the user object by the email field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
+ * @apiParam (hooks) {Hook} before-user-pref-delete Triggered before the `user-pref-delete` cloud function is called.
+```
+Arguments: params:Object
+```
+ * @apiParam (hooks) {Hook} user-pref-delete-response Triggered after the `user-pref-delete` cloud function is called.
+```
+Arguments: user:Parse.user, params:Object
+```
+ */
+User.Pref.delete = async params => {
+    await Hook.run('before-user-pref-delete', params);
+    const response = await Parse.Cloud.run('user-pref-delete', params);
+    await Hook.run('user-pref-delete-response');
+    return response;
 };
 
 export default User;
