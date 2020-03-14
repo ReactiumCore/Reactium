@@ -3,8 +3,8 @@ import _ from 'underscore';
 import op from 'object-path';
 import Parse from 'appdir/api';
 
-const { Hook, Enums, Cache } = SDK;
-const User = { Meta: {}, Pref: {}, Role: {} };
+const { Hook, Enums, Cache, Utils } = SDK;
+const User = { Meta: {}, Pref: {}, Role: {}, selected: null };
 
 Enums.cache.sessionValidate = 5000;
 
@@ -237,21 +237,41 @@ _Note:_ Any additional key value pairs will be added to the user object as a new
  * @apiParam (params) {String} email The email address to associate with the user account.
  * @apiParam (params) {String} password The password used when signing in.
  * @apiParam (params) {String} [role] The `Parse.Role` name to add the user to.
- * @apiParam (hooks) {Hook} user-before-save Mutate the `Parse.User` object before save is complete.
-
+ * @apiParam (hooks) {Hook} before-user-save Mutate the `Parse.User` object before save is complete.
 ```
 Arguments:  req:Object:Parse.User
 ```
- * @apiParam (hooks) {Hook} user-after-save Take action after the `Parse.User` object has been saved.
+ * @apiParam (hooks) {Hook} user-save-response Take action after the `Parse.User` object has been saved.
 ```
 Arguments: req:Object:Parse.User
 ```
+  * @apiParam (hooks) {Hook} user-save-error Take action after the `Parse.User` returns an error.
+```
+Arguments: error:Object, params:Object
+```
 */
 User.save = async params => {
+    const exclude = [
+        'ACL',
+        'capabilities',
+        'createdAt',
+        'emailVerified',
+        'updatedAt',
+    ];
+
+    exclude.forEach(field => op.del(params, field));
+
     await Hook.run('before-user-save', params);
-    const response = await Parse.Cloud.run('user-save', params);
-    await Hook.run('user-save-response', response, params);
-    return response;
+
+    return Parse.Cloud.run('user-save', params)
+        .then(async response => {
+            await Hook.run('user-save-response', response, params);
+            return response;
+        })
+        .catch(async err => {
+            await Hook.run('user-save-error', err, params);
+            return err;
+        });
 };
 
 /**
@@ -491,5 +511,14 @@ User.Pref.delete = async params => {
     await Hook.run('user-pref-delete-response');
     return response;
 };
+
+// User DirtyEvent, ScrubEvent
+User.DirtyEvent = Utils.registryFactory('UserDirtyEvent');
+User.DirtyEvent.protect(['change', 'loading']);
+User.DirtyEvent.protected.forEach(id => User.DirtyEvent.register(id));
+
+User.ScrubEvent = Utils.registryFactory('UserScrubEvent');
+User.ScrubEvent.protect(['loaded', 'save-success']);
+User.ScrubEvent.protected.forEach(id => User.ScrubEvent.register(id));
 
 export default User;
