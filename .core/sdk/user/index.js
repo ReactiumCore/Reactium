@@ -9,7 +9,7 @@ const User = { Meta: {}, Pref: {}, Role: {}, selected: null };
 Enums.cache.sessionValidate = 5000;
 
 /**
- * @api {Function} User.auth(username,password) User.auth()
+ * @api {Asyncronous} User.auth(username,password) User.auth()
  * @apiDescription Authenticate with the Actinium server.
  * @apiName User.auth
  * @apiParam {String} username
@@ -39,7 +39,7 @@ User.serialize = user => {
 };
 
 /**
- * @api {Function} User.login(username,password) User.login()
+ * @api {Asyncronous} User.login(username,password) User.login()
  * @apiDescription Alias of User.auth()
  * @apiName User.login
  * @apiGroup Reactium.User
@@ -47,7 +47,7 @@ User.serialize = user => {
 User.logIn = User.auth;
 
 /**
- * @api {Function} User.logOut() User.logOut()
+ * @api {Asyncronous} User.logOut() User.logOut()
  * @apiDescription Invalidate the current user.
  * @apiName User.logOut
  * @apiGroup Reactium.User
@@ -139,7 +139,7 @@ User.getSessionToken = () => {
 };
 
 /**
- * @api {Function} User.hasValidSession() User.hasValidSession()
+ * @api {Asyncronous} User.hasValidSession() User.hasValidSession()
  * @apiDescription Check to make sure the current user and associated session are valid.
  * @apiName User.hasValidSession
  * @apiGroup Reactium.User
@@ -324,27 +324,28 @@ User.retrieve = async params => {
 };
 
 /**
- * @api {Function} User.isRole(role,userId) User.isRole()
+ * @api {Asyncronous} User.isRole(role,objectId) User.isRole()
  * @apiDescription Asyncronously find out if a user is a member of a specific role.
  * @apiName User.isRole
  * @apiParam {String} role The role to check for.
+ * @apiParam {String} [objectId] The objectId of the user. If empty, the User.current() object is used.
  * @apiGroup Reactium.User
  */
-User.isRole = async (role, userId) => {
+User.isRole = async (role, objectId) => {
     const current = User.current() || {};
 
-    userId = userId || op.get(current, 'objectId');
-    const u = await User.find({ userId });
+    objectId = objectId || op.get(current, 'objectId');
+    const u = await User.retrieve({ objectId });
 
     if (!u) {
-        return Promise.reject('invalid userId');
+        return Promise.reject('invalid user id');
     }
 
     return op.has(u, ['roles', role]);
 };
 
 /**
- * @api {Function} User.can(capabilities,strict) User.can()
+ * @api {Asyncronous} User.can(capabilities,strict) User.can()
  * @apiDescription Asyncronously find out if a user has a set of capabilities.
  * @apiName User.can
  * @apiParam {Mixed} capabilities The capability(s) to check for (string or array)
@@ -357,25 +358,25 @@ User.can = async (capabilities = [], strict = true) => {
 };
 
 /**
- * @api {Function} User.Role.add(role,userId) User.Role.add()
+ * @api {Function} User.Role.add(role,objectId) User.Role.add()
  * @apiDescription Asyncronously add a user to a role.
  * @apiName User.Role.add
  * @apiParam {String} role The role name. Example: 'super-admin'.
- * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
+ * @apiParam {String} [objectId] The objectId of the user. If empty the current user is used.
  * @apiSuccess {Promise} user The updated user object.
  * @apiGroup Reactium.User
  */
-User.Role.add = async (role, userId) => {
+User.Role.add = async (role, objectId) => {
     const current = User.current() || {};
 
-    const u = userId || op.get(current, 'objectId');
+    const u = objectId || op.get(current, 'objectId');
 
     if (!u) {
-        return Promise.reject('invalid userId');
+        return Promise.reject('invalid user id');
     }
 
     return Parse.Cloud.run('role-user-add', { role, user: u })
-        .then(() => User.find({ userId: u }))
+        .then(() => User.retrieve({ objectId: u, refresh: true }))
         .then(async u => {
             await Hook.run('user.role.add', role, u);
             return u;
@@ -383,25 +384,25 @@ User.Role.add = async (role, userId) => {
 };
 
 /**
- * @api {Function} User.Role.remove(role,userId) User.Role.remove()
+ * @api {Function} User.Role.remove(role,objectId) User.Role.remove()
  * @apiDescription Asyncronously remove a user to a role.
  * @apiName User.Role.remove
  * @apiParam {String} role The role name. Example: 'super-admin'.
- * @apiParam {String} [userId] The objectId of the user. If empty the current user is used.
+ * @apiParam {String} [objectId] The objectId of the user. If empty the current user is used.
  * @apiSuccess {Promise} user The updated user object.
  * @apiGroup Reactium.User
  */
-User.Role.remove = (role, userId) => {
+User.Role.remove = (role, objectId) => {
     const current = User.current() || {};
 
-    const u = userId || op.get(current, 'objectId');
+    const u = objectId || op.get(current, 'objectId');
 
     if (!u) {
-        return Promise.reject('invalid userId');
+        return Promise.reject('invalid user id');
     }
 
     return Parse.Cloud.run('role-user-remove', { role, user: u })
-        .then(() => User.find({ userId: u }))
+        .then(() => User.retrieve({ objectId: u, refresh: true }))
         .then(async u => {
             await Hook.run('user.role.remove', role, u);
             return u;
