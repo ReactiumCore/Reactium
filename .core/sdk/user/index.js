@@ -519,7 +519,12 @@ User.DirtyEvent.protect(['change', 'loading']);
 User.DirtyEvent.protected.forEach(id => User.DirtyEvent.register(id));
 
 User.ScrubEvent = Utils.registryFactory('UserScrubEvent');
-User.ScrubEvent.protect(['loaded', 'save-success']);
+User.ScrubEvent.protect([
+    'loaded',
+    'save-success',
+    'user-role-add',
+    'user-role-remove',
+]);
 User.ScrubEvent.protected.forEach(id => User.ScrubEvent.register(id));
 
 export default User;
