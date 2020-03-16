@@ -265,8 +265,13 @@ User.save = async params => {
 
     return Parse.Cloud.run('user-save', params)
         .then(async response => {
-            await Hook.run('user-save-response', response, params);
-            return response;
+            if (_.isError(response)) {
+                await Hook.run('user-save-error', response, params);
+                throw new Error(response);
+            } else {
+                await Hook.run('user-save-response', response, params);
+                return response;
+            }
         })
         .catch(async err => {
             await Hook.run('user-save-error', err, params);
@@ -515,7 +520,7 @@ User.Pref.delete = async params => {
 
 // User DirtyEvent, ScrubEvent
 User.DirtyEvent = Utils.registryFactory('UserDirtyEvent');
-User.DirtyEvent.protect(['change', 'loading']);
+User.DirtyEvent.protect(['change']);
 User.DirtyEvent.protected.forEach(id => User.DirtyEvent.register(id));
 
 User.ScrubEvent = Utils.registryFactory('UserScrubEvent');
