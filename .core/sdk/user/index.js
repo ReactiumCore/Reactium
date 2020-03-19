@@ -532,4 +532,16 @@ User.ScrubEvent.protect([
 ]);
 User.ScrubEvent.protected.forEach(id => User.ScrubEvent.register(id));
 
+// User Content Zone registry. Used to register tabs on the user profile page.
+User.Content = Utils.registryFactory('UserContent');
+User.Content.protect(['admin-user-content', 'admin-user-media'])
+    .register('admin-user-content', {
+        order: 10,
+        tab: { id: 'content', label: 'Content' },
+    })
+    .register('admin-user-media', {
+        order: 20,
+        tab: { id: 'media', label: 'Media' },
+    });
+
 export default User;
