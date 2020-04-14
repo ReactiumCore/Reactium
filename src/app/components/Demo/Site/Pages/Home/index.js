@@ -3,45 +3,27 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import Template from 'components/Demo/Site/Template';
+import React from 'react';
 import Hero from 'components/Demo/Site/Hero';
 import Features from 'components/Demo/Site/Features';
+import Template from 'components/Demo/Site/Template';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Home
+ * Home
  * -----------------------------------------------------------------------------
  */
 
-export default class Home extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        };
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-    }
-
-    render() {
-        let { hero, features = {} } = this.state;
-
-        return (
-            <Template>
-                <main role='main'>
-                    <Hero {...hero} />
-                    <Features {...features} />
-                </main>
-            </Template>
-        );
-    }
-}
+const Home = ({ hero, features = {} }) => {
+    return (
+        <Template>
+            <main role='main'>
+                <Hero {...hero} />
+                <Features {...features} />
+            </main>
+        </Template>
+    );
+};
 
 Home.defaultProps = {
     hero: {
@@ -80,3 +62,5 @@ Home.defaultProps = {
         ],
     },
 };
+
+export default Home;

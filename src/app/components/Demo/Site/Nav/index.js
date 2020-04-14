@@ -3,58 +3,28 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: Nav
+ * Nav
  * -----------------------------------------------------------------------------
  */
 
-class Nav extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        };
-
-        this.container = null;
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                ...nextProps,
-            };
-        });
-    }
-
-    render() {
-        let { buttons, fixed } = this.state;
-
-        return (
-            <nav
-                className={fixed === true ? 'main fixed' : 'main'}
-                ref={elm => {
-                    this.container = elm;
-                }}>
-                <div>
-                    <ul>
-                        {buttons.map((item, i) => {
-                            return (
-                                <li key={`nav-${i}`}>
-                                    <NavLink {...item}>{item.label}</NavLink>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </nav>
-        );
-    }
-}
+const Nav = ({ buttons, fixed }) => (
+    <nav className={fixed === true ? 'main fixed' : 'main'}>
+        <div>
+            <ul>
+                {buttons.map((item, i) => (
+                    <li key={`nav-${i}`}>
+                        <NavLink {...item}>{item.label}</NavLink>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    </nav>
+);
 
 Nav.defaultProps = {
     fixed: false,

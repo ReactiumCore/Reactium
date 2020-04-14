@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from 'react';
+import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 /**
@@ -12,46 +12,25 @@ import { Link, NavLink } from 'react-router-dom';
  * -----------------------------------------------------------------------------
  */
 
-export default class Button extends Component {
-    constructor(props) {
-        super(props);
-        this.state = Object.assign({}, this.props);
+const PrimaryButton = ({ type = 'button', ...props }) => {
+    switch (type) {
+        case 'link':
+            return <Link {...props} />;
+
+        case 'nav':
+            return <NavLink {...props} />;
+
+        case 'label':
+            return <label {...props} />;
+
+        default:
+            return <button {...props} />;
     }
-
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => {
-            return Object.assign({}, prevState, nextProps);
-        });
-    }
-
-    render() {
-        let { type = 'button' } = this.state;
-
-        switch (type) {
-            case 'link':
-                return <Link {...this.state} />;
-
-            case 'nav':
-                return <NavLink {...this.state} />;
-
-            case 'label':
-                return <label {...this.state} />;
-
-            default:
-                return <button {...this.state} />;
-        }
-    }
-}
-
-class PrimaryButton extends Button {
-    constructor(props) {
-        super(props);
-    }
-}
+};
 
 PrimaryButton.defaultProps = {
     className: 'btn btn-primary',
     type: 'button',
 };
 
-export { PrimaryButton };
+export { PrimaryButton as default, PrimaryButton };

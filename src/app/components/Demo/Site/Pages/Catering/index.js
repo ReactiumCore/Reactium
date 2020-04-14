@@ -3,9 +3,9 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import Template from 'components/Demo/Site/Template';
+import React from 'react';
 import Hero from 'components/Demo/Site/Hero';
+import Template from 'components/Demo/Site/Template';
 
 /**
  * -----------------------------------------------------------------------------
@@ -13,39 +13,13 @@ import Hero from 'components/Demo/Site/Hero';
  * -----------------------------------------------------------------------------
  */
 
-export default class Catering extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        };
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-    }
-
-    render() {
-        let { hero, title } = this.state;
-
-        return (
-            <Template title={title}>
-                <main role='main'>
-                    <Hero {...hero} />
-                </main>
-            </Template>
-        );
-    }
-}
+const Catering = ({ hero, title }) => (
+    <Template title={title}>
+        <main role='main'>
+            <Hero {...hero} />
+        </main>
+    </Template>
+);
 
 Catering.defaultProps = {
     title: 'Catering | Reactium',
@@ -59,3 +33,5 @@ Catering.defaultProps = {
         content: ['Catering?', 'Yeah, we do that!'],
     },
 };
+
+export default Catering;

@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component } from 'react';
+import React from 'react';
 import HeaderNav from './HeaderNav';
 
 /**
@@ -12,49 +12,19 @@ import HeaderNav from './HeaderNav';
  * -----------------------------------------------------------------------------
  */
 
-export default class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        };
-
-        this.container = null;
+const Header = ({ backgroundImage, children, nav, style = {} }) => {
+    if (backgroundImage) {
+        style['backgroundImage'] = backgroundImage;
     }
 
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-    }
-
-    render() {
-        let { backgroundImage, children, style = {}, nav } = this.state;
-
-        if (backgroundImage) {
-            style['backgroundImage'] = backgroundImage;
-        }
-
-        return (
-            <header
-                style={style}
-                ref={elm => {
-                    this.container = elm;
-                }}>
-                <div className={`shadow`} />
-                <HeaderNav links={nav} />
-                {children}
-            </header>
-        );
-    }
-}
+    return (
+        <header style={style}>
+            <div className={'shadow'} />
+            <HeaderNav links={nav} />
+            {children}
+        </header>
+    );
+};
 
 Header.defaultProps = {
     style: { marginBottom: 0 },
@@ -72,3 +42,5 @@ Header.defaultProps = {
         },
     ],
 };
+
+export default Header;
