@@ -260,14 +260,14 @@ const SCHEMA_CHOOSE_TARGET = ({ props, actiniumPlugins }) => {
  * @description Function used as the commander.action() callback.
  * @see https://www.npmjs.com/package/commander
  * @param opt Object The commander options passed into the function.
- * @param props Object The CLI props passed from the calling class `orcli.js`.
+ * @param props Object The CLI props passed from the calling class `arcli.js`.
  * @since 2.0.0
  */
 const ACTION = ({ opt, props }) => {
     const { cwd, prompt, config } = props;
     const plugins = globby(
         path
-            .resolve(cwd, 'src/app/components/plugin-src/*/index.js')
+            .resolve(cwd, 'src/app/components/plugin-src/**/umd.js')
             .split(/[\\\/]/g)
             .join(path.posix.sep),
     ).map(mod => path.basename(path.dirname(mod)));
