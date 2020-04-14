@@ -3,11 +3,11 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
-import Header from './Header';
-import Nav from './Nav';
-import Footer from './Footer';
+import Header from '../Header';
+import Nav from '../Nav';
+import Footer from '../Footer';
 
 /**
  * -----------------------------------------------------------------------------
@@ -27,16 +27,20 @@ export default class Template extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('scroll', this.onScroll);
-        this.ival = setInterval(() => {
-            this.setState({ mounted: window.templateMounted });
-        });
+        if (typeof window !== 'undefined') {
+            window.addEventListener('scroll', this.onScroll);
+            this.ival = setInterval(() => {
+                this.setState({ mounted: window.templateMounted });
+            });
+        }
     }
 
     componentWillUnmount() {
-        clearInterval(this.ival);
-        this.ival = null;
-        window.removeEventListener('scroll', this.onScroll);
+        if (typeof window !== 'undefined') {
+            clearInterval(this.ival);
+            this.ival = null;
+            window.removeEventListener('scroll', this.onScroll);
+        }
     }
 
     onScroll(e) {
@@ -44,21 +48,21 @@ export default class Template extends Component {
             return;
         }
 
-        let {
+        const {
             height: headerHeight,
         } = this.header.container.getBoundingClientRect();
-        let { top, height } = this.navbar.container.getBoundingClientRect();
-        let y = scrollY - headerHeight;
+        const { top, height } = this.navbar.container.getBoundingClientRect();
+        const y = scrollY - headerHeight;
 
         if (this.mb !== y) {
-            let fixed = y >= 0;
+            const fixed = y >= 0;
             this.mb = y >= 0 ? height : 0;
             this.setState({ navbarFixed: fixed, headerMarginBottom: this.mb });
         }
     }
 
     render() {
-        let {
+        const {
             title,
             bodyClass,
             navbarFixed,
@@ -69,9 +73,9 @@ export default class Template extends Component {
             header = {},
         } = this.props;
 
-        let headerStyle = { marginBottom: headerMarginBottom };
+        const headerStyle = { marginBottom: headerMarginBottom };
         return (
-            <Fragment>
+            <>
                 <Helmet>
                     <link rel='stylesheet' href={style} />
                     <title>{title}</title>
@@ -98,7 +102,7 @@ export default class Template extends Component {
                 {children}
 
                 <Footer />
-            </Fragment>
+            </>
         );
     }
 }

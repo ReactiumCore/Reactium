@@ -3,49 +3,23 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
-import Template from 'components/Demo/Site/Template';
+import React from 'react';
 import Features from 'components/Demo/Site/Features';
+import Template from 'components/Demo/Site/Template';
 
 /**
  * -----------------------------------------------------------------------------
- * React Component: About
+ * About
  * -----------------------------------------------------------------------------
  */
 
-export default class About extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        };
-    }
-
-    componentDidMount() {
-        if (this.state.hasOwnProperty('mount')) {
-            this.state.mount(this);
-        }
-    }
-
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-    }
-
-    render() {
-        let { features = {}, title } = this.state;
-
-        return (
-            <Template title={title}>
-                <main role='main'>
-                    <Features {...features} />
-                </main>
-            </Template>
-        );
-    }
-}
+const About = ({ features = {}, title }) => (
+    <Template title={title}>
+        <main role='main'>
+            <Features {...features} />
+        </main>
+    </Template>
+);
 
 About.defaultProps = {
     title: 'About | Reactium',
@@ -61,3 +35,5 @@ About.defaultProps = {
         ],
     },
 };
+
+export default About;

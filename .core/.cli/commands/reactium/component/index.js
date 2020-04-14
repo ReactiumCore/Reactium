@@ -381,7 +381,7 @@ const SCHEMA = ({ props }) => {
             },
             redux: {
                 pattern: /^y|n|Y|N/,
-                default: 'Y',
+                default: 'N',
                 description: `${chalk.white('Redux?')} ${chalk.cyan('(Y/N):')}`,
                 required: true,
                 ask: () => overwritable(prompt),
@@ -454,7 +454,7 @@ const SCHEMA = ({ props }) => {
             },
             zone: {
                 pattern: /^y|n|Y|N/,
-                default: 'Y',
+                default: 'N',
                 description: `${chalk.white('Add to Zone file?')} ${chalk.cyan(
                     '(Y/N):',
                 )}`,
@@ -465,7 +465,7 @@ const SCHEMA = ({ props }) => {
             },
             services: {
                 pattern: /^y|n|Y|N/,
-                default: 'Y',
+                default: 'N',
                 description: `${chalk.white('Services?')} ${chalk.cyan(
                     '(Y/N):',
                 )}`,
@@ -476,7 +476,7 @@ const SCHEMA = ({ props }) => {
             },
             stylesheet: {
                 pattern: /^y|n|Y|N/,
-                default: 'Y',
+                default: 'N',
                 message: ' Add a style sheet?',
                 description: `${chalk.white('Stylesheet?')} ${chalk.cyan(
                     '(Y/N):',

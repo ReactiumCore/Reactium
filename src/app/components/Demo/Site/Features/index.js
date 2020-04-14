@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 
 /**
  * -----------------------------------------------------------------------------
@@ -11,61 +11,41 @@ import React, { Component, Fragment } from 'react';
  * -----------------------------------------------------------------------------
  */
 
-export default class Features extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...this.props,
-        };
-    }
+const Features = ({ count, layout = [], items = [] }) => {
+    return items.length < 1 ? null : (
+        <section className={'feature'}>
+            {items.map((item, i) => {
+                let { title, caption, backgroundImage } = item;
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState(prevState => ({
-            ...prevState,
-            ...nextProps,
-        }));
-    }
+                count += 2;
 
-    render() {
-        let count = 0;
-        let { items = [], layout = [] } = this.state;
+                let orderLeft = count % 4 === 0 ? count : count - 1;
+                let orderRight = count % 4 === 0 ? count - 1 : count;
 
-        return items.length < 1 ? null : (
-            <section className={'feature'}>
-                {items.map((item, i) => {
-                    let { title, caption, backgroundImage } = item;
-
-                    count += 2;
-
-                    let orderLeft = count % 4 === 0 ? count : count - 1;
-                    let orderRight = count % 4 === 0 ? count - 1 : count;
-
-                    return (
-                        <Fragment key={`feature-${i}`}>
-                            <div
-                                className={`feature-block ${
-                                    layout[0]
-                                } order-${orderLeft}`}>
-                                <div className={`feature-caption`}>
-                                    <h2>{title}</h2>
-                                    <p>{caption}</p>
-                                </div>
+                return (
+                    <Fragment key={`feature-${i}`}>
+                        <div
+                            className={`feature-block ${layout[0]} order-${orderLeft}`}>
+                            <div className={'feature-caption'}>
+                                <h2>{title}</h2>
+                                <p>{caption}</p>
                             </div>
-                            <div
-                                className={`feature-block ${
-                                    layout[1]
-                                } order-${orderRight}`}
-                                style={{ backgroundImage }}
-                            />
-                        </Fragment>
-                    );
-                })}
-            </section>
-        );
-    }
-}
+                        </div>
+                        <div
+                            className={`feature-block ${layout[1]} order-${orderRight}`}
+                            style={{ backgroundImage }}
+                        />
+                    </Fragment>
+                );
+            })}
+        </section>
+    );
+};
 
 Features.defaultProps = {
+    count: 0,
     layout: [],
     items: [],
 };
+
+export default Features;
