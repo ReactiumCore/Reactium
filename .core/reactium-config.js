@@ -3,7 +3,7 @@ const path = require('path');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.2.4';
+const version = '3.2.5';
 
 const contextMode = () => {
     if (
@@ -141,6 +141,10 @@ const defaultManifestConfig = {
         {
             from: '.core/',
             to: 'reactium-core/',
+        },
+        {
+            node_modules: true,
+            ignore: /^((?!reactium-plugin).)*$/,
         },
     ],
     pluginExternals: defaultLibraryExternals,

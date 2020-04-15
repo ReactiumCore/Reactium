@@ -9,48 +9,122 @@ const chalk = require('chalk');
 const diff = require('fast-diff');
 const hb = require('handlebars');
 
-const flattenRegistry = (registry = { children: [] }, manifest = []) =>
-    registry.children.reduce((manifest, item) => {
-        if ('children' in item) {
-            return flattenRegistry(item, manifest);
+const flattenRegistry = (registry = { children: [] }, manifest = []) => {
+    op.get(registry, 'children', []).forEach(item => {
+        const type = op.get(item, 'type');
+        if (type === 'directory') {
+            const children = op.get(item, 'children', []);
+            if (children.length > 0) {
+                return flattenRegistry(item, manifest);
+            }
+
+            return manifest;
         }
+
         if ('path' in item) {
             manifest.push(item);
         }
-        return manifest;
-    }, manifest);
+    });
+
+    return manifest;
+};
 
 const sources = (sourcePath, searchParams) =>
     flattenRegistry(tree(sourcePath, searchParams));
 
-const find = (searches = [], sourceMappings = [], searchParams) => {
-    let mappings = searches.reduce((mappings, { name, type }) => {
+const isRegExp = regEx =>
+    typeof regEx === 'object' && regEx.constructor == RegExp;
+
+const find = (searches = [], sourceMappings = [], searchParams = {}) => {
+    let mappings = {};
+    searches.forEach(({ name, type }) => {
         mappings[name] = {
             type,
             imports: [],
             originals: {},
         };
-        return mappings;
-    }, {});
+    });
 
     sourceMappings.forEach(sourceMapping => {
-        mappings = sources(sourceMapping.from)
-            .map(file => file.path)
-            .reduce((mappings, file) => {
-                searches.forEach(({ name, pattern, ignore }) => {
-                    if (pattern.test(file) && (!ignore || !ignore.test(file))) {
-                        const normalized = file
-                            .replace(/\\/g, '/')
-                            .replace(sourceMapping.from, sourceMapping.to)
-                            .replace(/.jsx?$/, '');
+        const nodeModules = Boolean(op.get(sourceMapping, 'node_modules'));
+        const params = {
+            ...searchParams,
+            exclude: [...(op.get(searchParams, 'exclude', []) || [])],
+        };
 
-                        mappings[name].originals[normalized] = file;
-                        mappings[name].imports.push(normalized);
+        const exclude = op
+            .get(params, 'exclude', [])
+            .concat(op.get(sourceMapping, 'exclude', []));
+
+        op.set(params, 'exclude', exclude);
+
+        const files = [];
+        if (nodeModules) {
+            // exclude deep packages
+            exclude.push(/node_modules$/);
+
+            const packagePath = module.paths
+                .map(p => path.resolve(path.dirname(p), 'package.json'))
+                .find(packagePath => fs.existsSync(packagePath));
+
+            Object.keys(
+                op.get(require(packagePath), 'dependencies', {}),
+            ).forEach(mod => {
+                let from;
+                try {
+                    from = path.dirname(require.resolve(mod));
+                } catch (err) {}
+
+                if (from) {
+                    sources(from, params).forEach(file => {
+                        file.mod = mod;
+                        files.push(file);
+                    });
+                }
+            });
+        } else if (op.has(sourceMapping, 'from')) {
+            sources(sourceMapping.from, params).forEach(file =>
+                files.push(file),
+            );
+        }
+
+        files.forEach(fileObj => {
+            const file = fileObj.path;
+
+            // ignore entire set of source paths if ignore specified
+            if (
+                op.has(sourceMapping, 'ignore') &&
+                isRegExp(sourceMapping.ignore) &&
+                sourceMapping.ignore.test(file)
+            )
+                return;
+
+            searches.forEach(({ name, pattern, ignore }) => {
+                if (ignore && isRegExp(ignore) && ignore.test(file)) return;
+
+                if (pattern.test(file)) {
+                    let normalized = file;
+                    if (nodeModules) {
+                        normalized = normalized.replace(
+                            new RegExp(`.*${fileObj.mod}`),
+                            fileObj.mod,
+                        );
                     }
-                });
 
-                return mappings;
-            }, mappings);
+                    file.replace(/\\/g, '/');
+                    if (op.has(sourceMapping, 'from')) {
+                        normalized = normalized.replace(
+                            sourceMapping.from,
+                            op.get(sourceMapping, 'to', sourceMapping.from),
+                        );
+                    }
+                    normalized = normalized.replace(fileObj.extension, '');
+
+                    mappings[name].originals[normalized] = file;
+                    mappings[name].imports.push(normalized);
+                }
+            });
+        });
     });
 
     return mappings;
