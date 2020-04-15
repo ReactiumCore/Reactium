@@ -184,6 +184,7 @@ const defaultManifestConfig = {
                 type: 'config',
                 pattern: /umd-config.json$/,
                 ignore: /assets/,
+                stripExtension: false,
             },
         ],
         sourceMappings: [

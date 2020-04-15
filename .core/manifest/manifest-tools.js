@@ -99,7 +99,8 @@ const find = (searches = [], sourceMappings = [], searchParams = {}) => {
             )
                 return;
 
-            searches.forEach(({ name, pattern, ignore }) => {
+            searches.forEach(search => {
+                const { name, pattern, ignore } = search;
                 if (ignore && isRegExp(ignore) && ignore.test(file)) return;
 
                 if (pattern.test(file)) {
@@ -118,7 +119,10 @@ const find = (searches = [], sourceMappings = [], searchParams = {}) => {
                             op.get(sourceMapping, 'to', sourceMapping.from),
                         );
                     }
-                    normalized = normalized.replace(fileObj.extension, '');
+
+                    if (op.get(search, 'stripExtension', true)) {
+                        normalized = normalized.replace(fileObj.extension, '');
+                    }
 
                     mappings[name].originals[normalized] = file;
                     mappings[name].imports.push(normalized);
