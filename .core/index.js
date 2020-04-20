@@ -24,6 +24,7 @@ const { Enums } = SDK;
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
 global.parseAppId = apiConfig.parseAppId;
+global.actiniumAppId = apiConfig.actiniumAppId;
 global.restAPI = apiConfig.restAPI;
 global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
 

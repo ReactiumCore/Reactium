@@ -21,10 +21,10 @@ module.exports = {
                     window.defines = ${serialize(defines)};
                     window.INITIAL_STATE = ${serialize(store.getState())}
                     window.restAPI = '/api';
-                    window.parseAppId = '${parseAppId}'
+                    window.actiniumAppId = '${actiniumAppId}'
                 </script>
                 ${req.scripts}
             </body>
         </html>`;
-    }
+    },
 };
