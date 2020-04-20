@@ -1,5 +1,4 @@
 import Capability from '../capability';
-import Parse from 'appdir/api';
 import { useAsyncEffect } from '@atomic-reactor/reactium-sdk-core';
 import { useRef, useState, useEffect } from 'react';
 import uuid from 'uuid/v4';

@@ -1,7 +1,7 @@
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
-import Parse from 'appdir/api';
+import Actinium from 'appdir/api';
 import ActionSequence from 'action-sequence';
 
 const { Hook, Enums, Cache } = SDK;
@@ -21,7 +21,7 @@ Roles.get = async search => {
     let rolesRequest = Cache.get(cacheKey);
 
     if (!rolesRequest) {
-        rolesRequest = Parse.Cloud.run('roles');
+        rolesRequest = Actinium.Cloud.run('roles');
         Cache.set(cacheKey, rolesRequest, Enums.cache.roles);
     }
 
@@ -65,7 +65,7 @@ Roles.create = (roleObj = {}, options = { useMasterKey }) => {
         context: { updatedRoles: {} },
         actions: {
             create: () =>
-                Parse.Cloud.run('role-create', { roleArray }, options),
+                Actinium.Cloud.run('role-create', { roleArray }, options),
             roles: async ({ context }) => {
                 context.updatedRoles = await Roles.get();
             },
@@ -79,7 +79,7 @@ Roles.remove = (role, options = { useMasterKey }) =>
     ActionSequence({
         context: { updatedRoles: {} },
         actions: {
-            remove: () => Parse.Cloud.run('role-remove', { role }, options),
+            remove: () => Actinium.Cloud.run('role-remove', { role }, options),
             roles: async ({ context }) => {
                 context.updatedRoles = await Roles.get();
             },

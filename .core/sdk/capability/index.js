@@ -1,7 +1,7 @@
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
-import Parse from 'appdir/api';
+import Actinium from 'appdir/api';
 import User from '../user';
 
 const { Hook, Enums, Cache } = SDK;
@@ -24,7 +24,7 @@ const Capability = {};
  })
  */
 Capability.set = (capability, perms) =>
-    Parse.Cloud.run('capability-edit', {
+    Actinium.Cloud.run('capability-edit', {
         capability,
         perms,
     });
@@ -51,7 +51,7 @@ Capability.get = capability => {
     let capRequest = Cache.get(cacheKey);
 
     if (capRequest) return capRequest;
-    capRequest = Parse.Cloud.run('capability-get', {
+    capRequest = Actinium.Cloud.run('capability-get', {
         capability,
     });
 
@@ -91,7 +91,7 @@ Capability.check = async (capabilities = [], strict = true) => {
     let checking = Cache.get(capCheckSignature);
     if (checking) return checking;
 
-    checking = Parse.Cloud.run('capability-check', { capabilities, strict });
+    checking = Actinium.Cloud.run('capability-check', { capabilities, strict });
     Cache.set(capCheckSignature, checking, Enums.cache.capability);
 
     return checking;
