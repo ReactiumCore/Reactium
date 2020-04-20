@@ -14,17 +14,24 @@ module.exports = spinner => {
 
     return {
         create: async ({ action, params, props }) => {
-            const { src, dest, verbose } = params;
-
-            createDoc({
-                src,
-                dest,
-                lineEnding: '\n',
-                debug: verbose,
-                verbose,
-            });
-
             message(`Creating ${chalk.cyan('docs')}...`);
+
+            let { src, dest, verbose } = params;
+
+            dest = String(dest)
+                .replace(/ /gi, '')
+                .split(',');
+            dest = _.flatten([dest]);
+
+            dest.forEach(d => {
+                createDoc({
+                    src,
+                    dest: d,
+                    lineEnding: '\n',
+                    debug: verbose,
+                    verbose,
+                });
+            });
 
             return Promise.resolve({ action, status: 200 });
         },

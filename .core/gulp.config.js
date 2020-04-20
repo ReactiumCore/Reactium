@@ -123,7 +123,7 @@ const defaultConfig = {
     },
     docs: {
         src: '.core,src/app,node_modules/@atomic-reactor',
-        dest: 'public/docs',
+        dest: ['public/docs', 'docs'],
         verbose: false,
     },
 };
