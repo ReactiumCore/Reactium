@@ -15,10 +15,6 @@ module.exports = ({ params, props }) => {
 
     const actions = require('./actions')(spinner);
 
-    if (!op.get(params, 'overwrite', false)) {
-        delete actions.backup;
-    }
-
     if (!op.get(params, 'redux', false)) {
         const noredux = [
             'redux',
@@ -31,6 +27,8 @@ module.exports = ({ params, props }) => {
         noredux.forEach(exclude => {
             delete actions[exclude];
         });
+    } else {
+        delete actions.index;
     }
 
     const excludes = [
@@ -110,6 +108,7 @@ module.exports = ({ params, props }) => {
                 'redux',
                 'actions',
                 'actionTypes',
+                'plugin',
                 'reducers',
                 'zone',
                 'services',
@@ -117,19 +116,6 @@ module.exports = ({ params, props }) => {
         ).length < 1
     ) {
         delete actions.domain;
-    }
-
-    switch (params.type) {
-        case 'functional':
-        case 'hook':
-            delete actions.class;
-            delete actions.redux;
-            delete actions.subclass;
-            break;
-
-        case 'class':
-            delete actions.functional;
-            break;
     }
 
     return ActionSequence({

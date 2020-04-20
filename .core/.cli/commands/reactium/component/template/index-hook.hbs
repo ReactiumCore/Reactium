@@ -2,77 +2,146 @@ import _ from 'underscore';
 import cn from 'classnames';
 import op from 'object-path';
 import PropTypes from 'prop-types';
+
+import Reactium, { useDerivedState, useEventHandle } from 'reactium-core/sdk';
+
 import React, {
     forwardRef,
     useImperativeHandle,
-    useEffect,
-    useLayoutEffect as useWindowEffect,
     useRef,
-    useState,
+    useEffect,
 } from 'react';
 
-// Server-Side Render safe useLayoutEffect (useEffect when node)
-const useLayoutEffect = typeof window !== 'undefined' ? useWindowEffect : useEffect;
+const ENUMS = {
+    STATUS: {
+        PENDING: 'PENDING',
+        INITIALIZING: 'INITIALIZING',
+        INITIALIZED: 'INITIALIZED',
+        READY: 'READY',
+    },
+};
 
-const ENUMS = {};
+const noop = () => {};
 
 /**
  * -----------------------------------------------------------------------------
  * Hook Component: {{name}}
  * -----------------------------------------------------------------------------
  */
-let {{name}} = ({ children, ...props }, ref) => {
-
+let {{name}} = (
+    { children, className, namespace, onStatus, ...props },
+    ref,
+) => {
+    // -------------------------------------------------------------------------
     // Refs
+    // -------------------------------------------------------------------------
+
     const containerRef = useRef();
-    const stateRef = useRef({
-        ...props,
+
+    // -------------------------------------------------------------------------
+    // State
+    // -------------------------------------------------------------------------
+
+    const [state, update] = useDerivedState({
+        status: ENUMS.STATUS.PENDING,
     });
 
-    // State
-    const [, setNewState] = useState(stateRef.current);
-
-    // Internal Interface
     const setState = newState => {
-
-        // Update the stateRef
-        stateRef.current = {
-            ...stateRef.current,
-            ...newState,
-        };
-
-        // Trigger useEffect()
-        setNewState(stateRef.current);
+        if (unMounted()) return;
+        update(newState);
     };
 
-    const cx = () => {
-        const { className, namespace } = stateRef.current;
-        return cn({ [className]: !!className, [namespace]: !!namespace });
+    // -------------------------------------------------------------------------
+    // Internal Interface
+    // -------------------------------------------------------------------------
+
+    // cx(suffix:String);
+    // className extension
+    const cx = () => Reactium.Utils.cxFactory(className || namespace);
+
+    // dispatch(eventType:String, event:Object, callback:Function);
+    // dispatch events, run a hook, execute a callack
+    const dispatch = async (eventType, event, callback) => {
+        if (unMounted()) return;
+
+        eventType = String(eventType).toUpperCase();
+
+        const evt = new CustomEvent(eventType, { details: event });
+
+        handle.dispatchEvent(eventType, evt);
+
+        if (unMounted()) return;
+        await Reactium.Hook.run({{name}} + `-${eventType}`, evt, handle);
+
+        if (unMounted()) return;
+        if (typeof callback === 'function') await callback(evt);
     };
 
-    // Side Effects
-    useEffect(() => setState(props), Object.values(props));
+    // initialize();
+    // run initialization process
+    const initialize = async () => {
+        // SET STATUS TO INITIALIZING
+        setState({ status: ENUMS.STATUS.INITIALIZING });
 
-    // Renderer
-    const render = () => {
+        // DO YOUR INITIALIZATION HERE
 
-        return (
-            <div ref={containerRef} className={cx()}>
-                {{name}}
-            </div>
-        );
+        // SET STATUS TO INITIALIZED WHEN COMPLETE
+        setState({ status: ENUMS.STATUS.INITIALIZED });
     };
 
-    // External Interface
-    useImperativeHandle(ref, () => ({
-        container: containerRef.current,
-        ref,
+    // unmount();
+    // check if the component has been unmounted
+    const unMounted = () => !containerRef.current;
+
+    // -------------------------------------------------------------------------
+    // Handle
+    // -------------------------------------------------------------------------
+
+    const _handle = () => ({
+        children,
+        className,
+        cx,
+        dispatch,
+        initialize,
+        namespace,
+        onStatus,
+        props,
         setState,
-        state: stateRef.current,
-    }));
+        state,
+        unMounted,
+    });
+    const [handle, setNewHandle] = useEventHandle(_handle());
 
+    useImperativeHandle(ref, () => handle, [handle]);
+
+    // -------------------------------------------------------------------------
+    // Side effects
+    // -------------------------------------------------------------------------
+
+    // Status change
+    useEffect(() => {
+        dispatch('status', { status: state.status }, onStatus);
+        if (state.status === ENUMS.STATUS.PENDING) initialize();
+    }, [state.status]);
+
+    // -------------------------------------------------------------------------
     // Render
-    return render();
+    // -------------------------------------------------------------------------
+    //   The unMounted() function relies on containerRef.
+    //   If it is not present, setState() will not execute.
+    //   This could lead to your component rendering empty if you have a
+    //   condition that checks state and renders null if certain conditions
+    //   are not met.
+    // -------------------------------------------------------------------------
+
+    return (
+        <div ref={containerRef} className={cx('container')}>
+            <div className={cx()}>
+                {{name}}
+                {children}
+            </div>
+        </div>
+    );
 };
 
 {{name}} = forwardRef({{name}});
@@ -82,10 +151,12 @@ let {{name}} = ({ children, ...props }, ref) => {
 {{name}}.propTypes = {
     className: PropTypes.string,
     namespace: PropTypes.string,
+    onStatus: PropTypes.func,
 };
 
 {{name}}.defaultProps = {
-    namespace: 'ui-component',
+    namespace: 'namespace',
+    onStatus: noop,
 };
 
-export { {{name}} as default };
+export { {{name}}, {{name}} as default };

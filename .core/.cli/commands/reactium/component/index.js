@@ -379,6 +379,70 @@ const SCHEMA = ({ props }) => {
                     return _.compact(routes.map(route => formatRoute(route)));
                 },
             },
+            plugin: {
+                pattern: /^y|n|Y|N/,
+                default: 'N',
+                description: `${chalk.white('Add plugin file?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
+            zone: {
+                pattern: /^y|n|Y|N/,
+                default: 'N',
+                description: `${chalk.white('Add to Zone file?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
+            stylesheet: {
+                pattern: /^y|n|Y|N/,
+                default: 'N',
+                message: ' Add a style sheet?',
+                description: `${chalk.white('Stylesheet?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
+            inject: {
+                pattern: /[0-9\s]/,
+                description: `${chalk.white(
+                    'Import stylesheet to:',
+                )} ${styles}\n    ${chalk.white('Select:')}`,
+                required: true,
+                message: 'Select a number or list of numbers. Example: 1 2 3',
+                ask: () => {
+                    try {
+                        return (
+                            prompt.override['stylesheet'] ||
+                            (prompt.history('stylesheet').value &&
+                                overwritable(prompt))
+                        );
+                    } catch (err) {
+                        return false;
+                    }
+                },
+            },
+            services: {
+                pattern: /^y|n|Y|N/,
+                default: 'N',
+                description: `${chalk.white('Services?')} ${chalk.cyan(
+                    '(Y/N):',
+                )}`,
+                ask: () => overwritable(prompt),
+                before: val => {
+                    return String(val).toUpperCase() === 'Y';
+                },
+            },
             redux: {
                 pattern: /^y|n|Y|N/,
                 default: 'N',
@@ -450,59 +514,6 @@ const SCHEMA = ({ props }) => {
                 },
                 before: val => {
                     return String(val).toUpperCase() === 'Y';
-                },
-            },
-            zone: {
-                pattern: /^y|n|Y|N/,
-                default: 'N',
-                description: `${chalk.white('Add to Zone file?')} ${chalk.cyan(
-                    '(Y/N):',
-                )}`,
-                ask: () => overwritable(prompt),
-                before: val => {
-                    return String(val).toUpperCase() === 'Y';
-                },
-            },
-            services: {
-                pattern: /^y|n|Y|N/,
-                default: 'N',
-                description: `${chalk.white('Services?')} ${chalk.cyan(
-                    '(Y/N):',
-                )}`,
-                ask: () => overwritable(prompt),
-                before: val => {
-                    return String(val).toUpperCase() === 'Y';
-                },
-            },
-            stylesheet: {
-                pattern: /^y|n|Y|N/,
-                default: 'N',
-                message: ' Add a style sheet?',
-                description: `${chalk.white('Stylesheet?')} ${chalk.cyan(
-                    '(Y/N):',
-                )}`,
-                ask: () => overwritable(prompt),
-                before: val => {
-                    return String(val).toUpperCase() === 'Y';
-                },
-            },
-            inject: {
-                pattern: /[0-9\s]/,
-                description: `${chalk.white(
-                    'Import stylesheet to:',
-                )} ${styles}\n    ${chalk.white('Select:')}`,
-                required: true,
-                message: 'Select a number or list of numbers. Example: 1 2 3',
-                ask: () => {
-                    try {
-                        return (
-                            prompt.override['stylesheet'] ||
-                            (prompt.history('stylesheet').value &&
-                                overwritable(prompt))
-                        );
-                    } catch (err) {
-                        return false;
-                    }
                 },
             },
             test: {
@@ -614,24 +625,25 @@ const COMMAND = ({ program, props }) => {
         .command(NAME)
         .description(DESC)
         .action(opt => ACTION({ opt, props }))
-        .option('-r, --redux-all [reduxAll]', 'Include all Redux files.')
-        .option('-n, --name [name]', 'Component name.')
         .option(
             '-d, --destination [destination]',
             'Component parent directory.',
         )
+        .option('-n, --name [name]', 'Component name.')
         .option('-o, --overwrite [overwrite]', 'Overwrite existing component.')
+        .option('-p, --plugin [plugin]', 'Include reactium-hooks.js file.')
+        .option('-r, --redux-all [reduxAll]', 'Include all Redux files.')
         .option('-t, --type [type]', `Component type: ${types.join(' | ')}.`)
-        .option('--redux [redux]', 'Create Redux Class component.')
-        .option('--route [route]', 'Include route.js file.')
         .option('--actions [actions]', 'Include Redux actions.js file.')
         .option(
             '--actionTypes [actionTypes]',
             'Include Redux actionTypes.js file.',
         )
+        .option('--redux [redux]', 'Create Redux Class component.')
         .option('--reducers [reducers]', 'Include Redux reducers.js file.')
-        .option('--zone [zone]', 'Include zone.js file.')
+        .option('--route [route]', 'Include route.js file.')
         .option('--services [services]', 'Include services.js file.')
+        .option('--zone [zone]', 'Include zone.js file.')
         .option('--stylesheet [stylesheet]', 'Include style.scss file.')
         .on('--help', HELP);
 };

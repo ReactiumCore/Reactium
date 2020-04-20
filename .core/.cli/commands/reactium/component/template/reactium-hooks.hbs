@@ -1,0 +1,12 @@
+/**
+ * -----------------------------------------------------------------------------
+ * Reactium Plugin {{name}}
+ * -----------------------------------------------------------------------------
+ */
+
+import Component from './index';
+import Reactium from 'reactium-core/sdk';
+
+Reactium.Plugin.register('{{name}}-plugin').then(() => {
+    Reactium.Component.register('{{name}}', Component);
+});

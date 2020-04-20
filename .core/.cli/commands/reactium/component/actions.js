@@ -43,32 +43,6 @@ module.exports = spinner => {
     };
 
     return {
-        backup: ({ action, params, props }) => {
-            const { cwd } = props;
-            const { destination, name } = params;
-
-            message(`backing up ${name} component...`);
-
-            const now = Date.now();
-            const backupDir = path.join(
-                homedir,
-                '.arcli',
-                cwd,
-                '.BACKUP',
-                'component',
-            );
-            const backupZip = path.normalize(`${backupDir}/${now}.${name}.zip`);
-
-            // Create the backup directory
-            fs.ensureDirSync(backupDir);
-
-            // Backup the component directory then empty the existing
-            return zip(destination, backupZip).then(() => {
-                fs.emptyDirSync(destination);
-                return { action, status: 200 };
-            });
-        },
-
         create: ({ action, params, props }) => {
             const { destination, name } = params;
 
@@ -85,21 +59,12 @@ module.exports = spinner => {
             });
         },
 
-        functional: ({ action, params, props }) =>
+        index: ({ action, params, props }) =>
             generate({
                 action,
                 params,
                 props,
                 templateFile: `index-${params.type}`,
-                fileName: 'index.js',
-            }),
-
-        class: ({ action, params, props }) =>
-            generate({
-                action,
-                params,
-                props,
-                templateFile: 'index-class',
                 fileName: 'index.js',
             }),
 
@@ -117,7 +82,7 @@ module.exports = spinner => {
                 action,
                 params,
                 props,
-                templateFile: 'index-class',
+                templateFile: `index-${params.type}`,
                 fileName: `${params.name}.js`,
             }),
 
@@ -187,6 +152,15 @@ module.exports = spinner => {
                 props,
                 templateFile: 'domain',
                 fileName: 'domain.js',
+            }),
+
+        plugin: ({ action, params, props }) =>
+            generate({
+                action,
+                params,
+                props,
+                templateFile: 'reactium-hooks',
+                fileName: 'reactium-hooks.js',
             }),
     };
 };
