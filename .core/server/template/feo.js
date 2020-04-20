@@ -17,10 +17,10 @@ module.exports = {
                     window.ssr = false;
                     window.defines = ${serialize(defines)};
                     window.restAPI = '/api';
-                    window.parseAppId = '${parseAppId}';
+                    window.actiniumAppId = '${actiniumAppId}';
                 </script>
                 ${req.scripts}
             </body>
         </html>`;
-    }
+    },
 };

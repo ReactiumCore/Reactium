@@ -48,10 +48,8 @@ export default class Template extends Component {
             return;
         }
 
-        const {
-            height: headerHeight,
-        } = this.header.container.getBoundingClientRect();
-        const { top, height } = this.navbar.container.getBoundingClientRect();
+        const { height: headerHeight } = this.header.getBoundingClientRect();
+        const { top, height } = this.navbar.getBoundingClientRect();
         const y = scrollY - headerHeight;
 
         if (this.mb !== y) {

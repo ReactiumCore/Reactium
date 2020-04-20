@@ -9,7 +9,12 @@ let apiConfig = {};
 if (typeof window !== 'undefined') {
     // the api configuration from the browser's perspective
     apiConfig = {
+        // [browser]: actinium app id provided by window
+        // since 3.2.6
+        actiniumAppId: window.actiniumAppId || 'Actinium',
+
         // [browser]: parse app id provided by window
+        // deprecated 3.2.6
         parseAppId: window.parseAppId || 'Actinium',
 
         // [browser]: REST API base url provided by window
@@ -20,6 +25,11 @@ if (typeof window !== 'undefined') {
     // the api from the server's perspective
     apiConfig = {
         // [server]: default app id for local dev with Actinium
+        // since 3.2.6
+        actiniumAppId: process.env.ACTINIUM_APP_ID || 'Actinium',
+
+        // [server]: default app id for local dev with Actinium
+        // deprecated 3.2.6
         parseAppId: process.env.PARSE_APP_ID || 'Actinium',
 
         // [server]: default api url for local dev with Actinium

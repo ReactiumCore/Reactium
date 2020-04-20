@@ -1,7 +1,7 @@
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import i18n from './i18n';
 import Middleware from './middleware';
-import Parse from 'appdir/api';
+import Actinium from 'appdir/api';
 import Reducer from './reducer';
 import Roles from './roles';
 import Routing from './routing';
@@ -14,7 +14,7 @@ export * from './named-exports';
 
 export default {
     ...SDK,
-    ...Parse,
+    ...Actinium,
     i18n,
     Middleware,
     Reducer,

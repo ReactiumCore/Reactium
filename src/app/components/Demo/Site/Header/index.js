@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React from 'react';
+import React, { forwardRef } from 'react';
 import HeaderNav from './HeaderNav';
 
 /**
@@ -12,19 +12,21 @@ import HeaderNav from './HeaderNav';
  * -----------------------------------------------------------------------------
  */
 
-const Header = ({ backgroundImage, children, nav, style = {} }) => {
+let Header = ({ backgroundImage, children, nav, style = {} }, ref) => {
     if (backgroundImage) {
         style['backgroundImage'] = backgroundImage;
     }
 
     return (
-        <header style={style}>
+        <header style={style} ref={ref}>
             <div className={'shadow'} />
             <HeaderNav links={nav} />
             {children}
         </header>
     );
 };
+
+Header = forwardRef(Header);
 
 Header.defaultProps = {
     style: { marginBottom: 0 },

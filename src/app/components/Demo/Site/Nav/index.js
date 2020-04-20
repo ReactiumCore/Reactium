@@ -3,7 +3,7 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { NavLink } from 'react-router-dom';
 
 /**
@@ -12,8 +12,8 @@ import { NavLink } from 'react-router-dom';
  * -----------------------------------------------------------------------------
  */
 
-const Nav = ({ buttons, fixed }) => (
-    <nav className={fixed === true ? 'main fixed' : 'main'}>
+let Nav = ({ buttons, fixed }, ref) => (
+    <nav className={fixed === true ? 'main fixed' : 'main'} ref={ref}>
         <div>
             <ul>
                 {buttons.map((item, i) => (
@@ -25,6 +25,8 @@ const Nav = ({ buttons, fixed }) => (
         </div>
     </nav>
 );
+
+Nav = forwardRef(Nav);
 
 Nav.defaultProps = {
     fixed: false,

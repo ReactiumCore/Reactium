@@ -1,7 +1,7 @@
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
-import Parse from 'appdir/api';
+import Actinium from 'appdir/api';
 
 const { Hook, Enums, Cache, Utils } = SDK;
 const User = { Meta: {}, Pref: {}, Role: {}, selected: null };
@@ -18,7 +18,7 @@ Enums.cache.sessionValidate = 5000;
  *
  */
 User.auth = (username, password) =>
-    Parse.User.logIn(username, password)
+    Actinium.User.logIn(username, password)
         .then(u => u.fetch())
         .then(u => u.toJSON())
         .then(async u => {
@@ -30,7 +30,7 @@ User.auth = (username, password) =>
  * @api {Function} User.serialize(user) User.serialize()
  * @apiGroup Reactium.User
  * @apiName User.serialize
- * @apiParam {Object} Convert a `Parse.User` object into a JSON object. If the object is already serialized it is returned.
+ * @apiParam {Object} Convert a `Actinium.User` object into a JSON object. If the object is already serialized it is returned.
  * @apiExample Usage:
 const u = User.serialize(user);
  */
@@ -58,7 +58,7 @@ User.logOut = async () => {
     await Hook.run('user.before.logout', u);
 
     try {
-        return Parse.User.logOut().then(async () => {
+        return Actinium.User.logOut().then(async () => {
             await Hook.run('user.after.logout', u);
             return u;
         });
@@ -78,7 +78,7 @@ User.forgot('someone@email.com').then(response => {
     console.log(response);
 });
  */
-User.forgot = email => Parse.Cloud.run('password-reset-request', { email });
+User.forgot = email => Actinium.Cloud.run('password-reset-request', { email });
 
 /**
  * @api {Asyncronous} User.reset() User.reset()
@@ -89,7 +89,7 @@ User.forgot = email => Parse.Cloud.run('password-reset-request', { email });
  * @apiParam {String} password The new password.
  */
 User.reset = (token, password) =>
-    Parse.Cloud.run('password-reset', { token, password });
+    Actinium.Cloud.run('password-reset', { token, password });
 
 /**
  * @api {Function} User.current(parseObject) User.current()
@@ -97,10 +97,10 @@ User.reset = (token, password) =>
  * @apiName User.current
  * @apiSuccess {Object} user the current user
  * @apiDescription Retrieve the current authenticated user.
- * @apiParam {Boolean} [parseObject=false] By default the return value is an object. If you need the Parse.User object instead pass `true`.
+ * @apiParam {Boolean} [parseObject=false] By default the return value is an object. If you need the Actinium.User object instead pass `true`.
  */
 User.current = (parseObject = false) => {
-    const u = Parse.User.current();
+    const u = Actinium.User.current();
     return u ? (parseObject === true ? u : u.toJSON()) : null;
 };
 
@@ -134,7 +134,7 @@ User.isCurrent = user => {
  * @apiGroup Reactium.User
  */
 User.getSessionToken = () => {
-    const u = Parse.User.current();
+    const u = Actinium.User.current();
     return u ? u.getSessionToken() : false;
 };
 
@@ -152,7 +152,7 @@ User.hasValidSession = async () => {
         return request;
     }
 
-    request = Parse.Cloud.run('session-validate')
+    request = Actinium.Cloud.run('session-validate')
         .then(() => Promise.resolve(true))
         .catch(() => Promise.resolve(false));
 
@@ -174,7 +174,7 @@ User.hasValidSession = async () => {
  */
 User.register = async user => {
     await Hook.run('user.before.register', user);
-    let response = await Parse.Cloud.run('user-save', user);
+    let response = await Actinium.Cloud.run('user-save', user);
     await Hook.run('user.after.register', response);
     return response;
 };
@@ -183,8 +183,8 @@ User.register = async user => {
  * @api {Asyncronous} User.list(params) User.list()
  * @apiGroup Reactium.User
  * @apiName User.list
- * @apiDescription Retrieve a list of `Parse.User` objects. Calls the `user-list` cloud function.
- * @apiParam (params) {String} [role] Filter the results to the specified `Parse.Role` name.
+ * @apiDescription Retrieve a list of `Actinium.User` objects. Calls the `user-list` cloud function.
+ * @apiParam (params) {String} [role] Filter the results to the specified `Actinium.Role` name.
  * @apiParam (params) {String} [search] Search using logical `or`. The query will RegExp compare to the default fields: `username`, `email`, `fname`, `lname`.
 
 _Note:_ You can add or remove fields via the `user-search-fields` hook.
@@ -221,7 +221,7 @@ const search = await User.list({ search: 'jeff' });
  */
 User.list = async params => {
     await Hook.run('before-user-list', params);
-    let response = await Parse.Cloud.run('user-list', params);
+    let response = await Actinium.Cloud.run('user-list', params);
     await Hook.run('user-list-response', response, params);
     return response;
 };
@@ -230,24 +230,24 @@ User.list = async params => {
  * @api {Asyncronous} User.save(params) User.save()
  * @apiGroup Reactium.User
  * @apiName User.save
- * @apiDescription Save a `Parse.User` object.
- * @apiParam {Object} params Key value pairs to apply to the `Parse.User` object. Calls the `user-save` cloud function.
+ * @apiDescription Save a `Actinium.User` object.
+ * @apiParam {Object} params Key value pairs to apply to the `Actinium.User` object. Calls the `user-save` cloud function.
 
 _Note:_ Any additional key value pairs will be added to the user object as a new column.
 
  * @apiParam (params) {String} username The unique username used when signing in.
  * @apiParam (params) {String} email The email address to associate with the user account.
  * @apiParam (params) {String} password The password used when signing in.
- * @apiParam (params) {String} [role] The `Parse.Role` name to add the user to.
- * @apiParam (hooks) {Hook} before-user-save Mutate the `Parse.User` object before save is complete.
+ * @apiParam (params) {String} [role] The `Actinium.Role` name to add the user to.
+ * @apiParam (hooks) {Hook} before-user-save Mutate the `Actinium.User` object before save is complete.
 ```
-Arguments:  req:Object:Parse.User
+Arguments:  req:Object:Actinium.User
 ```
- * @apiParam (hooks) {Hook} user-save-response Take action after the `Parse.User` object has been saved.
+ * @apiParam (hooks) {Hook} user-save-response Take action after the `Actinium.User` object has been saved.
 ```
-Arguments: req:Object:Parse.User
+Arguments: req:Object:Actinium.User
 ```
-  * @apiParam (hooks) {Hook} user-save-error Take action after the `Parse.User` returns an error.
+  * @apiParam (hooks) {Hook} user-save-error Take action after the `Actinium.User` returns an error.
 ```
 Arguments: error:Object, params:Object
 ```
@@ -265,7 +265,7 @@ User.save = async params => {
 
     await Hook.run('before-user-save', params);
 
-    return Parse.Cloud.run('user-save', params)
+    return Actinium.Cloud.run('user-save', params)
         .then(async response => {
             if (_.isError(response)) {
                 await Hook.run('user-save-error', response, params);
@@ -285,22 +285,22 @@ User.save = async params => {
  * @api {Asyncronous} User.trash(params) User.trash()
  * @apiGroup Reactium.User
  * @apiName User.trash
- * @apiDescription Send a single `Parse.User` object to the recycle bin. Calls `user-trash` cloud function.
+ * @apiDescription Send a single `Actinium.User` object to the recycle bin. Calls `user-trash` cloud function.
  * @apiParam {Object} params Object containing parameters for deleting a user.
- * @apiParam (params) {String} objectId The Parse.User objectId.
+ * @apiParam (params) {String} objectId The Actinium.User objectId.
  * @apiParam (hooks) {Hook} before-user-trash Triggered before the `user-trash` cloud function is run.
 ```
-Arguments: user:Parse.User
+Arguments: user:Actinium.User
 ```
  * @apiParam (hooks) {Hook} user-trash Triggered after the `user-trash` cloud function is run.
  ```
- Arguments: user:Parse.User
+ Arguments: user:Actinium.User
  ```
  */
 User.trash = async objectId => {
     const user = await User.retrieve({ objectId });
     await Hook.run('before-user-trash', user);
-    await Parse.Cloud.run('user-trash', { objectId });
+    await Actinium.Cloud.run('user-trash', { objectId });
     await Hook.run('user-trash', user);
     return user;
 };
@@ -309,7 +309,7 @@ User.trash = async objectId => {
  * @api {Asyncronous} User.retrieve(params,options) User.retrieve()
  * @apiGroup Reactium.User
  * @apiName User.retrieve
- * @apiDescription Retrieve a single `Parse.User` object. Calls the `user-retrieve` cloud function.
+ * @apiDescription Retrieve a single `Actinium.User` object. Calls the `user-retrieve` cloud function.
  * @apiParam {Object} params Query parameters. See [User.list()](#api-Reactium.User-User.list) for more details.
  * @apiParam (params) {String} [objectId] Retrieve by the objectId field.
  * @apiParam (params) {String} [username] Retrieve by the username field.
@@ -325,7 +325,7 @@ Arguments: user:Object, params:Object
  */
 User.retrieve = async params => {
     await Hook.run('before-user-retrieve', params);
-    const response = await Parse.Cloud.run('user-retrieve', params);
+    const response = await Actinium.Cloud.run('user-retrieve', params);
     await Hook.run('user-retrieve', response, params);
     return response;
 };
@@ -382,7 +382,7 @@ User.Role.add = async (role, objectId) => {
         return Promise.reject('invalid user id');
     }
 
-    return Parse.Cloud.run('role-user-add', { role, user: u })
+    return Actinium.Cloud.run('role-user-add', { role, user: u })
         .then(() => User.retrieve({ objectId: u, refresh: true }))
         .then(async u => {
             await Hook.run('user.role.add', role, u);
@@ -408,7 +408,7 @@ User.Role.remove = (role, objectId) => {
         return Promise.reject('invalid user id');
     }
 
-    return Parse.Cloud.run('role-user-remove', { role, user: u })
+    return Actinium.Cloud.run('role-user-remove', { role, user: u })
         .then(() => User.retrieve({ objectId: u, refresh: true }))
         .then(async u => {
             await Hook.run('user.role.remove', role, u);
@@ -420,7 +420,7 @@ User.Role.remove = (role, objectId) => {
  * @api {Asyncronous} User.Meta.update(params) User.Meta.update()
  * @apiGroup Reactium.User
  * @apiName User.Meta.update
- * @apiDescription Mutate the `Parse.User.meta` object. Calls the `user-meta-update` cloud function.
+ * @apiDescription Mutate the `Actinium.User.meta` object. Calls the `user-meta-update` cloud function.
  * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user meta object.
  * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
  * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
@@ -431,14 +431,14 @@ Arguments: params:Object
 ```
  * @apiParam (hooks) {Hook} user-meta-update-response Triggered after the `user-meta-update` cloud function is called.
 ```
-Arguments: user:Parse.user, params:Object
+Arguments: user:Actinium.user, params:Object
 ```
  * @apiExample
 const updatedUser = await User.Meta.update({ objectId: 'slertjt5wzb', random: 'meta value' });
  */
 User.Meta.update = async params => {
     await Hook.run('before-user-meta-update', params);
-    const response = await Parse.Cloud.run('user-meta-update', params);
+    const response = await Actinium.Cloud.run('user-meta-update', params);
     await Hook.run('user-meta-update-response', response, params);
     return response;
 };
@@ -447,7 +447,7 @@ User.Meta.update = async params => {
  * @api {Asyncronous} User.Meta.delete(params) User.Meta.delete()
  * @apiGroup Reactium.User
  * @apiName User.Meta.delete
- * @apiDescription Mutate the `Parse.User.meta` object by deleting a key value pair. Calls the `user-meta-delete` cloud function.
+ * @apiDescription Mutate the `Actinium.User.meta` object by deleting a key value pair. Calls the `user-meta-delete` cloud function.
  * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user meta object.
  * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
  * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
@@ -458,12 +458,12 @@ Arguments: params:Object
 ```
  * @apiParam (hooks) {Hook} user-meta-delete-response Triggered after the `user-meta-delete` cloud function is called.
 ```
-Arguments: user:Parse.user, params:Object
+Arguments: user:Actinium.user, params:Object
 ```
  */
 User.Meta.delete = async params => {
     await Hook.run('before-user-meta-delete', params);
-    const response = await Parse.Cloud.run('user-meta-delete', params);
+    const response = await Actinium.Cloud.run('user-meta-delete', params);
     await Hook.run('user-meta-delete-response');
     return response;
 };
@@ -472,7 +472,7 @@ User.Meta.delete = async params => {
  * @api {Asyncronous} User.Pref.update(params) User.Pref.update()
  * @apiGroup Reactium.User
  * @apiName User.Pref.update
- * @apiDescription Mutate the `Parse.User.pref` object. Calls the `user-pref-update` cloud function.
+ * @apiDescription Mutate the `Actinium.User.pref` object. Calls the `user-pref-update` cloud function.
  * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user pref object.
  * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
  * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
@@ -483,14 +483,14 @@ Arguments: params:Object
 ```
  * @apiParam (hooks) {Hook} user-pref-update-response Triggered after the `user-pref-update` cloud function is called.
 ```
-Arguments: user:Parse.user, params:Object
+Arguments: user:Actinium.user, params:Object
 ```
  * @apiExample
 const updatedUser = await User.Pref.update({ objectId: 'slertjt5wzb', random: 'pref value' });
  */
 User.Pref.update = async params => {
     await Hook.run('before-user-pref-update', params);
-    const response = await Parse.Cloud.run('user-pref-update', params);
+    const response = await Actinium.Cloud.run('user-pref-update', params);
     await Hook.run('user-pref-update-response', response, params);
     return response;
 };
@@ -499,7 +499,7 @@ User.Pref.update = async params => {
  * @api {Asyncronous} User.Pref.delete(params) User.Pref.delete()
  * @apiGroup Reactium.User
  * @apiName User.Pref.delete
- * @apiDescription Mutate the `Parse.User.pref` object by deleting a key value pair. Calls the `user-pref-delete` cloud function.
+ * @apiDescription Mutate the `Actinium.User.pref` object by deleting a key value pair. Calls the `user-pref-delete` cloud function.
  * @apiParam {Object} params Object containing parameters for retrieving a user and the key value pair to apply to the user pref object.
  * @apiParam (params) {String} [objectId] Look up the user object by the objectId field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
  * @apiParam (params) {String} [username] Look up the user object by the username field. See [User.retrieve()](#api-Reactium.User-User.retrieve).
@@ -510,12 +510,12 @@ Arguments: params:Object
 ```
  * @apiParam (hooks) {Hook} user-pref-delete-response Triggered after the `user-pref-delete` cloud function is called.
 ```
-Arguments: user:Parse.user, params:Object
+Arguments: user:Actinium.user, params:Object
 ```
  */
 User.Pref.delete = async params => {
     await Hook.run('before-user-pref-delete', params);
-    const response = await Parse.Cloud.run('user-pref-delete', params);
+    const response = await Actinium.Cloud.run('user-pref-delete', params);
     await Hook.run('user-pref-delete-response');
     return response;
 };

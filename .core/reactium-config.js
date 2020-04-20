@@ -3,7 +3,7 @@ const path = require('path');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.2.5';
+const version = '3.2.6';
 
 const contextMode = () => {
     if (
