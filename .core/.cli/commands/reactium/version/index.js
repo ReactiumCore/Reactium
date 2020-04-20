@@ -10,9 +10,16 @@ const ACTION = ({ opt, props }) => {
         path.join(props.cwd, '/.core', 'reactium-config'),
     );
     const reactiumConfig = require(configPath);
+    console.log(chalk.cyan('Reactium:'));
     console.log(
-        chalk.cyan('Reactium:'),
-        chalk.magenta(op.get(reactiumConfig, 'version')),
+        ' ',
+        'Version:',
+        chalk.magenta(op.get(actiniumConfig, 'version')),
+    );
+    console.log(
+        ' ',
+        'Semver: ',
+        chalk.magenta(op.get(actiniumConfig, 'semver')),
     );
     console.log('');
 };
