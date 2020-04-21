@@ -31,6 +31,9 @@ class Routing {
         if (typeof cb === 'function') {
             const id = uuid();
             this.subscriptions[id] = cb;
+
+            // initial callback
+            cb();
             return () => {
                 delete this.subscriptions[id];
             };

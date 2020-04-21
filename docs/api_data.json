@@ -1391,7 +1391,7 @@
             "type": "Function",
             "optional": false,
             "field": "callback",
-            "description": "<p>function returning promise that will be called when the hook is run. The hook callback will receive any parameters provided to Hook.run, followed by a context object.</p>"
+            "description": "<p>async function (or returning promise) that will be called when the hook is run. The hook callback will receive any parameters provided to Hook.run, followed by a context object (passed by reference to each callback).</p>"
           },
           {
             "group": "Parameter",
@@ -1415,7 +1415,60 @@
     "examples": [
       {
         "title": "Example Usage",
-        "content": "import Reactium from 'reactium-core/sdk';\nReactium.Hook.register('plugin-init', () => {\n    console.log('Plugins initialized!');\n    return Promise.resolve();\n}, Enums.priority.highest);",
+        "content": "import Reactium from 'reactium-core/sdk';\nReactium.Hook.register('plugin-init', async context => {\n// mutate context object asynchrounously here\n    console.log('Plugins initialized!');\n}, Enums.priority.highest);",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/hook/index.js",
+    "groupTitle": "Reactium.Hook"
+  },
+  {
+    "type": "Function",
+    "url": "Hook.registerSync(name,callback,order,id)",
+    "title": "Hook.registerSync()",
+    "name": "Hook.registerSync",
+    "description": "<p>Register a sync hook callback.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>the hook name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Function",
+            "optional": false,
+            "field": "callback",
+            "description": "<p>function returning promise that will be called when the hook is run. The hook callback will receive any parameters provided to Hook.run, followed by a context object (passed by reference to each callback).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": true,
+            "field": "order",
+            "defaultValue": "Enums.priority.neutral",
+            "description": "<p>order of which the callback will be called when this hook is run.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>the unique id. If not provided, a uuid will be generated</p>"
+          }
+        ]
+      }
+    },
+    "group": "Reactium.Hook",
+    "examples": [
+      {
+        "title": "Example Usage",
+        "content": "import Reactium from 'reactium-core/sdk';\nReactium.Hook.registerSync('my-sync-hook', context => {\n    // mutate context object synchrounously here\n    console.log('my-sync-hook run!');\n}, Enums.priority.highest);",
         "type": "json"
       }
     ],
@@ -1429,6 +1482,50 @@
     "title": "Hook.run()",
     "name": "Hook.run",
     "description": "<p>Run hook callbacks.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>the hook name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "...params",
+            "description": "<p>any number of arbitrary parameters (variadic)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "context",
+            "description": "<p>context object passed to each callback (after other variadic parameters)</p>"
+          }
+        ]
+      }
+    },
+    "group": "Reactium.Hook",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/hook/index.js",
+    "groupTitle": "Reactium.Hook"
+  },
+  {
+    "type": "Function",
+    "url": "Hook.runSync(name,...params)",
+    "title": "Hook.runSync()",
+    "name": "Hook.runSync",
+    "description": "<p>Run hook callbacks sychronously.</p>",
     "parameter": {
       "fields": {
         "Parameter": [

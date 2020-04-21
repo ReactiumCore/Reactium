@@ -71,10 +71,10 @@ Capability.get = capability => {
  * @apiGroup Reactium.Capability
  */
 Capability.check = async (capabilities = [], strict = true) => {
-    if (typeof capabilities === 'string') capabilities = [capabilities];
+    capabilities = _.compact(_.flatten([capabilities]));
 
     // null request
-    if (!Array.isArray(capabilities) || capabilities.length < 1) {
+    if (capabilities.length < 1) {
         return true;
     }
 
