@@ -15,26 +15,20 @@ import _ from 'underscore';
 export const useCapabilityCheck = (capabilities, strict = true) => {
     const allowedRef = useRef(false);
     const [, update] = useState(new Date());
+    const caps = _.uniq(_.compact(_.flatten([capabilities])));
 
     useAsyncEffect(
         async isMounted => {
             allowedRef.current = false;
-            if (Array.isArray(capabilities)) {
-                if (capabilities.length < 1) {
-                    allowedRef.current = true;
-                } else {
-                    allowedRef.current = await Capability.check(capabilities);
-                }
+            if (caps.length < 1) {
+                allowedRef.current = true;
+            } else {
+                allowedRef.current = await Capability.check(caps);
             }
 
             if (isMounted()) update(new Date());
         },
-        [
-            _.compact(_.flatten([capabilities]))
-                .sort()
-                .join(''),
-            strict,
-        ],
+        [caps.sort().join(''), strict],
     );
 
     return allowedRef.current;
