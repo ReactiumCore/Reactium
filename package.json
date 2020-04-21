@@ -175,6 +175,9 @@
     ]
   },
   "lint-staged": {
+    "*": [
+      "arcli apidocs"
+    ],
     "*.{js,json,css,md}": [
       "prettier --write",
       "git add"
