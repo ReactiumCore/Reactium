@@ -176,7 +176,8 @@
   },
   "lint-staged": {
     "*": [
-      "arcli docs -s .core,src/app,node_modules/@atomic-reactor -d docs,public/docs"
+      "arcli docs -s .core,src/app,node_modules/@atomic-reactor -d docs,public/docs",
+      "git add ./docs"
     ],
     "*.{js,json,css,md}": [
       "prettier --write",

@@ -2867,7 +2867,7 @@ define({ "api": [
     "type": "Asyncronous",
     "url": "User.auth(username,password)",
     "title": "User.auth()",
-    "description": "<p>Authenticate with the Actinium server.</p>",
+    "description": "<p>Authenticate with the Actinium server. test</p>",
     "name": "User.auth",
     "parameter": {
       "fields": {
