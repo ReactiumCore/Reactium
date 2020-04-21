@@ -10,7 +10,7 @@ Enums.cache.sessionValidate = 5000;
 
 /**
  * @api {Asyncronous} User.auth(username,password) User.auth()
- * @apiDescription Authenticate with the Actinium server.
+ * @apiDescription Authenticate with the Actinium server. test
  * @apiName User.auth
  * @apiParam {String} username
  * @apiParam {String} password
