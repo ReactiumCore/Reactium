@@ -3,6 +3,18 @@ import op from 'object-path';
 import getComponents from 'dependencies/getComponents';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 
+const lookupRouteComponent = async route => {
+    let Found;
+    if (typeof route.component === 'string') {
+        const { component } = await Reactium.Hook.run(route.component);
+        if (component) Found = { [route.component]: component };
+        if (!Found) Found = getComponents([{ type: route.component }]);
+        route.component = op.get(Found, route.component, () => null);
+    }
+
+    return route;
+};
+
 Reactium.Hook.register(
     'routes-init',
     async context => {
@@ -22,25 +34,6 @@ Reactium.Hook.register(
                 dynamicRoutes = global.routes;
             }
         }
-
-        dynamicRoutes = await Promise.all(
-            dynamicRoutes.map(async route => {
-                let Found;
-                if (typeof route.component === 'string') {
-                    const { component } = await Reactium.Hook.run(
-                        route.component,
-                    );
-                    if (component) Found = { [route.component]: component };
-                    if (!Found)
-                        Found = getComponents([{ type: route.component }]);
-                }
-
-                return {
-                    ...route,
-                    component: op.get(Found, route.component, () => null),
-                };
-            }),
-        );
 
         context.routes = Object.values(allRoutes || {})
             .concat(dynamicRoutes)
@@ -80,10 +73,14 @@ Reactium.Hook.register(
                 return [...rts, route];
             }, []);
 
-        return Promise.resolve();
+        context.routes = await Promise.all(
+            context.routes.map(lookupRouteComponent),
+        );
     },
     Reactium.Enums.priority.highest,
 );
+
+Reactium.Hook.register('register-route', lookupRouteComponent);
 
 Reactium.Hook.register(
     '404-component',
