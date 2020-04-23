@@ -23,17 +23,27 @@ Reactium.Hook.register(
             }
         }
 
-        context.routes = Object.values(allRoutes || {})
-            .concat(
-                dynamicRoutes.map(route => {
-                    let Found = getComponents([{ type: route.component }]);
+        dynamicRoutes = await Promise.all(
+            dynamicRoutes.map(async route => {
+                let Found;
+                if (typeof route.component === 'string') {
+                    const { component } = await Reactium.Hook.run(
+                        route.component,
+                    );
+                    if (component) Found = { [route.component]: component };
+                    if (!Found)
+                        Found = getComponents([{ type: route.component }]);
+                }
 
-                    return {
-                        ...route,
-                        component: op.get(Found, route.component, () => null),
-                    };
-                }),
-            )
+                return {
+                    ...route,
+                    component: op.get(Found, route.component, () => null),
+                };
+            }),
+        );
+
+        context.routes = Object.values(allRoutes || {})
+            .concat(dynamicRoutes)
             .filter(route => route)
             .reduce((rts, route) => {
                 // Support multiple routable components per route file
