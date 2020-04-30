@@ -71,7 +71,7 @@ let {{name}} = (
         handle.dispatchEvent(eventType, evt);
 
         if (unMounted()) return;
-        await Reactium.Hook.run({{name}} + `-${eventType}`, evt, handle);
+        await Reactium.Hook.run(`{{name}}-${eventType}`, evt, handle);
 
         if (unMounted()) return;
         if (typeof callback === 'function') await callback(evt);
