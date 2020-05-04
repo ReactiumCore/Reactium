@@ -143,6 +143,10 @@ const defaultManifestConfig = {
             to: 'reactium-core/',
         },
         {
+            from: 'reactium_modules/',
+            to: '../reactium_modules/',
+        },
+        {
             node_modules: true,
             ignore: /^((?!reactium-plugin).)*$/,
         },
