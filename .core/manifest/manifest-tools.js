@@ -112,7 +112,7 @@ const find = (searches = [], sourceMappings = [], searchParams = {}) => {
                         );
                     }
 
-                    file.replace(/\\/g, '/');
+                    normalized = normalized.replace(/\\/g, '/');
                     if (op.has(sourceMapping, 'from')) {
                         normalized = normalized.replace(
                             sourceMapping.from,
