@@ -70,6 +70,11 @@ module.exports = config => {
         ),
     );
     plugins.push(
+        new webpack.ContextReplacementPlugin(/^reactium_modules/, context => {
+            context.request = path.resolve('./reactium_modules');
+        }),
+    );
+    plugins.push(
         new webpack.ContextReplacementPlugin(
             /reactium-translations$/,
             context => {

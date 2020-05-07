@@ -88,6 +88,7 @@ const defaultConfig = {
         appdir: path.resolve(__dirname, 'src/app'),
         rootdir: path.resolve(__dirname),
         manifest: path.normalize(`${rootPath}/src/manifest.js`),
+        reactiumModules: path.normalize(`${rootPath}/reactium_modules`),
     },
     dest: {
         dist: 'public',

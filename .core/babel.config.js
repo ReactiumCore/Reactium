@@ -33,6 +33,7 @@ const alias = {
     appdir: './src/app',
     components: './src/app/components',
     'reactium-core': './.core',
+    reactium_modules: './reactium_modules',
     dependencies: './.core/dependencies',
     toolkit: './src/app/toolkit',
     'reactium-translations': './src/reactium-translations',
