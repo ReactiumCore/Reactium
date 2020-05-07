@@ -196,6 +196,10 @@ const defaultManifestConfig = {
                 from: 'src/',
                 to: path.resolve(rootPath, 'src') + '/',
             },
+            {
+                from: 'reactium_modules/',
+                to: path.resolve(rootPath, 'reactium_modules') + '/',
+            },
         ],
         searchParams: {
             extensions: /\.(js|json)$/,
