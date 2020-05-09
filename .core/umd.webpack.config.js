@@ -8,9 +8,27 @@ const op = require('object-path');
 module.exports = umd => {
     const plugins = [];
     const presets = [];
+    const rules = [];
 
     if (op.get(umd, 'babelPresetEnv', true)) presets.push('@babel/preset-env');
-    presets.push('@babel/react');
+    if (op.get(umd, 'babelReact', true)) presets.push('@babel/react');
+    if (op.get(umd, 'babelLoader', true))
+        rules.push({
+            test: /(\.jsx|\.js)$/,
+            loader: 'babel-loader',
+            options: {
+                presets,
+                plugins: [
+                    [
+                        '@babel/plugin-proposal-class-properties',
+                        {
+                            loose: true,
+                        },
+                    ],
+                    ['module-resolver'],
+                ],
+            },
+        });
 
     const config = {
         mode: env,
@@ -23,24 +41,7 @@ module.exports = umd => {
             globalObject: umd.globalObject,
         },
         module: {
-            rules: [
-                {
-                    test: /(\.jsx|\.js)$/,
-                    loader: 'babel-loader',
-                    options: {
-                        presets,
-                        plugins: [
-                            [
-                                '@babel/plugin-proposal-class-properties',
-                                {
-                                    loose: true,
-                                },
-                            ],
-                            ['module-resolver'],
-                        ],
-                    },
-                },
-            ],
+            rules,
         },
         externals: Object.entries(umd.externals).reduce(
             (externals, [key, value]) => {
