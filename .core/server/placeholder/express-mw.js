@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const xss = require('xss');
+const SDK = require('reactium-core/sdk').default;
+
+const { Enums } = SDK;
 
 const placeholder = (req, res) => {
     const { width = 640, height = 480, filename = '' } = req.params;
@@ -27,14 +30,14 @@ const placeholder = (req, res) => {
     res.set('Content-Type', 'image/svg+xml');
     res.send(`<?xml version="1.0" standalone="no"?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${xss(
-        width
+        width,
     )}" height="${xss(height)}" viewBox="0 0 ${xss(width)} ${xss(
-        height
+        height,
     )}" font-family="sans-serif"  preserveAspectRatio="none">
     <mask id="mask">
         <rect width="100%" height="100%" fill="#444"/>
         <rect x="${xss(xPercent)}%" y="${xss(yPercent)}%" width="${xss(
-        widthPercent
+        widthPercent,
     )}%" height="${xss(heightPercent)}%" fill="#fff"/>
     </mask>
 <pattern id="pattern" x="50%" y="50%" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -62,35 +65,35 @@ const placeholder = (req, res) => {
     </symbol>
 <rect width="100%" height="100%" fill="${xss(background)}" />
     <svg x="${xss(xPercent)}%" y="${xss(yPercent)}%" width="${xss(
-        widthPercent
+        widthPercent,
     )}%" height="${xss(heightPercent)}%" overflow="visible" opacity="0.25" >
     <use xlink:href="#${xss(content)}"/>
 </svg>
 <rect mask="url(#mask)" width="100%" height="100%" fill="url(#pattern)" opacity=".05" />
 <rect width="100%" height="100%" fill="none" stroke="${xss(
-        color
+        color,
     )}" stroke-opacity="0.7" stroke-width="2%" />
 <svg viewBox="0 0 60 100">
     <text transform="translate(30,44)" text-anchor="middle" alignment-baseline="central" font-size="12" fill="${xss(
-        color
+        color,
     )}">
         <tspan x="0">${xss(
-            width
+            width,
         )}</tspan><tspan x="0" dy="9">×</tspan><tspan x="0" dy="11">${xss(
-        height
+        height,
     )}</tspan>
     </text>
 </svg>
 <svg height="20%" viewBox="0 0 200 40" preserveAspectRatio="xMidYMin" opacity=".5" font-size="10" overflow="visible">
     <text transform="translate(100,37)" text-anchor="middle" fill="${xss(
-        color
+        color,
     )}">
         <tspan x="0">${xss(useTitle)}</tspan>
     </text>
 </svg>
 <svg y="80%" height="20%" viewBox="0 0 200 40" preserveAspectRatio="xMidYMax" font-size="10" opacity=".5" overflow="visible">
     <text transform="translate(100,11)" text-anchor="middle" fill="${xss(
-        color
+        color,
     )}">
         <tspan x="0">${xss(notes)}</tspan>
     </text>
@@ -101,4 +104,8 @@ const placeholder = (req, res) => {
 router.get('/placeholder/:width/:height/:filename', placeholder);
 router.get('/placeholder/:width/:height', placeholder);
 
-module.exports = router;
+SDK.Server.Middleware.register('placeholder', {
+    name: 'placeholder',
+    use: router,
+    order: Enums.priority.highest,
+});

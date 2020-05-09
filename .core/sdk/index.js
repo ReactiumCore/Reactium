@@ -8,6 +8,7 @@ import Routing from './routing';
 import Setting from './setting';
 import User from './user';
 import Capability from './capability';
+import Server from './server';
 
 export * from '@atomic-reactor/reactium-sdk-core';
 export * from './named-exports';
@@ -23,4 +24,5 @@ export default {
     Setting,
     User,
     Capability,
+    Server,
 };
