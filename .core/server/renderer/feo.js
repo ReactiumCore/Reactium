@@ -1,2 +1,1 @@
-module.exports = template => (req, res, context) =>
-    Promise.resolve(template(req, res, context));
+module.exports = async (req, res, context) => req.template(req, res, context);

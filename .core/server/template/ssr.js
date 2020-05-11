@@ -10,20 +10,21 @@ module.exports = {
                 ${helmet.title.toString()}
                 ${helmet.meta.toString()}
                 ${helmet.link.toString()}
-                ${req.styles}
             </head>
             <body ${helmet.bodyAttributes.toString()}>
-                <Component type="DevTools"></Component>
-                <div id="router">${content}</div>
+                ${req.headerScripts}
+                ${req.appBindings}
 
                 <script>
                     window.ssr = true;
                     window.defines = ${serialize(defines)};
-                    window.INITIAL_STATE = ${serialize(store.getState())}
+                    window.INITIAL_STATE = ${serialize(store.getState())};
                     window.restAPI = '/api';
-                    window.actiniumAppId = '${actiniumAppId}'
+                    window.actiniumAppId = '${actiniumAppId}';
+                    ${req.appGlobals}
                 </script>
                 ${req.scripts}
+                ${req.appAfterScripts}
             </body>
         </html>`;
     },

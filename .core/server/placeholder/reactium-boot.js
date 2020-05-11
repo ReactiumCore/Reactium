@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const xss = require('xss');
-const SDK = require('reactium-core/sdk').default;
-
-const { Enums } = SDK;
+const SDK = require('@atomic-reactor/reactium-sdk-core').default;
+const Enums = SDK.Enums;
 
 const placeholder = (req, res) => {
     const { width = 640, height = 480, filename = '' } = req.params;

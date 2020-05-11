@@ -13,7 +13,7 @@ import deps from 'dependencies';
 const app = {};
 app.dependencies = global.dependencies = deps;
 
-const renderer = template => async (req, res, context) => {
+const renderer = async (req, res, context) => {
     await Reactium.Hook.run('dependencies-load');
     await Reactium.Routing.load();
     const routes = Reactium.Routing.get();
@@ -40,9 +40,9 @@ const renderer = template => async (req, res, context) => {
         // Wait for loader or go ahead and render on error
         console.log('[Reactium] Loading page data...');
         const data = await ('load' in route && typeof route.load === 'function'
-            ? Promise.resolve(route.load(route.params, route.query)).then(
-                  thunk => thunk(store.dispatch, store.getState, store),
-              )
+            ? Promise.resolve(
+                  route.load(route.params, route.query),
+              ).then(thunk => thunk(store.dispatch, store.getState, store))
             : Promise.resolve());
 
         await Reactium.Hook.run(
@@ -70,7 +70,7 @@ const renderer = template => async (req, res, context) => {
 
     const helmet = Helmet.renderStatic();
 
-    return template(body, helmet, store, req, res);
+    return req.template(body, helmet, store, req, res);
 };
 
-module.exports = template => renderer(template);
+module.exports = renderer;

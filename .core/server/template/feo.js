@@ -10,16 +10,18 @@ module.exports = {
                 ${req.styles}
             </head>
             <body>
-                <Component type="DevTools"></Component>
-                <div id="router"></div>
+                ${req.headerScripts}
+                ${req.appBindings}
 
                 <script>
                     window.ssr = false;
                     window.defines = ${serialize(defines)};
                     window.restAPI = '/api';
                     window.actiniumAppId = '${actiniumAppId}';
+                    ${req.appGlobals}
                 </script>
                 ${req.scripts}
+                ${req.appAfterScripts}
             </body>
         </html>`;
     },

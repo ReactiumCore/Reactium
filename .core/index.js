@@ -73,6 +73,17 @@ const adminURL = process.env.ACTINIUM_ADMIN_URL || false;
 // set app variables
 app.set('x-powered-by', false);
 
+// include boot DDD artifacts
+globby([
+    `${rootPath}/.core/**/reactium-boot.js`,
+    `${rootPath}/src/**/reactium-boot.js`,
+    `${rootPath}/reactium_modules/**/reactium-boot.js`,
+    `${rootPath}/node_modules/**/reactium-plugin/**/reactium-boot.js`,
+]).map(item => {
+    const p = path.normalize(item);
+    require(p);
+});
+
 // express middlewares
 if (process.env.DEBUG === 'on') {
     SDK.Server.Middleware.register('logging', {
@@ -192,24 +203,7 @@ SDK.Server.Middleware.register('router', {
     order: Enums.priority.neutral,
 });
 
-// include
-globby([
-    `${rootPath}/.core/**/express-mw.js`,
-    `${rootPath}/src/**/express-mw.js`,
-    `${rootPath}/reactium_modules/**/express-mw.js`,
-    `${rootPath}/node_modules/**/reactium-plugin/**/express-mw.js`,
-]).map(item => {
-    const p = path.normalize(item);
-    const mwLoader = require(p);
-
-    // express-mw.js can optionally be passed registry
-    // helpful when it is difficult to import Reactium SDK
-    if (typeof mwLoader === 'function') {
-        mwLoader(SDK.Server.Middleware);
-    }
-});
-
-SDK.Hook.runSync('startup.express-middleware', SDK.Server.Middleware);
+SDK.Hook.runSync('Server.Middleware', SDK.Server.Middleware);
 
 let middlewares = Object.values(SDK.Server.Middleware.list);
 
