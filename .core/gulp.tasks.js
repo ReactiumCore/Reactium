@@ -230,7 +230,7 @@ const reactium = (gulp, config, webpackConfig) => {
         if (!isDev) done();
 
         const arcliBin = path.resolve(
-            path.dirname(require.resolve('atomic-reactor-cli')),
+            path.dirname(require.resolve('@atomic-reactor/cli')),
             'arcli.js',
         );
         const args = [

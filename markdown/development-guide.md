@@ -8,7 +8,7 @@ Before reading the rest of this guide, grab the [Atomic Reactor CLI](https://git
 No, seriously... go get the CLI:
 
 ```
-$ npm i -g atomic-reactor-cli
+$ npm i -g @atomic-reactor/cli
 ```
 
 ## Zero Day Install
@@ -99,10 +99,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     },
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Test);
+export default connect(mapStateToProps, mapDispatchToProps)(Test);
 ```
 
 Test.js:
@@ -453,7 +450,7 @@ export default {
 1.  Before creating a component, grab the [Atomic Reactor CLI](https://github.com/Atomic-Reactor/CLI):
 
 ```
-$ npm i -g atomic-reactor-cli
+$ npm i -g @atomic-reactor/cli
 ```
 
 2.  Change directory into your project:

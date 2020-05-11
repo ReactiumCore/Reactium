@@ -8,13 +8,11 @@ import Routing from './routing';
 import Setting from './setting';
 import User from './user';
 import Capability from './capability';
-import Server from './server';
 
 export * from '@atomic-reactor/reactium-sdk-core';
 export * from './named-exports';
 
-export default {
-    ...SDK,
+const Reactium = Object.assign(SDK, {
     ...Actinium,
     i18n,
     Middleware,
@@ -24,5 +22,6 @@ export default {
     Setting,
     User,
     Capability,
-    Server,
-};
+});
+
+export default Reactium;

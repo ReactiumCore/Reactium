@@ -5,7 +5,7 @@ const _ = require('underscore');
 const op = require('object-path');
 const globby = require('globby').sync;
 const { spawn } = require('child_process');
-const labelGenerator = require('atomic-reactor-cli/commands/config/set/generator');
+const labelGenerator = require('@atomic-reactor/cli/commands/config/set/generator');
 
 const command = (cmd, args = [], done) => {
     const ps = spawn(cmd, args, {

@@ -7,7 +7,7 @@ Out of the box, Reactium comes with the ability to build a basic Electron app.
 Install the necessary tools:
 
 ```
-$ npm install -g atomic-reactor-cli
+$ npm install -g @atomic-reactor/cli
 $ npm install -g electron
 $ npm install -g gulp
 ```

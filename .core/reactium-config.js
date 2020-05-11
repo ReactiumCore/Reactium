@@ -243,6 +243,7 @@ module.exports = {
             },
             devDependencies: {
                 remove: [
+                    '@atomic-reactor/cli',
                     'atomic-reactor-cli',
                     'babel-cli',
                     'babel-core',

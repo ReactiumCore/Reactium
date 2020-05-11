@@ -39,7 +39,7 @@ Pages are specific instances of templates. Here, placeholder content is replaced
 
 # Creating Elements
 
-Using the [Atomic Reactor CLI](https://www.npmjs.com/package/atomic-reactor-cli) you can easily add new elements and menu items to the Design System.
+Using the [Atomic Reactor CLI](https://www.npmjs.com/package/@atomic-reactor/cli) you can easily add new elements and menu items to the Design System.
 
 ```
 $ arcli element create

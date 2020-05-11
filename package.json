@@ -41,7 +41,7 @@
     "parse/node": false
   },
   "dependencies": {
-    "@atomic-reactor/reactium-sdk-core": "^0.0.63",
+    "@atomic-reactor/reactium-sdk-core": "^0.0.64",
     "@babel/cli": "^7.8.4",
     "@babel/node": "^7.8.7",
     "@loadable/component": "^5.12.0",
@@ -98,6 +98,7 @@
     "xss": "^1.0.6"
   },
   "devDependencies": {
+    "@atomic-reactor/cli": "^2.2.1",
     "@atomic-reactor/gulp-watch": "^5.0.1-patched",
     "@atomic-reactor/webpack-po-loader": "0.0.3",
     "@babel/core": "^7.9.0",
@@ -108,7 +109,6 @@
     "@babel/preset-flow": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
     "apidoc": "^0.20.1",
-    "atomic-reactor-cli": "^2.1.21",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.1.0",
