@@ -161,6 +161,10 @@ export default async (req, res, context) => {
     req.styles = '';
     req.appGlobals = '';
     req.appAfterScripts = '';
+    req.headTags = `<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta charSet="utf-8" />`;
+
     req.appBindings =
         '<Component type="DevTools"></Component><div id="router"></div>';
 
