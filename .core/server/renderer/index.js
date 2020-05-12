@@ -82,10 +82,12 @@ SDK.Hook.registerSync(
 
             Object.values(assetsByChunkName).forEach(chunk => {
                 _.flatten([
-                    normalizeAssets(chunk).filter(path => path.endsWith('.js')),
+                    normalizeAssets(chunk)
+                        .filter(path => path.endsWith('.js'))
+                        .filter(path => /main\.js$/.test(path)),
                 ]).forEach(path =>
                     AppScripts.register(path, {
-                        path,
+                        path: `/${path}`,
                         order: SDK.Enums.priority.highest,
                         footer: true,
                     }),
@@ -99,7 +101,11 @@ SDK.Hook.registerSync(
             process.env.PUBLIC_DIRECTORY || `${process.cwd()}/public`;
 
         globby
-            .sync(path.resolve(scriptPathBase, 'assets', 'js', '*main.js'))
+            .sync(
+                path
+                    .resolve(scriptPathBase, 'assets', 'js', '*main.js')
+                    .replace(/\\/g, '/'),
+            )
             .map(script => `/assets/js/${path.parse(script).base}`)
             .forEach(path =>
                 AppScripts.register(path, {
