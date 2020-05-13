@@ -152,6 +152,8 @@ module.exports = config => {
                         /\.core\/.cli\//,
                         /\.cli/,
                         /src\/app\/server/,
+                        /arcli-install.js$/,
+                        /reactium-boot.js$/,
                     ],
                     use: [
                         {
