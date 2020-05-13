@@ -2447,6 +2447,16 @@
     "groupTitle": "Reactium.Routing"
   },
   {
+    "type": "Registry",
+    "url": "Middleware",
+    "title": "Middleware",
+    "version": "0.0.0",
+    "name": "Server.Middleware",
+    "group": "Reactium.Server",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/server/index.js",
+    "groupTitle": "Reactium.Server"
+  },
+  {
     "type": "Function",
     "url": "Setting.get(key,defaultValue,refresh)",
     "title": "Setting.get()",
@@ -4319,6 +4329,113 @@
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
     "groupTitle": "Reactium.Zone"
+  },
+  {
+    "type": "Object",
+    "url": "Registry",
+    "title": "Registry",
+    "group": "Reactium",
+    "name": "Registry",
+    "description": "<p>Reactium uses a number of registry objects used to registering all sorts of objects that will be used elsewhere in the framework. New registry objects are generally instanciated as singletons on the overall SDK.</p> <p>There are many registry objects attached by default to the SDK, and developers can create new ones using <code>Utils.registryFactory()</code>.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "list",
+            "description": "<p>{Getter} get list of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "registered",
+            "description": "<p>{Getter} get list of all historically registrated objects, even duplicates, ordered by order property of object (defaults to 100).</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "protected",
+            "description": "<p>{Getter} get list of protected registrations ids</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "unregistered",
+            "description": "<p>{Getter} get list of all existing registered objects ids that have been subsequently unregistered.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "banned",
+            "description": "<p>{Getter} get list of all banned objects ids.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "mode",
+            "description": "<p>{Getter} get current mode (Default Utils.Registry.MODES.HISTORY)</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "isProtected",
+            "description": "<p>{Method} pass the identifier of an object to see if it has been protected</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "isRegistered",
+            "description": "<p>{Method} pass the identifier of an object to see if it has been registered</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "isBanned",
+            "description": "<p>{Method} pass the identifier of an object to see if it has been banned</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "ban",
+            "description": "<p>{Method} pass the identifier of an object to ban. Banned objects can not be registered and will not be show in list. Useful when you have code that needs to preempt the registration of an object from code you do not control. E.g. a plugin is introducing undesireable or disabled functionality</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "cleanup",
+            "description": "<p>{Method} pass the identifier of an object to be purged from historical registrations (i.e. free up memory) Automatically performed in mode Utils.Registry.CLEAN</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "protect",
+            "description": "<p>{Method} pass the identifier of an object to protect. Protected objects can not be overridden or cleaned up.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "register",
+            "description": "<p>{Method} pass an identifier and a data object to register the object. The identifier will be added if it is not already registered (but protected) and not banned.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "unprotect",
+            "description": "<p>{Method} pass an identifier to unprotect an object</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "unregister",
+            "description": "<p>{Method} pass an identifier to unregister an object. When in HISTORY mode (default), previous registration will be retained, but the object will not be listed. In CLEAN mode, the previous registrations will be removed, unless protected.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/registry.js",
+    "groupTitle": "Reactium"
   },
   {
     "type": "Function",

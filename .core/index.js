@@ -196,6 +196,29 @@ SDK.Server.Middleware.register('static', {
     order: Enums.priority.neutral,
 });
 
+const reactiumModules = Object.keys(
+    op.get(
+        require(path.resolve(process.cwd(), 'package.json')),
+        'reactiumDependencies',
+        {},
+    ),
+);
+
+reactiumModules.forEach(mod => {
+    const modStaticPath = path.resolve(
+        process.cwd(),
+        'reactium_modules',
+        mod,
+        '_static',
+    );
+    if (fs.existsSync(modStaticPath)) {
+        SDK.Server.Middleware.register(`static.${mod}`, {
+            use: staticGzip(modStaticPath),
+            order: Enums.priority.neutral,
+        });
+    }
+});
+
 // default route handler
 SDK.Server.Middleware.register('router', {
     name: 'router',
