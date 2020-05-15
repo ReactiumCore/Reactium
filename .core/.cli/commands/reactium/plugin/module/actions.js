@@ -51,6 +51,17 @@ module.exports = spinner => {
                 'utf8',
             );
 
+            message('Writing reactium-hooks.json');
+            const hooksJson = fs.readFileSync(
+                path.resolve(__dirname, 'template/reactium-hooks.json'),
+                'utf8',
+            );
+            fs.writeFileSync(
+                path.resolve(pluginPath, 'reactium-hooks.json'),
+                hooksJson,
+                'utf8',
+            );
+
             message('Writing umd.js');
             const umd = handlebars(
                 fs.readFileSync(
