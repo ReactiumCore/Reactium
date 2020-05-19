@@ -261,12 +261,23 @@ module.exports = {
             scripts: {
                 add: {
                     build: 'npm-run-all build:*',
+                    'build:gulp': 'cross-env NODE_ENV=production gulp',
+                    'build:babel-core':
+                        'cross-env NODE_ENV=production babel .core --out-dir build/.core',
+                    'build:babel-reactium_modules':
+                        'cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules',
+                    'build:babel-src':
+                        'cross-env NODE_ENV=production babel src --out-dir build/src',
                     static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
                     'local:ssr': 'gulp local:ssr',
                 },
                 remove: [
-                    'build:cleanup',
+                    'build',
+                    'build:gulp',
+                    'build:babel-core',
+                    'build:babel-reactium_modules',
+                    'build:babel-src',
                     'local-fe-start',
                     'local-fe:gulp',
                     'local-fe:babel-node',

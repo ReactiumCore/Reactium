@@ -67,9 +67,43 @@ const find = (searches = [], sourceMappings = [], searchParams = {}) => {
                 .map(p => path.resolve(path.dirname(p), 'package.json'))
                 .find(packagePath => fs.existsSync(packagePath));
 
-            Object.keys(
+            let modules = Object.keys(
                 op.get(require(packagePath), 'dependencies', {}),
-            ).forEach(mod => {
+            );
+
+            const reactiumModules = Object.keys(
+                op.get(require(packagePath), 'reactiumDependencies', {}),
+            );
+
+            // Special exception for reactium_modules dependencies, which will be considered
+            if (reactiumModules.length) {
+                const reactiumModuleDir = path.resolve(
+                    path.dirname(packagePath),
+                    'reactium_modules',
+                );
+                reactiumModules.forEach(reactiumModule => {
+                    const subPackage = path.resolve(
+                        reactiumModuleDir,
+                        reactiumModule,
+                        '_npm/package.json',
+                    );
+                    if (fs.existsSync(subPackage)) {
+                        modules = _.uniq(
+                            modules.concat(
+                                Object.keys(
+                                    op.get(
+                                        require(subPackage),
+                                        'dependencies',
+                                        {},
+                                    ),
+                                ),
+                            ),
+                        );
+                    }
+                });
+            }
+
+            modules.forEach(mod => {
                 let from;
                 try {
                     from = path.dirname(require.resolve(mod));

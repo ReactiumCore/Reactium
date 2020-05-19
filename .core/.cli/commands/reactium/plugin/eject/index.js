@@ -31,7 +31,8 @@ const NAME = 'plugin <eject>';
  * @see https://www.npmjs.com/package/commander#automated---help
  * @since 2.0.0
  */
-const DESC = 'The description of the command';
+const DESC =
+    'Compile a runtime plugin to a UMD asset and eject the asset into a publishing directory.';
 
 /**
  * CANCELED String
