@@ -2,6 +2,7 @@
 
 const del = require('del');
 const fs = require('fs-extra');
+const op = require('object-path');
 const path = require('path');
 const globby = require('globby');
 const webpack = require('webpack');
@@ -47,10 +48,25 @@ const reactium = (gulp, config, webpackConfig) => {
         }
     };
 
+    // PORT setup:
+    let port = config.port.proxy;
+    let pvar = op.get(process.env, 'PORT_VAR', false);
+
+    if (pvar) {
+        port = op.get(process.env, pvar, port);
+    } else {
+        port = op.get(process.env, 'APP_PORT', port);
+        port = op.get(process.env, 'PORT', port);
+    }
+    port = Number(port);
+
     // Update config from environment variables
-    config.port.browsersync = process.env.hasOwnProperty('APP_PORT')
-        ? Number(process.env.APP_PORT)
-        : Number(config.port.browsersync);
+    config.port.proxy = port;
+
+    // Update config from environment variables
+    config.port.browsersync = Number(
+        op.get(process.env, 'BROWSERSYNC_PORT', config.port.browsersync),
+    );
 
     const noop = done => done();
 
