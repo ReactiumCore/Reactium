@@ -57,7 +57,7 @@ let {{name}} = (
 
     // cx(suffix:String);
     // className extension
-    const cx = () => Reactium.Utils.cxFactory(className || namespace);
+    const cx = Reactium.Utils.cxFactory(className || namespace);
 
     // dispatch(eventType:String, event:Object, callback:Function);
     // dispatch events, run a hook, execute a callack
@@ -68,7 +68,7 @@ let {{name}} = (
 
         const evt = new CustomEvent(eventType, { details: event });
 
-        handle.dispatchEvent(eventType, evt);
+        handle.dispatchEvent(evt);
 
         if (unMounted()) return;
         await Reactium.Hook.run(`{{name}}-${eventType}`, evt, handle);
