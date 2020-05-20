@@ -105,7 +105,6 @@ const COMMAND = ({ program, props }) =>
  */
 module.exports = {
     ACTION,
-    CONFIRM,
     CONFORM,
     COMMAND,
     NAME,
