@@ -172,7 +172,8 @@
       "src/manifest.js"
     ],
     "ignore": [
-      "src/app/*"
+      "src/app/*",
+      ".tmp/"
     ]
   },
   "lint-staged": {
