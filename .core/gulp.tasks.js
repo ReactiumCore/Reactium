@@ -110,25 +110,25 @@ const reactium = (gulp, config, webpackConfig) => {
     };
 
     const serve = ({ open } = { open: config.open }) => done => {
-        // Serve locally
-        // Delay to allow server time to start
+        const proxy = `localhost:${config.port.proxy}`;
+        require('axios')
+            .get(`http://${proxy}`)
+            .then(() => {
+                browserSync({
+                    notify: false,
+                    timestamps: true,
+                    logPrefix: '00:00:00',
+                    port: config.port.browsersync,
+                    ui: { port: config.port.browsersync + 1 },
+                    proxy,
+                    open: open,
+                    ghostMode: false,
+                    startPath: config.dest.startPath,
+                    ws: true,
+                });
 
-        setTimeout(() => {
-            browserSync({
-                notify: false,
-                timestamps: true,
-                logPrefix: '00:00:00',
-                port: config.port.browsersync,
-                ui: { port: config.port.browsersync + 1 },
-                proxy: `localhost:${config.port.proxy}`,
-                open: open,
-                ghostMode: false,
-                startPath: config.dest.startPath,
-                ws: true,
+                done();
             });
-
-            done();
-        }, 5000);
     };
 
     const watch = (done, restart = false) => {
