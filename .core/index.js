@@ -1,15 +1,14 @@
-/*
- *------------------------------------------------------------------------------
- *  Reactium Node Express Server
- *------------------------------------------------------------------------------
- */
+//------------------------------------------------------------------------------
+// node.js starter application for hosting
+//------------------------------------------------------------------------------
+
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 import router from './server/router';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
-import { createProxyMiddleware as proxy } from 'http-proxy-middleware';
+import proxy from 'http-proxy-middleware';
 import morgan from 'morgan';
 import apiConfig from 'appdir/api/config';
 import path from 'path';

@@ -53,7 +53,8 @@ define([
         // create JSON dictionary of parameters
         var param = {};
         var paramType = {};
-        var bodyFormData = new FormData();
+        var bodyFormData = {};
+        var bodyFormDataType = {};
         var bodyJson = '';
         $root.find(".sample-request-param:checked").each(function(i, element) {
             var group = $(element).data("sample-request-param-group-id");
@@ -78,10 +79,8 @@ define([
                     }
                     if (contentType == "body-form-data"){
                         header['Content-Type'] = 'multipart/form-data'
-                        if (element.type == "file") {
-                        value = element.files[0];
-                      }
-                      bodyFormData.append(key,value);
+                        bodyFormData[key] = value;
+                        bodyFormDataType[key] = $(element).next().text();
                     }else {
                         param[key] = value;
                         paramType[key] = $(element).next().text();
@@ -94,7 +93,7 @@ define([
         var url = $root.find(".sample-request-url").val();
 
         //Convert {param} form to :param
-        url = utils.convertPathParams(url);
+        url = url.replace(/{/,':').replace(/}/,'');
 
         // Insert url parameter
         var pattern = pathToRegexp(url, null);
@@ -135,11 +134,6 @@ define([
             error      : displayError
         };
 
-        if(header['Content-Type'] == 'multipart/form-data'){
-            delete ajaxRequest.headers['Content-Type'];
-            ajaxRequest.contentType=false;
-            ajaxRequest.processData=false;
-        }
         $.ajax(ajaxRequest);
 
 

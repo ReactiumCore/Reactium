@@ -12,9 +12,7 @@ require.config({
         semver: './vendor/semver.min',
         utilsSampleRequest: './utils/send_sample_request',
         webfontloader: './vendor/webfontloader',
-        list: './vendor/list.min',
-        apiData: './api_data',
-        apiProject: './api_project',
+        list: './vendor/list.min'
     },
     shim: {
         bootstrap: {
@@ -43,8 +41,8 @@ require([
     'lodash',
     'locales',
     'handlebarsExtended',
-    'apiProject',
-    'apiData',
+    './api_project.js',
+    './api_data.js',
     'prettify',
     'utilsSampleRequest',
     'semver',
@@ -54,19 +52,9 @@ require([
     'list'
 ], function($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sampleRequest, semver, WebFont) {
 
-    // Load google web fonts.
-    WebFont.load({
-        active: function() {
-            // Only init after fonts are loaded.
-            init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sampleRequest, semver);
-        },
-        google: {
-            families: ['Source Code Pro', 'Source Sans Pro:n4,n6,n7']
-        }
-    });
-});
+    // load google web fonts
+    loadGoogleFontCss();
 
-function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sampleRequest, semver) {
     var api = apiData.api;
 
     //
@@ -397,7 +385,7 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
     $('#sections').append( content );
 
     // Bootstrap Scrollspy
-    $(this).scrollspy({ target: '#scrollingNav' });
+    $(this).scrollspy({ target: '#scrollingNav', offset: 18 });
 
     // Content-Scroll on Navigation click.
     $('.sidenav').find('a').on('click', function(e) {
@@ -407,6 +395,13 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
             $('html,body').animate({ scrollTop: parseInt($(id).offset().top) }, 400);
         window.location.hash = $(this).attr('href');
     });
+
+    // Quickjump on Pageload to hash position.
+    if(window.location.hash) {
+        var id = window.location.hash;
+        if ($(id).length > 0)
+            $('html,body').animate({ scrollTop: parseInt($(id).offset().top) }, 0);
+    }
 
     /**
      * Check if Parameter (sub) List has a type Field.
@@ -540,13 +535,11 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
     // HTML-Template specific jQuery-Functions
     //
     // Change Main Version
-    function setMainVersion(selectedVersion) {
-        if (typeof(selectedVersion) === 'undefined') {
-            selectedVersion = $('#version strong').html();
-        }
-        else {
-            $('#version strong').html(selectedVersion);
-        }
+    $('#versions li.version a').on('click', function(e) {
+        e.preventDefault();
+
+        var selectedVersion = $(this).html();
+        $('#version strong').html(selectedVersion);
 
         // hide all
         $('article').addClass('hide');
@@ -582,13 +575,6 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
 
         initDynamic();
         return;
-    }
-    setMainVersion();
-
-    $('#versions li.version a').on('click', function(e) {
-        e.preventDefault();
-
-        setMainVersion($(this).html());
     });
 
     // compare all article with their predecessor
@@ -606,17 +592,11 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
     if ($.urlParam('compare')) {
         // URL Paramter ?compare=1 is set
         $('#compareAllWithPredecessor').trigger('click');
-    }
 
-    // Quick jump on page load to hash position.
-    // Should happen after setting the main version
-    // and after triggering the click on the compare button,
-    // as these actions modify the content
-    // and would make it jump to the wrong position or not jump at all.
-    if (window.location.hash) {
-        var id = window.location.hash;
-        if ($(id).length > 0)
-            $('html,body').animate({ scrollTop: parseInt($(id).offset().top) }, 0);
+        if (window.location.hash) {
+            var id = window.location.hash;
+            $('html,body').animate({ scrollTop: parseInt($(id).offset().top) - 18 }, 0);
+        }
     }
 
     /**
@@ -875,6 +855,21 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
     }
 
     /**
+     * Load google fonts.
+     */
+    function loadGoogleFontCss() {
+        WebFont.load({
+            active: function() {
+                // Update scrollspy
+                $(window).scrollspy('refresh')
+            },
+            google: {
+                families: ['Source Code Pro', 'Source Sans Pro:n4,n6,n7']
+            }
+        });
+    }
+
+    /**
      * Return ordered entries by custom order and append not defined entries to the end.
      * @param  {String[]} elements
      * @param  {String[]} order
@@ -904,4 +899,5 @@ function init($, _, locale, Handlebars, apiProject, apiData, prettyPrint, sample
         });
         return results;
     }
-}
+
+});

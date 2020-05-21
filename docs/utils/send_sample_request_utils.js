@@ -47,10 +47,5 @@ define([], function () {
         return result;
     }
 
-    // Converts path params in the {param} format to the accepted :param format, used before inserting the URL params.
-    function convertPathParams(url) {
-        return url.replace(/{(.+?)}/g, ':$1');
-    }
-
-    return {handleNestedAndParsingFields,convertPathParams};
+    return {handleNestedAndParsingFields};
 });
