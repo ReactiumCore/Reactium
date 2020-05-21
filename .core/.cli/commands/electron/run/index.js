@@ -96,6 +96,8 @@ const ACTION = ({ opt, props }) => {
     prompt.override = ovr;
     prompt.start();
 
+    let params;
+
     return new Promise((resolve, reject) => {
         prompt.get(schema, (err, input = {}) => {
             if (err) {
@@ -106,7 +108,7 @@ const ACTION = ({ opt, props }) => {
 
             input = { ...ovr, ...input };
 
-            const params = CONFORM({ input, props });
+            params = CONFORM({ input, props });
 
             resolve(params);
         });
@@ -119,7 +121,7 @@ const ACTION = ({ opt, props }) => {
         .then(() => prompt.stop())
         .catch(err => {
             prompt.stop();
-            message(op.get(err, 'message', CANCELED));
+            console.log(err);
         });
 };
 
