@@ -3,6 +3,7 @@ import renderer from './renderer';
 import fs from 'fs';
 import path from 'path';
 import httpAuth from 'http-auth';
+import authConnect from 'http-auth-connect';
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ if (fs.existsSync(basicAuthFile)) {
                 file: basicAuthFile,
             });
 
-            httpAuth.connect(basic)(req, res, next);
+            authConnect(basic)(req, res, next);
         } else {
             next();
         }
