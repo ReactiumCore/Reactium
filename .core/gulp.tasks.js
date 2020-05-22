@@ -283,6 +283,8 @@ const reactium = (gulp, config, webpackConfig) => {
         gulp.parallel(task('mainManifest'), task('umdManifest')),
     );
 
+    const umd = gulp.series(task('umdManifest'), task('umdLibraries'));
+
     const mainManifest = done => {
         // Generate manifest.js file
         regenManifest({
@@ -588,10 +590,7 @@ $assets: (
         gulpwatch(config.watch.assets, watcher);
         const scriptWatcher = gulp.watch(
             config.watch.js,
-            gulp.parallel(
-                task('manifest'),
-                gulp.series(task('umdManifest'), task('umdLibraries')),
-            ),
+            gulp.parallel(task('manifest')),
         );
         done();
     };
@@ -612,6 +611,7 @@ $assets: (
         json,
         manifest,
         mainManifest,
+        umd,
         umdManifest,
         umdLibraries,
         markup,
