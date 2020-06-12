@@ -70,7 +70,7 @@ const defaultLibraryExternals = {
         defaultAlias: 'ReactDOM',
     },
     Reactium: {
-        externalName: '/sdk$/',
+        externalName: '/reactium-core/sdk$/',
         // relative to src/manifest.js
         requirePath: 'reactium-core/sdk',
         // to provide both es6 named exports and Reactium default alias
