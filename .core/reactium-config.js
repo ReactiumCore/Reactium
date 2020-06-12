@@ -17,18 +17,33 @@ const contextMode = () => {
 };
 
 const defaultLibraryExternals = {
-    Reactium: {
-        externalName: '/sdk$/',
-        // relative to src/manifest.js
-        requirePath: 'reactium-core/sdk',
-        // to provide both es6 named exports and Reactium default alias
-        defaultAlias: 'Reactium',
+    axios: {
+        externalName: 'axios',
+        requirePath: 'axios',
     },
-    ReactDOM: {
-        externalName: 'react-dom',
-        requirePath: 'react-dom',
-        // to provide both es6 named exports and React default alias
-        defaultAlias: 'ReactDOM',
+    classnames: {
+        externalName: 'classnames',
+        requirePath: 'classnames',
+    },
+    'copy-to-clipboard': {
+        externalName: 'copy-to-clipboard',
+        requirePath: 'copy-to-clipboard',
+    },
+    'gsap/umd/TweenMax': {
+        externalName: '/^gsap.*$/',
+        requirePath: 'gsap/umd/TweenMax',
+    },
+    moment: {
+        externalName: 'moment',
+        requirePath: 'moment',
+    },
+    'object-path': {
+        externalName: 'object-path',
+        requirePath: 'object-path',
+    },
+    'prop-types': {
+        externalName: 'prop-types',
+        requirePath: 'prop-types',
     },
     react: {
         externalName: 'react',
@@ -36,45 +51,50 @@ const defaultLibraryExternals = {
         // to provide both es6 named exports and React default alias
         defaultAlias: 'React',
     },
+    'react-router-dom': {
+        externalName: 'react-router-dom',
+        requirePath: 'react-router-dom',
+    },
     redux: {
         externalName: 'redux',
         requirePath: 'redux',
     },
-    'gsap/umd/TweenMax': {
-        externalName: '/^gsap.*$/',
-        requirePath: 'gsap/umd/TweenMax',
+    'redux-super-thunk': {
+        externalName: 'redux-super-thunk',
+        requirePath: 'redux-super-thunk',
     },
-    underscore: {
-        externalName: 'underscore',
-        requirePath: 'underscore',
+    ReactDOM: {
+        externalName: 'react-dom',
+        requirePath: 'react-dom',
+        // to provide both es6 named exports and React default alias
+        defaultAlias: 'ReactDOM',
     },
-    'object-path': {
-        externalName: 'object-path',
-        requirePath: 'object-path',
+    Reactium: {
+        externalName: '/sdk$/',
+        // relative to src/manifest.js
+        requirePath: 'reactium-core/sdk',
+        // to provide both es6 named exports and Reactium default alias
+        defaultAlias: 'Reactium',
     },
     semver: {
         externalName: 'semver',
         requirePath: 'semver',
     },
-    moment: {
-        externalName: 'moment',
-        requirePath: 'moment',
+    'shallow-equals': {
+        externalName: 'shallow-equals',
+        requirePath: 'shallow-equals',
     },
-    classnames: {
-        externalName: 'classnames',
-        requirePath: 'classnames',
+    underscore: {
+        externalName: 'underscore',
+        requirePath: 'underscore',
     },
-    'prop-types': {
-        externalName: 'prop-types',
-        requirePath: 'prop-types',
+    uuid: {
+        externalName: 'uuid',
+        requirePath: 'uuid',
     },
-    'react-router-dom': {
-        externalName: 'react-router-dom',
-        requirePath: 'react-router-dom',
-    },
-    'redux-super-thunk': {
-        externalName: 'redux-super-thunk',
-        requirePath: 'redux-super-thunk',
+    xss: {
+        externalName: 'xss',
+        requirePath: 'xss',
     },
 };
 
