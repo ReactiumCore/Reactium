@@ -118,6 +118,23 @@ SDK.Hook.registerSync(
     SDK.Enums.priority.highest,
 );
 
+SDK.Hook.registerSync('Server.AppHeaders', (req, AppHeaders, res) => {
+    AppHeaders.register('shortcut', {
+        header:
+            '<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
+        order: SDK.Enums.priority.highest,
+    });
+    AppHeaders.register('viewport', {
+        header:
+            '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
+        order: SDK.Enums.priority.highest,
+    });
+    AppHeaders.register('charset', {
+        header: '<meta charSet="utf-8" />',
+        order: SDK.Enums.priority.highest,
+    });
+});
+
 const sanitizeTemplateVersion = version => {
     if (semver.valid(version)) {
         return version;
@@ -167,9 +184,7 @@ export default async (req, res, context) => {
     req.styles = '';
     req.appGlobals = '';
     req.appAfterScripts = '';
-    req.headTags = `<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta charSet="utf-8" />`;
+    req.headTags = '';
 
     req.appBindings =
         '<Component type="DevTools"></Component><div id="router"></div>';
@@ -179,21 +194,38 @@ export default async (req, res, context) => {
 
     // early registration
     SDK.Hook.runSync('Server.beforeApp', req, SDK.Server);
+    await SDK.Hook.run('Server.beforeApp', req, SDK.Server);
+
+    // register html headers
+    SDK.Hook.runSync('Server.AppHeaders', req, SDK.Server.AppHeaders, res);
+    await SDK.Hook.run('Server.AppHeaders', req, SDK.Server.AppHeaders, res);
 
     // register scripts, response is needed for webpack dev server
     SDK.Hook.runSync('Server.AppScripts', req, SDK.Server.AppScripts, res);
+    await SDK.Hook.run('Server.AppScripts', req, SDK.Server.AppScripts, res);
 
     // register script snippets to run after scripts
     SDK.Hook.runSync('Server.AppSnippets', req, SDK.Server.AppSnippets);
+    await SDK.Hook.run('Server.AppSnippets', req, SDK.Server.AppSnippets);
 
     // register stylesheets
     SDK.Hook.runSync('Server.AppStyleSheets', req, SDK.Server.AppStyleSheets);
+    await SDK.Hook.run('Server.AppStyleSheets', req, SDK.Server.AppStyleSheets);
 
     // register globals (on window)
     SDK.Hook.runSync('Server.AppGlobals', req, SDK.Server.AppGlobals);
+    await SDK.Hook.run('Server.AppGlobals', req, SDK.Server.AppGlobals);
 
     // useful to unregister
     SDK.Hook.runSync('Server.afterApp', req, SDK.Server);
+    await SDK.Hook.run('Server.afterApp', req, SDK.Server);
+
+    // Add header tags
+    _.sortBy(Object.values(SDK.Server.AppHeaders.list), 'order').forEach(
+        ({ header = '' }) => {
+            req.headTags += header;
+        },
+    );
 
     // Add scripts and headerScripts
     _.sortBy(Object.values(SDK.Server.AppScripts.list), 'order').forEach(
