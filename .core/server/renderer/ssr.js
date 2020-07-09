@@ -14,10 +14,14 @@ const app = {};
 app.dependencies = global.dependencies = deps;
 
 const renderer = async (req, res, context) => {
+    await Reactium.Hook.run('init');
     await Reactium.Hook.run('dependencies-load');
+    await Reactium.Zone.init();
     await Reactium.Routing.load();
     const routes = Reactium.Routing.get();
     const { store } = await Reactium.Hook.run('store-create', { server: true });
+    await Reactium.Hook.run('plugin-dependencies');
+
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);
 
@@ -67,6 +71,8 @@ const renderer = async (req, res, context) => {
             />
         </Provider>,
     );
+
+    await Reactium.Hook.run('app-ready', true);
 
     const helmet = Helmet.renderStatic();
 
