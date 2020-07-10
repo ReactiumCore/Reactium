@@ -249,7 +249,6 @@ const bootup = async () => {
         res.send('Foo!!')
      });
 
-     // Synchronous version
      SDK.Hook.registerSync('Server.Middleware', Middleware => {
         Middleware.register('foo-page', {
             name: 'foo-page',
@@ -258,9 +257,7 @@ const bootup = async () => {
         })
      });
 
-     // Async Middleware Registration
-     SDK.Hook.registerSync('Server.Middleware', async Middleware => {
-
+     SDK.Hook.registerSync('Server.Middleware', Middleware => {
         const intercept = express.Router();
         intercept.post('/api*', (req, res) => {
             res.json({
@@ -274,7 +271,7 @@ const bootup = async () => {
             use: async (res, req, next) => {
                 try {
                     let healthy = SDK.Cache.get('health-check');
-                    if (healthy !== false) {
+                    if (healthy === undefined) {
                         const response = await axios.get(process.env.REST_API_URI + '/healthcheck');
                         healthy = response.data;
                         SDK.Cache.set('health-check', healthy, 1000 * 90);
