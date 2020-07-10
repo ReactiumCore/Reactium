@@ -1,5 +1,465 @@
 [
   {
+    "type": "Hook",
+    "url": "Server.AppBindings",
+    "title": "Server.AppBindings",
+    "name": "Server.AppBindings",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines React bind pointes in markup.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppBindings",
+            "description": "<p>Server app binding registry object.</p>"
+          }
+        ],
+        "binding": [
+          {
+            "group": "binding",
+            "type": "String",
+            "optional": true,
+            "field": "component",
+            "description": "<p>string name of component to bind directly if possible (must be in a webpack search context in reactium-config)</p>"
+          },
+          {
+            "group": "binding",
+            "type": "String",
+            "optional": true,
+            "field": "markup",
+            "description": "<p>ordinary markup that React will use to bind the app.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/sdk';\nSDK.Hook.registerSync(\n    'Server.AppBindings',\n    (req, AppBindings) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppBindings.register('DevTools', {\n            component: 'DevTools',\n        });\n\n        // Add ordinary markup for React to bind to\n        AppBindings.register('router', {\n            markup: '<div id=\"router\"></div>',\n        });\n    },\n    SDK.Enums.priority.highest,\n    'SERVER-APP-BINDINGS-CORE',\n);",
+        "type": "json"
+      }
+    ],
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppGlobals",
+    "title": "Server.AppGlobals",
+    "name": "Server.AppGlobals",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define global for nodejs (useful for Server-Side-Rendering).</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppGlobals",
+            "description": "<p>Server app globals registry object.</p>"
+          }
+        ],
+        "global": [
+          {
+            "group": "global",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The property name that will be added to window (for browser) or global (for nodejs).</p>"
+          },
+          {
+            "group": "global",
+            "type": "Mixed",
+            "optional": false,
+            "field": "value",
+            "description": "<p>any javascript value that can be serialized for use in a script tag</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/sdk';\n// will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs\nSDK.Hook.registerSync(\n    'Server.AppGlobals',\n    (req, AppGlobals) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppGlobals.register('environment', {\n            name: 'environment',\n            value: 'local',\n        });\n    });",
+        "type": "json"
+      }
+    ],
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppHeaders",
+    "title": "Server.AppHeaders",
+    "name": "Server.AppHeaders",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines html head tags (exluding stylesheet). Use this hook to register/unregister <head> tags as strings. Note: if using Server Side Render and react-helmet, this is often unnecessary to do.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppHeaders",
+            "description": "<p>Server app header registry object.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/sdk';\nSDK.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {\n   // given some data was added to req by express middleware\n   const seo = req.seo;\n   if (seo) {\n       if (seo.canonicalURL) {\n           AppHeaders.register('canonical-url', {\n               header: `<link rel=\"canonical\" href=\"${seo.canonicalURL}\" />`\n           });\n       }\n       if (seo.description) {\n           AppHeaders.register('meta-description', {\n               header: `<meta name=\"description\" content=\"${seo.description}\"/>`\n           });\n       }\n   }\n});",
+        "type": "json"
+      }
+    ],
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppScripts",
+    "title": "Server.AppScripts",
+    "name": "Server.AppScripts",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines javascript files to be loaded.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppScripts",
+            "description": "<p>Server app scripts registry object.</p>"
+          }
+        ],
+        "script": [
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "footer",
+            "defaultValue": "true",
+            "description": "<p>Place the script tag in the footer if true</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "header",
+            "defaultValue": "false",
+            "description": "<p>Place the script tag above the body if true</p>"
+          },
+          {
+            "group": "script",
+            "type": "String",
+            "optional": true,
+            "field": "path",
+            "description": "<p>the src of the javascript</p>"
+          },
+          {
+            "group": "script",
+            "type": "String",
+            "optional": true,
+            "field": "charset",
+            "defaultValue": "UTF-8",
+            "description": "<p>charset attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>type attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "defer",
+            "defaultValue": "false",
+            "description": "<p>Add defer attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "async",
+            "defaultValue": "false",
+            "description": "<p>Add async attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "content",
+            "description": "<p>script content</p>"
+          },
+          {
+            "group": "script",
+            "type": "Number",
+            "optional": true,
+            "field": "order",
+            "defaultValue": "0",
+            "description": "<p>loading order of script</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/sdk';\nSDK.Hook.register('Server.AppScripts', async (req, AppScripts) => {\n    AppScripts.register('my-onsite-script', {\n        path: '/assets/js/some-additional.js'\n        footer: true, // load in footer (optional)\n        header: false, // don't load in header (optional)\n        order: 1, // scripts will be ordered by this\n    });\n\n    AppScripts.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.js'\n        header: true, // maybe for an external\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "type": "json"
+      }
+    ],
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppSnippets",
+    "title": "Server.AppSnippets",
+    "name": "Server.AppSnippets",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines snippets of code to be added to document in their entirety.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppSnippets",
+            "description": "<p>Server app snippets registry object.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "     import SDK from '@atomic-reactor/sdk';\n     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {\n        AppSnippets.register('ga-tracking', {\n            snippet: `<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n\nga('create', '', 'auto');\nga('send', 'pageview');\n</script>`,\n          order: 1,\n        })\n     });",
+        "type": "json"
+      }
+    ],
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppStyleSheets",
+    "title": "Server.AppStyleSheets",
+    "name": "Server.AppStyleSheets",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines css files to be loaded.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppStyleSheets",
+            "description": "<p>Server app styles registry object.</p>"
+          }
+        ],
+        "stylesheet": [
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "path",
+            "description": "<p>the src of the javascript</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "Number",
+            "optional": true,
+            "field": "order",
+            "defaultValue": "0",
+            "description": "<p>loading order of script</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "rel",
+            "defaultValue": "stylesheet",
+            "description": "<p>the rel attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "crossorigin",
+            "description": "<p>the crossorigin attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "referrerpolicy",
+            "description": "<p>the referrerpolicy attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "hrefLang",
+            "description": "<p>the hreflang attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "sizes",
+            "description": "<p>the sizes attribute if rel=icon</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>the type attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "Function",
+            "optional": true,
+            "field": "when",
+            "description": "<p>callback passed the request object, and returns true or false if the css should be included</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/sdk';\nSDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        path: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "type": "json"
+      }
+    ],
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.afterApp",
+    "title": "Server.afterApp",
+    "name": "Server.afterApp",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "Server",
+            "description": "<p>SDK Server object.</p>"
+          }
+        ]
+      }
+    },
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.beforeApp",
+    "title": "Server.beforeApp",
+    "name": "Server.beforeApp",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Called before other Server hooks.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "Server",
+            "description": "<p>SDK Server object.</p>"
+          }
+        ]
+      }
+    },
+    "group": "BootHook",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "BootHook"
+  },
+  {
     "type": "ReactHook",
     "url": "useAsyncEffect(cb,dependencies)",
     "title": "useAsyncEffect()",
@@ -496,6 +956,24 @@
   },
   {
     "type": "ReactHook",
+    "url": "useRefs()",
+    "title": "useRefs()",
+    "group": "ReactHook",
+    "name": "useRefs",
+    "description": "<p>Creates a single reference object that can be managed using the <code>get</code>/<code>set</code>/<code>del</code>/<code>clear</code> functions.</p>",
+    "examples": [
+      {
+        "title": "Usage",
+        "content": "import React, { useEffect, useState } from 'react';\nimport { useRefs } from '@atomic-reactor/reactium-sdk-core';\n\nconst MyComponent = () => {\n    const refs = useRefs();\n    const [state, setState] = useState({ input: null });\n\n    const onClick = () => {\n        const inputElm = refs.get('input');\n        setState({ ...state, input: inputElm.value });\n        inputElm.value = '';\n    };\n\n    return (\n        <div ref={elm => refs.set('container', elm)}>\n            {state.input && <div>{state.input}</div>}\n            <input type='text' ref={elm => refs.set('input', elm)} />\n            <button onClick={onClick}>Update</button>\n        </div>\n    );\n};",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/useRefs.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useRegisterHandle(id,cb,deps)",
     "title": "useRegisterHandle()",
     "description": "<p>React hook to create a new imperative handle reference, similar to <code>useImperativeHandle()</code> except that instead of using <code>React.forwardRef()</code> to attach the handle to a parent compenent ref. A ref is generated for you and is assigned the current value of the callback <code>cb</code>, is registered with <code>Reactium.Handle</code>, and made available to all other components at the object path <code>id</code>.</p>",
@@ -644,6 +1122,31 @@
   },
   {
     "type": "ReactHook",
+    "url": "useStatus(initialStatus)",
+    "title": "useStatus()",
+    "group": "ReactHook",
+    "name": "useStatus",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "initialStatus",
+            "defaultValue": "pending",
+            "description": "<p>The initial status of the hook.</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Synchronously set a status value that can be checked within a function scope without updating the state of the component. Useful when doing asynchronous activities and the next activity depends on a status of some sort from the previous activity.</p> <p>Returns [status:String, setStatus:Function, isStatus:Function]</p> <h3>status</h3> <p>The current status value.</p> <h3>setStatus(status:String, forceRender:Boolean = false)</h3> <p>Set the status value. If forceRender is true, a rerender will be triggered. <em><strong>Beware:</strong></em> forceRender may have unintended consequence and should be used in last status before re-rendering situations only.</p> <h3>isStatus(statuses:Array)</h3> <p>Check if the current status matches the statuses passed.</p>",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/useStatus.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useStore()",
     "title": "useStore()",
     "description": "<p>Just gimme the store damnit! This React hook provides the Redux store when used on a component declared within the Store Provider.</p>",
@@ -756,7 +1259,7 @@
     "examples": [
       {
         "title": "Example",
-        "content": "import React from 'react';\nimport { useZoneComponents } from 'reactium-core/sdk';\n export props => {\n    const zoneComponents = useZoneComponents('my-zone');\n     return (\n        <div>\n            Components in Zone: {zoneComponents.length}\n        </div>\n    );\n};",
+        "content": "import React from 'react';\nimport { useZoneComponents } from 'reactium-core/sdk';\n\nexport props => {\n    const zoneComponents = useZoneComponents('my-zone');\n\n    return (\n        <div>\n            Components in Zone: {zoneComponents.length}\n        </div>\n    );\n};",
         "type": "json"
       }
     ],
@@ -1350,6 +1853,14 @@
             "optional": false,
             "field": "name",
             "description": "<p>the hook name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "defaultValue": "async",
+            "description": "<p>'async' or 'sync' hooks</p>"
           }
         ]
       }
@@ -1569,7 +2080,7 @@
     "url": "Hook.unregister(id)",
     "title": "Hook.unregister()",
     "name": "Hook.unregister",
-    "description": "<p>Unregister a registered callback by id.</p>",
+    "description": "<p>Unregister a registered hook callback by id.</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2445,16 +2956,6 @@
     "version": "0.0.0",
     "filename": ".core/sdk/routing/index.js",
     "groupTitle": "Reactium.Routing"
-  },
-  {
-    "type": "Registry",
-    "url": "Middleware",
-    "title": "Middleware",
-    "version": "0.0.0",
-    "name": "Server.Middleware",
-    "group": "Reactium.Server",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/server/index.js",
-    "groupTitle": "Reactium.Server"
   },
   {
     "type": "Function",
@@ -4429,6 +4930,12 @@
             "optional": false,
             "field": "unregister",
             "description": "<p>{Method} pass an identifier to unregister an object. When in HISTORY mode (default), previous registration will be retained, but the object will not be listed. In CLEAN mode, the previous registrations will be removed, unless protected.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "flush",
+            "description": "<p>{Method} clear all registrations. Resets registry to newly constructed state.</p>"
           }
         ]
       }
