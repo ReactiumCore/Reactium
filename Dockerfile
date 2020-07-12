@@ -31,6 +31,7 @@ WORKDIR /usr/src/app
 COPY --from=build /tmp/app/node_modules ./node_modules
 COPY --from=build /tmp/app/public ./public
 COPY --from=build /tmp/app/build ./build
+COPY --from=build /tmp/app/package.json ./package.json
 
 EXPOSE 3030
 

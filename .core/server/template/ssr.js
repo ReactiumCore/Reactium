@@ -7,6 +7,7 @@ module.exports = {
         <html ${helmet.htmlAttributes.toString()}>
             <head>
                 ${req.headTags}
+                ${req.styles}
                 ${helmet.title.toString()}
                 ${helmet.meta.toString()}
                 ${helmet.link.toString()}

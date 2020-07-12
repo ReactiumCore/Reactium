@@ -6,7 +6,7 @@ import { createBrowserHistory, createMemoryHistory } from 'history';
 const lookupRouteComponent = async route => {
     let Found;
     if (typeof route.component === 'string') {
-        const { component } = await Reactium.Hook.run(route.component);
+        const { component } = Reactium.Hook.runSync(route.component);
         if (component) Found = { [route.component]: component };
         if (!Found) Found = getComponents([{ type: route.component }]);
         route.component = op.get(Found, route.component, () => null);
