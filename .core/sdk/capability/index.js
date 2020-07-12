@@ -10,7 +10,7 @@ Enums.cache.capability = 5000;
 const Capability = {};
 
 /**
- * @api {Function} Capability.set(capability, perms) Capability.set()
+ * @api {Function} Capability.set(capability,perms) Capability.set()
  * @apiVersion 3.2.1
  * @apiDescription Set permissions on a capability for allowed and excluded roles.
  * @apiName Capability.set
