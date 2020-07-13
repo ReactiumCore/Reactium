@@ -240,7 +240,7 @@ export default async (req, res, context) => {
      * @apiParam {Object} req express request object
      * @apiParam {Object} AppHeaders Server app header registry object.
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/sdk';
+     import SDK from '@atomic-reactor/reactium-sdk-core';
      SDK.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {
         // given some data was added to req by express middleware
         const seo = req.seo;
@@ -278,7 +278,7 @@ export default async (req, res, context) => {
      * @apiParam (script) {Boolean} [content] script content
      * @apiParam (script) {Number} [order=0] loading order of script
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/sdk';
+     import SDK from '@atomic-reactor/reactium-sdk-core';
      SDK.Hook.register('Server.AppScripts', async (req, AppScripts) => {
          AppScripts.register('my-onsite-script', {
              path: '/assets/js/some-additional.js'
@@ -305,7 +305,7 @@ export default async (req, res, context) => {
      * @apiParam {Object} req express request object
      * @apiParam {Object} AppSnippets Server app snippets registry object.
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/sdk';
+     import SDK from '@atomic-reactor/reactium-sdk-core';
      SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {
         AppSnippets.register('ga-tracking', {
             snippet: `<script>
@@ -341,7 +341,7 @@ ga('send', 'pageview');
      * @apiParam (stylesheet) {String} [type] the type attribute
      * @apiParam (stylesheet) {Function} [when] callback passed the request object, and returns true or false if the css should be included
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/sdk';
+     import SDK from '@atomic-reactor/reactium-sdk-core';
      SDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {
          AppStyleSheets.register('my-stylesheet', {
              path: '/assets/css/some-additional.css'
@@ -366,7 +366,7 @@ ga('send', 'pageview');
      * @apiParam (binding) {String} [component] string name of component to bind directly if possible (must be in a webpack search context in reactium-config)
      * @apiParam (binding) {String} [markup] ordinary markup that React will use to bind the app.
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/sdk';
+     import SDK from '@atomic-reactor/reactium-sdk-core';
      SDK.Hook.registerSync(
          'Server.AppBindings',
          (req, AppBindings) => {
@@ -398,7 +398,7 @@ ga('send', 'pageview');
      * @apiParam (global) {String} name The property name that will be added to window (for browser) or global (for nodejs).
      * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/sdk';
+     import SDK from '@atomic-reactor/reactium-sdk-core';
      // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
      SDK.Hook.registerSync(
          'Server.AppGlobals',
