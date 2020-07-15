@@ -105,6 +105,20 @@ module.exports = spinner => {
                 style({ NAME: plugin }),
                 'utf8',
             );
+
+            message('Writing reactium-boot.js');
+            const bootJs = handlebars(
+                fs.readFileSync(
+                    path.resolve(__dirname, 'template/reactium-boot.hbs'),
+                    'utf8',
+                ),
+            );
+
+            fs.writeFileSync(
+                path.resolve(pluginPath, 'reactium-boot.js'),
+                bootJs({ FILENAME: `/assets/style/${plugin}-plugin.css` }),
+                'utf8',
+            );
         },
     };
 };
