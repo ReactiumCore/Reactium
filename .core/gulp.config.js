@@ -30,7 +30,6 @@ const defaultConfig = {
             'src/**/assets/style/*.less',
             'src/**/assets/style/*.scss',
             'src/**/assets/style/*.sass',
-            '.core/components/Toolkit/style.scss',
             '!src/**/assets/style/_*.less',
             '!src/**/assets/style/_*.scss',
             '!src/**/assets/style/_*.sass',
@@ -134,6 +133,7 @@ const overrides = config => {
     globby
         .sync('./**/gulp.config.override.js')
         .forEach(file => require(path.resolve(file))(config));
+
     return config;
 };
 
