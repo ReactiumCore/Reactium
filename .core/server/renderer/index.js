@@ -200,6 +200,39 @@ export default async (req, res, context) => {
     let template,
         renderMode = isSSR ? 'ssr' : 'feo';
 
+    const Server = {};
+    Server.AppHeaders = SDK.Utils.registryFactory(
+        'AppHeaders',
+        'name',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppScripts = SDK.Utils.registryFactory(
+        'AppScripts',
+        'name',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppSnippets = SDK.Utils.registryFactory(
+        'AppSnippets',
+        'name',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppStyleSheets = SDK.Utils.registryFactory(
+        'AppStyleSheets',
+        'name',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppBindings = SDK.Utils.registryFactory(
+        'AppBindings',
+        'name',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppGlobals = SDK.Utils.registryFactory(
+        'AppGlobals',
+        'name',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+    req.Server = Server;
+
     req.isSSR = isSSR;
     req.renderMode = renderMode;
     req.scripts = '';
@@ -213,14 +246,6 @@ export default async (req, res, context) => {
     const coreTemplate = require(`../template/${renderMode}`);
     req.template = coreTemplate.template;
 
-    // Flush previous connection's registrations
-    SDK.Server.AppHeaders.flush();
-    SDK.Server.AppScripts.flush();
-    SDK.Server.AppSnippets.flush();
-    SDK.Server.AppStyleSheets.flush();
-    SDK.Server.AppBindings.flush();
-    SDK.Server.AppGlobals.flush();
-
     /**
      * @api {Hook} Server.beforeApp Server.beforeApp
      * @apiName Server.beforeApp
@@ -229,8 +254,8 @@ export default async (req, res, context) => {
      * @apiParam {Object} Server SDK Server object.
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.beforeApp', req, SDK.Server);
-    await SDK.Hook.run('Server.beforeApp', req, SDK.Server);
+    SDK.Hook.runSync('Server.beforeApp', req, Server);
+    await SDK.Hook.run('Server.beforeApp', req, Server);
 
     /**
      * @api {Hook} Server.AppHeaders Server.AppHeaders
@@ -259,8 +284,8 @@ export default async (req, res, context) => {
      });
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.AppHeaders', req, SDK.Server.AppHeaders, res);
-    await SDK.Hook.run('Server.AppHeaders', req, SDK.Server.AppHeaders, res);
+    SDK.Hook.runSync('Server.AppHeaders', req, Server.AppHeaders, res);
+    await SDK.Hook.run('Server.AppHeaders', req, Server.AppHeaders, res);
 
     /**
      * @api {Hook} Server.AppScripts Server.AppScripts
@@ -295,8 +320,8 @@ export default async (req, res, context) => {
      });
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.AppScripts', req, SDK.Server.AppScripts, res);
-    await SDK.Hook.run('Server.AppScripts', req, SDK.Server.AppScripts, res);
+    SDK.Hook.runSync('Server.AppScripts', req, Server.AppScripts, res);
+    await SDK.Hook.run('Server.AppScripts', req, Server.AppScripts, res);
 
     /**
      * @api {Hook} Server.AppSnippets Server.AppSnippets
@@ -322,8 +347,8 @@ ga('send', 'pageview');
      });
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.AppSnippets', req, SDK.Server.AppSnippets);
-    await SDK.Hook.run('Server.AppSnippets', req, SDK.Server.AppSnippets);
+    SDK.Hook.runSync('Server.AppSnippets', req, Server.AppSnippets);
+    await SDK.Hook.run('Server.AppSnippets', req, Server.AppSnippets);
 
     /**
      * @api {Hook} Server.AppStyleSheets Server.AppStyleSheets
@@ -354,8 +379,8 @@ ga('send', 'pageview');
      });
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.AppStyleSheets', req, SDK.Server.AppStyleSheets);
-    await SDK.Hook.run('Server.AppStyleSheets', req, SDK.Server.AppStyleSheets);
+    SDK.Hook.runSync('Server.AppStyleSheets', req, Server.AppStyleSheets);
+    await SDK.Hook.run('Server.AppStyleSheets', req, Server.AppStyleSheets);
 
     /**
      * @api {Hook} Server.AppBindings Server.AppBindings
@@ -385,8 +410,8 @@ ga('send', 'pageview');
      );
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.AppBindings', req, SDK.Server.AppBindings);
-    await SDK.Hook.run('Server.AppBindings', req, SDK.Server.AppBindings);
+    SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
+    await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
 
     /**
      * @api {Hook} Server.AppGlobals Server.AppGlobals
@@ -411,8 +436,8 @@ ga('send', 'pageview');
          });
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.AppGlobals', req, SDK.Server.AppGlobals);
-    await SDK.Hook.run('Server.AppGlobals', req, SDK.Server.AppGlobals);
+    SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
+    await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
 
     /**
      * @api {Hook} Server.afterApp Server.afterApp
@@ -422,17 +447,17 @@ ga('send', 'pageview');
      * @apiParam {Object} Server SDK Server object.
      * @apiGroup BootHook
      */
-    SDK.Hook.runSync('Server.afterApp', req, SDK.Server);
-    await SDK.Hook.run('Server.afterApp', req, SDK.Server);
+    SDK.Hook.runSync('Server.afterApp', req, Server);
+    await SDK.Hook.run('Server.afterApp', req, Server);
 
     // Add header tags
-    _.sortBy(Object.values(SDK.Server.AppHeaders.list), 'order').forEach(
+    _.sortBy(Object.values(Server.AppHeaders.list), 'order').forEach(
         ({ header = '' }) => {
             req.headTags += header;
         },
     );
 
-    _.sortBy(Object.values(SDK.Server.AppBindings.list), 'order').forEach(
+    _.sortBy(Object.values(Server.AppBindings.list), 'order').forEach(
         ({ component, markup }) => {
             // Reactium App will lookup these components and bind them
             if (component && typeof component === 'string') {
@@ -444,7 +469,7 @@ ga('send', 'pageview');
     );
 
     // Add scripts and headerScripts
-    _.sortBy(Object.values(SDK.Server.AppScripts.list), 'order').forEach(
+    _.sortBy(Object.values(Server.AppScripts.list), 'order').forEach(
         ({
             path,
             footer = true,
@@ -483,7 +508,7 @@ ga('send', 'pageview');
     );
 
     // Add stylesheets
-    _.sortBy(Object.values(SDK.Server.AppStyleSheets.list), 'order').forEach(
+    _.sortBy(Object.values(Server.AppStyleSheets.list), 'order').forEach(
         ({
             path,
             rel = 'stylesheet',
@@ -549,7 +574,7 @@ ga('send', 'pageview');
     );
 
     // Add application globals
-    _.sortBy(Object.values(SDK.Server.AppGlobals.list), 'order').forEach(
+    _.sortBy(Object.values(Server.AppGlobals.list), 'order').forEach(
         ({ name, value }) => {
             global[name] = value;
             req.appGlobals += `window["${name}"] = ${serialize(value)};\n`;
@@ -557,7 +582,7 @@ ga('send', 'pageview');
     );
 
     // Add entire text script snippets
-    _.sortBy(Object.values(SDK.Server.AppSnippets.list), 'order').forEach(
+    _.sortBy(Object.values(Server.AppSnippets.list), 'order').forEach(
         ({ snippet = '' }) => {
             req.appAfterScripts += `${snippet}\n`;
         },
