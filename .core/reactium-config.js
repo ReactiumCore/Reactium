@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.3.3';
+const version = '3.4.0';
 
 const contextMode = () => {
     if (
@@ -183,11 +184,6 @@ const defaultManifestConfig = {
             filePattern: '.js?$',
             mode: contextMode(),
         },
-        toolkit: {
-            modulePath: 'toolkit',
-            filePattern: '.js?$',
-            mode: contextMode(),
-        },
         core: {
             modulePath: 'reactium-core/components',
             filePattern: '.js?$',
@@ -223,22 +219,19 @@ const defaultManifestConfig = {
         ],
         searchParams: {
             extensions: /\.(js|json)$/,
-            exclude: [
-                /.ds_store/i,
-                /.core/i,
-                /.cli\//i,
-                /src\/assets/,
-                /src\/app\/toolkit/,
-            ],
+            exclude: [/.ds_store/i, /.core/i, /.cli\//i, /src\/assets/],
         },
     },
 };
 
-let manifestConfigOverride = _ => _;
-if (fs.existsSync(`${rootPath}/manifest.config.override.js`)) {
-    manifestConfigOverride = require(`${rootPath}/manifest.config.override.js`);
-}
-const manifestConfig = manifestConfigOverride(defaultManifestConfig);
+const overrides = config => {
+    globby
+        .sync('./**/manifest.config.override.js')
+        .forEach(file => require(path.resolve(file))(config));
+    return config;
+};
+
+const manifestConfig = overrides(defaultManifestConfig);
 
 /**
  * Use liberally for additional core configuration.

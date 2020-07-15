@@ -1640,8 +1640,8 @@
   },
   {
     "type": "Function",
-    "url": "Capability.set(capability,",
-    "title": "perms) Capability.set()",
+    "url": "Capability.set(capability,perms)",
+    "title": "Capability.set()",
     "version": "3.2.1",
     "description": "<p>Set permissions on a capability for allowed and excluded roles.</p>",
     "name": "Capability.set",

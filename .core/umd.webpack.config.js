@@ -1,9 +1,17 @@
 const fs = require('fs');
 const path = require('path');
-const env = process.env.NODE_ENV || 'development';
-const rootPath = path.resolve(__dirname, '..');
-const CompressionPlugin = require('compression-webpack-plugin');
+const globby = require('globby');
 const op = require('object-path');
+const rootPath = path.resolve(__dirname, '..');
+const env = process.env.NODE_ENV || 'development';
+const CompressionPlugin = require('compression-webpack-plugin');
+
+const overrides = (umd, config) => {
+    globby
+        .sync('./**/umd.webpack.override.js')
+        .forEach(file => require(path.resolve(file))(umd, config));
+    return config;
+};
 
 module.exports = umd => {
     const plugins = [];
@@ -65,10 +73,5 @@ module.exports = umd => {
         config.devtool = 'inline-source-map';
     }
 
-    let override = (umd, config) => config;
-    if (fs.existsSync(`${rootPath}/umd.webpack.override.js`)) {
-        override = require(`${rootPath}/umd.webpack.override.js`);
-    }
-
-    return override(umd, config);
+    return overrides(umd, config);
 };

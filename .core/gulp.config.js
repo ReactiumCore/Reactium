@@ -45,7 +45,6 @@ const defaultConfig = {
             '!{src/**/assets/style/*.less}',
             '!{src/**/assets/style/*.scss}',
             '!{src/**/assets/style/*.sass}',
-            '!{.core/components/Toolkit/style.scss}',
         ],
         assets: [
             'src/**/assets/**/*',
@@ -131,9 +130,11 @@ const defaultConfig = {
     },
 };
 
-let gulpConfigOverride = _ => _;
-if (fs.existsSync(`${rootPath}/gulp.config.override.js`)) {
-    gulpConfigOverride = require(`${rootPath}/gulp.config.override.js`);
-}
+const overrides = config => {
+    globby
+        .sync('./**/gulp.config.override.js')
+        .forEach(file => require(path.resolve(file))(config));
+    return config;
+};
 
-module.exports = gulpConfigOverride(defaultConfig);
+module.exports = overrides(defaultConfig);
