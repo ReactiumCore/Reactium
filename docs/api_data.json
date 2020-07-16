@@ -1658,6 +1658,37 @@
   },
   {
     "type": "Function",
+    "url": "Component.get(hook,defaultComponent)",
+    "title": "Component.get()",
+    "group": "Reactium.Component",
+    "name": "Component.get",
+    "description": "<p>Call the hook and obtain the registered component. Get the defaultComponent if no hook component was registered.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "hook",
+            "description": "<p>The hook name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": true,
+            "field": "defaultComponent",
+            "description": "<p>the default component if no component is provided</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/component/index.js",
+    "groupTitle": "Reactium.Component"
+  },
+  {
+    "type": "Function",
     "url": "Component.register(hook,component,order,capabilities,strict)",
     "title": "Component.register()",
     "group": "Reactium.Component",
@@ -3007,7 +3038,28 @@
     "url": "Routing.unregister(id)",
     "title": "Routing.unregister()",
     "name": "Routing.unregister",
-    "description": "<p>Unregister an existing route, by id. Note: You can not unregister the 'NotFound' component. You can only replace it using the <code>404-component</code> hook.</p>",
+    "description": "<p>Unregister an existing route, by id. Note: You can not unregister the 'NotFound' component. You can only replace it using the registering a NotFound component with Reactium.Component.register().</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the route id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "update",
+            "defaultValue": "true",
+            "description": "<p>update subscribers</p>"
+          }
+        ]
+      }
+    },
     "group": "Reactium.Routing",
     "version": "0.0.0",
     "filename": ".core/sdk/routing/index.js",
@@ -4900,6 +4952,12 @@
           {
             "group": "Parameter",
             "optional": false,
+            "field": "listById",
+            "description": "<p>{Getter} get Object keyed by id of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
             "field": "list",
             "description": "<p>{Getter} get list of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
           },
@@ -4936,6 +4994,12 @@
           {
             "group": "Parameter",
             "optional": false,
+            "field": "get",
+            "description": "<p>{Method} pass the identifier of an object get that object from the registry</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
             "field": "isProtected",
             "description": "<p>{Method} pass the identifier of an object to see if it has been protected</p>"
           },
@@ -4944,6 +5008,12 @@
             "optional": false,
             "field": "isRegistered",
             "description": "<p>{Method} pass the identifier of an object to see if it has been registered</p>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "isUnRegistered",
+            "description": "<p>{Method} pass the identifier of an object to see is NOT registered.</p>"
           },
           {
             "group": "Parameter",
