@@ -23,11 +23,11 @@ export const App = async () => {
     await Reactium.Hook.run('init');
     await Reactium.Hook.run('dependencies-load');
     await Reactium.Zone.init();
-    await Reactium.Routing.load();
     const { store } = await Reactium.Hook.run('store-create', {
         server: false,
     });
     await Reactium.Hook.run('plugin-dependencies');
+    await Reactium.Routing.load();
 
     if (typeof window !== 'undefined') {
         const { bindPoints } = await Reactium.Hook.run('component-bindings');

@@ -8,20 +8,19 @@ const { Hook } = SDK;
 class Routing {
     loaded = false;
     updated = null;
-    routes = [];
+    routes = new SDK.Utils.Registry(
+        'Routing',
+        'id',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
     NotFound = () => null;
     subscriptions = {};
 
     load = async () => {
         if (this.loaded) return;
-        const { routes = [] } = await Hook.run('routes-init');
-        const { NotFound } = await Hook.run('404-component');
+        await Hook.run('routes-init', this.routes);
+        const NotFound = await SDK.Component.get('NotFound');
         this.loaded = true;
-        this.routes = routes.map(route => {
-            route.id = uuid();
-            return route;
-        });
-
         this.NotFound = NotFound;
         this._update();
         console.log('Initializing routes.');
@@ -103,11 +102,13 @@ Reactium.Plugin.register('myPlugin').then(() => {
     Reactium.Reducer.register('myPlugin', myReducer);
 })
      */
-    async register(route = {}) {
-        route.id = uuid();
+    async register(route = {}, update = true) {
+        if (!route.id) route.id = uuid();
+        if (!route.order) route.order = 0;
+
         await Hook.run('register-route', route);
-        this.routes.push(route);
-        this._update();
+        this.routes.register(route.id, route);
+        if (update) this._update();
         return route.id;
     }
 
@@ -116,12 +117,14 @@ Reactium.Plugin.register('myPlugin').then(() => {
      * @apiName Routing.unregister
      * @apiDescription Unregister an existing route, by id.
      Note: You can not unregister the 'NotFound' component. You can only replace it
-     using the `404-component` hook.
+     using the registering a NotFound component with Reactium.Component.register().
+     * @apiParam {String} id the route id
+     * @apiParam {Boolean} [update=true] update subscribers
      * @apiGroup Reactium.Routing
      */
-    unregister(id) {
-        this.routes = this.routes.filter(route => id !== route.id);
-        this._update();
+    unregister(id, update = true) {
+        this.routes = this.routes.unregister(id);
+        if (update) this._update();
     }
 
     _update() {
@@ -138,7 +141,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
      * @apiGroup Reactium.Routing
      */
     get() {
-        return _.sortBy(this.routes, 'order').concat([
+        return this.routes.list.concat([
             { id: 'NotFound', component: this.NotFound, order: 1000 },
         ]);
     }
