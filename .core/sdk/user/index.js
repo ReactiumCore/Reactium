@@ -159,6 +159,7 @@ User.hasValidSession = async () => {
             // destroy current user on invalid session
             if (op.get(error, 'code') === 209) {
                 API.Actinium.CoreManager.getUserController().removeUserFromDisk();
+                window.location.reload();
             }
 
             Promise.resolve(false);
