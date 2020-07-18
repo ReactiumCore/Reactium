@@ -18,7 +18,7 @@ Enums.cache.sessionValidate = 5000;
  *
  */
 User.auth = (username, password) =>
-    Actinium.User.logIn(username, password)
+    API.Actinium.User.logIn(username, password)
         .then(u => u.fetch())
         .then(u => u.toJSON())
         .then(async u => {
@@ -135,7 +135,7 @@ User.isCurrent = user => {
  * @apiGroup Reactium.User
  */
 User.getSessionToken = () => {
-    const u = Actinium.User.current();
+    const u = API.Actinium.User.current();
     return u ? u.getSessionToken() : false;
 };
 

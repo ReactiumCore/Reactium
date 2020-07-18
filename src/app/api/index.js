@@ -5,7 +5,7 @@ console.log(
     'You imported from appdir/api, which is deprecated. Use the Reactium singleton instead.',
     `import Reactium from 'reactium-core/sdk';
 
-const api = Reactium.API.get('MyAPI').api;
+const api = Reactium.API.MyAPI;
 `,
 );
 
