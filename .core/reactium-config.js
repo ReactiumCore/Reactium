@@ -4,7 +4,7 @@ const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.4.1';
+const version = '3.4.2';
 
 const contextMode = () => {
     if (
@@ -157,7 +157,7 @@ const defaultManifestConfig = {
     sourceMappings: [
         {
             from: 'src/app/',
-            to: '',
+            to: '../src/app/',
         },
         {
             from: '.core/',
@@ -378,6 +378,24 @@ module.exports = {
                     version: '>=3.2.2',
                     destination: '/.huskyrc',
                     source: '/tmp/update/.huskyrc',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.4.2',
+                    destination: '/src/app/api/reactium-hooks.js',
+                    source: '/tmp/update/src/app/api/reactium-hooks.js',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.4.2',
+                    destination: '/src/app/api/index.js',
+                    source: '/tmp/update/src/app/api/index.js',
+                },
+                {
+                    overwrite: false,
+                    version: '>=3.4.2',
+                    destination: '/src/app/api/domain.js',
+                    source: '/tmp/update/src/app/api/domain.js',
                 },
             ],
             remove: [],

@@ -1,5 +1,6 @@
-import Actinium from 'appdir/api';
+import API from '../api';
 import SDK from '@atomic-reactor/reactium-sdk-core';
+import op from 'object-path';
 import _ from 'underscore';
 import moment from 'moment';
 
@@ -26,7 +27,7 @@ Setting.load = async (autoRefresh = true) => {
     if (autoRefresh) cacheLoadedArgs.push(Setting.load);
     Cache.set('settings.loaded', ...cacheLoadedArgs);
 
-    const settings = await Actinium.Cloud.run('settings');
+    const settings = await API.Actinium.Cloud.run('settings');
     Object.entries(settings).forEach(([group = '', value]) => {
         Cache.set(['setting', group], value, Enums.cache.settings);
     });
@@ -52,7 +53,7 @@ Setting.set = async (key = '', value, setPublic = false) => {
     // refresh entire setting group if needed
     Setting.get(group);
 
-    const setting = await Actinium.Cloud.run('setting-set', {
+    const setting = await API.Actinium.Cloud.run('setting-set', {
         key,
         value,
         public: setPublic,
@@ -71,7 +72,7 @@ Setting.set = async (key = '', value, setPublic = false) => {
 Reactium.Setting.unset('site.title');
  */
 Setting.unset = async (key = '') => {
-    const setting = await Actinium.Cloud.run('setting-unset', { key });
+    const setting = await API.Actinium.Cloud.run('setting-unset', { key });
     Cache.del(['setting'].concat(key.split('.')));
 };
 
@@ -93,7 +94,7 @@ Setting.get = async (key = '', defaultValue, refresh = false) => {
     if (cached && !refresh) return cached;
 
     // refresh the whole setting group
-    const value = await Actinium.Cloud.run('setting-get', { key: group });
+    const value = await API.Actinium.Cloud.run('setting-get', { key: group });
     Cache.set(['setting', group], value, Enums.cache.settings);
 
     return Cache.get(['setting'].concat(settingPath), defaultValue);

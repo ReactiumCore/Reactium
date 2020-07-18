@@ -1,49 +1,12 @@
-import apiConfig from './config';
+import Reactium from 'reactium-core/sdk';
+import op from 'object-path';
 
-let Actinium = null;
+console.log(
+    'You imported from appdir/api, which is deprecated. Use the Reactium singleton instead.',
+    `import Reactium from 'reactium-core/sdk';
 
-/**
- * Isomorphic Actinium SDK
- *
- * @see https://reactium.io/docs/guide/using-apis
- */
-if (typeof window !== 'undefined') {
-    // [browser]: client side version of parse
-    Actinium = require('parse');
-} else {
-    // [server]: node SDK for parse
-    Actinium = require('parse/node');
-}
+const api = Reactium.API.get('MyAPI').api;
+`,
+);
 
-if (Actinium) {
-    if (apiConfig.actiniumAppId) {
-        Actinium.initialize(apiConfig.actiniumAppId);
-    } else {
-        if (apiConfig.parseAppId) {
-            Actinium.initialize(apiConfig.parseAppId);
-        }
-    }
-
-    Actinium.serverURL = apiConfig.restAPI;
-
-    // Configure LiveQuery
-    if (typeof window !== 'undefined') {
-        const { host } = location;
-
-        // proxied through express
-        Actinium.liveQueryServerURL = `ws://${host}${restAPI}`;
-
-        // direct connection (not proxied through express)
-        if (/^http/.test(apiConfig.restAPI)) {
-            const API = new URL(apiConfig.restAPI);
-            API.protocol = 'ws:';
-            Actinium.liveQueryServerURL = API.toString();
-        }
-
-        Actinium.LiveQuery.on('open', () => {
-            console.log('Actinium LiveQuery connection established');
-        });
-    }
-}
-
-export default Actinium;
+export default Reactium.API.Actinium;

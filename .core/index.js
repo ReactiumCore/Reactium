@@ -10,7 +10,6 @@ import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import proxy from 'http-proxy-middleware';
 import morgan from 'morgan';
-import apiConfig from 'appdir/api/config';
 import path from 'path';
 import fs from 'fs';
 import op from 'object-path';
@@ -24,10 +23,12 @@ const { Enums } = SDK;
 
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
+global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
+
+const apiConfig = SDK.API.ActiniumConfig;
 global.parseAppId = apiConfig.parseAppId;
 global.actiniumAppId = apiConfig.actiniumAppId;
 global.restAPI = apiConfig.restAPI;
-global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
 
 // SSR Defines
 if (!'defines' in global) {
@@ -100,19 +101,21 @@ const bootup = async () => {
         order: Enums.priority.highest,
     });
 
-    SDK.Server.Middleware.register('api', {
-        name: 'api',
-        use: proxy('/api', {
-            target: restAPI,
-            changeOrigin: true,
-            pathRewrite: {
-                '^/api': '',
-            },
-            logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
-            ws: true,
-        }),
-        order: Enums.priority.highest,
-    });
+    if (restAPI) {
+        SDK.Server.Middleware.register('api', {
+            name: 'api',
+            use: proxy('/api', {
+                target: restAPI,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '',
+                },
+                logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
+                ws: true,
+            }),
+            order: Enums.priority.highest,
+        });
+    }
 
     // parsers
     SDK.Server.Middleware.register('jsonParser', {
