@@ -397,6 +397,12 @@ module.exports = {
                     destination: '/src/app/api/domain.js',
                     source: '/tmp/update/src/app/api/domain.js',
                 },
+                {
+                    overwrite: false,
+                    version: '>=3.4.2',
+                    destination: '/.npmrc',
+                    source: '/tmp/update/.npmrc',
+                },
             ],
             remove: [],
         },
