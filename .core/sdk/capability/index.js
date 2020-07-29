@@ -10,24 +10,57 @@ Enums.cache.capability = 5000;
 const Capability = {};
 
 /**
- * @api {Function} Capability.set(capability,perms) Capability.set()
+ * @api {Function} Capability.grant(capability,role) Capability.grant()
  * @apiVersion 3.2.1
- * @apiDescription Set permissions on a capability for allowed and excluded roles.
- * @apiName Capability.set
+ * @apiDescription Add role(s) to the capability allowed list.
+ * @apiName Capability.grant
  * @apiGroup Reactium.Capability
  * @apiExample Usage
- import Reactium from 'reactium-core/sdk';
-
- Capability.set('do-something', {
-     allowed: ['contributor'],
-     excluded: ['user']
- })
+Capability.grant('taxonomy.update', 'moderator');
+Capability.grant('taxonomy.update', ['moderator']);
  */
-Capability.set = (capability, perms) =>
-    API.Actinium.Cloud.run('capability-edit', {
-        capability,
-        perms,
-    });
+
+Capability.grant = (capability, role) =>
+    API.Actinium.Cloud.run('capability-grant', { capability, role });
+
+/**
+ * @api {Function} Capability.revoke(capability,role) Capability.revoke()
+ * @apiVersion 3.2.1
+ * @apiDescription Remove role(s) from the capability allowed list.
+ * @apiName Capability.revoke
+ * @apiGroup Reactium.Capability
+ * @apiExample Usage
+Capability.revoke('taxonomy.update', 'moderator');
+Capability.revoke('taxonomy.update', ['moderator']);
+ */
+Capability.revoke = (capability, role) =>
+    API.Actinium.Cloud.run('capability-revoke', { capability, role });
+
+/**
+ * @api {Function} Capability.restrict(capability,role) Capability.restrict()
+ * @apiVersion 3.2.1
+ * @apiDescription Add role(s) to the capability excluded list.
+ * @apiName Capability.restrict
+ * @apiGroup Reactium.Capability
+ * @apiExample Usage
+Capability.restrict('taxonomy.update', 'moderator');
+Capability.restrict('taxonomy.update', ['moderator']);
+ */
+Capability.restrict = (capability, role) =>
+    API.Actinium.Cloud.run('capability-restrict', { capability, role });
+
+/**
+ * @api {Function} Capability.unrestrict(capability,role) Capability.unrestrict()
+ * @apiVersion 3.2.1
+ * @apiDescription Remove role(s) from the capability excluded list.
+ * @apiName Capability.unrestrict
+ * @apiGroup Reactium.Capability
+ * @apiExample Usage
+Capability.unrestrict('taxonomy.update', 'moderator');
+Capability.unrestrict('taxonomy.update', ['moderator']);
+ */
+Capability.unrestrict = (capability, role) =>
+    API.Actinium.Cloud.run('capability-unrestrict', { capability, role });
 
 /**
  * @api {Function} Capability.get(capability) Capability.get()
