@@ -128,6 +128,11 @@ SDK.Hook.registerSync(
                 '<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
             order: SDK.Enums.priority.highest,
         });
+        AppHeaders.register('favicon', {
+            header:
+                '<link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
+            order: SDK.Enums.priority.highest,
+        });
         AppHeaders.register('viewport', {
             header:
                 '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
