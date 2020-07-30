@@ -57,6 +57,9 @@ User.logOut = async () => {
 
     await Hook.run('user.before.logout', u);
 
+    Cache.del('capabilities_list');
+    Cache.del(`capabilities_${user.objectId}`);
+
     try {
         return API.Actinium.User.logOut().then(async () => {
             await Hook.run('user.after.logout', u);
@@ -149,9 +152,7 @@ User.hasValidSession = async () => {
     const current = User.current(true);
     if (!current || !current.authenticated()) return false;
     let request = Cache.get('session-validate');
-    if (request) {
-        return request;
-    }
+    if (request) return request;
 
     request = API.Actinium.Cloud.run('session-validate')
         .then(() => Promise.resolve(true))

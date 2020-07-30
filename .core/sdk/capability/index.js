@@ -5,9 +5,9 @@ import API from '../api';
 import User from '../user';
 
 const { Hook, Enums, Cache } = SDK;
-Enums.cache.capability = 5000;
+Enums.cache.capability = 60000;
 
-const Capability = {};
+const Capability = { User: {}, request: {} };
 
 /**
  * @api {Function} Capability.grant(capability,role) Capability.grant()
@@ -74,22 +74,39 @@ Capability.unrestrict = (capability, role) =>
      if (allowed.includes('contributor')) console.log('Contributor allowed to do something');
  })
  */
-Capability.get = capability => {
-    const caps = _.chain([capability])
+Capability.get = async (capability, refresh = false) => {
+    const cacheKey = 'capabilities_list';
+    let caps = Cache.get(cacheKey);
+
+    capability = _.chain([capability])
         .flatten()
         .uniq()
         .value()
+        .map(c => String(c).toLowerCase())
         .sort();
-    const cacheKey = `capRequest-${capability.join('-').replace(/\./g, '_')}`;
-    let capRequest = Cache.get(cacheKey);
 
-    if (capRequest) return capRequest;
-    capRequest = API.Actinium.Cloud.run('capability-get', {
-        capability,
-    });
+    if (!caps || refresh === true) {
+        let req = op.get(Capability.request, 'list');
 
-    Cache.set(cacheKey, capRequest, Enums.cache.capability);
-    return capRequest;
+        if (!req) {
+            req = API.Actinium.Cloud.run('capability-get').then(caps => {
+                caps = Object.values(caps);
+                Cache.set(cacheKey, caps, Enums.cache.capability);
+                op.del(Capability.request, 'list');
+                return capability.length > 0
+                    ? caps.filter(({ group }) => capability.includes(group))
+                    : caps;
+            });
+
+            op.set(Capability.request, 'list', req);
+        }
+
+        return req;
+    }
+
+    return capability.length > 0
+        ? caps.filter(({ group }) => capability.includes(group))
+        : caps;
 };
 
 /**
@@ -103,34 +120,49 @@ Capability.get = capability => {
  * @apiName Capability.check
  * @apiGroup Reactium.Capability
  */
-Capability.check = async (capabilities = [], strict = true) => {
-    capabilities = _.compact(_.flatten([capabilities]));
+Capability.check = async (check, strict = true) => {
+    const user = User.current(true);
+    if (!user) return false;
 
-    // null request
-    if (capabilities.length < 1) {
-        return true;
+    check = _.flatten([check]);
+
+    const caps = await Capability.User.get(user.id);
+
+    const match = _.intersection(caps, check);
+
+    return strict === true ? match.length === check.length : match.length > 0;
+};
+
+Capability.User.get = async (user, refresh = false) => {
+    const cacheKey = `capabilities_${user}`;
+    let caps = Cache.get(cacheKey);
+
+    if (!caps || refresh === true) {
+        let req = op.get(Capability.request, user);
+
+        if (!req) {
+            req = API.Actinium.Cloud.run('capability-get-user', { user }).then(
+                caps => {
+                    Cache.set(cacheKey, caps, Enums.cache.capability);
+                    op.del(Capability.request, user);
+                    return caps;
+                },
+            );
+
+            op.set(Capability.request, user, req);
+        }
+
+        return req;
     }
 
+    return caps;
+};
+
+Capability.User.refresh = user => Capability.User.get(user, true);
+
+Capability.watch = async () => {
     const valid = await User.hasValidSession();
-    if (!valid) return false;
-
-    // Prevent Rapid Duplicate Cap Checks from reaching server
-    const capCheckSignature = capabilities
-        .sort()
-        .concat([strict ? 'strict' : 'loose'])
-        .join('-')
-        .replace(/\./g, '_');
-
-    let checking = Cache.get(capCheckSignature);
-    if (checking) return checking;
-
-    checking = API.Actinium.Cloud.run('capability-check', {
-        capabilities,
-        strict,
-    });
-    Cache.set(capCheckSignature, checking, Enums.cache.capability);
-
-    return checking;
+    if (!valid) return;
 };
 
 export default Capability;
