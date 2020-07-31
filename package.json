@@ -42,7 +42,7 @@
     "parse/node": false
   },
   "dependencies": {
-    "@atomic-reactor/reactium-sdk-core": "0.0.78",
+    "@atomic-reactor/reactium-sdk-core": "0.0.79",
     "@babel/cli": "^7.10.4",
     "@babel/node": "^7.10.4",
     "@loadable/component": "^5.13.1",
