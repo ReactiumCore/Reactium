@@ -57,9 +57,6 @@ User.logOut = async () => {
 
     await Hook.run('user.before.logout', u);
 
-    Cache.del('capabilities_list');
-    Cache.del(`capabilities_${user.objectId}`);
-
     try {
         return API.Actinium.User.logOut().then(async () => {
             await Hook.run('user.after.logout', u);
