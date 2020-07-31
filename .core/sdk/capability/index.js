@@ -75,6 +75,9 @@ Capability.unrestrict = (capability, role) =>
  })
  */
 Capability.get = async (capability, refresh = false) => {
+    const isValidUser = await User.hasValidSession();
+    if (!isValidUser) return [];
+
     const cacheKey = 'capabilities_list';
     let caps = Cache.get(cacheKey);
 
@@ -120,17 +123,59 @@ Capability.get = async (capability, refresh = false) => {
  * @apiName Capability.check
  * @apiGroup Reactium.Capability
  */
-Capability.check = async (check, strict = true) => {
-    const user = User.current(true);
-    if (!user) return false;
+Capability.check = async (checks, strict = true) => {
+    const isValidUser = await User.hasValidSession();
+    if (!isValidUser) return false;
 
-    check = _.flatten([check]);
+    checks = _.chain([checks])
+        .flatten()
+        .uniq()
+        .value()
+        .map(cap => String(cap).toLowerCase());
 
-    const caps = await Capability.User.get(user.id);
+    const u = User.current(true);
+    const caps = await Capability.User.get(u.id);
 
-    const match = _.intersection(caps, check);
+    const match = _.intersection(caps, checks);
 
-    return strict === true ? match.length === check.length : match.length > 0;
+    return strict === true ? match.length === checks.length : match.length > 0;
+};
+
+/**
+ * @api {Function} Capability.check(capabilities,strict) Capability.check
+ * @apiVersion 3.2.1
+ * @apiDescription Check a list of capabilities on the current user and return the results as an object with the capabilities as keys and Boolean value.
+ * @apiParam {Array} capabilities list of string capabilities to check, returns true if current user is allowed, false if not allowed
+ * @apiName Capability.check
+ * @apiGroup Reactium.Capability
+ */
+Capability.checkAll = async checks => {
+    checks = _.chain([checks])
+        .flatten()
+        .uniq()
+        .value()
+        .map(cap => String(cap).toLowerCase());
+
+    const isValidUser = await User.hasValidSession();
+
+    let results = {};
+
+    if (!isValidUser) {
+        results = checks.reduce((obj, cap) => {
+            obj[cap] = false;
+            return obj;
+        }, {});
+    } else {
+        const u = User.current(true);
+        const caps = await Capability.User.get(u.id);
+
+        results = checks.reduce((obj, cap) => {
+            obj[cap] = caps.includes(cap);
+            return obj;
+        }, {});
+    }
+
+    return results;
 };
 
 Capability.User.get = async (user, refresh = false) => {
