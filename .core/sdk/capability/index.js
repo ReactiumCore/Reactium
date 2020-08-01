@@ -4,10 +4,114 @@ import op from 'object-path';
 import API from '../api';
 import User from '../user';
 
-const { Hook, Enums, Cache } = SDK;
+const { Hook, Enums, Cache, Utils } = SDK;
 Enums.cache.capability = 60000;
 
-const Capability = { User: {}, request: {} };
+const Registry = Utils.registryFactory(
+    'capability',
+    'group',
+    Utils.Registry.MODES.CLEAN,
+);
+
+const Capability = {
+    autosync: true,
+    User: {},
+    request: {},
+};
+
+const update = async (capability, role, action) => {
+    action = `capability-${action}`;
+    const result = await API.Actinium.Cloud.run(action, { capability, role });
+
+    // Invalidate capability cache
+    Capability.clearCache();
+
+    return result;
+};
+
+Capability.register = (id, capability) => {
+    Registry.register(id, capability);
+    if (Capability.autosync === true) {
+        Cache.set('cap_register', Date.now(), 10000, Capability.propagate);
+    }
+};
+
+Capability.propagate = async (force = false) => {
+    let req = op.get(Capability.request, 'propagate');
+
+    if (req && force !== true) return req;
+
+    if (req && force === true) {
+        req.cancelled = true;
+        op.del(Capability.request, 'propagate');
+    }
+
+    // Res down what you're allowed to register from the front-end to just the group name.
+    const capabilities = _.pluck(Registry.list, 'group');
+
+    // Flush the registry.
+    Registry.flush();
+
+    req =
+        capabilities.length > 0
+            ? API.Actinium.Cloud.run('capability-create-all', { capabilities })
+            : Promise.resolve();
+
+    req.retry = 0;
+    req.cancelled = false;
+    req.propagate = capabilities.length > 0;
+
+    op.set(Capability.request, 'propagate', req);
+
+    return req
+        .then(async results => {
+            if (req.cancelled === true) return;
+
+            // Clear request
+            op.del(Capability.request, 'propagate');
+
+            // Setup next propagation run.
+            if (Capability.autosync === true) {
+                Cache.set(
+                    'cap_register',
+                    Date.now(),
+                    10000,
+                    Capability.propagate,
+                );
+            }
+
+            if (req.propagate === true) {
+                const cacheKey = 'capability_list';
+                Cache.set(
+                    cacheKey,
+                    Object.values(results),
+                    Enums.cache.capability,
+                );
+            }
+
+            Hook.run('capability-propagated', req);
+
+            return results;
+        })
+        .catch(err => {
+            let { propagate, retry = 0 } = req;
+            if (
+                Capability.autosync === true &&
+                propagate === true &&
+                retry < 5
+            ) {
+                retry += 1;
+                req = API.Actinium.Cloud.run('capability-create-all', {
+                    capabilities,
+                });
+                req.retry = retry;
+                req.propagate = true;
+                op.set(Capability.request, 'propagate', req);
+            }
+
+            return err;
+        });
+};
 
 /**
  * @api {Function} Capability.grant(capability,role) Capability.grant()
@@ -19,9 +123,7 @@ const Capability = { User: {}, request: {} };
 Capability.grant('taxonomy.update', 'moderator');
 Capability.grant('taxonomy.update', ['moderator']);
  */
-
-Capability.grant = (capability, role) =>
-    API.Actinium.Cloud.run('capability-grant', { capability, role });
+Capability.grant = (capability, role) => update(capability, role, 'grant');
 
 /**
  * @api {Function} Capability.revoke(capability,role) Capability.revoke()
@@ -33,8 +135,7 @@ Capability.grant = (capability, role) =>
 Capability.revoke('taxonomy.update', 'moderator');
 Capability.revoke('taxonomy.update', ['moderator']);
  */
-Capability.revoke = (capability, role) =>
-    API.Actinium.Cloud.run('capability-revoke', { capability, role });
+Capability.revoke = (capability, role) => update(capability, role, 'revoke');
 
 /**
  * @api {Function} Capability.restrict(capability,role) Capability.restrict()
@@ -47,7 +148,7 @@ Capability.restrict('taxonomy.update', 'moderator');
 Capability.restrict('taxonomy.update', ['moderator']);
  */
 Capability.restrict = (capability, role) =>
-    API.Actinium.Cloud.run('capability-restrict', { capability, role });
+    update(capability, role, 'restrict');
 
 /**
  * @api {Function} Capability.unrestrict(capability,role) Capability.unrestrict()
@@ -60,7 +161,7 @@ Capability.unrestrict('taxonomy.update', 'moderator');
 Capability.unrestrict('taxonomy.update', ['moderator']);
  */
 Capability.unrestrict = (capability, role) =>
-    API.Actinium.Cloud.run('capability-unrestrict', { capability, role });
+    update(capability, role, 'unrestrict');
 
 /**
  * @api {Function} Capability.get(capability) Capability.get()
@@ -83,6 +184,7 @@ Capability.get = async (capability, refresh = false) => {
 
     capability = _.chain([capability])
         .flatten()
+        .compact()
         .uniq()
         .value()
         .map(c => String(c).toLowerCase())
@@ -123,9 +225,15 @@ Capability.get = async (capability, refresh = false) => {
  * @apiName Capability.check
  * @apiGroup Reactium.Capability
  */
-Capability.check = async (checks, strict = true) => {
+Capability.check = async (checks, strict = true, userID) => {
     const isValidUser = await User.hasValidSession();
     if (!isValidUser) return false;
+
+    const u = User.current(true);
+    userID = userID || u.id;
+
+    const isSuperAdmin = await User.isRole('super-admin', userID);
+    if (isSuperAdmin === true) return true;
 
     checks = _.chain([checks])
         .flatten()
@@ -133,8 +241,7 @@ Capability.check = async (checks, strict = true) => {
         .value()
         .map(cap => String(cap).toLowerCase());
 
-    const u = User.current(true);
-    const caps = await Capability.User.get(u.id);
+    const caps = await Capability.User.get(userID);
 
     const match = _.intersection(caps, checks);
 
@@ -144,17 +251,23 @@ Capability.check = async (checks, strict = true) => {
 /**
  * @api {Function} Capability.check(capabilities,strict) Capability.check
  * @apiVersion 3.2.1
- * @apiDescription Check a list of capabilities on the current user and return the results as an object with the capabilities as keys and Boolean value.
- * @apiParam {Array} capabilities list of string capabilities to check, returns true if current user is allowed, false if not allowed
+ * @apiDescription Retrieve an enumerated list of capabilities for the specified user.
+ * @apiParam {Array} capabilities list of string capabilities to check, returns true if current user is allowed, false if not allowed.
+ * @apiParam {String} [userID] The Actinium.User id value. If empty the current user is used.
  * @apiName Capability.check
  * @apiGroup Reactium.Capability
  */
-Capability.checkAll = async checks => {
-    checks = _.chain([checks])
-        .flatten()
-        .uniq()
-        .value()
-        .map(cap => String(cap).toLowerCase());
+Capability.checkAll = async (checks, userID) => {
+    if (checks) {
+        checks = _.chain([checks])
+            .flatten()
+            .uniq()
+            .value()
+            .map(cap => String(cap).toLowerCase());
+    } else {
+        checks = await Capability.get();
+        checks = _.pluck(checks, 'group');
+    }
 
     const isValidUser = await User.hasValidSession();
 
@@ -167,12 +280,22 @@ Capability.checkAll = async checks => {
         }, {});
     } else {
         const u = User.current(true);
-        const caps = await Capability.User.get(u.id);
+        userID = userID || u.id;
 
-        results = checks.reduce((obj, cap) => {
-            obj[cap] = caps.includes(cap);
-            return obj;
-        }, {});
+        const isSuperAdmin = await User.isRole('super-admin', userID);
+
+        if (isSuperAdmin) {
+            results = checks.reduce((obj, cap) => {
+                obj[cap] = true;
+                return obj;
+            }, {});
+        } else {
+            const caps = await Capability.User.get(userID);
+            results = checks.reduce((obj, cap) => {
+                obj[cap] = caps.includes(cap);
+                return obj;
+            }, {});
+        }
     }
 
     return results;
@@ -205,9 +328,11 @@ Capability.User.get = async (user, refresh = false) => {
 
 Capability.User.refresh = user => Capability.User.get(user, true);
 
-Capability.watch = async () => {
-    const valid = await User.hasValidSession();
-    if (!valid) return;
-};
+Capability.clearCache = () =>
+    Cache.keys().forEach(key => {
+        if (String(key).startsWith('capability_')) {
+            Cache.del(key);
+        }
+    });
 
 export default Capability;

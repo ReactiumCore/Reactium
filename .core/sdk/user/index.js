@@ -2,6 +2,7 @@ import SDK from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
 import API from '../api';
+import uuid from 'uuid/v4';
 
 const { Hook, Enums, Cache, Utils } = SDK;
 const User = { Meta: {}, Pref: {}, Role: {}, selected: null };
@@ -331,10 +332,22 @@ Arguments: user:Object, params:Object
 ```
  */
 User.retrieve = async params => {
+    const cacheKey = `user_retrieve_${uuid(Object.values(params).join(''))}`;
+
+    let req = Cache.get(cacheKey);
+    if (req) return req;
+
     await Hook.run('before-user-retrieve', params);
-    const response = await API.Actinium.Cloud.run('user-retrieve', params);
-    await Hook.run('user-retrieve', response, params);
-    return response;
+
+    req = new Promise(async resolve => {
+        const response = await API.Actinium.Cloud.run('user-retrieve', params);
+        await Hook.run('user-retrieve', response, params);
+        resolve(response);
+    }).catch(() => Cache.del(cacheKey));
+
+    Cache.set(cacheKey, req, 5000);
+
+    return req;
 };
 
 /**
@@ -342,20 +355,25 @@ User.retrieve = async params => {
  * @apiDescription Asyncronously find out if a user is a member of a specific role.
  * @apiName User.isRole
  * @apiParam {String} role The role to check for.
- * @apiParam {String} [objectId] The objectId of the user. If empty, the User.current() object is used.
+ * @apiParam {String} [userID] The Actinium.User id. If empty, the User.current() id is used.
  * @apiGroup Reactium.User
  */
-User.isRole = async (role, objectId) => {
-    const current = User.current() || {};
+User.isRole = async (role, userID) => {
+    userID = userID || op.get(User.current(), 'objectId');
 
-    objectId = objectId || op.get(current, 'objectId');
-    const u = await User.retrieve({ objectId });
+    if (!userID) return Promise.resolve(false);
 
-    if (!u) {
-        return Promise.reject('invalid user id');
-    }
+    const cacheKey = `user_is_${role}_${userID}`;
+    let req = Cache.get(cacheKey);
+    if (req) return req;
 
-    return op.has(u, ['roles', role]);
+    req = User.retrieve({ objectId: userID })
+        .then(({ roles }) => op.has(roles, role))
+        .catch(() => false);
+
+    Cache.set(cacheKey, req, 10000);
+
+    return req;
 };
 
 /**
