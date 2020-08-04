@@ -56,11 +56,14 @@ User.logIn = User.auth;
 User.logOut = async () => {
     const u = User.current();
 
+    console.log('user.before.logout');
     await Hook.run('user.before.logout', u);
 
     try {
+        console.log('user.logout');
         return API.Actinium.User.logOut().then(async () => {
             await Hook.run('user.after.logout', u);
+            console.log('user.after.logout');
             return u;
         });
     } catch (err) {

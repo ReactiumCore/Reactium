@@ -101,11 +101,11 @@ Setting.get = async (key = '', defaultValue, refresh = false) => {
 };
 
 const clearSettings = async () => {
-    Cache.del('setting');
     Cache.del('settings.loaded');
+    Cache.del('setting');
 };
 
 Hook.register('user.auth', clearSettings);
-Hook.register('user.after.logout', clearSettings);
+Hook.register('user.before.logout', clearSettings);
 
 export default Setting;
