@@ -516,6 +516,141 @@ define({ "api": [
     "groupTitle": "BootHook"
   },
   {
+    "type": "Async",
+    "url": "Capability.User.get(userID,refresh)",
+    "title": "Capability.User.get()",
+    "version": "3.1.2",
+    "group": "Capability",
+    "name": "Capability.User.get()",
+    "description": "<p>Return an Array of capability names granted to the user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "userID",
+            "description": "<p>The Reactium.User id. If empty the User.current id is used.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "refres",
+            "defaultValue": "false",
+            "description": "<p>Fetch capabilities from the server instead of cache.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage",
+        "content": "const canEditArticle = async userID => {\n    const caps = await Reactium.Capability.User.get(userID);\n    return caps.includes('content.article.update');\n};",
+        "type": "json"
+      }
+    ],
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Capability"
+  },
+  {
+    "type": "Static",
+    "url": "Capability.autosync",
+    "title": "Capability.autosync",
+    "version": "3.1.2",
+    "group": "Capability",
+    "name": "Capability.autosync",
+    "description": "<p>Time in milliseconds that controls when registered capabilities are propagated to the server. If set to <code>false</code>, manually push registered capabilities with <code>Capability.propagate()</code>. Default: <code>10000</code>.</p>",
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Capability"
+  },
+  {
+    "type": "Static",
+    "url": "Capability.cache",
+    "title": "Capability.cache",
+    "version": "3.1.2",
+    "group": "Capability",
+    "name": "Capability.cache",
+    "description": "<p>Time in milliseconds that controls how long to cache capability request results. Default: <code>60000</code>.</p>",
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Capability"
+  },
+  {
+    "type": "Function",
+    "url": "Capability.clearCache()",
+    "title": "Capability.clearCache()",
+    "version": "3.1.2",
+    "group": "Capability",
+    "name": "Capability.clearCache()",
+    "description": "<p>Clear Capability related Cache keys.</p>",
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Capability"
+  },
+  {
+    "type": "Async",
+    "url": "Capability.propagate(force)",
+    "title": "Capability.propagate()",
+    "version": "3.1.2",
+    "group": "Capability",
+    "name": "Capability.propagate()",
+    "description": "<p>Propagate registered capabilities to an Actinium server.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "force",
+            "defaultValue": "false",
+            "description": "<p>Execute the propagation regardless of if a current propagation operation is under way. The resolution of the previous propagation operation will be cancelled. If <code>Capability.autosync</code> is <code>true</code>, this function will be called whenever the autosync is initiated.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage",
+        "content": "await Capability.propagate();",
+        "type": "json"
+      }
+    ],
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Capability"
+  },
+  {
+    "type": "Function",
+    "url": "Capability.register(id)",
+    "title": "Capability.register()",
+    "version": "3.1.2",
+    "group": "Capability",
+    "name": "Capability.register()",
+    "description": "<p>Register a new capability.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>String value used when checking for the capability. This function is limited in scope and regularly shouldn't be used. Server-side capability registration is preferred.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage",
+        "content": "Capability.register('my-ui.view')",
+        "type": "json"
+      }
+    ],
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Capability"
+  },
+  {
     "type": "ReactHook",
     "url": "useAsyncEffect(cb,dependencies)",
     "title": "useAsyncEffect()",
@@ -1589,10 +1724,12 @@ define({ "api": [
     "groupTitle": "Reactium.Cache"
   },
   {
-    "type": "Function",
+    "type": "Async",
     "url": "Capability.check(capabilities,strict)",
     "title": "Capability.check",
     "version": "3.2.1",
+    "name": "Capability.check",
+    "group": "Reactium.Capability",
     "description": "<p>Check a list of capabilities on the current user.</p>",
     "parameter": {
       "fields": {
@@ -1611,6 +1748,42 @@ define({ "api": [
             "field": "strict",
             "defaultValue": "true",
             "description": "<p>When true all capabilities must be allowed for user for check to return true, otherwise only one capability is required to get a true value.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "userID",
+            "description": "<p>The Reactium.User id to check.</p>"
+          }
+        ]
+      }
+    },
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Reactium.Capability"
+  },
+  {
+    "type": "Async",
+    "url": "Capability.check(capabilities,strict)",
+    "title": "Capability.check",
+    "version": "3.2.1",
+    "description": "<p>Retrieve an enumerated list of capabilities for the specified user.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Array",
+            "optional": false,
+            "field": "capabilities",
+            "description": "<p>list of string capabilities to check, returns true if current user is allowed, false if not allowed.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "userID",
+            "description": "<p>The Actinium.User id value. If empty the current user is used.</p>"
           }
         ]
       }
@@ -1621,7 +1794,7 @@ define({ "api": [
     "groupTitle": "Reactium.Capability"
   },
   {
-    "type": "Function",
+    "type": "Async",
     "url": "Capability.get(capability)",
     "title": "Capability.get()",
     "version": "3.2.1",
@@ -1639,17 +1812,71 @@ define({ "api": [
     "groupTitle": "Reactium.Capability"
   },
   {
-    "type": "Function",
-    "url": "Capability.set(capability,perms)",
-    "title": "Capability.set()",
+    "type": "Async",
+    "url": "Capability.grant(capability,role)",
+    "title": "Capability.grant()",
     "version": "3.2.1",
-    "description": "<p>Set permissions on a capability for allowed and excluded roles.</p>",
-    "name": "Capability.set",
+    "description": "<p>Add role(s) to the capability allowed list.</p>",
+    "name": "Capability.grant",
     "group": "Reactium.Capability",
     "examples": [
       {
         "title": "Usage",
-        "content": "import Reactium from 'reactium-core/sdk';\n\nCapability.set('do-something', {\n    allowed: ['contributor'],\n    excluded: ['user']\n})",
+        "content": "Capability.grant('taxonomy.update', 'moderator');\nCapability.grant('taxonomy.update', ['moderator']);",
+        "type": "json"
+      }
+    ],
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Reactium.Capability"
+  },
+  {
+    "type": "Async",
+    "url": "Capability.restrict(capability,role)",
+    "title": "Capability.restrict()",
+    "version": "3.2.1",
+    "description": "<p>Add role(s) to the capability excluded list.</p>",
+    "name": "Capability.restrict",
+    "group": "Reactium.Capability",
+    "examples": [
+      {
+        "title": "Usage",
+        "content": "Capability.restrict('taxonomy.update', 'moderator');\nCapability.restrict('taxonomy.update', ['moderator']);",
+        "type": "json"
+      }
+    ],
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Reactium.Capability"
+  },
+  {
+    "type": "Async",
+    "url": "Capability.revoke(capability,role)",
+    "title": "Capability.revoke()",
+    "version": "3.2.1",
+    "description": "<p>Remove role(s) from the capability allowed list.</p>",
+    "name": "Capability.revoke",
+    "group": "Reactium.Capability",
+    "examples": [
+      {
+        "title": "Usage",
+        "content": "Capability.revoke('taxonomy.update', 'moderator');\nCapability.revoke('taxonomy.update', ['moderator']);",
+        "type": "json"
+      }
+    ],
+    "filename": ".core/sdk/capability/index.js",
+    "groupTitle": "Reactium.Capability"
+  },
+  {
+    "type": "Async",
+    "url": "Capability.unrestrict(capability,role)",
+    "title": "Capability.unrestrict()",
+    "version": "3.2.1",
+    "description": "<p>Remove role(s) from the capability excluded list.</p>",
+    "name": "Capability.unrestrict",
+    "group": "Reactium.Capability",
+    "examples": [
+      {
+        "title": "Usage",
+        "content": "Capability.unrestrict('taxonomy.update', 'moderator');\nCapability.unrestrict('taxonomy.update', ['moderator']);",
         "type": "json"
       }
     ],
@@ -3783,8 +4010,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": true,
-            "field": "objectId",
-            "description": "<p>The objectId of the user. If empty, the User.current() object is used.</p>"
+            "field": "userID",
+            "description": "<p>The Actinium.User id. If empty, the User.current() id is used.</p>"
           }
         ]
       }
@@ -4951,117 +5178,198 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "listById",
-            "description": "<p>{Getter} get Object keyed by id of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
+            "description": "<p>get Object keyed by id of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "list",
-            "description": "<p>{Getter} get list of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
+            "description": "<p>get list of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "registered",
-            "description": "<p>{Getter} get list of all historically registrated objects, even duplicates, ordered by order property of object (defaults to 100).</p>"
+            "description": "<p>get list of all historically registrated objects, even duplicates, ordered by order property of object (defaults to 100).</p>"
           },
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "protected",
-            "description": "<p>{Getter} get list of protected registrations ids</p>"
+            "description": "<p>get list of protected registrations ids</p>"
           },
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "unregistered",
-            "description": "<p>{Getter} get list of all existing registered objects ids that have been subsequently unregistered.</p>"
+            "description": "<p>get list of all existing registered objects ids that have been subsequently unregistered.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "banned",
-            "description": "<p>{Getter} get list of all banned objects ids.</p>"
+            "description": "<p>get list of all banned objects ids.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Getter",
             "optional": false,
             "field": "mode",
-            "description": "<p>{Getter} get current mode (Default Utils.Registry.MODES.HISTORY)</p>"
+            "description": "<p>get current mode (Default Utils.Registry.MODES.HISTORY)</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "get",
-            "description": "<p>{Method} pass the identifier of an object get that object from the registry</p>"
+            "description": "<p><code>reg.get(id)</code> pass the identifier of an object get that object from the registry</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "isProtected",
-            "description": "<p>{Method} pass the identifier of an object to see if it has been protected</p>"
+            "description": "<p>pass the identifier of an object to see if it has been protected</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "isRegistered",
-            "description": "<p>{Method} pass the identifier of an object to see if it has been registered</p>"
+            "description": "<p>pass the identifier of an object to see if it has been registered</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "isUnRegistered",
-            "description": "<p>{Method} pass the identifier of an object to see is NOT registered.</p>"
+            "description": "<p>pass the identifier of an object to see is NOT registered.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "isBanned",
-            "description": "<p>{Method} pass the identifier of an object to see if it has been banned</p>"
+            "description": "<p>pass the identifier of an object to see if it has been banned</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "ban",
-            "description": "<p>{Method} pass the identifier of an object to ban. Banned objects can not be registered and will not be show in list. Useful when you have code that needs to preempt the registration of an object from code you do not control. E.g. a plugin is introducing undesireable or disabled functionality</p>"
+            "description": "<p><code>reg.ban(id)</code> pass the identifier of an object to ban. Banned objects can not be registered and will not be show in list. Useful when you have code that needs to preempt the registration of an object from code you do not control. E.g. a plugin is introducing undesireable or disabled functionality</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "cleanup",
-            "description": "<p>{Method} pass the identifier of an object to be purged from historical registrations (i.e. free up memory) Automatically performed in mode Utils.Registry.CLEAN</p>"
+            "description": "<p><code>reg.cleanup(id)</code> pass the identifier of an object to be purged from historical registrations (i.e. free up memory) Automatically performed in mode Utils.Registry.CLEAN</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "protect",
-            "description": "<p>{Method} pass the identifier of an object to protect. Protected objects can not be overridden or cleaned up.</p>"
+            "description": "<p><code>reg.protect(id)</code> pass the identifier of an object to protect. Protected objects can not be overridden or cleaned up.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "register",
-            "description": "<p>{Method} pass an identifier and a data object to register the object. The identifier will be added if it is not already registered (but protected) and not banned.</p>"
+            "description": "<p><code>reg.register(id,data)</code> pass an identifier and a data object to register the object. The identifier will be added if it is not already registered (but protected) and not banned.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "unprotect",
-            "description": "<p>{Method} pass an identifier to unprotect an object</p>"
+            "description": "<p><code>reg.unprotect(id)</code> pass an identifier to unprotect an object</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "unregister",
-            "description": "<p>{Method} pass an identifier to unregister an object. When in HISTORY mode (default), previous registration will be retained, but the object will not be listed. In CLEAN mode, the previous registrations will be removed, unless protected.</p>"
+            "description": "<p><code>reg.unregister(id)</code> pass an identifier to unregister an object. When in HISTORY mode (default), previous registration will be retained, but the object will not be listed. In CLEAN mode, the previous registrations will be removed, unless protected.</p>"
           },
           {
             "group": "Parameter",
+            "type": "Method",
             "optional": false,
             "field": "flush",
-            "description": "<p>{Method} clear all registrations. Resets registry to newly constructed state.</p>"
+            "description": "<p><code>reg.flush()</code> clear all registrations. Resets registry to newly constructed state.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Method",
+            "optional": false,
+            "field": "subscribe",
+            "description": "<p><code>reg.subscribe(cb,id)</code> Adds a callback to indicate changes to the registry. Callback is called on register, unregister, protect, unprotect, ban, cleanup, and flush. Returns unsubscribe function.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Method",
+            "optional": false,
+            "field": "unsubscribe",
+            "description": "<p><code>reg.unsubscribe(id)</code> unsubscribe a subscriber by id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Method",
+            "optional": false,
+            "field": "unsubscribeAll",
+            "description": "<p><code>reg.unsubscribeAll()</code> unsubscribe all subscribers to changes made on the registry</p>"
+          }
+        ],
+        "register": [
+          {
+            "group": "register",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the data object to be registered</p>"
+          },
+          {
+            "group": "register",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>the object to be registered</p>"
+          }
+        ],
+        "subscribe": [
+          {
+            "group": "subscribe",
+            "type": "Function",
+            "optional": false,
+            "field": "cb",
+            "description": "<p>Callback to be invoked on changes to the registry.</p>"
+          },
+          {
+            "group": "subscribe",
+            "type": "String",
+            "optional": true,
+            "field": "id",
+            "description": "<p>optional id of the callback, if you want to invoke unsubscribe manually by id, instead of the callback returned from subscribe method</p>"
+          }
+        ],
+        "unsubscribe": [
+          {
+            "group": "unsubscribe",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the subscriber to unsubscribe</p>"
           }
         ]
       }
