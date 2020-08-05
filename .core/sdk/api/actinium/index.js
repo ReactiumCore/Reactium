@@ -31,7 +31,7 @@ if (Actinium) {
 
         // proxied through express
         Actinium.liveQueryServerURL = `${
-            protocal === 'http' ? 'ws:' : 'wss:'
+            protocol === 'http' ? 'ws:' : 'wss:'
         }//${host}${restAPI}`;
 
         // direct connection (not proxied through express)
