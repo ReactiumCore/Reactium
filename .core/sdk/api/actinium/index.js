@@ -27,15 +27,17 @@ if (Actinium) {
 
     // Configure LiveQuery
     if (typeof window !== 'undefined') {
-        const { host } = location;
+        const { host, protocol } = location;
 
         // proxied through express
-        Actinium.liveQueryServerURL = `ws://${host}${restAPI}`;
+        Actinium.liveQueryServerURL = `${
+            protocal === 'http' ? 'ws:' : 'wss:'
+        }//${host}${restAPI}`;
 
         // direct connection (not proxied through express)
         if (/^http/.test(apiConfig.restAPI)) {
             const API = new URL(apiConfig.restAPI);
-            API.protocol = 'ws:';
+            API.protocol = API.protocol === 'http' ? 'ws:' : 'wss:';
             Actinium.liveQueryServerURL = API.toString();
         }
 
