@@ -3,14 +3,15 @@ import cn from 'classnames';
 import op from 'object-path';
 import PropTypes from 'prop-types';
 
-import Reactium, { useDerivedState, useEventHandle } from 'reactium-core/sdk';
+import Reactium, {
+    ComponentEvent,
+    useDerivedState,
+    useEventHandle,
+    useRefs,
+    useStatus,
+} from 'reactium-core/sdk';
 
-import React, {
-    forwardRef,
-    useImperativeHandle,
-    useRef,
-    useEffect,
-} from 'react';
+import React, { forwardRef, useImperativeHandle, useEffect } from 'react';
 
 const ENUMS = {
     STATUS: {
@@ -28,28 +29,34 @@ const noop = () => {};
  * Hook Component: {{name}}
  * -----------------------------------------------------------------------------
  */
-let {{name}} = (
-    { children, className, namespace, onStatus, ...props },
-    ref,
-) => {
+let {{name}} = (initialProps, ref) => {
+    let {
+        children,
+        className,
+        namespace,
+        onStatus,
+        state:initialState,
+        ...props
+    } = initialProps;
+
     // -------------------------------------------------------------------------
     // Refs
     // -------------------------------------------------------------------------
-
-    const containerRef = useRef();
+    const refs = useRefs();
 
     // -------------------------------------------------------------------------
     // State
     // -------------------------------------------------------------------------
-
-    const [state, update] = useDerivedState({
-        status: ENUMS.STATUS.PENDING,
-    });
-
+    const [state, update] = useDerivedState(initialState);
     const setState = newState => {
         if (unMounted()) return;
         update(newState);
     };
+
+    // -------------------------------------------------------------------------
+    // Status
+    // -------------------------------------------------------------------------
+    const [status, setStatus, isStatus] = useStatus(ENUMS.STATUS.PENDING);
 
     // -------------------------------------------------------------------------
     // Internal Interface
@@ -61,17 +68,15 @@ let {{name}} = (
 
     // dispatch(eventType:String, event:Object, callback:Function);
     // dispatch events, run a hook, execute a callack
-    const dispatch = async (eventType, event, callback) => {
-        if (unMounted()) return;
+    const dispatch = async (eventType, event = {}, callback) => {
+        eventType = String(eventType).toLowerCase();
 
-        eventType = String(eventType).toUpperCase();
-
-        const evt = new CustomEvent(eventType, { details: event });
+        const evt = new ComponentEvent(eventType, event);
 
         handle.dispatchEvent(evt);
 
         if (unMounted()) return;
-        await Reactium.Hook.run(`{{name}}-${eventType}`, evt, handle);
+        await Reactium.Hook.run(eventType, evt, handle);
 
         if (unMounted()) return;
         if (typeof callback === 'function') await callback(evt);
@@ -81,22 +86,21 @@ let {{name}} = (
     // run initialization process
     const initialize = async () => {
         // SET STATUS TO INITIALIZING
-        setState({ status: ENUMS.STATUS.INITIALIZING });
+        setStatus(ENUMS.STATUS.INITIALIZING);
 
         // DO YOUR INITIALIZATION HERE
 
         // SET STATUS TO INITIALIZED WHEN COMPLETE
-        setState({ status: ENUMS.STATUS.INITIALIZED });
+        setStatus(ENUMS.STATUS.INITIALIZED);
     };
 
     // unmount();
     // check if the component has been unmounted
-    const unMounted = () => !containerRef.current;
+    const unMounted = () => !refs.get('container');
 
     // -------------------------------------------------------------------------
     // Handle
     // -------------------------------------------------------------------------
-
     const _handle = () => ({
         children,
         className,
@@ -117,29 +121,29 @@ let {{name}} = (
     // -------------------------------------------------------------------------
     // Side effects
     // -------------------------------------------------------------------------
-
     // Status change
     useEffect(() => {
-        dispatch('status', { status: state.status }, onStatus);
-        if (state.status === ENUMS.STATUS.PENDING) initialize();
-    }, [state.status]);
+        dispatch('status', { status }, onStatus);
+
+        switch (status) {
+            case ENUMS.STATUS.PENDING:
+                initialize();
+                break;
+        }
+    }, [status]);
 
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
-    //   The unMounted() function relies on containerRef.
+    //   The unMounted() function relies on refs.get('container').
     //   If it is not present, setState() will not execute.
     //   This could lead to your component rendering empty if you have a
     //   condition that checks state and renders null if certain conditions
     //   are not met.
     // -------------------------------------------------------------------------
-
     return (
-        <div ref={containerRef} className={cx('container')}>
-            <div className={cx()}>
-                {{name}}
-                {children}
-            </div>
+        <div ref={elm => refs.set('container', elm)} className={cx()}>
+            {children}
         </div>
     );
 };
@@ -152,11 +156,13 @@ let {{name}} = (
     className: PropTypes.string,
     namespace: PropTypes.string,
     onStatus: PropTypes.func,
+    state: PropTypes.object,
 };
 
 {{name}}.defaultProps = {
-    namespace: 'namespace',
+    namespace: 'NAMESPACE',
     onStatus: noop,
+    state: {},
 };
 
 export { {{name}}, {{name}} as default };
