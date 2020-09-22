@@ -4,7 +4,7 @@
 
 An opinionated framework for creating React + Redux apps.
 
-[Reactium documentation](https://reactium.io/get-started)
+[Reactium documentation](https://docs.reactium.io/)
 
 ## Quick Start
 
