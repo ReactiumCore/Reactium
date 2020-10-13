@@ -23,7 +23,7 @@ const defaultConfig = {
     cssPreProcessor: 'sass',
     watch: {
         js: ['src/app/**/*'],
-        markup: ['src/**/*.html', 'src/**/*.css'],
+        markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
         colors: ['src/**/*/colors.json'],
         pluginAssets: ['src/app/**/plugin-assets.json'],
         restartWatches: [
@@ -62,7 +62,7 @@ const defaultConfig = {
         pluginAssets: ['src/app/**/plugin-assets.json'],
         js: ['src/app/**/*'],
         json: ['src/**/*.json'],
-        markup: ['src/**/*.html', 'src/**/*.css'],
+        markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
         style: [
             'src/**/*.scss',
             '.core/**/*.scss',
