@@ -4,87 +4,61 @@ import { matchPath } from 'react-router';
 import op from 'object-path';
 import deps from 'dependencies';
 
-const routeListener = (store, history) => async location => {
-    const state = store.getState();
-    const Router = op.get(state, 'Router', {});
-    let routes = Reactium.Routing.get();
+const historyHandler = store => async ({ current }) => {
+    const location = Reactium.Routing.history.location;
+    const match = current.match;
 
-    const pathChanged =
-        !Router.pathname || location.pathname !== Router.pathname;
-    const searchChanged = location.search !== Router.search;
+    if (match) {
+        const { params, search } = current;
+        const route = op.get(current, 'match.route');
 
-    if (pathChanged || searchChanged) {
-        let { route, match } =
-            routes
-                .filter(route => route.path)
-                .map(route => {
-                    let match = matchPath(location.pathname, route);
-                    return { route, match };
-                })
-                .filter(route => route.match)
-                .find(({ route, match }) => {
-                    return match.isExact;
-                }) || {};
-
-        if (match) {
-            // optionally load route data
-            const search = queryString.parse(
-                location.search.replace(/^\?/, ''),
-            );
-            if ('load' in route && typeof route.load === 'function') {
-                await Promise.resolve(route.load(match.params, search))
-                    .then(thunk => thunk(store.dispatch, store.getState, store))
-                    .then(data =>
-                        Reactium.Hook.run(
-                            'data-loaded',
-                            data,
-                            route,
-                            match.params,
-                            search,
-                        ),
-                    );
-            }
-
-            store.dispatch(
-                deps().actions.Router.updateRoute({
-                    history,
-                    location: {
-                        pathname: location.pathname,
-                        search: location.search,
-                        hash: location.hash,
-                        state: location.state,
-                        key: location.key,
-                    },
-                    match,
-                    route,
-                    params: match.params,
-                    search,
-                }),
-            );
+        if ('load' in route && typeof route.load === 'function') {
+            await Promise.resolve(route.load(params, search))
+                .then(thunk => thunk(store.dispatch, store.getState, store))
+                .then(data =>
+                    Reactium.Hook.run(
+                        'data-loaded',
+                        data,
+                        route,
+                        params,
+                        search,
+                    ),
+                );
         }
+
+        store.dispatch(
+            deps().actions.Router.updateRoute({
+                history,
+                location: {
+                    pathname: location.pathname,
+                    search: location.search,
+                    hash: location.hash,
+                    state: location.state,
+                    key: location.key,
+                },
+                match: match.match,
+                route,
+                params,
+                search,
+            }),
+        );
     }
 };
 
 export default (enhancers = [], isServer = false) => {
+    const name = 'load-thunk-route-observer';
     return [
         {
-            name: 'route-observer',
+            name,
             order: 999,
             enhancer: isServer
                 ? _ => _
                 : storeCreator => (...args) => {
                       const store = storeCreator(...args);
 
-                      Reactium.Hook.register(
-                          'history-create',
-                          async ({ history }) => {
-                              routeListener(store, history)(window.location);
-                              history.listen(routeListener(store, history));
-
-                              return Promise.resolve();
-                          },
-                          Reactium.Enums.priority.high,
-                      );
+                      Reactium.Routing.routeListeners.register(name, {
+                          handler: historyHandler(store),
+                      });
 
                       return store;
                   },

@@ -5,10 +5,15 @@
  * Includes
  * -----------------------------------------------------------------------------
  */
-import Reactium from 'reactium-core/sdk';
+import Reactium, { useHookComponent } from 'reactium-core/sdk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'dependencies';
+
+const hookableComponent = name => props => {
+    const Component = useHookComponent(name);
+    return <Component {...props} />;
+};
 
 /**
  * -----------------------------------------------------------------------------
@@ -32,9 +37,11 @@ export const App = async () => {
     if (typeof window !== 'undefined') {
         const { bindPoints } = await Reactium.Hook.run('component-bindings');
         const { appElement } = await Reactium.Hook.run('app-bindpoint');
-        const { Provider } = await Reactium.Hook.run('app-redux-provider');
-        const { history } = await Reactium.Hook.run('history-create');
-        const { Router } = await Reactium.Hook.run('app-router');
+        await Reactium.Hook.run('app-redux-provider');
+        await Reactium.Hook.run('app-router');
+
+        const Provider = hookableComponent('ReduxProvider');
+        const Router = hookableComponent('Router');
 
         // Render the React Components
         if (bindPoints.length > 0) {
@@ -57,7 +64,7 @@ export const App = async () => {
 
             ReactDOM[ssr ? 'hydrate' : 'render'](
                 <Provider store={store}>
-                    <Router history={history} />
+                    <Router history={Reactium.Routing.history} />
                 </Provider>,
                 appElement,
             );

@@ -133,8 +133,8 @@ Reactium.Hook.register('zone-defaults', async context => {
 
 Reactium.Hook.register(
     'app-redux-provider',
-    context => {
-        context.Provider = Provider;
+    async () => {
+        Reactium.Component.register('ReduxProvider', Provider);
         console.log('Defining Redux Provider.');
         return Promise.resolve();
     },
@@ -143,10 +143,9 @@ Reactium.Hook.register(
 
 Reactium.Hook.register(
     'app-router',
-    context => {
-        context.Router = Router;
+    async () => {
+        Reactium.Component.register('Router', Router);
         console.log('Defining Router.');
-        return Promise.resolve();
     },
     Reactium.Enums.priority.highest,
 );

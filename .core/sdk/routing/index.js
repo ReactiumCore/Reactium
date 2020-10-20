@@ -1,28 +1,135 @@
-import SDK from '@atomic-reactor/reactium-sdk-core';
+import SDK, { useHookComponent } from '@atomic-reactor/reactium-sdk-core';
 import uuid from 'uuid/v4';
 import _ from 'underscore';
+import op from 'object-path';
 import moment from 'moment';
+import { createBrowserHistory, createMemoryHistory } from 'history';
+import queryString from 'querystring-browser';
+import { matchPath } from 'react-router';
+import React from 'react';
 
 const { Hook } = SDK;
+
+const createHistory =
+    typeof window !== 'undefined' && window.process && window.process.type
+        ? createMemoryHistory
+        : createBrowserHistory;
+
+const NotFoundWrapper = props => {
+    const NotFound = useHookComponent('NotFound');
+    return <NotFound {...props} />;
+};
 
 class Routing {
     loaded = false;
     updated = null;
-    routes = new SDK.Utils.Registry(
+    routesRegistry = new SDK.Utils.Registry(
         'Routing',
         'id',
         SDK.Utils.Registry.MODES.CLEAN,
     );
-    NotFound = () => null;
+    routeListeners = new SDK.Utils.Registry(
+        'RoutingListeners',
+        'id',
+        SDK.Utils.Registry.MODES.CLEAN,
+    );
+
+    currentRoute = null;
+    previousRoute = null;
     subscriptions = {};
+
+    constructor() {
+        this.historyObj = createHistory();
+        this.historyObj.listen(this.setCurrentRoute);
+    }
+
+    set history(histObj) {
+        this.historyObj = histObj;
+    }
+
+    get history() {
+        return this.historyObj;
+    }
+
+    get routes() {
+        return _.sortBy(
+            _.sortBy(this.routesRegistry.list, 'path').reverse(),
+            'order',
+        );
+    }
+
+    setCurrentRoute = async location => {
+        const prev = this.currentRoute;
+        const current = {
+            location,
+        };
+
+        const matches = this.routes
+            .map(route => ({
+                route,
+                match: matchPath(location.pathname, route),
+            }))
+            .filter(({ match }) => match);
+
+        let [match] = matches;
+
+        const routeChanged =
+            op.get(prev, 'match.route.id') !== op.get(match, 'route.id');
+        const pathChanged =
+            op.get(prev, 'location.pathname') !==
+            op.get(current, 'location.pathname');
+        const searchChanged =
+            op.get(prev, 'location.search', '') !==
+            op.get(current, 'location.search', '');
+
+        const notFound = !match;
+
+        if (!match)
+            match = {
+                route: this.routes.find(({ id }) => id === 'NotFound'),
+                match: undefined,
+            };
+
+        op.set(current, 'match', match);
+        op.set(current, 'params', op.get(match, 'match.params', {}));
+        op.set(
+            current,
+            'search',
+            queryString.parse(
+                op.get(current, 'location.search', '').replace(/^\?/, ''),
+            ),
+        );
+        op.set(current, 'reasons', {
+            routeChanged,
+            pathChanged,
+            searchChanged,
+            notFound,
+        });
+
+        this.currentRoute = current;
+        this.previousRoute = prev;
+        this.routeListeners.list.forEach(sub => {
+            const cb = op.get(sub, 'handler', () => {});
+            cb({ prev, current });
+        });
+    };
 
     load = async () => {
         if (this.loaded) return;
-        await Hook.run('routes-init', this.routes);
-        const NotFound = await SDK.Component.get('NotFound');
+        await Hook.run('routes-init', this.routesRegistry);
+
+        this.routesRegistry.register({
+            id: 'NotFound',
+            exact: false,
+            component: NotFoundWrapper,
+            order: SDK.Enums.priority.lowest,
+        });
+
         this.loaded = true;
-        this.NotFound = NotFound;
+
+        this.setCurrentRoute(this.historyObj.location);
         this._update();
+
         console.log('Initializing routes.');
     };
 
@@ -107,7 +214,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
         if (!route.order) route.order = 0;
 
         await Hook.run('register-route', route);
-        this.routes.register(route.id, route);
+        this.routesRegistry.register(route.id, route);
         if (update) this._update();
         return route.id;
     }
@@ -123,7 +230,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
      * @apiGroup Reactium.Routing
      */
     unregister(id, update = true) {
-        this.routes = this.routes.unregister(id);
+        this.routesRegistry.unregister(id);
         if (update) this._update();
     }
 
@@ -135,15 +242,11 @@ Reactium.Plugin.register('myPlugin').then(() => {
     /**
      * @api {Function} Routing.get() Routing.get()
      * @apiName Routing.get
-     * @apiDescription Get sorted array of all route objects. This includes the NotFound
-     component. If called prior to the `routes-init` hook completion, will contain
-     only the NotFound component.
+     * @apiDescription Get sorted array of all route objects.
      * @apiGroup Reactium.Routing
      */
     get() {
-        return this.routes.list.concat([
-            { id: 'NotFound', component: this.NotFound, order: 1000 },
-        ]);
+        return this.routes;
     }
 }
 

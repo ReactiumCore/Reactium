@@ -3,7 +3,6 @@ import React, { forwardRef } from 'react';
 import op from 'object-path';
 import _ from 'underscore';
 import getComponents from 'dependencies/getComponents';
-import { createBrowserHistory, createMemoryHistory } from 'history';
 
 const lookupRouteComponent = async route => {
     let Found;
@@ -75,28 +74,3 @@ if (NotFound !== null)
         NotFound,
         Reactium.Enums.priority.highest,
     );
-
-let history;
-const getHistory = () => {
-    const createHistory =
-        typeof window !== 'undefined' && window.process && window.process.type
-            ? createMemoryHistory
-            : createBrowserHistory;
-
-    if (!history) {
-        history = createHistory();
-    }
-
-    return history;
-};
-
-Reactium.Hook.register(
-    'history-create',
-    async context => {
-        context.history = getHistory();
-        Reactium.Routing.history = history;
-
-        return Promise.resolve();
-    },
-    Reactium.Enums.priority.highest,
-);
