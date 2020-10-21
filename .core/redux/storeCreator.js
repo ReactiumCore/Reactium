@@ -97,12 +97,14 @@ const storeCreator = async ({ server = false } = {}) => {
     // Create the store
     store = compose(...enhancers)(createStore)(rootReducer, initialState);
 
-    // Allow plugins the ability to interact with store directly
-    await Reactium.Hook.run('store-created', {
+    Reactium.Redux = {
         store,
         allReducers: manifest.allReducers,
         middlewares,
-    });
+    };
+
+    // Allow plugins the ability to interact with store directly
+    await Reactium.Hook.run('store-created', Reactium.Redux);
 
     return store;
 };
