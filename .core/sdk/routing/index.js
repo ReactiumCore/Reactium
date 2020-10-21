@@ -142,7 +142,7 @@ class Routing {
             active,
             changes: this.changeReasons,
             transitionState: this.transitionState,
-            transitionsStates: this.transitionsStates,
+            transitionStates: this.transitionStates,
         };
         this.routeListeners.list.forEach(sub => {
             const cb = op.get(sub, 'handler', () => {});
@@ -212,7 +212,7 @@ class Routing {
             active,
             changes: this.changeReasons,
             transitionState: this.transitionState,
-            transitionsStates: this.transitionsStates,
+            transitionStates: this.transitionStates,
         };
         if (update) {
             this.routeListeners.list.forEach(sub => {
