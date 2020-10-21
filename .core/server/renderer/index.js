@@ -155,7 +155,11 @@ SDK.Hook.registerSync(
         });
 
         AppBindings.register('router', {
-            markup: '<div id="router"></div>',
+            template: ({ content = '' }) => {
+                const binding = `<div id="router">${content}</div>`;
+                return binding;
+            },
+            requestParams: ['content'],
         });
     },
     SDK.Enums.priority.highest,
@@ -201,41 +205,64 @@ SDK.Hook.registerSync(
     'SERVER-BEFORE-APP-CORE-TEMPLATES',
 );
 
+const Server = {};
+Server.AppHeaders = SDK.Utils.registryFactory(
+    'AppHeaders',
+    'name',
+    SDK.Utils.Registry.MODES.CLEAN,
+);
+Server.AppScripts = SDK.Utils.registryFactory(
+    'AppScripts',
+    'name',
+    SDK.Utils.Registry.MODES.CLEAN,
+);
+Server.AppSnippets = SDK.Utils.registryFactory(
+    'AppSnippets',
+    'name',
+    SDK.Utils.Registry.MODES.CLEAN,
+);
+Server.AppStyleSheets = SDK.Utils.registryFactory(
+    'AppStyleSheets',
+    'name',
+    SDK.Utils.Registry.MODES.CLEAN,
+);
+Server.AppBindings = SDK.Utils.registryFactory(
+    'AppBindings',
+    'name',
+    SDK.Utils.Registry.MODES.CLEAN,
+);
+Server.AppGlobals = SDK.Utils.registryFactory(
+    'AppGlobals',
+    'name',
+    SDK.Utils.Registry.MODES.CLEAN,
+);
+
+export const renderAppBindings = req => {
+    let bindingsMarkup = '';
+    _.sortBy(Object.values(Server.AppBindings.list), 'order').forEach(
+        ({ component, markup, template, requestParams = [] }) => {
+            // Reactium App will lookup these components and bind them
+            if (component && typeof component === 'string') {
+                bindingsMarkup += `<Component type="${component}"></Component>`;
+            } else if (markup && typeof markup === 'string') {
+                bindingsMarkup += markup;
+            } else if (template && typeof template === 'function') {
+                const context = {};
+                requestParams.forEach(name => {
+                    context[name] = req[name] || '';
+                });
+                bindingsMarkup += template(context);
+            }
+        },
+    );
+
+    return bindingsMarkup;
+};
+
 export default async (req, res, context) => {
     let template,
         renderMode = isSSR ? 'ssr' : 'feo';
 
-    const Server = {};
-    Server.AppHeaders = SDK.Utils.registryFactory(
-        'AppHeaders',
-        'name',
-        SDK.Utils.Registry.MODES.CLEAN,
-    );
-    Server.AppScripts = SDK.Utils.registryFactory(
-        'AppScripts',
-        'name',
-        SDK.Utils.Registry.MODES.CLEAN,
-    );
-    Server.AppSnippets = SDK.Utils.registryFactory(
-        'AppSnippets',
-        'name',
-        SDK.Utils.Registry.MODES.CLEAN,
-    );
-    Server.AppStyleSheets = SDK.Utils.registryFactory(
-        'AppStyleSheets',
-        'name',
-        SDK.Utils.Registry.MODES.CLEAN,
-    );
-    Server.AppBindings = SDK.Utils.registryFactory(
-        'AppBindings',
-        'name',
-        SDK.Utils.Registry.MODES.CLEAN,
-    );
-    Server.AppGlobals = SDK.Utils.registryFactory(
-        'AppGlobals',
-        'name',
-        SDK.Utils.Registry.MODES.CLEAN,
-    );
     req.Server = Server;
 
     req.isSSR = isSSR;
@@ -417,6 +444,7 @@ ga('send', 'pageview');
      */
     SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
     await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
+    req.appBindings = renderAppBindings(req);
 
     /**
      * @api {Hook} Server.AppGlobals Server.AppGlobals
@@ -459,17 +487,6 @@ ga('send', 'pageview');
     _.sortBy(Object.values(Server.AppHeaders.list), 'order').forEach(
         ({ header = '' }) => {
             req.headTags += header;
-        },
-    );
-
-    _.sortBy(Object.values(Server.AppBindings.list), 'order').forEach(
-        ({ component, markup }) => {
-            // Reactium App will lookup these components and bind them
-            if (component && typeof component === 'string') {
-                req.appBindings += `<Component type="${component}"></Component>`;
-            } else if (markup && typeof markup === 'string') {
-                req.appBindings += markup;
-            }
         },
     );
 

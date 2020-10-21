@@ -39,8 +39,10 @@ class Routing {
     subscriptions = {};
 
     constructor() {
-        this.historyObj = createHistory();
-        this.historyObj.listen(this.setCurrentRoute);
+        if (typeof window !== 'undefined') {
+            this.historyObj = createHistory();
+            this.historyObj.listen(this.setCurrentRoute);
+        }
     }
 
     set history(histObj) {
@@ -48,6 +50,7 @@ class Routing {
     }
 
     get history() {
+        if (typeof window === 'undefined') return {};
         return this.historyObj;
     }
 
@@ -127,7 +130,10 @@ class Routing {
 
         this.loaded = true;
 
-        this.setCurrentRoute(this.historyObj.location);
+        if (typeof window !== 'undefined') {
+            this.setCurrentRoute(this.historyObj.location);
+        }
+
         this._update();
 
         console.log('Initializing routes.');

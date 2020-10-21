@@ -1,4 +1,5 @@
 import serialize from 'serialize-javascript';
+import { renderAppBindings } from '../renderer';
 
 module.exports = {
     version: '%TEMPLATE_VERSION%',
@@ -14,7 +15,7 @@ module.exports = {
             </head>
             <body ${helmet.bodyAttributes.toString()}>
                 ${req.headerScripts}
-                ${req.appBindings}
+                ${renderAppBindings(req)}
 
                 <script>
                     window.ssr = true;

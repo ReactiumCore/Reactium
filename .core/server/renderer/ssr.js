@@ -61,7 +61,7 @@ const renderer = async (req, res, context) => {
         console.error('[Reactium] Page data loading error.', error);
     }
 
-    const body = renderToString(
+    const content = renderToString(
         <Provider store={store}>
             <Router
                 server={true}
@@ -72,11 +72,13 @@ const renderer = async (req, res, context) => {
         </Provider>,
     );
 
+    req.content = content;
+
     await Reactium.Hook.run('app-ready', true);
 
     const helmet = Helmet.renderStatic();
 
-    return req.template(body, helmet, store, req, res);
+    return req.template(content, helmet, store, req, res);
 };
 
 module.exports = renderer;

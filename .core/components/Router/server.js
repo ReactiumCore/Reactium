@@ -1,20 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import { StaticRouter, Switch } from 'react-router-dom';
-import { renderRoutes } from 'react-router-config';
+import { StaticRouter, Switch, Route } from 'react-router-dom';
 
-export default class AppRouter extends Component {
-    shouldComponentUpdate({ updated }) {
-        return !!(this.props.updated && updated !== this.props.updated);
-    }
+const ServerRouter = props => {
+    const { routes = [], location } = props;
+    return (
+        <StaticRouter context={props.context} location={location}>
+            <Switch>
+                {routes.map(({ id, ...route }) => (
+                    <Route {...route} key='route' />
+                ))}
+            </Switch>
+        </StaticRouter>
+    );
+};
 
-    render() {
-        const { routes = [], ...props } = this.props;
-        return (
-            <StaticRouter {...props} context={this.props.context}>
-                <Fragment>
-                    <Switch>{renderRoutes(routes)}</Switch>
-                </Fragment>
-            </StaticRouter>
-        );
-    }
-}
+export default ServerRouter;

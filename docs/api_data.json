@@ -1,5 +1,99 @@
 [
   {
+    "type": "Function",
+    "url": "Zone.getZoneComponent(zone,id)",
+    "title": "Zone.getZoneComponent()",
+    "name": "Zone.getZoneComponent",
+    "description": "<p>Get the component from a zone by its id.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone name to get components from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the registered component, specified in the object passed to Zone.addComponent() or returned by it.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "group": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "groupTitle": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js"
+  },
+  {
+    "type": "Function",
+    "url": "Zone.getZoneComponents(zone,raw)",
+    "title": "Zone.getZoneComponents()",
+    "name": "Zone.getZoneComponents",
+    "description": "<p>Get existing registrations for a zone, by default goes through mapping, sorting, filtering. Add raw=true to get unadulterated list, even if they may not be renderable in the Zone. Returns the object used in Zone.addComponent()</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone name to get components from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "raw",
+            "defaultValue": "false",
+            "description": "<p>Set to true to get all components, whether or not they are currently filtered, and without mapping or extra sorting.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "group": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "groupTitle": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js"
+  },
+  {
+    "type": "Function",
+    "url": "Zone.hasZoneComponent(zone,id)",
+    "title": "Zone.hasZoneComponent()",
+    "name": "Zone.hasZoneComponent",
+    "description": "<p>Returns true if component with id is present in the zone.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone name to get components from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the registered component, specified in the object passed to Zone.addComponent() or returned by it.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "group": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "groupTitle": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js"
+  },
+  {
     "type": "Hook",
     "url": "Server.AppBindings",
     "title": "Server.AppBindings",
@@ -853,6 +947,51 @@
   },
   {
     "type": "ReactHook",
+    "url": "useEventEffect(eventTarget,",
+    "title": "eventCallbacks, deps) useEventEffect()",
+    "version": "1.0.7",
+    "description": "<p>React hook to short hand for addEventListener and removeEventLister for one or more callbacks.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "eventTarget",
+            "description": "<p>Some event target object (implementing addEventListener and removeEventLister)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "eventCallbacks",
+            "description": "<p>Object keys are event names, and Object values are callbacks to be subscribed/unsubscribed.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "useEffectDeps",
+            "optional": false,
+            "field": "deps",
+            "description": "<p>consistent with React useEffect deps list.</p>"
+          }
+        ]
+      }
+    },
+    "name": "useEventEffect",
+    "group": "ReactHook",
+    "examples": [
+      {
+        "title": "EventEffectComponent.js",
+        "content": "import React, { useState } from 'react';\nimport { useEventEffect } from 'reactium-core/sdk';\n\nconst EventEffectComponent = () => {\n    const [size, setSize] = useState({\n        width: window.innerWidth,\n        height: window.innerHeight,\n    });\n\n    const [online, setOnline] = useState(window.onLine);\n\n    const onResize = e => {\n        setSize({\n            width: window.innerWidth,\n            height: window.innerHeight,\n        });\n    };\n\n    const onNetworkChange = e => {\n        setOnline(window.onLine);\n    };\n\n    useEventEffect(\n        window,\n        {\n            resize: onResize,\n            online: onNetworkChange,\n            offline: onNetworkChange,\n        },\n        [],\n    );\n\n    return (\n        <div className='status'>\n            <span className='status-width'>width: {size.width}</span>\n            <span className='status-height'>height: {size.height}</span>\n            <span className={`status-${online ? 'online' : 'offline'}`}></span>\n        </div>\n    );\n};",
+        "type": "json"
+      }
+    ],
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/event-handle.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useEventHandle(handle)",
     "title": "useEventHandle()",
     "description": "<p>React hook to create an imperative handle that is also an implementation of EventTarget. Can be used in conjunction with useImperativeHandle (React built-in) or useRegisterHandle/useHandle (Reactium SDK hooks).</p>",
@@ -885,6 +1024,24 @@
     ],
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/event-handle.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
+    "url": "useEventRefs()",
+    "title": "useEventRefs()",
+    "version": "1.0.7",
+    "group": "ReactHook",
+    "name": "useEventRefs",
+    "description": "<p>Like useRefs, creates a single reference object that can be managed using the <code>get</code>/<code>set</code>/<code>del</code>/<code>clear</code> functions, however also an EventTarget object. <code>set</code>/<code>del</code>/<code>clear</code> methods dispatch <code>before-set</code>/<code>set</code>, <code>before-del</code>/<code>del</code>, and <code>before-clear</code>/<code>clear</code> events respectively.</p>",
+    "examples": [
+      {
+        "title": "Usage",
+        "content": "import React, { useState } from 'react';\nimport { useRefs } from '@atomic-reactor/reactium-sdk-core';\n\nconst MyComponent = () => {\n    const refs = useEventRefs();\n    const [ready, setReady] = useState(false);\n\n    const onChildRefReady = e => {\n        if (e.key === 'my.component') {\n            setReady(refs.get(e.key) !== undefined);\n        }\n    };\n\n    useEffect(() => {\n        refs.addEventListener('set', onChildRefReady);\n        return () => refs.removeEventListener('set', onChildRefReady);\n    }, []);\n\n    return (\n        <MyForwardRefComponent ref={cmp => refs.set('my.component', cmp)} />\n        {ready && <Controller control={refs.get('my.component')} />}\n    );\n};",
+        "type": "json"
+      }
+    ],
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/useRefs.js",
     "groupTitle": "ReactHook"
   },
   {
@@ -1157,6 +1314,11 @@
         "title": "Usage",
         "content": "import React, { useEffect, useState } from 'react';\nimport { useRefs } from '@atomic-reactor/reactium-sdk-core';\n\nconst MyComponent = () => {\n    const refs = useRefs();\n    const [state, setState] = useState({ input: null });\n\n    const onClick = () => {\n        const inputElm = refs.get('input');\n        setState({ ...state, input: inputElm.value });\n        inputElm.value = '';\n    };\n\n    return (\n        <div ref={elm => refs.set('container', elm)}>\n            {state.input && <div>{state.input}</div>}\n            <input type='text' ref={elm => refs.set('input', elm)} />\n            <button onClick={onClick}>Update</button>\n        </div>\n    );\n};",
         "type": "json"
+      },
+      {
+        "title": "Proxy Reference Usage",
+        "content": "// sometimes you need a forwarded ref to be a ref object from useRef() or React.createRef()\n// You can create proxy factory for the refs to achieve this.\nimport React, { useEffect, useState } from 'react';\nimport { EventForm } from '@atomic-reactor/reactium-ui';\nimport { useRefs } from '@atomic-reactor/reactium-sdk-core';\n\nconst MyComponent = () => {\n   const refs = useRefs();\n   // creates a factory for React.createRef() object to your refs\n   const refProxy = refs.createProxy('form');\n\n   const [state, setState] = useState({});\n\n   const onSubmit = e => {\n       const formRef = refs.get('form');\n       setState({ ...formRef.getValue() });\n   };\n\n   // EventForm expects a reference object, not a callback function\n   // When EventForm references ref.current, it will actually get refs.get('form').\n   // When EventForm sets the ref.current value, it will actually perform refs.set('form', value);\n   return (\n       <EventForm ref={refProxy} onSubmit={onSubmit}>\n           <input type='text' name=\"foo\" />\n           <button type=\"submit\">Submit the Form</button>\n       </EventForm>\n   );\n};",
+        "type": "json"
       }
     ],
     "version": "0.0.0",
@@ -1238,7 +1400,7 @@
             "type": "Mixed",
             "optional": false,
             "field": "params",
-            "description": "<ol> <li>Callback function taking current state object from Redux store, and returning what you care about, or</li> <li>an Object with <code>select</code> and <code>shouldUpdate</code> props.</li> </ol>"
+            "description": "<ol> <li>Callback function taking current state object from Redux store, and returning what you care about, or</li> <li>an Object with <code>select</code>, <code>shouldUpdate</code> and <code>returnMode</code> props.</li> </ol>"
           },
           {
             "group": "Parameter",
@@ -1253,6 +1415,14 @@
             "optional": true,
             "field": "params.shouldUpdate",
             "description": "<p>Callback function object with 2 properties <code>newState</code> and <code>prevState</code>, containing the current results of the select function, and the previous results of the select function, respectively. Returns true if your component should update, otherwise false. By default, <code>useSelect</code> will do a shallow comparison.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "params.returnMode",
+            "defaultValue": "state",
+            "description": "<p><code>state</code> to get the current state, <code>ref</code> to get the whole React reference object (for more realtime updates), and <code>get</code> for a getter function that takes object-path</p>"
           }
         ]
       }
@@ -1331,7 +1501,7 @@
         ]
       }
     },
-    "description": "<p>Synchronously set a status value that can be checked within a function scope without updating the state of the component. Useful when doing asynchronous activities and the next activity depends on a status of some sort from the previous activity.</p> <p>Returns [status:String, setStatus:Function, isStatus:Function]</p> <h3>status</h3> <p>The current status value.</p> <h3>setStatus(status:String, forceRender:Boolean = false)</h3> <p>Set the status value. If forceRender is true, a rerender will be triggered. <em><strong>Beware:</strong></em> forceRender may have unintended consequence and should be used in last status before re-rendering situations only.</p> <h3>isStatus(statuses:Array)</h3> <p>Check if the current status matches the statuses passed.</p>",
+    "description": "<p>Synchronously set a status value that can be checked within a function scope without updating the state of the component. Useful when doing asynchronous activities and the next activity depends on a status of some sort from the previous activity.</p> <p>Returns [status:String, setStatus:Function, isStatus:Function, getStatus:Function]</p> <h3>status</h3> <p>The current asynchronous status value. (is accurate once per render)</p> <h3>setStatus(status:String, forceRender:Boolean = false)</h3> <p>Set the status value. If forceRender is true, a rerender will be triggered. <em><strong>Beware:</strong></em> forceRender may have unintended consequence and should be used in last status before re-rendering situations only.</p> <h3>isStatus(statuses:Array)</h3> <p>Check if the current status matches the statuses passed.</p> <h3>getStatus()</h3> <p>Get the synchrounous value of the status. This can matter if you need to set and check the value in the same render cycle.</p>",
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/useStatus.js",
     "groupTitle": "ReactHook"
@@ -1885,111 +2055,6 @@
   },
   {
     "type": "Function",
-    "url": "Component.get(hook,defaultComponent)",
-    "title": "Component.get()",
-    "group": "Reactium.Component",
-    "name": "Component.get",
-    "description": "<p>Call the hook and obtain the registered component. Get the defaultComponent if no hook component was registered.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "hook",
-            "description": "<p>The hook name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Mixed",
-            "optional": true,
-            "field": "defaultComponent",
-            "description": "<p>the default component if no component is provided</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/component/index.js",
-    "groupTitle": "Reactium.Component"
-  },
-  {
-    "type": "Function",
-    "url": "Component.register(hook,component,order,capabilities,strict)",
-    "title": "Component.register()",
-    "group": "Reactium.Component",
-    "name": "Component.register",
-    "description": "<p>Register a React component to be used with a specific useHookComponent hook. This must be called before the useHookComponent that defines the hook.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "hook",
-            "description": "<p>The hook name</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Mixed",
-            "optional": false,
-            "field": "component",
-            "description": "<p>component(s) to be output by useHookComponent</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "order",
-            "description": "<p>precedent of this if Component.register is called multiple times (e.g. if you are trying to override core or another plugin)</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-hooks.js",
-        "content": "import React from 'react';\nimport Reactium from 'reactium-core/sdk';\n\n// component to be used unless overriden by Reactium.Component.register()\nconst ReplacementComponentA = () => <div>My Plugin's Component</div>\nconst ReplacementComponentB = () => <div>My Alternative Component</div>\n\n// Simple Version\nReactium.Component.register('my-component', ReplacementComponentA);\n\n// Advanced Form using Reactium.Hook SDK\nReactium.Hook.register('my-component', async (...params) => {\n    const context = params.pop(); // context is last argument\n    const [param] = params;\n    if (param === 'test') {\n        context.component = ReplacementComponentA;\n    } else {\n        context.component = ReplacementComponentB;\n    }\n}\n})",
-        "type": "json"
-      },
-      {
-        "title": "parent.js",
-        "content": "import React from 'react';\nimport { useHookComponent } from 'reactium-core/sdk';\n\n// component to be used unless overriden by Reactium.Component.register()\nconst DefaultComponent = () => <div>Default or Placeholder component</div>\n\nexport props => {\n    const MyComponent = useHookComponent('my-component', DefaultComponent, 'test');\n    return (\n        <div>\n            <MyComponent {...props} />\n        </div>\n    );\n};",
-        "type": "json"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/component/index.js",
-    "groupTitle": "Reactium.Component"
-  },
-  {
-    "type": "Function",
-    "url": "Component.unregister(uuid)",
-    "title": "Component.unregister()",
-    "group": "Reactium.Component",
-    "name": "Component.unregister",
-    "description": "<p>Unregister a component used in useHookComponent. This must be performed before useHookComponent is called. Alias for Reactium.Hook.unregister. See Hook.unregister()</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "uuid",
-            "description": "<p>the registered component hook id provided to <code>Component.register()</code></p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/component/index.js",
-    "groupTitle": "Reactium.Component"
-  },
-  {
-    "type": "Function",
     "url": "Handle.get(id)",
     "title": "Handle.get()",
     "description": "<p>Get a specific imperative handle reference, by object path (id). If id is full object path to the handle, returns a React reference if it exists, otherwise <code>undefined</code>. If id is partial object path, returns object containing one or more references if the path exists, otherwise 'undefined'.</p>",
@@ -2482,6 +2547,48 @@
     "version": "0.0.0",
     "filename": ".core/sdk/middleware/index.js",
     "groupTitle": "Reactium.Middleware"
+  },
+  {
+    "type": "Function",
+    "url": "Plugin.isActive(ID)",
+    "title": "Plugin.isActive()",
+    "group": "Reactium.Plugin",
+    "name": "Plugin.isActive",
+    "description": "<p>Determine if a plugin ID is active.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "ID",
+            "description": "<p>the plugin id.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "Reactium.Plugin.isActive('Media');",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/plugin/index.js",
+    "groupTitle": "Reactium.Plugin"
+  },
+  {
+    "type": "Function",
+    "url": "Plugin.list()",
+    "title": "Plugin.list()",
+    "group": "Reactium.Plugin",
+    "name": "Plugin.list",
+    "description": "<p>Return the list of registered plugins.</p>",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/plugin/index.js",
+    "groupTitle": "Reactium.Plugin"
   },
   {
     "type": "Function",
@@ -3210,7 +3317,7 @@
     "url": "Routing.get()",
     "title": "Routing.get()",
     "name": "Routing.get",
-    "description": "<p>Get sorted array of all route objects. This includes the NotFound component. If called prior to the <code>routes-init</code> hook completion, will contain only the NotFound component.</p>",
+    "description": "<p>Get sorted array of all route objects.</p>",
     "group": "Reactium.Routing",
     "version": "0.0.0",
     "filename": ".core/sdk/routing/index.js",
@@ -5230,7 +5337,7 @@
             "type": "Method",
             "optional": false,
             "field": "get",
-            "description": "<p><code>reg.get(id)</code> pass the identifier of an object get that object from the registry</p>"
+            "description": "<p><code>reg.get(id,defaultValue)</code> pass the identifier of an object get that object from the registry. Optionally provide a default value if the id doesn't exist in the registry.</p>"
           },
           {
             "group": "Parameter",
