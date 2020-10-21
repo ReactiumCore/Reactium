@@ -20,6 +20,25 @@ const NotFoundWrapper = props => {
     return <NotFound {...props} />;
 };
 
+const defaultTransitionStates = [
+    {
+        state: 'EXITING',
+        active: 'previous',
+    },
+    {
+        state: 'LOADING',
+        active: 'current',
+    },
+    {
+        state: 'ENTERING',
+        active: 'current',
+    },
+    {
+        state: 'READY',
+        active: 'current',
+    },
+];
+
 class Routing {
     loaded = false;
     updated = null;
@@ -34,6 +53,7 @@ class Routing {
         SDK.Utils.Registry.MODES.CLEAN,
     );
 
+    active = 'current';
     currentRoute = null;
     previousRoute = null;
     subscriptions = {};
@@ -62,7 +82,7 @@ class Routing {
     }
 
     setCurrentRoute = async location => {
-        const prev = this.currentRoute;
+        const previous = this.currentRoute;
         const current = {
             location,
         };
@@ -77,12 +97,12 @@ class Routing {
         let [match] = matches;
 
         const routeChanged =
-            op.get(prev, 'match.route.id') !== op.get(match, 'route.id');
+            op.get(previous, 'match.route.id') !== op.get(match, 'route.id');
         const pathChanged =
-            op.get(prev, 'location.pathname') !==
+            op.get(previous, 'location.pathname') !==
             op.get(current, 'location.pathname');
         const searchChanged =
-            op.get(prev, 'location.search', '') !==
+            op.get(previous, 'location.search', '') !==
             op.get(current, 'location.search', '');
 
         const notFound = !match;
@@ -102,19 +122,104 @@ class Routing {
                 op.get(current, 'location.search', '').replace(/^\?/, ''),
             ),
         );
-        op.set(current, 'reasons', {
+        this.changeReasons = {
             routeChanged,
             pathChanged,
             searchChanged,
             notFound,
-        });
+            transitionStateChanged: false,
+        };
 
         this.currentRoute = current;
-        this.previousRoute = prev;
+        this.previousRoute = previous;
+        this.setupTransitions();
+
+        const active =
+            this.active === 'current' ? this.currentRoute : this.previousRoute;
+        const updates = {
+            previous: this.previousRoute,
+            current: this.currentRoute,
+            active,
+            changes: this.changeReasons,
+            transitionState: this.transitionState,
+            transitionsStates: this.transitionsStates,
+        };
         this.routeListeners.list.forEach(sub => {
             const cb = op.get(sub, 'handler', () => {});
-            cb({ prev, current });
+            cb(updates);
         });
+    };
+
+    setupTransitions = () => {
+        const previousTransitions =
+            op.get(this.previousRoute, 'match.route.transitions', false) ===
+            true;
+        const currentTransitions =
+            op.get(this.currentRoute, 'match.route.transitions', false) ===
+            true;
+        const currentTransitionStates =
+            op.get(
+                this.currentRoute,
+                'match.route.transitionStates',
+                defaultTransitionStates,
+            ) || [];
+
+        // set transitionStates on allowed components
+        this.transitionStates = (!currentTransitions
+            ? []
+            : currentTransitionStates
+        ).filter(({ active = 'current' }) => {
+            return (
+                active === 'current' ||
+                (active === 'previous' && previousTransitions)
+            );
+        });
+
+        const [transition, ...transitionStates] = this.transitionStates;
+        this.transitionStates = transitionStates;
+        this.setTransitionState(transition, false);
+    };
+
+    jumpCurrent = () => {
+        this.transitionStates = [];
+        this.setTransitionState(null);
+    };
+
+    nextState = () => {
+        if (this.transitionStates.length > 0) {
+            const [transition, ...transitionStates] = this.transitionStates;
+            this.transitionStates = transitionStates;
+            this.setTransitionState(transition);
+        }
+    };
+
+    setTransitionState = (transition, update = true) => {
+        this.active = op.get(transition, 'active', 'current') || 'current';
+        this.transitionState = op.get(transition, 'state', 'READY') || 'READY';
+        this.changeReasons = {
+            routeChanged: false,
+            pathChanged: false,
+            searchChanged: false,
+            notFound: false,
+            transitionStateChanged: true,
+        };
+
+        const active =
+            this.active === 'current' ? this.currentRoute : this.previousRoute;
+        const updates = {
+            previous: this.previousRoute,
+            current: this.currentRoute,
+            active,
+            changes: this.changeReasons,
+            transitionState: this.transitionState,
+            transitionsStates: this.transitionsStates,
+        };
+        if (update) {
+            this.routeListeners.list.forEach(sub => {
+                const cb = op.get(sub, 'handler', () => {});
+                cb(updates);
+            });
+        }
     };
 
     load = async () => {

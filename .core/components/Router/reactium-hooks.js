@@ -3,6 +3,7 @@ import React, { forwardRef } from 'react';
 import op from 'object-path';
 import _ from 'underscore';
 import getComponents from 'dependencies/getComponents';
+import RoutedContent from './RoutedContent';
 
 const lookupRouteComponent = async route => {
     let Found;
@@ -74,3 +75,5 @@ if (NotFound !== null)
         NotFound,
         Reactium.Enums.priority.highest,
     );
+
+Reactium.Component.register('RoutedContent', RoutedContent);

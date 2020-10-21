@@ -43,11 +43,16 @@ const renderer = async (req, res, context) => {
 
         // Wait for loader or go ahead and render on error
         console.log('[Reactium] Loading page data...');
-        const data = await ('load' in route && typeof route.load === 'function'
-            ? Promise.resolve(
-                  route.load(route.params, route.query),
-              ).then(thunk => thunk(store.dispatch, store.getState, store))
-            : Promise.resolve());
+
+        let data;
+        if ('thunk' in route && typeof route.thunk === 'function') {
+            const maybeThunk = route.thunk(route.params, route.query);
+            if (typeof maybeThunk === 'function')
+                data = await Promise.resolve(
+                    maybeThunk(store.dispatch, store.getState, store),
+                );
+            else data = await Promise.resolve(maybeThunk);
+        }
 
         await Reactium.Hook.run(
             'data-loaded',

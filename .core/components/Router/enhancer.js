@@ -4,27 +4,25 @@ import { matchPath } from 'react-router';
 import op from 'object-path';
 import deps from 'dependencies';
 
-const historyHandler = store => async ({ current }) => {
+const historyHandler = store => async ({ active: current }) => {
     const location = Reactium.Routing.history.location;
     const match = current.match;
 
     if (match) {
         const { params, search } = current;
         const route = op.get(current, 'match.route');
+        const store = Reactium.Redux.store;
 
-        if ('load' in route && typeof route.load === 'function') {
-            await Promise.resolve(route.load(params, search))
-                .then(thunk => thunk(store.dispatch, store.getState, store))
-                .then(data =>
-                    Reactium.Hook.run(
-                        'data-loaded',
-                        data,
-                        route,
-                        params,
-                        search,
-                    ),
+        let data;
+        if ('thunk' in route && typeof route.thunk === 'function') {
+            const maybeThunk = route.thunk(params, search);
+            if (typeof maybeThunk === 'function')
+                data = await Promise.resolve(
+                    maybeThunk(store.dispatch, store.getState, store),
                 );
         }
+
+        await Reactium.Hook.run('data-loaded', data, route, params, search);
 
         store.dispatch(
             deps().actions.Router.updateRoute({
