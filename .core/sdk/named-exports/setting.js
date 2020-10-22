@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Setting from '../setting';
 import { useCapabilityCheck } from './capability';
+import { useAsyncEffect } from '@atomic-reactor/reactium-sdk-core';
 
 /**
  * @api {ReactHook} useSettingGroup(group) useSettingGroup()
@@ -50,6 +51,7 @@ export const useSettingGroup = group => {
 
     const settingRef = useRef({});
 
+    const [loading, setLoading] = useState(true);
     const [getter, updateGetter] = useState(1);
     const refresh = () => {
         updateGetter(getter + 1);
@@ -63,7 +65,10 @@ export const useSettingGroup = group => {
     const setSettingGroup = async (settingGroup, setPublic = false) => {
         if (canSet) {
             updateSettingRef(settingGroup);
-            return Setting.set(group, settingGroup, setPublic);
+            setLoading(true);
+            const settings = await Setting.set(group, settingGroup, setPublic);
+            setLoading(false);
+            return settings;
         } else {
             throw new Error(
                 'Unable to update setting %s. Not permitted.',
@@ -71,21 +76,24 @@ export const useSettingGroup = group => {
         }
     };
 
-    useEffect(() => {
-        const getSettingGroup = async () => {
+    useAsyncEffect(
+        async isMounted => {
             if (group && canGet) {
                 const settingGroup = await Setting.get(group);
-                updateSettingRef(settingGroup);
+                if (isMounted()) {
+                    updateSettingRef(settingGroup);
+                    setLoading(false);
+                }
             }
-        };
-
-        getSettingGroup();
-    }, [canGet, canSet, group]);
+        },
+        [canGet, canSet, group],
+    );
 
     return {
         canGet,
         canSet,
         settingGroup: settingRef.current,
         setSettingGroup,
+        loading,
     };
 };
