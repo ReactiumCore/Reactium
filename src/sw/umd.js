@@ -10,15 +10,16 @@
  * and re-run your build process.
  * See https://goo.gl/2aRDsh
  */
+import { skipWaiting, clientsClaim } from 'workbox-core';
+import { precacheAndRoute } from 'workbox-precaching';
+// import {NavigationRoute, registerRoute} from 'workbox-routing';
 
-importScripts(
-    'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js',
-);
+skipWaiting();
 
-workbox.core.skipWaiting();
-
-workbox.core.clientsClaim();
+clientsClaim();
 
 console.log('Customizable service worker!');
 
-workbox.precaching.precacheAndRoute([]);
+// This is for static assets. You will need to implement your own precaching
+// for dynamic resources
+precacheAndRoute(self.__WB_MANIFEST);

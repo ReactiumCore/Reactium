@@ -70,7 +70,7 @@ module.exports = umd => {
     if (env === 'production') {
         plugins.push(new CompressionPlugin());
     } else if (op.get(umd, 'sourcemaps', true)) {
-        config.devtool = 'inline-source-map';
+        config.devtool = 'cheap-source-map';
     }
 
     return overrides(umd, config);
