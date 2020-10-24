@@ -406,8 +406,14 @@ module.exports = {
                 {
                     overwrite: true,
                     version: '>=3.5.0',
-                    destination: '/src/sw',
-                    source: '/tmp/src/sw',
+                    destination: '/src/sw/umd.js',
+                    source: '/tmp/src/sw/umd.js',
+                },
+                {
+                    overwrite: true,
+                    version: '>=3.5.0',
+                    destination: '/src/sw/umd-config.json',
+                    source: '/tmp/src/sw/umd-config.json',
                 },
             ],
             remove: [],
