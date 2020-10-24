@@ -406,8 +406,8 @@ module.exports = {
                 {
                     overwrite: true,
                     version: '>=3.5.0',
-                    destination: '/src/sw/umd.js',
-                    source: '/tmp/update/src/sw/umd.js',
+                    destination: '/src/sw',
+                    source: '/tmp/update/src/sw',
                 },
             ],
             remove: [],
