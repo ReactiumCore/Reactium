@@ -6,6 +6,7 @@ const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 
 const defaultConfig = {
+    rootPath,
     entries: globby
         .sync('./src/app/*.js')
         .map(p => path.resolve(p))
