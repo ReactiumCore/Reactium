@@ -23,7 +23,7 @@ const defaultConfig = {
     open: true,
     cssPreProcessor: 'sass',
     watch: {
-        js: ['src/app/**/*'],
+        js: ['src/app/**/*', 'reactium_modules/**/*'],
         markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
         colors: ['src/**/*/colors.json'],
         pluginAssets: ['src/app/**/plugin-assets.json'],
