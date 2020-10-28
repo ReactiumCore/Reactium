@@ -4,7 +4,7 @@ const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.5.0';
+const version = '3.5.1';
 
 const contextMode = () => {
     if (
@@ -405,9 +405,15 @@ module.exports = {
                 },
                 {
                     overwrite: true,
-                    version: '>=3.5.0',
+                    version: '>=3.5.1',
                     destination: '/src/sw',
                     source: '/tmp/update/src/sw',
+                },
+                {
+                    overwrite: true,
+                    version: '>=3.5.1',
+                    destination: '/src/app/main.js',
+                    source: '/tmp/update/src/app/main.js',
                 },
             ],
             remove: [],

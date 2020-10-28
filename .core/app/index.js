@@ -27,6 +27,7 @@ export const App = async () => {
 
     await Reactium.Hook.run('init');
     await Reactium.Hook.run('dependencies-load');
+    Reactium.ServiceWorker.init();
     await Reactium.Zone.init();
     const { store } = await Reactium.Hook.run('store-create', {
         server: false,

@@ -8,6 +8,7 @@ import Routing from './routing';
 import Setting from './setting';
 import User from './user';
 import Capability from './capability';
+import ServiceWorker from './service-worker';
 import API from './api';
 
 export * from '@atomic-reactor/reactium-sdk-core';
@@ -47,6 +48,7 @@ export default new Proxy(
         Setting,
         User,
         Capability,
+        ServiceWorker,
     }),
     apiHandler,
 );

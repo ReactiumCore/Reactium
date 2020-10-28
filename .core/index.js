@@ -227,6 +227,39 @@ const bootup = async () => {
     });
 
     // default route handler
+    SDK.Server.Middleware.register('service-worker-allowed', {
+        name: 'service-worker-allowed',
+        use: async (req, res, next) => {
+            const responseHeaders = {
+                'Service-Worker-Allowed': '/',
+            };
+
+            SDK.Hook.runSync(
+                'Server.ServiceWorkerAllowed',
+                responseHeaders,
+                req,
+                res,
+            );
+            await SDK.Hook.run(
+                'Server.ServiceWorkerAllowed',
+                responseHeaders,
+                req,
+                res,
+            );
+
+            if (op.has(responseHeaders, 'Service-Worker-Allowed')) {
+                res.set(
+                    'Service-Worker-Allowed',
+                    op.get(responseHeaders, 'Service-Worker-Allowed'),
+                );
+            }
+
+            next();
+        },
+        order: Enums.priority.high,
+    });
+
+    // default route handler
     SDK.Server.Middleware.register('router', {
         name: 'router',
         use: router,

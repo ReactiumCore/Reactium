@@ -115,10 +115,8 @@ const defaultConfig = {
     sw: {
         globDirectory: 'public',
         globPatterns: ['**/*.{html,js,css,js.gz,css.gz}'],
-        globIgnores: ['**/index-static.html', 'docs/**/*'],
+        globIgnores: ['**/index-static.html', 'docs/**/*', 'assets/js/sw/**/*'],
         swDest: 'public/assets/js/sw/sw.js',
-        clientsClaim: true,
-        skipWaiting: true,
         modifyURLPrefix: {
             assets: '/assets',
         },
