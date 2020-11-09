@@ -82,7 +82,19 @@ export const restHeaders = () => {
 };
 
 // File scoped
-dependencies.manifest = require('manifest').get();
+try {
+    dependencies.manifest = require('manifest').get();
+} catch (error) {
+    if (typeof window !== 'undefined') {
+        console.error('Error loading dependencies from manifest.', error);
+    } else {
+        console.error(
+            'Error loading dependencies from manifest on server.',
+            error,
+        );
+    }
+}
+
 export const manifest = dependencies.manifest;
 
 Reactium.Hook.register(
@@ -105,7 +117,7 @@ Reactium.Hook.register(
                     dependencies._init();
                     resolve();
                 }
-            }, 100);
+            }, 10);
         }),
     Reactium.Enums.priority.highest,
 );
