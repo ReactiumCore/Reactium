@@ -1,9 +1,10 @@
 import React, { Suspense, lazy } from 'react';
+import manifestLoader from 'manifest';
 
 export default (elms = []) => {
     let cmps = {};
     if (typeof window !== 'undefined') {
-        const contexts = require('manifest').contexts;
+        const contexts = manifestLoader.contexts;
 
         // Traverse the Array of bindable elements and require the components for them
         elms.forEach(({ type, path }) => {

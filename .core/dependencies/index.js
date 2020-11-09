@@ -1,5 +1,6 @@
 import op from 'object-path';
 import Reactium from 'reactium-core/sdk';
+import manifestLoader from 'manifest';
 
 class ReactiumDependencies {
     constructor() {
@@ -26,9 +27,11 @@ class ReactiumDependencies {
         if (this.loaded) return;
 
         this.loaded = true;
-        this.reducers = this.manifest.allReducers;
-        this.actions = this.manifest.allActions;
-        this.actionTypes = Object.keys(this.manifest.allActionTypes).reduce(
+        this.reducers = op.get(this.manifest, 'allReducers', {});
+        this.actions = op.get(this.manifest, 'allActions', {});
+        this.actionTypes = Object.keys(
+            op.get(this.manifest, 'allActionTypes', {}),
+        ).reduce(
             (types, key) => ({
                 ...types,
                 ...this.manifest.allActionTypes[key],
@@ -37,9 +40,9 @@ class ReactiumDependencies {
         );
         this.actionTypes.DOMAIN_UPDATE = 'DOMAIN_UPDATE';
 
-        this.services = this.manifest.allServices;
+        this.services = op.get(this.manifest, 'allServices', {});
 
-        this.plugins = this.manifest.allPlugins;
+        this.plugins = op.get(this.manifest, 'allPlugins', {});
 
         try {
             let plugableConfig = require('appdir/plugable');
@@ -56,7 +59,7 @@ class ReactiumDependencies {
                     coreType => coreType === type || type === 'allHooks',
                 )
             ) {
-                this[type] = this.manifest[type];
+                this[type] = op.get(this.manifest, [type], {});
             }
         });
 
@@ -83,7 +86,7 @@ export const restHeaders = () => {
 
 // File scoped
 try {
-    dependencies.manifest = require('manifest').get();
+    dependencies.manifest = manifestLoader.get();
 } catch (error) {
     if (typeof window !== 'undefined') {
         console.error('Error loading dependencies from manifest.', error);
@@ -112,6 +115,7 @@ Reactium.Hook.register(
                             (loaded, [, dependency]) => loaded && !!dependency,
                             true,
                         );
+
                 if (loaded) {
                     clearInterval(interval);
                     dependencies._init();
