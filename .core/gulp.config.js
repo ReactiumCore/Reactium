@@ -130,7 +130,12 @@ const defaultConfig = {
 
 const overrides = config => {
     globby
-        .sync('./**/gulp.config.override.js')
+        .sync([
+            './gulp.config.override.js',
+            './node_modules/**/reactium-plugin/gulp.config.override.js',
+            './src/**/gulp.config.override.js',
+            './reactium_modules/**/gulp.config.override.js',
+        ])
         .forEach(file => require(path.resolve(file))(config));
 
     return config;

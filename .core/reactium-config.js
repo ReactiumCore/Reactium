@@ -226,7 +226,12 @@ const defaultManifestConfig = {
 
 const overrides = config => {
     globby
-        .sync('./**/manifest.config.override.js')
+        .sync([
+            './manifest.config.override.js',
+            './node_modules/**/reactium-plugin/manifest.config.override.js',
+            './src/**/manifest.config.override.js',
+            './reactium_modules/**/manifest.config.override.js',
+        ])
         .forEach(file => require(path.resolve(file))(config));
     return config;
 };

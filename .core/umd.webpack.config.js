@@ -9,7 +9,12 @@ const webpack = require('webpack');
 
 const overrides = (umd, config) => {
     globby
-        .sync('./**/umd.webpack.override.js')
+        .sync([
+            './umd.webpack.override.js',
+            './node_modules/**/reactium-plugin/umd.webpack.override.js',
+            './src/**/umd.webpack.override.js',
+            './reactium_modules/**/umd.webpack.override.js',
+        ])
         .forEach(file => require(path.resolve(file))(umd, config));
     return config;
 };
