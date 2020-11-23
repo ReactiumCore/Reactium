@@ -71,7 +71,7 @@ const dependencies = new ReactiumDependencies();
 
 export default () => {
     if (!dependencies.loaded) {
-        console.warning(
+        console.warn(
             new Error('Use of dependencies before dependencies-loaded.'),
         );
         throw dependencyError;
