@@ -2,5 +2,9 @@
     "libraryName": "service-worker",
     "globalObject": "this",
     "babelPresetEnv": false,
-    "externals": {}
+    "babelReact": false,
+    "babelLoader": false,
+    "externals": {},
+    "addDefines": true,
+    "workerRestAPI": true
 }

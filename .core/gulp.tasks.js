@@ -285,6 +285,8 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const umd = gulp.series(task('umdManifest'), task('umdLibraries'));
 
+    const sw = gulp.series(task('umd'), task('serviceWorker'));
+
     const mainManifest = done => {
         // Generate manifest.js file
         regenManifest({
@@ -619,6 +621,7 @@ $assets: (
         serve: serve(),
         'serve-restart': serve({ open: false }),
         serviceWorker,
+        sw,
         static: staticTask,
         'static:copy': staticCopy,
         'styles:pluginAssets': pluginAssets,

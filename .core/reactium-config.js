@@ -4,7 +4,7 @@ const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.4.6';
+const version = '3.5.1';
 
 const contextMode = () => {
     if (
@@ -226,7 +226,12 @@ const defaultManifestConfig = {
 
 const overrides = config => {
     globby
-        .sync('./**/manifest.config.override.js')
+        .sync([
+            './manifest.config.override.js',
+            './node_modules/**/reactium-plugin/manifest.config.override.js',
+            './src/**/manifest.config.override.js',
+            './reactium_modules/**/manifest.config.override.js',
+        ])
         .forEach(file => require(path.resolve(file))(config));
     return config;
 };
@@ -402,6 +407,18 @@ module.exports = {
                     version: '>=3.4.2',
                     destination: '/.npmrc',
                     source: '/tmp/update/.npmrc',
+                },
+                {
+                    overwrite: true,
+                    version: '>=3.5.1',
+                    destination: '/src/sw',
+                    source: '/tmp/update/src/sw',
+                },
+                {
+                    overwrite: true,
+                    version: '>=3.5.1',
+                    destination: '/src/app/main.js',
+                    source: '/tmp/update/src/app/main.js',
                 },
             ],
             remove: [],

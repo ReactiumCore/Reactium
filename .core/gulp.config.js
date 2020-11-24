@@ -6,6 +6,7 @@ const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 
 const defaultConfig = {
+    rootPath,
     entries: globby
         .sync('./src/app/*.js')
         .map(p => path.resolve(p))
@@ -22,7 +23,7 @@ const defaultConfig = {
     open: true,
     cssPreProcessor: 'sass',
     watch: {
-        js: ['src/app/**/*'],
+        js: ['src/app/**/*', 'reactium_modules/**/*'],
         markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
         colors: ['src/**/*/colors.json'],
         pluginAssets: ['src/app/**/plugin-assets.json'],
@@ -114,10 +115,8 @@ const defaultConfig = {
     sw: {
         globDirectory: 'public',
         globPatterns: ['**/*.{html,js,css,js.gz,css.gz}'],
-        globIgnores: ['**/index-static.html'],
+        globIgnores: ['**/index-static.html', 'docs/**/*', 'assets/js/sw/**/*'],
         swDest: 'public/assets/js/sw/sw.js',
-        clientsClaim: true,
-        skipWaiting: true,
         modifyURLPrefix: {
             assets: '/assets',
         },
@@ -131,7 +130,12 @@ const defaultConfig = {
 
 const overrides = config => {
     globby
-        .sync('./**/gulp.config.override.js')
+        .sync([
+            './gulp.config.override.js',
+            './node_modules/**/reactium-plugin/gulp.config.override.js',
+            './src/**/gulp.config.override.js',
+            './reactium_modules/**/gulp.config.override.js',
+        ])
         .forEach(file => require(path.resolve(file))(config));
 
     return config;

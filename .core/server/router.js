@@ -3,6 +3,7 @@ import renderer from './renderer';
 import fs from 'fs';
 import path from 'path';
 import httpAuth from 'http-auth';
+import SDK from '@atomic-reactor/reactium-sdk-core';
 
 const router = express.Router();
 
@@ -49,6 +50,23 @@ router.use(async (req, res, next) => {
                 console.log('[Reactium] Redirecting to ', context.url);
                 return res.redirect(302, context.url);
             }
+
+            const responseHeaders = {};
+            SDK.Hook.runSync(
+                'Server.ResponseHeaders',
+                responseHeaders,
+                req,
+                res,
+            );
+            await SDK.Hook.run(
+                'Server.ResponseHeaders',
+                responseHeaders,
+                req,
+                res,
+            );
+            Object.entries(responseHeaders).forEach(([key, value]) =>
+                res.set(key, value),
+            );
 
             let status = 200;
             if (/^\/404/.test(req.path) || context.notFound) {

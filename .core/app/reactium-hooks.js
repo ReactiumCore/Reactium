@@ -9,9 +9,10 @@ import Router from 'reactium-core/components/Router';
 import getComponents from 'dependencies/getComponents';
 import op from 'object-path';
 import _ from 'underscore';
+import manifestLoader from 'manifest';
 
 Reactium.Hook.register('init', async () => {
-    require('manifest').externals();
+    manifestLoader.externals();
 });
 
 Reactium.Hook.register(

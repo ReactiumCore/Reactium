@@ -5,10 +5,16 @@ const op = require('object-path');
 const rootPath = path.resolve(__dirname, '..');
 const env = process.env.NODE_ENV || 'development';
 const CompressionPlugin = require('compression-webpack-plugin');
+const webpack = require('webpack');
 
 const overrides = (umd, config) => {
     globby
-        .sync('./**/umd.webpack.override.js')
+        .sync([
+            './umd.webpack.override.js',
+            './node_modules/**/reactium-plugin/umd.webpack.override.js',
+            './src/**/umd.webpack.override.js',
+            './reactium_modules/**/umd.webpack.override.js',
+        ])
         .forEach(file => require(path.resolve(file))(umd, config));
     return config;
 };
@@ -17,6 +23,7 @@ module.exports = umd => {
     const plugins = [];
     const presets = [];
     const rules = [];
+    const defines = op.get(umd, 'staticDefines', {});
 
     if (op.get(umd, 'babelPresetEnv', true)) presets.push('@babel/preset-env');
     if (op.get(umd, 'babelReact', true)) presets.push('@babel/react');
@@ -38,6 +45,17 @@ module.exports = umd => {
             },
         });
 
+    if (op.get(umd, 'workerRestAPI', true)) {
+        op.set(
+            defines,
+            'workerRestAPIConfig',
+            JSON.stringify({
+                actiniumAppId: process.env.ACTINIUM_APP_ID || 'Actinium',
+                restAPI: process.env.WORKER_REST_API_URL || '/api',
+            }),
+        );
+    }
+
     const externals = [];
     Object.entries(umd.externals).forEach(([key, value]) => {
         // regex key
@@ -49,6 +67,10 @@ module.exports = umd => {
         }
         externals.push(value);
     });
+
+    if (op.get(umd, 'addDefines', true)) {
+        plugins.push(new webpack.DefinePlugin(defines));
+    }
 
     const config = {
         mode: env,
@@ -70,7 +92,7 @@ module.exports = umd => {
     if (env === 'production') {
         plugins.push(new CompressionPlugin());
     } else if (op.get(umd, 'sourcemaps', true)) {
-        config.devtool = 'inline-source-map';
+        config.devtool = 'cheap-source-map';
     }
 
     return overrides(umd, config);

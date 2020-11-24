@@ -15,7 +15,11 @@ if (module.hot) {
     };
 
     module.hot.accept(
-        ['../.././.core/dependencies/index.js', '../.././.core/app.js'],
+        [
+            '../.././.core/dependencies/index.js',
+            '../.././.core/app.js',
+            '../.././.core/sdk/index.js',
+        ],
         () => {
             window.location.reload();
         },
@@ -23,16 +27,3 @@ if (module.hot) {
 }
 
 render();
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker
-            .register('/assets/js/sw/sw.js')
-            .then(registration => {
-                console.log('SW registered.');
-            })
-            .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    });
-}

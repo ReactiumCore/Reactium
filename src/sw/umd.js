@@ -10,15 +10,75 @@
  * and re-run your build process.
  * See https://goo.gl/2aRDsh
  */
+import { skipWaiting, clientsClaim, cacheNames } from 'workbox-core';
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { CacheOnly } from 'workbox-strategies';
+import op from 'object-path';
 
-importScripts(
-    'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js',
-);
+const SW_VERSION = '1.0.0';
 
-workbox.core.skipWaiting();
+const messageTypes = {
+    GET_VERSION: 'GET_VERSION',
+};
 
-workbox.core.clientsClaim();
+const customCacheNames = {
+    media: 'site-media',
+};
 
-console.log('Customizable service worker!');
+// This is for static assets. You will need to implement your own precaching
+// for dynamic resources
+precacheAndRoute(self.__WB_MANIFEST);
 
-workbox.precaching.precacheAndRoute([]);
+/**
+ * Example Dynamic loading of content
+ */
+// const apiConfig = workerRestAPIConfig;
+// const getParseApi = () => {
+//     return (url, body = {}, config = {}) => {
+//         return fetch(`${apiConfig.restAPI}${url}`, {
+//             ...config,
+//             method: 'POST',
+//             body: JSON.stringify(body),
+//             headers: {
+//                 ...op.get(config, 'headers', {}),
+//                 'X-Parse-Application-Id': apiConfig.actiniumAppId,
+//             },
+//         });
+//     };
+// };
+
+// const prefetchMedia = async () => {
+//     const api = getParseApi();
+//     const mediaRequest = await fetch('/media/all');
+//     const files = await mediaRequest.json();
+//     const cache = await caches.open(customCacheNames.media);
+//     console.log(`Precaching ${customCacheNames.media}`);
+//     for (const url of files) {
+//         const mediaResponse = await fetch(url, { mode: 'no-cors' });
+//         cache.put(url, mediaResponse.clone());
+//     }
+// };
+//
+// self.addEventListener('install', event => {
+//     event.waitUntil(
+//         Promise.all([
+//             // Pre-cache media
+//             prefetchMedia(),
+//         ]),
+//     );
+// });
+
+self.addEventListener('install', event => {
+    skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+    clientsClaim();
+});
+
+self.addEventListener('message', event => {
+    if (event.data.type === messageTypes.GET_VERSION) {
+        event.ports[0].postMessage(SW_VERSION);
+    }
+});
