@@ -4,7 +4,7 @@ const globby = require('globby');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.4.5';
+const version = '3.4.6';
 
 const contextMode = () => {
     if (

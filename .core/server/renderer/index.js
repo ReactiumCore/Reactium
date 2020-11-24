@@ -415,6 +415,32 @@ ga('send', 'pageview');
     await SDK.Hook.run('Server.AppStyleSheets', req, Server.AppStyleSheets);
 
     /**
+     * @api {Hook} Server.AppGlobals Server.AppGlobals
+     * @apiName Server.AppGlobals
+     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define
+     global for nodejs (useful for Server-Side-Rendering).
+     * @apiParam {Object} req express request object
+     * @apiParam {Object} AppGlobals Server app globals registry object.
+     * @apiParam (global) {String} name The property name that will be added to window (for browser) or global (for nodejs).
+     * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
+     * @apiExample reactium-boot.js
+     import SDK from '@atomic-reactor/reactium-sdk-core';
+     // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
+     SDK.Hook.registerSync(
+         'Server.AppGlobals',
+         (req, AppGlobals) => {
+             // Find the registered component "DevTools" and bind it
+             AppGlobals.register('environment', {
+                 name: 'environment',
+                 value: 'local',
+             });
+         });
+     * @apiGroup BootHook
+     */
+    SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
+    await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
+
+    /**
      * @api {Hook} Server.AppBindings Server.AppBindings
      * @apiName Server.AppBindings
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines React bind pointes in markup.
@@ -445,32 +471,6 @@ ga('send', 'pageview');
     SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
     await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
     req.appBindings = renderAppBindings(req);
-
-    /**
-     * @api {Hook} Server.AppGlobals Server.AppGlobals
-     * @apiName Server.AppGlobals
-     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define
-     global for nodejs (useful for Server-Side-Rendering).
-     * @apiParam {Object} req express request object
-     * @apiParam {Object} AppGlobals Server app globals registry object.
-     * @apiParam (global) {String} name The property name that will be added to window (for browser) or global (for nodejs).
-     * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
-     * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
-     SDK.Hook.registerSync(
-         'Server.AppGlobals',
-         (req, AppGlobals) => {
-             // Find the registered component "DevTools" and bind it
-             AppGlobals.register('environment', {
-                 name: 'environment',
-                 value: 'local',
-             });
-         });
-     * @apiGroup BootHook
-     */
-    SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
-    await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
 
     /**
      * @api {Hook} Server.afterApp Server.afterApp
