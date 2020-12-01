@@ -290,6 +290,40 @@ export default async (req, res, context) => {
     await SDK.Hook.run('Server.beforeApp', req, Server);
 
     /**
+     * @api {Hook} Server.AppGlobals Server.AppGlobals
+     * @apiName Server.AppGlobals
+     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define
+     global for nodejs (useful for Server-Side-Rendering).
+     * @apiParam {Object} req express request object
+     * @apiParam {Object} AppGlobals Server app globals registry object.
+     * @apiParam (global) {String} name The property name that will be added to window (for browser) or global (for nodejs).
+     * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
+     * @apiExample reactium-boot.js
+     import SDK from '@atomic-reactor/reactium-sdk-core';
+     // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
+     SDK.Hook.registerSync(
+         'Server.AppGlobals',
+         (req, AppGlobals) => {
+             // Find the registered component "DevTools" and bind it
+             AppGlobals.register('environment', {
+                 name: 'environment',
+                 value: 'local',
+             });
+         });
+     * @apiGroup BootHook
+     */
+    SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
+    await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
+
+    // Add application globals
+    _.sortBy(Object.values(Server.AppGlobals.list), 'order').forEach(
+        ({ name, value }) => {
+            global[name] = value;
+            req.appGlobals += `window["${name}"] = ${serialize(value)};\n`;
+        },
+    );
+
+    /**
      * @api {Hook} Server.AppHeaders Server.AppHeaders
      * @apiName Server.AppHeaders
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines html head tags (exluding stylesheet).
@@ -318,6 +352,13 @@ export default async (req, res, context) => {
      */
     SDK.Hook.runSync('Server.AppHeaders', req, Server.AppHeaders, res);
     await SDK.Hook.run('Server.AppHeaders', req, Server.AppHeaders, res);
+
+    // Add header tags
+    _.sortBy(Object.values(Server.AppHeaders.list), 'order').forEach(
+        ({ header = '' }) => {
+            req.headTags += header;
+        },
+    );
 
     /**
      * @api {Hook} Server.AppScripts Server.AppScripts
@@ -354,141 +395,6 @@ export default async (req, res, context) => {
      */
     SDK.Hook.runSync('Server.AppScripts', req, Server.AppScripts, res);
     await SDK.Hook.run('Server.AppScripts', req, Server.AppScripts, res);
-
-    /**
-     * @api {Hook} Server.AppSnippets Server.AppSnippets
-     * @apiName Server.AppSnippets
-     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines snippets of code to be added to document in their entirety.
-     * @apiParam {Object} req express request object
-     * @apiParam {Object} AppSnippets Server app snippets registry object.
-     * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {
-        AppSnippets.register('ga-tracking', {
-            snippet: `<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', '', 'auto');
-ga('send', 'pageview');
-</script>`,
-          order: 1,
-        })
-     });
-     * @apiGroup BootHook
-     */
-    SDK.Hook.runSync('Server.AppSnippets', req, Server.AppSnippets);
-    await SDK.Hook.run('Server.AppSnippets', req, Server.AppSnippets);
-
-    /**
-     * @api {Hook} Server.AppStyleSheets Server.AppStyleSheets
-     * @apiName Server.AppStyleSheets
-     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines css files to be loaded.
-     * @apiParam {Object} req express request object
-     * @apiParam {Object} AppStyleSheets Server app styles registry object.
-     * @apiParam (stylesheet) {String} [path] the src of the javascript
-     * @apiParam (stylesheet) {Number} [order=0] loading order of script
-     * @apiParam (stylesheet) {String} [rel=stylesheet] the rel attribute
-     * @apiParam (stylesheet) {String} [crossorigin] the crossorigin attribute
-     * @apiParam (stylesheet) {String} [referrerpolicy] the referrerpolicy attribute
-     * @apiParam (stylesheet) {String} [hrefLang] the hreflang attribute
-     * @apiParam (stylesheet) {String} [sizes] the sizes attribute if rel=icon
-     * @apiParam (stylesheet) {String} [type] the type attribute
-     * @apiParam (stylesheet) {Function} [when] callback passed the request object, and returns true or false if the css should be included
-     * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {
-         AppStyleSheets.register('my-stylesheet', {
-             path: '/assets/css/some-additional.css'
-         });
-
-         AppStyleSheets.register('my-csn-script', {
-             path: 'https://cdn.example.com/cdn.loaded.css'
-             order: 1, // scripts will be ordered by this
-         });
-     });
-     * @apiGroup BootHook
-     */
-    SDK.Hook.runSync('Server.AppStyleSheets', req, Server.AppStyleSheets);
-    await SDK.Hook.run('Server.AppStyleSheets', req, Server.AppStyleSheets);
-
-    /**
-     * @api {Hook} Server.AppGlobals Server.AppGlobals
-     * @apiName Server.AppGlobals
-     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define
-     global for nodejs (useful for Server-Side-Rendering).
-     * @apiParam {Object} req express request object
-     * @apiParam {Object} AppGlobals Server app globals registry object.
-     * @apiParam (global) {String} name The property name that will be added to window (for browser) or global (for nodejs).
-     * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
-     * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
-     SDK.Hook.registerSync(
-         'Server.AppGlobals',
-         (req, AppGlobals) => {
-             // Find the registered component "DevTools" and bind it
-             AppGlobals.register('environment', {
-                 name: 'environment',
-                 value: 'local',
-             });
-         });
-     * @apiGroup BootHook
-     */
-    SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
-    await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
-
-    /**
-     * @api {Hook} Server.AppBindings Server.AppBindings
-     * @apiName Server.AppBindings
-     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines React bind pointes in markup.
-     * @apiParam {Object} req express request object
-     * @apiParam {Object} AppBindings Server app binding registry object.
-     * @apiParam (binding) {String} [component] string name of component to bind directly if possible (must be in a webpack search context in reactium-config)
-     * @apiParam (binding) {String} [markup] ordinary markup that React will use to bind the app.
-     * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.registerSync(
-         'Server.AppBindings',
-         (req, AppBindings) => {
-             // Find the registered component "DevTools" and bind it
-             AppBindings.register('DevTools', {
-                 component: 'DevTools',
-             });
-
-             // Add ordinary markup for React to bind to
-             AppBindings.register('router', {
-                 markup: '<div id="router"></div>',
-             });
-         },
-         SDK.Enums.priority.highest,
-         'SERVER-APP-BINDINGS-CORE',
-     );
-     * @apiGroup BootHook
-     */
-    SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
-    await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
-    req.appBindings = renderAppBindings(req);
-
-    /**
-     * @api {Hook} Server.afterApp Server.afterApp
-     * @apiName Server.afterApp
-     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.
-     * @apiParam {Object} req express request object
-     * @apiParam {Object} Server SDK Server object.
-     * @apiGroup BootHook
-     */
-    SDK.Hook.runSync('Server.afterApp', req, Server);
-    await SDK.Hook.run('Server.afterApp', req, Server);
-
-    // Add header tags
-    _.sortBy(Object.values(Server.AppHeaders.list), 'order').forEach(
-        ({ header = '' }) => {
-            req.headTags += header;
-        },
-    );
 
     // Add scripts and headerScripts
     _.sortBy(Object.values(Server.AppScripts.list), 'order').forEach(
@@ -528,6 +434,38 @@ ga('send', 'pageview');
             }
         },
     );
+
+    /**
+     * @api {Hook} Server.AppStyleSheets Server.AppStyleSheets
+     * @apiName Server.AppStyleSheets
+     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines css files to be loaded.
+     * @apiParam {Object} req express request object
+     * @apiParam {Object} AppStyleSheets Server app styles registry object.
+     * @apiParam (stylesheet) {String} [path] the src of the javascript
+     * @apiParam (stylesheet) {Number} [order=0] loading order of script
+     * @apiParam (stylesheet) {String} [rel=stylesheet] the rel attribute
+     * @apiParam (stylesheet) {String} [crossorigin] the crossorigin attribute
+     * @apiParam (stylesheet) {String} [referrerpolicy] the referrerpolicy attribute
+     * @apiParam (stylesheet) {String} [hrefLang] the hreflang attribute
+     * @apiParam (stylesheet) {String} [sizes] the sizes attribute if rel=icon
+     * @apiParam (stylesheet) {String} [type] the type attribute
+     * @apiParam (stylesheet) {Function} [when] callback passed the request object, and returns true or false if the css should be included
+     * @apiExample reactium-boot.js
+     import SDK from '@atomic-reactor/reactium-sdk-core';
+     SDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {
+         AppStyleSheets.register('my-stylesheet', {
+             path: '/assets/css/some-additional.css'
+         });
+
+         AppStyleSheets.register('my-csn-script', {
+             path: 'https://cdn.example.com/cdn.loaded.css'
+             order: 1, // scripts will be ordered by this
+         });
+     });
+     * @apiGroup BootHook
+     */
+    SDK.Hook.runSync('Server.AppStyleSheets', req, Server.AppStyleSheets);
+    await SDK.Hook.run('Server.AppStyleSheets', req, Server.AppStyleSheets);
 
     // Add stylesheets
     _.sortBy(Object.values(Server.AppStyleSheets.list), 'order').forEach(
@@ -595,13 +533,64 @@ ga('send', 'pageview');
         },
     );
 
-    // Add application globals
-    _.sortBy(Object.values(Server.AppGlobals.list), 'order').forEach(
-        ({ name, value }) => {
-            global[name] = value;
-            req.appGlobals += `window["${name}"] = ${serialize(value)};\n`;
-        },
-    );
+    /**
+     * @api {Hook} Server.AppBindings Server.AppBindings
+     * @apiName Server.AppBindings
+     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines React bind pointes in markup.
+     * @apiParam {Object} req express request object
+     * @apiParam {Object} AppBindings Server app binding registry object.
+     * @apiParam (binding) {String} [component] string name of component to bind directly if possible (must be in a webpack search context in reactium-config)
+     * @apiParam (binding) {String} [markup] ordinary markup that React will use to bind the app.
+     * @apiExample reactium-boot.js
+     import SDK from '@atomic-reactor/reactium-sdk-core';
+     SDK.Hook.registerSync(
+         'Server.AppBindings',
+         (req, AppBindings) => {
+             // Find the registered component "DevTools" and bind it
+             AppBindings.register('DevTools', {
+                 component: 'DevTools',
+             });
+
+             // Add ordinary markup for React to bind to
+             AppBindings.register('router', {
+                 markup: '<div id="router"></div>',
+             });
+         },
+         SDK.Enums.priority.highest,
+         'SERVER-APP-BINDINGS-CORE',
+     );
+     * @apiGroup BootHook
+     */
+    SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
+    await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
+    req.appBindings = renderAppBindings(req);
+
+    /**
+     * @api {Hook} Server.AppSnippets Server.AppSnippets
+     * @apiName Server.AppSnippets
+     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines snippets of code to be added to document in their entirety.
+     * @apiParam {Object} req express request object
+     * @apiParam {Object} AppSnippets Server app snippets registry object.
+     * @apiExample reactium-boot.js
+     import SDK from '@atomic-reactor/reactium-sdk-core';
+     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {
+        AppSnippets.register('ga-tracking', {
+            snippet: `<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+</script>`,
+          order: 1,
+        })
+     });
+     * @apiGroup BootHook
+     */
+    SDK.Hook.runSync('Server.AppSnippets', req, Server.AppSnippets);
+    await SDK.Hook.run('Server.AppSnippets', req, Server.AppSnippets);
 
     // Add entire text script snippets
     _.sortBy(Object.values(Server.AppSnippets.list), 'order').forEach(
@@ -609,6 +598,17 @@ ga('send', 'pageview');
             req.appAfterScripts += `${snippet}\n`;
         },
     );
+
+    /**
+     * @api {Hook} Server.afterApp Server.afterApp
+     * @apiName Server.afterApp
+     * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.
+     * @apiParam {Object} req express request object
+     * @apiParam {Object} Server SDK Server object.
+     * @apiGroup BootHook
+     */
+    SDK.Hook.runSync('Server.afterApp', req, Server);
+    await SDK.Hook.run('Server.afterApp', req, Server);
 
     return require(`./${renderMode}`)(req, res, context);
 };
