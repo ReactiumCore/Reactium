@@ -582,7 +582,7 @@ define({ "api": [
     "title": "Capability.clearCache()",
     "version": "3.1.2",
     "group": "Capability",
-    "name": "Capability.clearCache()",
+    "name": "Capability.clearCache",
     "description": "<p>Clear Capability related Cache keys.</p>",
     "filename": ".core/sdk/capability/index.js",
     "groupTitle": "Capability"
@@ -625,7 +625,7 @@ define({ "api": [
     "title": "Capability.register()",
     "version": "3.1.2",
     "group": "Capability",
-    "name": "Capability.register()",
+    "name": "Capability.register",
     "description": "<p>Register a new capability.</p>",
     "parameter": {
       "fields": {

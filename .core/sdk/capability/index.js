@@ -68,7 +68,7 @@ Capability.cache = 60000;
  * @api {Function} Capability.register(id) Capability.register()
  * @apiVersion 3.1.2
  * @apiGroup Capability
- * @apiName Capability.register()
+ * @apiName Capability.register
  * @apiDescription Register a new capability.
  * @apiParam {String} id String value used when checking for the capability.
     This function is limited in scope and regularly shouldn't be used. Server-side capability registration is preferred.
@@ -356,7 +356,7 @@ Capability.checkAll = async (checks, userID) => {
  * @api {Function} Capability.clearCache() Capability.clearCache()
  * @apiVersion 3.1.2
  * @apiGroup Capability
- * @apiName Capability.clearCache()
+ * @apiName Capability.clearCache
  * @apiDescription Clear Capability related Cache keys.
  */
 Capability.clearCache = () =>
