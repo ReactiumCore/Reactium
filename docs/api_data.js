@@ -1,99 +1,5 @@
 define({ "api": [
   {
-    "type": "Function",
-    "url": "Zone.getZoneComponent(zone,id)",
-    "title": "Zone.getZoneComponent()",
-    "name": "Zone.getZoneComponent",
-    "description": "<p>Get the component from a zone by its id.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "zone",
-            "description": "<p>the zone name to get components from</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>the id of the registered component, specified in the object passed to Zone.addComponent() or returned by it.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
-    "group": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
-    "groupTitle": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js"
-  },
-  {
-    "type": "Function",
-    "url": "Zone.getZoneComponents(zone,raw)",
-    "title": "Zone.getZoneComponents()",
-    "name": "Zone.getZoneComponents",
-    "description": "<p>Get existing registrations for a zone, by default goes through mapping, sorting, filtering. Add raw=true to get unadulterated list, even if they may not be renderable in the Zone. Returns the object used in Zone.addComponent()</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "zone",
-            "description": "<p>the zone name to get components from</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "raw",
-            "defaultValue": "false",
-            "description": "<p>Set to true to get all components, whether or not they are currently filtered, and without mapping or extra sorting.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
-    "group": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
-    "groupTitle": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js"
-  },
-  {
-    "type": "Function",
-    "url": "Zone.hasZoneComponent(zone,id)",
-    "title": "Zone.hasZoneComponent()",
-    "name": "Zone.hasZoneComponent",
-    "description": "<p>Returns true if component with id is present in the zone.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "zone",
-            "description": "<p>the zone name to get components from</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>the id of the registered component, specified in the object passed to Zone.addComponent() or returned by it.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
-    "group": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
-    "groupTitle": "/Users/johndillick/dev/atomic-reactor/reactium/node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js"
-  },
-  {
     "type": "Hook",
     "url": "Server.AppBindings",
     "title": "Server.AppBindings",
@@ -5096,6 +5002,100 @@ define({ "api": [
         "type": "json"
       }
     ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "groupTitle": "Reactium.Zone"
+  },
+  {
+    "type": "Function",
+    "url": "Zone.getZoneComponent(zone,id)",
+    "title": "Zone.getZoneComponent()",
+    "name": "Zone.getZoneComponent",
+    "description": "<p>Get the component from a zone by its id.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone name to get components from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the registered component, specified in the object passed to Zone.addComponent() or returned by it.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Reactium.Zone",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "groupTitle": "Reactium.Zone"
+  },
+  {
+    "type": "Function",
+    "url": "Zone.getZoneComponents(zone,raw)",
+    "title": "Zone.getZoneComponents()",
+    "name": "Zone.getZoneComponents",
+    "description": "<p>Get existing registrations for a zone, by default goes through mapping, sorting, filtering. Add raw=true to get unadulterated list, even if they may not be renderable in the Zone. Returns the object used in Zone.addComponent()</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone name to get components from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "raw",
+            "defaultValue": "false",
+            "description": "<p>Set to true to get all components, whether or not they are currently filtered, and without mapping or extra sorting.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Reactium.Zone",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
+    "groupTitle": "Reactium.Zone"
+  },
+  {
+    "type": "Function",
+    "url": "Zone.hasZoneComponent(zone,id)",
+    "title": "Zone.hasZoneComponent()",
+    "name": "Zone.hasZoneComponent",
+    "description": "<p>Returns true if component with id is present in the zone.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone name to get components from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the registered component, specified in the object passed to Zone.addComponent() or returned by it.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Reactium.Zone",
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/index.js",
     "groupTitle": "Reactium.Zone"
