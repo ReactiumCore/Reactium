@@ -593,7 +593,7 @@
     "title": "Capability.propagate()",
     "version": "3.1.2",
     "group": "Capability",
-    "name": "Capability.propagate()",
+    "name": "Capability.propagate",
     "description": "<p>Propagate registered capabilities to an Actinium server.</p>",
     "parameter": {
       "fields": {

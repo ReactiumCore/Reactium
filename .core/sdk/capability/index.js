@@ -91,7 +91,7 @@ Capability.register = id => {
  * @api {Async} Capability.propagate(force) Capability.propagate()
  * @apiVersion 3.1.2
  * @apiGroup Capability
- * @apiName Capability.propagate()
+ * @apiName Capability.propagate
  * @apiDescription Propagate registered capabilities to an Actinium server.
  * @apiParam {Boolean} [force=false] Execute the propagation regardless of if a current propagation operation is under way.
     The resolution of the previous propagation operation will be cancelled.
