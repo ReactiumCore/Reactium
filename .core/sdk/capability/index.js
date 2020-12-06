@@ -370,7 +370,7 @@ Capability.clearCache = () =>
  * @api {Async} Capability.User.get(userID,refresh) Capability.User.get()
  * @apiVersion 3.1.2
  * @apiGroup Capability
- * @apiName Capability.User.get()
+ * @apiName Capability.User.get
  * @apiDescription Return an Array of capability names granted to the user.
  * @apiParam {String} [userID] The Reactium.User id. If empty the User.current id is used.
  * @apiParam {Boolean} [refres=false] Fetch capabilities from the server instead of cache.

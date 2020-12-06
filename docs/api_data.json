@@ -521,7 +521,7 @@
     "title": "Capability.User.get()",
     "version": "3.1.2",
     "group": "Capability",
-    "name": "Capability.User.get()",
+    "name": "Capability.User.get",
     "description": "<p>Return an Array of capability names granted to the user.</p>",
     "parameter": {
       "fields": {
@@ -2447,6 +2447,37 @@
       {
         "title": "Example Usage:",
         "content": "import Reactium from 'reactium-core/sdk';\nReactium.Middleware.register('logger', store => action => next => {\n    console.log(`action type ${action.type} dispatched.`, action);\n    next(action);\n});",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": ".core/sdk/middleware/index.js",
+    "groupTitle": "Reactium.Middleware"
+  },
+  {
+    "type": "Function",
+    "url": "Middleware.unregister(name)",
+    "title": "Middleware.unregister()",
+    "name": "Middleware.unregister",
+    "description": "<p>Unregister a Redux middleware. This should be called only:</p> <ol> <li>within <code>Reactium.Plugin.register()</code> promise callback,</li> <li>or after the <code>plugin-dependencies</code> hook, (e.g. <code>plugin-init</code>)</li> <li>or after <code>Reactium.Plugin.ready === true</code>.</li> </ol>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>the middleware's unique name</p>"
+          }
+        ]
+      }
+    },
+    "group": "Reactium.Middleware",
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "import Reactium from 'reactium-core/sdk';\nReactium.Middleware.unregister('logger');",
         "type": "json"
       }
     ],
@@ -5484,37 +5515,6 @@
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/registry.js",
     "groupTitle": "Reactium"
-  },
-  {
-    "type": "Function",
-    "url": "Middleware.unregister(name)",
-    "title": "Middleware.unregister()",
-    "name": "Middleware.unregister",
-    "description": "<p>Unregister a Redux middleware. This should be called only:</p> <ol> <li>within <code>Reactium.Plugin.register()</code> promise callback,</li> <li>or after the <code>plugin-dependencies</code> hook, (e.g. <code>plugin-init</code>)</li> <li>or after <code>Reactium.Plugin.ready === true</code>.</li> </ol>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>the middleware's unique name</p>"
-          }
-        ]
-      }
-    },
-    "group": "Reatium.Middleware",
-    "examples": [
-      {
-        "title": "Example Usage:",
-        "content": "import Reactium from 'reactium-core/sdk';\nReactium.Middleware.unregister('logger');",
-        "type": "json"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": ".core/sdk/middleware/index.js",
-    "groupTitle": "Reatium.Middleware"
   },
   {
     "type": "RegisteredComponent",

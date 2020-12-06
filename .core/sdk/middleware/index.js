@@ -53,7 +53,7 @@ Middleware.register = (name, mw, order = Enums.priority.neutral) => {
  2. or after the `plugin-dependencies` hook, (e.g. `plugin-init`)
  3. or after `Reactium.Plugin.ready === true`.
  * @apiParam {String} name the middleware's unique name
- * @apiGroup Reatium.Middleware
+ * @apiGroup Reactium.Middleware
  * @apiExample Example Usage:
 import Reactium from 'reactium-core/sdk';
 Reactium.Middleware.unregister('logger');
