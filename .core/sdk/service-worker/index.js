@@ -1,6 +1,6 @@
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import op from 'object-path';
-const { Hook, Utils } = SDK;
+const { Hook, Utils, Enums } = SDK;
 
 class ServiceWorker {
     constructor() {
@@ -24,6 +24,17 @@ class ServiceWorker {
     }
 
     init = async () => {
+        /**
+         * @api {Hook} service-worker-init service-worker-init
+         * @apiName service-worker-init
+         * @apiDescription Called after dependencies-load in Reactium.ServiceWorker to register any webapp
+         service worker code for the app. By default, this hook is implemented to
+         register the customizable Google Workbox implementation that will be compiled (to /assets/js/sw/sw.js).
+         Also, async loads and instantiates a
+         a google workbox-window Workbox object on Reactium.ServiceWorker.worker.
+         async only - used in front-end webapp only
+         * @apiGroup Hooks
+         */
         await Hook.run('service-worker-init');
     };
 
@@ -41,38 +52,42 @@ class ServiceWorker {
 
 const swManager = new ServiceWorker();
 
-Hook.register('service-worker-init', async () => {
-    if (typeof window === 'undefined') return;
-    const { Workbox } = await import('workbox-window');
-    const sw = new Workbox(swManager.script, { scope: '/' });
-    swManager.worker = sw;
+Hook.register(
+    'service-worker-init',
+    async () => {
+        if (typeof window === 'undefined') return;
+        const { Workbox } = await import('workbox-window');
+        const sw = new Workbox(swManager.script, { scope: '/' });
+        swManager.worker = sw;
 
-    sw.addEventListener('install', event => {
-        console.log('Service Worker installed.');
-    });
+        sw.addEventListener('install', event => {
+            console.log('Service Worker installed.');
+        });
 
-    sw.addEventListener('waiting', event => {
-        console.log('Service Worker waiting to update.');
-    });
+        sw.addEventListener('waiting', event => {
+            console.log('Service Worker waiting to update.');
+        });
 
-    sw.addEventListener('activated', event => {
-        if (!event.isUpdate) {
-            console.log('Service Worker activated.');
-        } else {
-            console.log('Service Worker updated.');
+        sw.addEventListener('activated', event => {
+            if (!event.isUpdate) {
+                console.log('Service Worker activated.');
+            } else {
+                console.log('Service Worker updated.');
+            }
+        });
+
+        sw.addEventListener('controlling', event => {
+            console.log('Service Worker captured client connections.');
+        });
+
+        try {
+            await sw.register();
+            console.log('SW registered.');
+        } catch (error) {
+            console.error({ error });
         }
-    });
-
-    sw.addEventListener('controlling', event => {
-        console.log('Service Worker captured client connections.');
-    });
-
-    try {
-        await sw.register();
-        console.log('SW registered.');
-    } catch (error) {
-        console.error({ error });
-    }
-});
+    },
+    Enums.priority.highest,
+);
 
 export default swManager;

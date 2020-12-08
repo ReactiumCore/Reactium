@@ -224,6 +224,15 @@ class Routing {
 
     load = async () => {
         if (this.loaded) return;
+
+        /**
+         * @api {Hook} routes-init routes-init
+         * @apiName routes-init
+         * @apiDescription Called after plugin-init, to add React Router routes to Reactium.Routing register before
+         the Router component is initialized and finally the application is bound to the DOM.
+         async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+         * @apiGroup Hooks
+         */
         await Hook.run('routes-init', this.routesRegistry);
 
         this.routesRegistry.register({
@@ -324,6 +333,15 @@ Reactium.Plugin.register('myPlugin').then(() => {
         if (!route.id) route.id = uuid();
         if (!route.order) route.order = 0;
 
+        /**
+         * @api {Hook} register-route register-route
+         * @apiName register-route
+         * @apiDescription Called on boot after routes-init, and during runtime operation of the front-end application, whenever
+         a new route is registered. Can be used to augment a router object before it is registered to the router.
+         async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+         * @apiParam {Object} route the new or updated route, indentified by unique id (route.id)
+         * @apiGroup Hooks
+         */
         await Hook.run('register-route', route);
         this.routesRegistry.register(route.id, route);
         if (update) this._update();

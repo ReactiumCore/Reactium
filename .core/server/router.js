@@ -52,6 +52,17 @@ router.use(async (req, res, next) => {
             }
 
             const responseHeaders = {};
+
+            /**
+             * @api {Hook} Server.ResponseHeaders Server.ResponseHeaders
+             * @apiName Server.ResponseHeaders
+             * @apiDescription On html template responses on server, this hook is called
+             when HTTP headers are added to the response. Both sync and async hook is called.
+             * @apiParam {Object} responseHeaders object with key pairs (header name => header value)
+             * @apiParam {Object} req Node/Express request object
+             * @apiParam {Object} res Node/Express response object
+             * @apiGroup Hooks
+             */
             SDK.Hook.runSync(
                 'Server.ResponseHeaders',
                 responseHeaders,

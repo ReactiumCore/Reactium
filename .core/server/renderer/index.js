@@ -284,7 +284,7 @@ export default async (req, res, context) => {
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Called before other Server hooks.
      * @apiParam {Object} req express request object
      * @apiParam {Object} Server SDK Server object.
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.beforeApp', req, Server);
     await SDK.Hook.run('Server.beforeApp', req, Server);
@@ -310,7 +310,7 @@ export default async (req, res, context) => {
                  value: 'local',
              });
          });
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
     await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
@@ -348,7 +348,7 @@ export default async (req, res, context) => {
             }
         }
      });
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.AppHeaders', req, Server.AppHeaders, res);
     await SDK.Hook.run('Server.AppHeaders', req, Server.AppHeaders, res);
@@ -391,7 +391,7 @@ export default async (req, res, context) => {
              order: 1, // scripts will be ordered by this
          });
      });
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.AppScripts', req, Server.AppScripts, res);
     await SDK.Hook.run('Server.AppScripts', req, Server.AppScripts, res);
@@ -462,7 +462,7 @@ export default async (req, res, context) => {
              order: 1, // scripts will be ordered by this
          });
      });
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.AppStyleSheets', req, Server.AppStyleSheets);
     await SDK.Hook.run('Server.AppStyleSheets', req, Server.AppStyleSheets);
@@ -559,7 +559,7 @@ export default async (req, res, context) => {
          SDK.Enums.priority.highest,
          'SERVER-APP-BINDINGS-CORE',
      );
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
     await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
@@ -587,7 +587,7 @@ ga('send', 'pageview');
           order: 1,
         })
      });
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.AppSnippets', req, Server.AppSnippets);
     await SDK.Hook.run('Server.AppSnippets', req, Server.AppSnippets);
@@ -605,7 +605,7 @@ ga('send', 'pageview');
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.
      * @apiParam {Object} req express request object
      * @apiParam {Object} Server SDK Server object.
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.afterApp', req, Server);
     await SDK.Hook.run('Server.afterApp', req, Server);

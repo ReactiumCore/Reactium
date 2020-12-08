@@ -1,521 +1,5 @@
 define({ "api": [
   {
-    "type": "Hook",
-    "url": "Server.AppBindings",
-    "title": "Server.AppBindings",
-    "name": "Server.AppBindings",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines React bind pointes in markup.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "AppBindings",
-            "description": "<p>Server app binding registry object.</p>"
-          }
-        ],
-        "binding": [
-          {
-            "group": "binding",
-            "type": "String",
-            "optional": true,
-            "field": "component",
-            "description": "<p>string name of component to bind directly if possible (must be in a webpack search context in reactium-config)</p>"
-          },
-          {
-            "group": "binding",
-            "type": "String",
-            "optional": true,
-            "field": "markup",
-            "description": "<p>ordinary markup that React will use to bind the app.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.registerSync(\n    'Server.AppBindings',\n    (req, AppBindings) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppBindings.register('DevTools', {\n            component: 'DevTools',\n        });\n\n        // Add ordinary markup for React to bind to\n        AppBindings.register('router', {\n            markup: '<div id=\"router\"></div>',\n        });\n    },\n    SDK.Enums.priority.highest,\n    'SERVER-APP-BINDINGS-CORE',\n);",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.AppGlobals",
-    "title": "Server.AppGlobals",
-    "name": "Server.AppGlobals",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define global for nodejs (useful for Server-Side-Rendering).</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "AppGlobals",
-            "description": "<p>Server app globals registry object.</p>"
-          }
-        ],
-        "global": [
-          {
-            "group": "global",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>The property name that will be added to window (for browser) or global (for nodejs).</p>"
-          },
-          {
-            "group": "global",
-            "type": "Mixed",
-            "optional": false,
-            "field": "value",
-            "description": "<p>any javascript value that can be serialized for use in a script tag</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\n// will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs\nSDK.Hook.registerSync(\n    'Server.AppGlobals',\n    (req, AppGlobals) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppGlobals.register('environment', {\n            name: 'environment',\n            value: 'local',\n        });\n    });",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.AppHeaders",
-    "title": "Server.AppHeaders",
-    "name": "Server.AppHeaders",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines html head tags (exluding stylesheet). Use this hook to register/unregister <head> tags as strings. Note: if using Server Side Render and react-helmet, this is often unnecessary to do.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "AppHeaders",
-            "description": "<p>Server app header registry object.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {\n   // given some data was added to req by express middleware\n   const seo = req.seo;\n   if (seo) {\n       if (seo.canonicalURL) {\n           AppHeaders.register('canonical-url', {\n               header: `<link rel=\"canonical\" href=\"${seo.canonicalURL}\" />`\n           });\n       }\n       if (seo.description) {\n           AppHeaders.register('meta-description', {\n               header: `<meta name=\"description\" content=\"${seo.description}\"/>`\n           });\n       }\n   }\n});",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.AppScripts",
-    "title": "Server.AppScripts",
-    "name": "Server.AppScripts",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines javascript files to be loaded.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "AppScripts",
-            "description": "<p>Server app scripts registry object.</p>"
-          }
-        ],
-        "script": [
-          {
-            "group": "script",
-            "type": "Boolean",
-            "optional": true,
-            "field": "footer",
-            "defaultValue": "true",
-            "description": "<p>Place the script tag in the footer if true</p>"
-          },
-          {
-            "group": "script",
-            "type": "Boolean",
-            "optional": true,
-            "field": "header",
-            "defaultValue": "false",
-            "description": "<p>Place the script tag above the body if true</p>"
-          },
-          {
-            "group": "script",
-            "type": "String",
-            "optional": true,
-            "field": "path",
-            "description": "<p>the src of the javascript</p>"
-          },
-          {
-            "group": "script",
-            "type": "String",
-            "optional": true,
-            "field": "charset",
-            "defaultValue": "UTF-8",
-            "description": "<p>charset attribute</p>"
-          },
-          {
-            "group": "script",
-            "type": "String",
-            "optional": true,
-            "field": "type",
-            "description": "<p>type attribute</p>"
-          },
-          {
-            "group": "script",
-            "type": "Boolean",
-            "optional": true,
-            "field": "defer",
-            "defaultValue": "false",
-            "description": "<p>Add defer attribute</p>"
-          },
-          {
-            "group": "script",
-            "type": "Boolean",
-            "optional": true,
-            "field": "async",
-            "defaultValue": "false",
-            "description": "<p>Add async attribute</p>"
-          },
-          {
-            "group": "script",
-            "type": "Boolean",
-            "optional": true,
-            "field": "content",
-            "description": "<p>script content</p>"
-          },
-          {
-            "group": "script",
-            "type": "Number",
-            "optional": true,
-            "field": "order",
-            "defaultValue": "0",
-            "description": "<p>loading order of script</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppScripts', async (req, AppScripts) => {\n    AppScripts.register('my-onsite-script', {\n        path: '/assets/js/some-additional.js'\n        footer: true, // load in footer (optional)\n        header: false, // don't load in header (optional)\n        order: 1, // scripts will be ordered by this\n    });\n\n    AppScripts.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.js'\n        header: true, // maybe for an external\n        order: 1, // scripts will be ordered by this\n    });\n});",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.AppSnippets",
-    "title": "Server.AppSnippets",
-    "name": "Server.AppSnippets",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines snippets of code to be added to document in their entirety.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "AppSnippets",
-            "description": "<p>Server app snippets registry object.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "     import SDK from '@atomic-reactor/reactium-sdk-core';\n     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {\n        AppSnippets.register('ga-tracking', {\n            snippet: `<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n\nga('create', '', 'auto');\nga('send', 'pageview');\n</script>`,\n          order: 1,\n        })\n     });",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.AppStyleSheets",
-    "title": "Server.AppStyleSheets",
-    "name": "Server.AppStyleSheets",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines css files to be loaded.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "AppStyleSheets",
-            "description": "<p>Server app styles registry object.</p>"
-          }
-        ],
-        "stylesheet": [
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "path",
-            "description": "<p>the src of the javascript</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "Number",
-            "optional": true,
-            "field": "order",
-            "defaultValue": "0",
-            "description": "<p>loading order of script</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "rel",
-            "defaultValue": "stylesheet",
-            "description": "<p>the rel attribute</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "crossorigin",
-            "description": "<p>the crossorigin attribute</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "referrerpolicy",
-            "description": "<p>the referrerpolicy attribute</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "hrefLang",
-            "description": "<p>the hreflang attribute</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "sizes",
-            "description": "<p>the sizes attribute if rel=icon</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "String",
-            "optional": true,
-            "field": "type",
-            "description": "<p>the type attribute</p>"
-          },
-          {
-            "group": "stylesheet",
-            "type": "Function",
-            "optional": true,
-            "field": "when",
-            "description": "<p>callback passed the request object, and returns true or false if the css should be included</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        path: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.Middleware",
-    "title": "Server.Middleware",
-    "name": "Server.Middleware",
-    "description": "<p>Used to register or unregister express middleware.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "Middleware",
-            "description": "<p>Server express middleware registry object.</p>"
-          }
-        ],
-        "middleware": [
-          {
-            "group": "middleware",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>Name of the middleware.</p>"
-          }
-        ],
-        "middlware": [
-          {
-            "group": "middlware",
-            "type": "Function",
-            "optional": false,
-            "field": "use",
-            "description": "<p>the express middleware function.</p>"
-          },
-          {
-            "group": "middlware",
-            "type": "Number",
-            "optional": false,
-            "field": "order",
-            "description": "<p>the loading order of the middleware</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "reactium-boot.js",
-        "content": "const SDK = require('@atomic-reactor/sdk').default;\nconst express = require('express');\nconst router = express.Router();\nconst axios = require('axios');\n\n// register a new backend route /foo with express\nrouter.get('/', (req, res) => {\n   res.send('Foo!!')\n});\n\nSDK.Hook.registerSync('Server.Middleware', Middleware => {\n   Middleware.register('foo-page', {\n       name: 'foo-page',\n       use: router,\n       order: SDK.Enums.priority.highest,\n   })\n});\n\nSDK.Hook.registerSync('Server.Middleware', Middleware => {\n   const intercept = express.Router();\n   intercept.post('/api*', (req, res) => {\n       res.json({\n           foo: 'bar'\n       });\n   });\n\n   // check api health every 90 seconds and intercept api if it goes down\n   Middleware.register('downapi', {\n       name: 'downapi',\n       use: async (res, req, next) => {\n           try {\n               let healthy = SDK.Cache.get('health-check');\n               if (healthy === undefined) {\n                   const response = await axios.get(process.env.REST_API_URI + '/healthcheck');\n                   healthy = response.data;\n                   SDK.Cache.set('health-check', healthy, 1000 * 90);\n               }\n           } catch (error) {\n               console.error(error);\n               SDK.Cache.set('health-check', false, 1000 * 90);\n               healthy = false;\n           }\n\n           if (healthy === true) next();\n           return intercept(req, req, next);\n       },\n       order: SDK.Enums.priority.highest,\n   })\n});",
-        "type": "json"
-      }
-    ],
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.afterApp",
-    "title": "Server.afterApp",
-    "name": "Server.afterApp",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "Server",
-            "description": "<p>SDK Server object.</p>"
-          }
-        ]
-      }
-    },
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
-    "type": "Hook",
-    "url": "Server.beforeApp",
-    "title": "Server.beforeApp",
-    "name": "Server.beforeApp",
-    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Called before other Server hooks.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "req",
-            "description": "<p>express request object</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "Server",
-            "description": "<p>SDK Server object.</p>"
-          }
-        ]
-      }
-    },
-    "group": "BootHook",
-    "version": "0.0.0",
-    "filename": ".core/server/renderer/index.js",
-    "groupTitle": "BootHook"
-  },
-  {
     "type": "Async",
     "url": "Capability.User.get(userID,refresh)",
     "title": "Capability.User.get()",
@@ -649,6 +133,851 @@ define({ "api": [
     ],
     "filename": ".core/sdk/capability/index.js",
     "groupTitle": "Capability"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppBindings",
+    "title": "Server.AppBindings",
+    "name": "Server.AppBindings",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines React bind pointes in markup.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppBindings",
+            "description": "<p>Server app binding registry object.</p>"
+          }
+        ],
+        "binding": [
+          {
+            "group": "binding",
+            "type": "String",
+            "optional": true,
+            "field": "component",
+            "description": "<p>string name of component to bind directly if possible (must be in a webpack search context in reactium-config)</p>"
+          },
+          {
+            "group": "binding",
+            "type": "String",
+            "optional": true,
+            "field": "markup",
+            "description": "<p>ordinary markup that React will use to bind the app.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.registerSync(\n    'Server.AppBindings',\n    (req, AppBindings) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppBindings.register('DevTools', {\n            component: 'DevTools',\n        });\n\n        // Add ordinary markup for React to bind to\n        AppBindings.register('router', {\n            markup: '<div id=\"router\"></div>',\n        });\n    },\n    SDK.Enums.priority.highest,\n    'SERVER-APP-BINDINGS-CORE',\n);",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppGlobals",
+    "title": "Server.AppGlobals",
+    "name": "Server.AppGlobals",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines window globals to be defined in template. Will also define global for nodejs (useful for Server-Side-Rendering).</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppGlobals",
+            "description": "<p>Server app globals registry object.</p>"
+          }
+        ],
+        "global": [
+          {
+            "group": "global",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>The property name that will be added to window (for browser) or global (for nodejs).</p>"
+          },
+          {
+            "group": "global",
+            "type": "Mixed",
+            "optional": false,
+            "field": "value",
+            "description": "<p>any javascript value that can be serialized for use in a script tag</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\n// will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs\nSDK.Hook.registerSync(\n    'Server.AppGlobals',\n    (req, AppGlobals) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppGlobals.register('environment', {\n            name: 'environment',\n            value: 'local',\n        });\n    });",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppHeaders",
+    "title": "Server.AppHeaders",
+    "name": "Server.AppHeaders",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines html head tags (exluding stylesheet). Use this hook to register/unregister <head> tags as strings. Note: if using Server Side Render and react-helmet, this is often unnecessary to do.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppHeaders",
+            "description": "<p>Server app header registry object.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {\n   // given some data was added to req by express middleware\n   const seo = req.seo;\n   if (seo) {\n       if (seo.canonicalURL) {\n           AppHeaders.register('canonical-url', {\n               header: `<link rel=\"canonical\" href=\"${seo.canonicalURL}\" />`\n           });\n       }\n       if (seo.description) {\n           AppHeaders.register('meta-description', {\n               header: `<meta name=\"description\" content=\"${seo.description}\"/>`\n           });\n       }\n   }\n});",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppScripts",
+    "title": "Server.AppScripts",
+    "name": "Server.AppScripts",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines javascript files to be loaded.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppScripts",
+            "description": "<p>Server app scripts registry object.</p>"
+          }
+        ],
+        "script": [
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "footer",
+            "defaultValue": "true",
+            "description": "<p>Place the script tag in the footer if true</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "header",
+            "defaultValue": "false",
+            "description": "<p>Place the script tag above the body if true</p>"
+          },
+          {
+            "group": "script",
+            "type": "String",
+            "optional": true,
+            "field": "path",
+            "description": "<p>the src of the javascript</p>"
+          },
+          {
+            "group": "script",
+            "type": "String",
+            "optional": true,
+            "field": "charset",
+            "defaultValue": "UTF-8",
+            "description": "<p>charset attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>type attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "defer",
+            "defaultValue": "false",
+            "description": "<p>Add defer attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "async",
+            "defaultValue": "false",
+            "description": "<p>Add async attribute</p>"
+          },
+          {
+            "group": "script",
+            "type": "Boolean",
+            "optional": true,
+            "field": "content",
+            "description": "<p>script content</p>"
+          },
+          {
+            "group": "script",
+            "type": "Number",
+            "optional": true,
+            "field": "order",
+            "defaultValue": "0",
+            "description": "<p>loading order of script</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppScripts', async (req, AppScripts) => {\n    AppScripts.register('my-onsite-script', {\n        path: '/assets/js/some-additional.js'\n        footer: true, // load in footer (optional)\n        header: false, // don't load in header (optional)\n        order: 1, // scripts will be ordered by this\n    });\n\n    AppScripts.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.js'\n        header: true, // maybe for an external\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppSnippets",
+    "title": "Server.AppSnippets",
+    "name": "Server.AppSnippets",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines snippets of code to be added to document in their entirety.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppSnippets",
+            "description": "<p>Server app snippets registry object.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "     import SDK from '@atomic-reactor/reactium-sdk-core';\n     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {\n        AppSnippets.register('ga-tracking', {\n            snippet: `<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n\nga('create', '', 'auto');\nga('send', 'pageview');\n</script>`,\n          order: 1,\n        })\n     });",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.AppStyleSheets",
+    "title": "Server.AppStyleSheets",
+    "name": "Server.AppStyleSheets",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines css files to be loaded.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "AppStyleSheets",
+            "description": "<p>Server app styles registry object.</p>"
+          }
+        ],
+        "stylesheet": [
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "path",
+            "description": "<p>the src of the javascript</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "Number",
+            "optional": true,
+            "field": "order",
+            "defaultValue": "0",
+            "description": "<p>loading order of script</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "rel",
+            "defaultValue": "stylesheet",
+            "description": "<p>the rel attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "crossorigin",
+            "description": "<p>the crossorigin attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "referrerpolicy",
+            "description": "<p>the referrerpolicy attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "hrefLang",
+            "description": "<p>the hreflang attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "sizes",
+            "description": "<p>the sizes attribute if rel=icon</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "String",
+            "optional": true,
+            "field": "type",
+            "description": "<p>the type attribute</p>"
+          },
+          {
+            "group": "stylesheet",
+            "type": "Function",
+            "optional": true,
+            "field": "when",
+            "description": "<p>callback passed the request object, and returns true or false if the css should be included</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        path: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.Middleware",
+    "title": "Server.Middleware",
+    "name": "Server.Middleware",
+    "description": "<p>Used to register or unregister express middleware.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "Middleware",
+            "description": "<p>Server express middleware registry object.</p>"
+          }
+        ],
+        "middleware": [
+          {
+            "group": "middleware",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Name of the middleware.</p>"
+          }
+        ],
+        "middlware": [
+          {
+            "group": "middlware",
+            "type": "Function",
+            "optional": false,
+            "field": "use",
+            "description": "<p>the express middleware function.</p>"
+          },
+          {
+            "group": "middlware",
+            "type": "Number",
+            "optional": false,
+            "field": "order",
+            "description": "<p>the loading order of the middleware</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-boot.js",
+        "content": "const SDK = require('@atomic-reactor/sdk').default;\nconst express = require('express');\nconst router = express.Router();\nconst axios = require('axios');\n\n// register a new backend route /foo with express\nrouter.get('/', (req, res) => {\n   res.send('Foo!!')\n});\n\nSDK.Hook.registerSync('Server.Middleware', Middleware => {\n   Middleware.register('foo-page', {\n       name: 'foo-page',\n       use: router,\n       order: SDK.Enums.priority.highest,\n   })\n});\n\nSDK.Hook.registerSync('Server.Middleware', Middleware => {\n   const intercept = express.Router();\n   intercept.post('/api*', (req, res) => {\n       res.json({\n           foo: 'bar'\n       });\n   });\n\n   // check api health every 90 seconds and intercept api if it goes down\n   Middleware.register('downapi', {\n       name: 'downapi',\n       use: async (res, req, next) => {\n           try {\n               let healthy = SDK.Cache.get('health-check');\n               if (healthy === undefined) {\n                   const response = await axios.get(process.env.REST_API_URI + '/healthcheck');\n                   healthy = response.data;\n                   SDK.Cache.set('health-check', healthy, 1000 * 90);\n               }\n           } catch (error) {\n               console.error(error);\n               SDK.Cache.set('health-check', false, 1000 * 90);\n               healthy = false;\n           }\n\n           if (healthy === true) next();\n           return intercept(req, req, next);\n       },\n       order: SDK.Enums.priority.highest,\n   })\n});",
+        "type": "json"
+      }
+    ],
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.ResponseHeaders",
+    "title": "Server.ResponseHeaders",
+    "name": "Server.ResponseHeaders",
+    "description": "<p>On html template responses on server, this hook is called when HTTP headers are added to the response. Both sync and async hook is called.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "responseHeaders",
+            "description": "<p>object with key pairs (header name =&gt; header value)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>Node/Express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Node/Express response object</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/router.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.ServiceWorkerAllowed",
+    "title": "Server.ServiceWorkerAllowed",
+    "description": "<p>Called on server-side during service-worker-allowed middleware. Used to define the HTTP response header &quot;Service-Worker-Allowed&quot;. By default, this header will allow the document root, &quot;/&quot;. Both sync and async version called.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "responseHeader",
+            "description": "<p>with property 'Service-Worker-Allowed' (case sensitive) and its value.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>Node/Express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "res",
+            "description": "<p>Node/Express response object</p>"
+          }
+        ]
+      }
+    },
+    "name": "Server.ServiceWorkerAllowed",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.afterApp",
+    "title": "Server.afterApp",
+    "name": "Server.afterApp",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "Server",
+            "description": "<p>SDK Server object.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "Server.beforeApp",
+    "title": "Server.beforeApp",
+    "name": "Server.beforeApp",
+    "description": "<p>Before index.html template render for SPA template (both Front-end and Server-Side Render). Called before other Server hooks.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "req",
+            "description": "<p>express request object</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "Server",
+            "description": "<p>SDK Server object.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/server/renderer/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "app-bindpoint",
+    "title": "app-bindpoint",
+    "name": "app-bindpoint",
+    "description": "<p>Called after plugin and routing initialization to define the DOM element used for mounting the Single-Page application (SPA). By default, the application will bind to <code>document.getElementById('router')</code>, but this can be changed with this hook. This is related to the HTML template artifacts left by the server-side <code>Server.AppBindings</code> hook. async only - used in front-end application only</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "context",
+            "description": "<p>context.appElement MUST be an HTMLElement where your React appliation will bind to the DOM.</p>"
+          }
+        ],
+        "appElement": [
+          {
+            "group": "appElement",
+            "type": "HTMLElement",
+            "optional": false,
+            "field": "the",
+            "description": "<p>DOM element to bind to - by default <code>document.getElementById('router')</code>.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "app-boot-message",
+    "title": "app-boot-message",
+    "name": "app-boot-message",
+    "description": "<p>Called during application binding, this minor hook will allow you to change the format of the of the front-end Javascript console message indicating application start. async only - used in front-end application only</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "app-redux-provider",
+    "title": "app-redux-provider",
+    "name": "app-redux-provider",
+    "description": "<p>Called after app-bindpoint to define the registered Redux Provider component (i.e. <code>Reactium.Component.register('ReduxProvider'...)</code>) for all bind points and the SPA. async only - used in front-end application only</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "app-router",
+    "title": "app-router",
+    "name": "app-router",
+    "description": "<p>Called after app-redux-provider to define the registered Router component (i.e. <code>Reactium.Component.register('Router'...)</code>). After this hook, the ReactDOM bindings will actually take place. async only - used in front-end application only</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "component-bindings",
+    "title": "component-bindings",
+    "name": "component-bindings",
+    "description": "<p>Called after plugin and routing initialization to define element and dynamic component for one-off component bindings to the DOM. e.g. In development mode, used to render Redux Dev tools. async only - used in front-end application only</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "context",
+            "description": "<p>context.bindPoints MUST be an array of binding objects after this hook is called</p>"
+          }
+        ],
+        "binding": [
+          {
+            "group": "binding",
+            "type": "HTMLElement",
+            "optional": false,
+            "field": "the",
+            "description": "<p>DOM element to bind to (e.g. document.getElementById('my-element'))</p>"
+          },
+          {
+            "group": "binding",
+            "type": "String",
+            "optional": false,
+            "field": "string",
+            "description": "<p>matching a React component module in one of the Reactium built-in webpack contexts (src/app/components or src/app/components/common-ui) e.g. 'DevTools' maps to src/app/components/DevTools</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "dependencies-load",
+    "title": "dependencies-load",
+    "name": "dependencies-load",
+    "description": "<p>Called after init to give an application a change to load async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "init",
+    "title": "init",
+    "name": "init",
+    "description": "<p>Called before all other hooks on Reactium application startup. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "plugin-dependencies",
+    "title": "plugin-dependencies",
+    "name": "plugin-dependencies",
+    "description": "<p>Called to indicate all bootstrap dependencies should now be loaded, but before application routes have been initialized. There are 2 default registered callback in Reactium core on this hook. 1. (Highest Priority): The generated src/manifest.js dependencies are attached to this hook context (as context.deps). 2. (High Priority): <code>plugin-init</code> hook will be invoked, at which point all Reactium.Plugin registrations will be called.</p> <pre><code> Any hooks that registered after Reactium.Plugin will only be useful if they happen to be invoked during the normal runtime operations of the application.  An important exception to this is `routes-init`, which is deferred until after plugins initialize so they may dynamically add routes before Reactium hands off  control to the Router.  async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</code></pre>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "context",
+            "description": "<p>Core attaches generated manifest loaded dependencies to context.deps</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "register-route",
+    "title": "register-route",
+    "name": "register-route",
+    "description": "<p>Called on boot after routes-init, and during runtime operation of the front-end application, whenever a new route is registered. Can be used to augment a router object before it is registered to the router. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "route",
+            "description": "<p>the new or updated route, indentified by unique id (route.id)</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/sdk/routing/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "routes-init",
+    "title": "routes-init",
+    "name": "routes-init",
+    "description": "<p>Called after plugin-init, to add React Router routes to Reactium.Routing register before the Router component is initialized and finally the application is bound to the DOM. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/sdk/routing/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "service-worker-init",
+    "title": "service-worker-init",
+    "name": "service-worker-init",
+    "description": "<p>Called after dependencies-load in Reactium.ServiceWorker to register any webapp service worker code for the app. By default, this hook is implemented to register the customizable Google Workbox implementation that will be compiled (to /assets/js/sw/sw.js). Also, async loads and instantiates a a google workbox-window Workbox object on Reactium.ServiceWorker.worker. async only - used in front-end webapp only</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/sdk/service-worker/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "store-create",
+    "title": "store-create",
+    "name": "store-create",
+    "description": "<p>Called after dependencies-load to trigger Redux store creator. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "params",
+            "description": "<p>params.server indicate if is store creation on the server, or in the front-end application</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "context",
+            "description": "<p>Core implementation of this hook will create the Redux store and set it to context.store.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "zone-defaults",
+    "title": "zone-defaults",
+    "name": "zone-defaults",
+    "description": "<p>Called after dependencies-load by Reactium.Zone.init() for loading default component rendering Zone controls and components. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "context",
+            "description": "<p>used to create initial controls and components. controls.filter for default filtering, controls.sort for default sorting, controls.mapper for default mapping and controls.components for initial registered components. zone.js Domain Driven Design (DDD) artifacts from generated src/manifest.js are registered with Reactium.Zone at this time. See Reactium.Zone SDK for runtime operations.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
   },
   {
     "type": "ReactHook",
@@ -2388,7 +2717,7 @@ define({ "api": [
     "type": "Hook",
     "url": "app-ready",
     "title": "app-ready",
-    "description": "<p>Hook run after the app has been rendered.</p>",
+    "description": "<p>The final hook run after the front-end application has bee bound or hydrated. After this point, the all hooks are runtime hooks.</p>",
     "name": "app-ready",
     "group": "Reactium.Hooks",
     "parameter": {
@@ -2399,7 +2728,7 @@ define({ "api": [
             "type": "Boolean",
             "optional": false,
             "field": "ssr",
-            "description": "<p>If the app is in server-side rendering mode <code>true</code> is passed to the hook.</p>"
+            "description": "<p>If the app is in server-side rendering mode (SSR) <code>true</code> is passed to the hook.</p>"
           }
         ]
       }

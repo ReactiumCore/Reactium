@@ -234,6 +234,18 @@ const bootup = async () => {
                 'Service-Worker-Allowed': '/',
             };
 
+            /**
+             * @api {Hook} Server.ServiceWorkerAllowed Server.ServiceWorkerAllowed
+             * @apiDescription Called on server-side during service-worker-allowed middleware.
+             Used to define the HTTP response header "Service-Worker-Allowed".
+             By default, this header will allow the document root, "/".
+             Both sync and async version called.
+             * @apiParam {Object} responseHeader with property 'Service-Worker-Allowed' (case sensitive) and its value.
+             * @apiParam {Object} req Node/Express request object
+             * @apiParam {Object} res Node/Express response object
+             * @apiName Server.ServiceWorkerAllowed
+             * @apiGroup Hooks
+             */
             SDK.Hook.runSync(
                 'Server.ServiceWorkerAllowed',
                 responseHeaders,
@@ -324,7 +336,7 @@ const bootup = async () => {
             order: SDK.Enums.priority.highest,
         })
      });
-     * @apiGroup BootHook
+     * @apiGroup Hooks
      */
     SDK.Hook.runSync('Server.Middleware', SDK.Server.Middleware);
     await SDK.Hook.run('Server.Middleware', SDK.Server.Middleware);
