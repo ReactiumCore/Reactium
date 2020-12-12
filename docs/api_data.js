@@ -4936,135 +4936,6 @@ define({ "api": [
   },
   {
     "type": "Function",
-    "url": "Reactium.Utils.abbreviatedNumber(number)",
-    "title": "Utils.abbreviatedNumber()",
-    "version": "3.1.14",
-    "group": "Reactium.Utilities",
-    "name": "Utils.abbreviatedNumber",
-    "description": "<p>Abbreviate a long number to a string.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "number",
-            "description": "<p>The number to abbreviate.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example Usage:",
-        "content": "Reactium.Utils.abbreviatedNumber(5000);\n// Returns: 5k\n\nReactium.Utils.abbreviatedNumber(500000);\n// Returns .5m",
-        "type": "json"
-      }
-    ],
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
-    "groupTitle": "Reactium.Utilities"
-  },
-  {
-    "type": "Function",
-    "url": "Reactium.Utils.breakpoint(width)",
-    "title": "Utils.breakpoint()",
-    "version": "3.1.14",
-    "group": "Reactium.Utilities",
-    "name": "Utils.breakpoint",
-    "description": "<p>Get the breakpoint of a window width.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": true,
-            "field": "width",
-            "defaultValue": "window.innerWidth",
-            "description": "<p>Custom width to check. Useful if you have a resize event and want to skip the function from looking up the value again. Reactium.Utils.breakpoint(); // Returns: the current window.innerWidth breakpoint.</p> <p>Reactium.Utils.breakpoint(1024); // Returns: sm</p>"
-          }
-        ]
-      }
-    },
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
-    "groupTitle": "Reactium.Utilities"
-  },
-  {
-    "type": "Function",
-    "url": "Reactium.Utils.breakpoints()",
-    "title": "Utils.breakpoints",
-    "version": "3.1.14",
-    "group": "Reactium.Utilities",
-    "name": "Utils.breakpoints",
-    "description": "<p>Get breakpoints from browser body:after psuedo element or <code>Utils.BREAKPOINTS_DEFAULT</code> if unset or node.</p> <table> <thead> <tr> <th>Breakpoint</th> <th>Range</th> </tr> </thead> <tbody> <tr> <td>xs</td> <td>0 - 640</td> </tr> <tr> <td>sm</td> <td>641 - 990</td> </tr> <tr> <td>md</td> <td>991 - 1280</td> </tr> <tr> <td>lg</td> <td>1281 - 1440</td> </tr> <tr> <td>xl</td> <td>1600+</td> </tr> </tbody> </table>",
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
-    "groupTitle": "Reactium.Utilities"
-  },
-  {
-    "type": "Function",
-    "url": "Reactium.Utils.isElectron(iframeWindow)",
-    "title": "Utils.isElectron()",
-    "version": "3.1.14",
-    "group": "Reactium.Utilities",
-    "name": "Utils.isElectron",
-    "description": "<p>Determine if window is an electron window. Useful for detecting electron usage.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Window",
-            "optional": true,
-            "field": "iframeWindow",
-            "description": "<p>iframe window reference.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example Usage:",
-        "content": "Reactium.Utils.isElectron();\n// Returns: true if executed in electron.\n// Returns: false if executed in node or browser.",
-        "type": "json"
-      }
-    ],
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
-    "groupTitle": "Reactium.Utilities"
-  },
-  {
-    "type": "Function",
-    "url": "Reactium.Utils.isWindow(iframeWindow)",
-    "title": "Utils.isWindow()",
-    "version": "3.1.14",
-    "group": "Reactium.Utilities",
-    "name": "Utils.isWindow",
-    "description": "<p>Determine if the window object has been set. Useful when developing for server side rendering.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Window",
-            "optional": true,
-            "field": "iframeWindow",
-            "description": "<p>iframe window reference.</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example Usage:",
-        "content": "Reactium.Utils.isWindow();\n// Returns: true if executed in a browser.\n// Returns: false if executed in node (server side rendering).",
-        "type": "json"
-      }
-    ],
-    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
-    "groupTitle": "Reactium.Utilities"
-  },
-  {
-    "type": "Function",
     "url": "ec(Component)",
     "title": "ec()",
     "description": "<p>ec, short for &quot;easy connect&quot; is a stripped down version of the redux <code>connect</code> function, which will provide your component with any Redux state properties under the name matching your component class (if applicable), as well as a <code>getState</code> function property.</p>",
@@ -5107,6 +4978,73 @@ define({ "api": [
     "groupTitle": "Reactium.Utilities"
   },
   {
+    "type": "Function",
+    "url": "Reactium.Utils.abbreviatedNumber(number)",
+    "title": "Utils.abbreviatedNumber()",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "Utils.abbreviatedNumber",
+    "description": "<p>Abbreviate a long number to a string.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "number",
+            "description": "<p>The number to abbreviate.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "Reactium.Utils.abbreviatedNumber(5000);\n// Returns: 5k\n\nReactium.Utils.abbreviatedNumber(500000);\n// Returns .5m",
+        "type": "json"
+      }
+    ],
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
+    "type": "Function",
+    "url": "Reactium.Utils.breakpoint(width)",
+    "title": "Utils.breakpoint()",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "Utils.breakpoint",
+    "description": "<p>Get the breakpoint of a window width.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "width",
+            "defaultValue": "window.innerWidth",
+            "description": "<p>Custom width to check. Useful if you have a resize event and want to skip the function from looking up the value again. Reactium.Utils.breakpoint(); // Returns: the current window.innerWidth breakpoint.</p> <p>Reactium.Utils.breakpoint(1024); // Returns: sm</p>"
+          }
+        ]
+      }
+    },
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
+    "type": "Function",
+    "url": "Reactium.Utils.breakpoints()",
+    "title": "Utils.breakpoints",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "Utils.breakpoints",
+    "description": "<p>Get breakpoints from browser body:after psuedo element or <code>Utils.BREAKPOINTS_DEFAULT</code> if unset or node.</p> <table> <thead> <tr> <th>Breakpoint</th> <th>Range</th> </tr> </thead> <tbody> <tr> <td>xs</td> <td>0 - 640</td> </tr> <tr> <td>sm</td> <td>641 - 990</td> </tr> <tr> <td>md</td> <td>991 - 1280</td> </tr> <tr> <td>lg</td> <td>1281 - 1440</td> </tr> <tr> <td>xl</td> <td>1600+</td> </tr> </tbody> </table>",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
     "type": "Utils.cxFactory",
     "url": "Utils.cxFactory",
     "title": "Utils.cxFactory",
@@ -5134,6 +5072,37 @@ define({ "api": [
       }
     ],
     "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
+    "type": "Function",
+    "url": "Reactium.Utils.isWindow(iframeWindow)",
+    "title": "Utils.isWindow()",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "Utils.isWindow",
+    "description": "<p>Determine if the window object has been set. Useful when developing for server side rendering.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Window",
+            "optional": true,
+            "field": "iframeWindow",
+            "description": "<p>iframe window reference.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "Reactium.Utils.isWindow();\n// Returns: true if executed in a browser.\n// Returns: false if executed in node (server side rendering).",
+        "type": "json"
+      }
+    ],
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
     "groupTitle": "Reactium.Utils"
   },
@@ -5220,6 +5189,99 @@ define({ "api": [
       }
     ],
     "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
+    "type": "Function",
+    "url": "Reactium.Utils.isBrowserWindow(iframeWindow)",
+    "title": "Utils.isBrowserWindow()",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "isBrowserWindow",
+    "description": "<p>If global window object exists, and does not have boolean isJSDOM flag, this context may be browser or electron. Use isElectronWindow() to know the latter.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Window",
+            "optional": true,
+            "field": "iframeWindow",
+            "description": "<p>iframe window reference.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "import { isBrowserWindow } from 'reactium-core/sdk';\nisBrowserWindow();\n// Returns: true if executed in browser or electron.\n// Returns: false if executed on server.",
+        "type": "json"
+      }
+    ],
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
+    "type": "Function",
+    "url": "Reactium.Utils.isElectronWindow(iframeWindow)",
+    "title": "Utils.isElectronWindow()",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "isElectronWindow",
+    "description": "<p>Determine if window is an electron window. Useful for detecting electron usage.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Window",
+            "optional": true,
+            "field": "iframeWindow",
+            "description": "<p>iframe window reference.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "import { isElectronWindow } from 'reactium-core/sdk';\nisElectronWindow();\n// Returns: true if executed in electron.\n// Returns: false if executed in node or browser.",
+        "type": "json"
+      }
+    ],
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
+    "groupTitle": "Reactium.Utils"
+  },
+  {
+    "type": "Function",
+    "url": "Reactium.Utils.isServerWindow(iframeWindow)",
+    "title": "Utils.isServerWindow()",
+    "version": "3.1.14",
+    "group": "Reactium.Utils",
+    "name": "isServerWindow",
+    "description": "<p>If global window object exists, and has boolean isJSDOM flag, this context is a JSON window object (not in the browser or electron)</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Window",
+            "optional": true,
+            "field": "iframeWindow",
+            "description": "<p>iframe window reference.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example Usage:",
+        "content": "import { isServerWindow } from 'reactium-core/sdk';\nisServerWindow();\n// Returns: true if executed in server SSR context.\n// Returns: false if executed in browser or electron.",
+        "type": "json"
+      }
+    ],
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/index.js",
     "groupTitle": "Reactium.Utils"
   },

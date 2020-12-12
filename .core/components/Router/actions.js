@@ -1,5 +1,6 @@
 import deps from 'dependencies';
 import op from 'object-path';
+import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 
 export default {
     updateRoute: ({ history, location, match, route = {}, params, search }) => (
@@ -11,10 +12,7 @@ export default {
         const prevLocation = op.get(Router, 'location', {});
 
         const defaultOnRouteChange = () => {
-            if (
-                typeof window !== 'undefined' &&
-                Router.pathname !== location.pathname
-            ) {
+            if (isBrowserWindow() && Router.pathname !== location.pathname) {
                 window.scrollTo(0, 0);
             }
         };
@@ -23,7 +21,7 @@ export default {
         const { onRouteChange = defaultOnRouteChange } = route;
         if (
             typeof onRouteChange === 'function' &&
-            typeof window !== 'undefined' &&
+            isBrowserWindow() &&
             Router.pathname !== location.pathname
         ) {
             onRouteChange(defaultOnRouteChange);

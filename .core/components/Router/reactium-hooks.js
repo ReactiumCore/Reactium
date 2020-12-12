@@ -1,4 +1,4 @@
-import Reactium from 'reactium-core/sdk';
+import Reactium, { isBrowserWindow } from 'reactium-core/sdk';
 import React, { forwardRef } from 'react';
 import op from 'object-path';
 import _ from 'underscore';
@@ -32,7 +32,7 @@ Reactium.Hook.register(
         }
 
         let globalRoutes = [];
-        if (typeof window !== 'undefined') {
+        if (isBrowserWindow()) {
             if ('routes' in window && Array.isArray(window.routes)) {
                 globalRoutes = window.routes;
             }

@@ -1,4 +1,5 @@
 import thunk from 'redux-super-thunk';
+import { isBrowserWindow } from 'reactium-core/sdk';
 
 export default (middlewares = [], isServer = false) => {
     let newMiddlewares = [
@@ -9,7 +10,7 @@ export default (middlewares = [], isServer = false) => {
         },
     ];
 
-    if (!isServer && typeof window !== 'undefined') {
+    if (!isServer && isBrowserWindow()) {
         const { save: lsSave } = require('redux-local-persist');
 
         newMiddlewares.push({

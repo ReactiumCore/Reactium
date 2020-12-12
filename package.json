@@ -1,6 +1,6 @@
 {
     "name": "reactium",
-    "version": "3.5.1",
+    "version": "3.6.0",
     "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
     "main": "index.js",
     "scripts": {
@@ -42,7 +42,7 @@
         "parse/node": false
     },
     "dependencies": {
-        "@atomic-reactor/reactium-sdk-core": "^1.0.21",
+        "@atomic-reactor/reactium-sdk-core": "^1.0.23",
         "@babel/cli": "^7.12.1",
         "@babel/node": "^7.12.1",
         "@loadable/component": "^5.14.1",
@@ -64,6 +64,7 @@
         "http-auth": "^3.2.4",
         "http-proxy-middleware": "^0.20.0",
         "jed": "^1.1.1",
+        "jsdom": "^16.4.0",
         "marked": "^0.8.2",
         "memory-cache": "^0.2.0",
         "moment": "^2.29.1",

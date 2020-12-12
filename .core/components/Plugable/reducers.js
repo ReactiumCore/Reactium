@@ -8,9 +8,6 @@ export default (state = {}, action) => {
             console.log(
                 `action ${action.type} is no longer used. See one of the following Reactium.Zone SDK functions.`,
             );
-            if (typeof window !== 'undefined') {
-                console.log(`See ${window.location.origin}/docs`);
-            }
             console.log(
                 `Use Reactium.Zone.addComponent() instead of dispatching the ADD_PLUGIN action type.`,
             );

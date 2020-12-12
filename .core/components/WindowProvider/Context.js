@@ -1,6 +1,7 @@
 import { createContext } from 'react';
+import { isBrowserWindow } from 'reactium-core/sdk';
 
 export default createContext({
-    iWindow: typeof window !== 'undefined' ? window : undefined,
-    iDocument: typeof document !== 'undefined' ? document : undefined,
+    iWindow: isBrowserWindow() ? window : undefined,
+    iDocument: isBrowserWindow() ? document : undefined,
 });

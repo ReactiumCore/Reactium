@@ -1,4 +1,4 @@
-import SDK from '@atomic-reactor/reactium-sdk-core';
+import SDK, { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 import op from 'object-path';
 const { Hook, Utils, Enums } = SDK;
 
@@ -55,7 +55,7 @@ const swManager = new ServiceWorker();
 Hook.register(
     'service-worker-init',
     async () => {
-        if (typeof window === 'undefined') return;
+        if (!isBrowserWindow()) return;
         const { Workbox } = await import('workbox-window');
         const sw = new Workbox(swManager.script, { scope: '/' });
         swManager.worker = sw;

@@ -1,5 +1,5 @@
 import op from 'object-path';
-import Reactium from 'reactium-core/sdk';
+import Reactium, { isBrowserWindow } from 'reactium-core/sdk';
 import manifestLoader from 'manifest';
 
 class ReactiumDependencies {
@@ -88,7 +88,7 @@ export const restHeaders = () => {
 try {
     dependencies.manifest = manifestLoader.get();
 } catch (error) {
-    if (typeof window !== 'undefined') {
+    if (isBrowserWindow()) {
         console.error('Error loading dependencies from manifest.', error);
     } else {
         console.error(
@@ -108,7 +108,7 @@ Reactium.Hook.register(
 
             const interval = setInterval(() => {
                 const loaded =
-                    typeof window !== 'undefined' ||
+                    isBrowserWindow() ||
                     Object.entries(dependencies.manifest)
                         .filter(([type]) => type !== 'allHooks')
                         .reduce(

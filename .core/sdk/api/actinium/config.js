@@ -1,3 +1,5 @@
+import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
+
 let apiConfig = {};
 
 /**
@@ -6,7 +8,7 @@ let apiConfig = {};
  * @see https://reactium.io/docs/guide/using-apis
  * @see ./index.js for Parse SDK setup
  */
-if (typeof window !== 'undefined') {
+if (isBrowserWindow()) {
     // the api configuration from the browser's perspective
     apiConfig = {
         // [browser]: actinium app id provided by window

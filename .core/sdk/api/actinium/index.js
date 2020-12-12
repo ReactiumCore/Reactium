@@ -1,3 +1,5 @@
+import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
+
 import apiConfig from './config';
 let Actinium = null;
 
@@ -6,7 +8,7 @@ let Actinium = null;
  *
  * @see https://reactium.io/docs/guide/using-apis
  */
-if (typeof window !== 'undefined') {
+if (isBrowserWindow()) {
     // [browser]: client side version of parse
     Actinium = require('parse');
 } else {
@@ -26,7 +28,7 @@ if (Actinium) {
     Actinium.serverURL = apiConfig.restAPI;
 
     // Configure LiveQuery
-    if (typeof window !== 'undefined') {
+    if (isBrowserWindow()) {
         const { host, protocol } = location;
 
         // proxied through express

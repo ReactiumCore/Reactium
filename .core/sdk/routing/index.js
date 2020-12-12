@@ -1,4 +1,9 @@
-import SDK, { useHookComponent } from '@atomic-reactor/reactium-sdk-core';
+import SDK, {
+    useHookComponent,
+    isServerWindow,
+    isBrowserWindow,
+    isElectronWindow,
+} from '@atomic-reactor/reactium-sdk-core';
 import uuid from 'uuid/v4';
 import _ from 'underscore';
 import op from 'object-path';
@@ -10,10 +15,9 @@ import React from 'react';
 
 const { Hook } = SDK;
 
-const createHistory =
-    typeof window !== 'undefined' && window.process && window.process.type
-        ? createMemoryHistory
-        : createBrowserHistory;
+const createHistory = isElectronWindow()
+    ? createMemoryHistory
+    : createBrowserHistory;
 
 const NotFoundWrapper = props => {
     const NotFound = useHookComponent('NotFound');
@@ -59,7 +63,7 @@ class Routing {
     subscriptions = {};
 
     constructor() {
-        if (typeof window !== 'undefined') {
+        if (isBrowserWindow()) {
             this.historyObj = createHistory();
             this.historyObj.listen(this.setCurrentRoute);
         }
@@ -70,7 +74,7 @@ class Routing {
     }
 
     get history() {
-        if (typeof window === 'undefined') return {};
+        if (!isBrowserWindow()) return {};
         return this.historyObj;
     }
 
@@ -153,10 +157,10 @@ class Routing {
     setupTransitions = () => {
         const previousTransitions =
             op.get(this.previousRoute, 'match.route.transitions', false) ===
-            true;
+                true && !isServerWindow();
         const currentTransitions =
             op.get(this.currentRoute, 'match.route.transitions', false) ===
-            true;
+                true && !isServerWindow();
         const currentTransitionStates =
             op.get(
                 this.currentRoute,
@@ -244,7 +248,7 @@ class Routing {
 
         this.loaded = true;
 
-        if (typeof window !== 'undefined') {
+        if (isBrowserWindow()) {
             this.setCurrentRoute(this.historyObj.location);
         }
 

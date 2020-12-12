@@ -5,7 +5,7 @@
  * Includes
  * -----------------------------------------------------------------------------
  */
-import Reactium, { useHookComponent } from 'reactium-core/sdk';
+import Reactium, { useHookComponent, isBrowserWindow } from 'reactium-core/sdk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'dependencies';
@@ -93,7 +93,7 @@ export const App = async () => {
     await Reactium.Hook.run('plugin-dependencies');
     await Reactium.Routing.load();
 
-    if (typeof window !== 'undefined') {
+    if (isBrowserWindow()) {
         /**
          * @api {Hook} component-bindings component-bindings
          * @apiName component-bindings

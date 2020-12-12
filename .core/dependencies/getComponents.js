@@ -1,9 +1,10 @@
+import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 import React, { Suspense, lazy } from 'react';
 import manifestLoader from 'manifest';
 
 export default (elms = []) => {
     let cmps = {};
-    if (typeof window !== 'undefined') {
+    if (isBrowserWindow()) {
         const contexts = manifestLoader.contexts;
 
         // Traverse the Array of bindable elements and require the components for them

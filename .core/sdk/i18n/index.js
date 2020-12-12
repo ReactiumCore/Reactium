@@ -1,4 +1,4 @@
-import SDK from '@atomic-reactor/reactium-sdk-core';
+import SDK, { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 import Jed from 'jed';
 
 const { Hook } = SDK;
@@ -11,7 +11,7 @@ class i18n {
     }
 
     setDefaultLocale = async () => {
-        if (typeof window === 'undefined') this.locale = 'en_US';
+        if (!isBrowserWindow()) this.locale = 'en_US';
         else {
             const langRaw =
                 window.navigator.userLanguage || window.navigator.language;
@@ -27,7 +27,7 @@ class i18n {
         const defaultStrings = { strings: JSON.stringify({}) };
 
         try {
-            if (typeof window !== 'undefined') {
+            if (isBrowserWindow()) {
                 const context = require.context(
                     'babel-loader!@atomic-reactor/webpack-po-loader!reactium-translations',
                     true,

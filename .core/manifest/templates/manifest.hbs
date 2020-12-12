@@ -3,6 +3,7 @@
  * DO NOT directly edit this file !!!!!!
  */
 import op from 'object-path';
+import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 
 const deps = {};
 const reqs = {
@@ -25,7 +26,7 @@ const manifest = {
                 try {
                     op.set(deps, [name, domain], item.req());
                 } catch (error) {
-                    const where = typeof window !== 'undefined' ? ' in browser ' : ' on server ';
+                    const where = isBrowserWindow() ? ' in browser ' : ' on server ';
                     console.error(`Error loading manifest resource "${item.file}" of type ${name} from domain ${domain}${where}`, error);
                 }
             }
@@ -35,11 +36,11 @@ const manifest = {
     },
     contexts: {
         {{#each contexts}}
-        '{{context}}': typeof window !== 'undefined' && require.context('{{modulePath}}', true, /{{filePattern}}/, '{{mode}}'),
+        '{{context}}': isBrowserWindow() && require.context('{{modulePath}}', true, /{{filePattern}}/, '{{mode}}'),
         {{/each}}
     },
     externals: () => {
-        if (typeof window !== 'undefined') {
+        if (isBrowserWindow()) {
             {{#each externals}}
             window['{{externalName}}'] = require('{{requirePath}}');
             {{/each}}
