@@ -1182,8 +1182,8 @@ define({ "api": [
   },
   {
     "type": "ReactHook",
-    "url": "useEventEffect(eventTarget,",
-    "title": "eventCallbacks, deps) useEventEffect()",
+    "url": "useEventEffect(eventTarget,eventCallbacks,deps)",
+    "title": "useEventEffect()",
     "version": "1.0.7",
     "description": "<p>React hook to short hand for addEventListener and removeEventLister for one or more callbacks.</p>",
     "parameter": {
@@ -2287,6 +2287,56 @@ define({ "api": [
     ],
     "filename": ".core/sdk/capability/index.js",
     "groupTitle": "Reactium.Capability"
+  },
+  {
+    "type": "Function",
+    "url": "Component.register(hook,component,order)",
+    "title": "Component.register()",
+    "group": "Reactium.Component",
+    "name": "Component.register",
+    "description": "<p>Register a React component to be used with a specific useHookComponent React hook. This must be called before the useHookComponent that defines the hook.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "hook",
+            "description": "<p>The hook name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "component",
+            "description": "<p>component(s) to be output by useHookComponent</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "order",
+            "description": "<p>precedent of this if Component.register is called multiple times (e.g. if you are trying to override core or another plugin)</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-hooks.js",
+        "content": "import React from 'react';\nimport Reactium from 'reactium-core/sdk';\n\n// component to be used unless overriden by Reactium.Component.register()\nconst ReplacementComponentA = () => <div>My Plugin's Component</div>\nconst ReplacementComponentB = () => <div>My Alternative Component</div>\n\n// Simple Version\nReactium.Component.register('my-component', ReplacementComponentA);\n\n// Advanced Form using Reactium.Hook SDK\nReactium.Hook.register('my-component', async (...params) => {\n    const context = params.pop(); // context is last argument\n    const [param] = params;\n    if (param === 'test') {\n        context.component = ReplacementComponentA;\n    } else {\n        context.component = ReplacementComponentB;\n    }\n}\n})",
+        "type": "json"
+      },
+      {
+        "title": "parent.js",
+        "content": "import React from 'react';\nimport { useHookComponent } from 'reactium-core/sdk';\n\n// component to be used unless overriden by Reactium.Component.register()\nconst DefaultComponent = () => <div>Default or Placeholder component</div>\n\nexport props => {\n    const MyComponent = useHookComponent('my-component', DefaultComponent, 'test');\n    return (\n        <div>\n            <MyComponent {...props} />\n        </div>\n    );\n};",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/component/index.js",
+    "groupTitle": "Reactium.Component"
   },
   {
     "type": "Function",
