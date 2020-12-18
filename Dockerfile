@@ -18,7 +18,7 @@ RUN chown -R node ./
 USER node
 
 # Run App build within container context
-RUN npm install && npm run build
+RUN npx -p @atomic-reactor/cli arcli install && npm run build
 
 RUN npm prune --production
 
