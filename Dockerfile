@@ -13,6 +13,9 @@ COPY package*.json ./
 # Bundle app source
 COPY . .
 
+# Allocate as much as 2GB for build heap
+ENV NODE_OPTIONS=--max_old_space_size=2078
+
 # Run App build within container context
 RUN npx -p @atomic-reactor/cli arcli install && npm run build
 
