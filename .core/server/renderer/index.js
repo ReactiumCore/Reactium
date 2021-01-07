@@ -205,6 +205,27 @@ SDK.Hook.registerSync(
     'SERVER-BEFORE-APP-CORE-TEMPLATES',
 );
 
+SDK.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
+    AppGlobals.register('actiniumAPIEnabled', {
+        name: 'actiniumAPIEnabled',
+        value: process.env.ACTINIUM_API !== 'off',
+    });
+
+    if (process.env.PROXY_ACTINIUM_API === 'off') {
+        AppGlobals.register('restAPI', {
+            name: 'restAPI',
+            value: process.env.REST_API_URL || 'http://localhost:9000/api',
+        });
+    } else {
+        AppGlobals.register('restAPI', {
+            name: 'restAPI',
+            value: '/api',
+            serverValue:
+                process.env.REST_API_URL || 'http://localhost:9000/api',
+        });
+    }
+});
+
 const Server = {};
 Server.AppHeaders = SDK.Utils.registryFactory(
     'AppHeaders',
@@ -298,6 +319,7 @@ export default async (req, res, context) => {
      * @apiParam {Object} AppGlobals Server app globals registry object.
      * @apiParam (global) {String} name The property name that will be added to window (for browser) or global (for nodejs).
      * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
+     * @apiParam (global) {Mixed} [serverValue] optional different value for the server global, useful when value should be used differently on the server code
      * @apiExample reactium-boot.js
      import SDK from '@atomic-reactor/reactium-sdk-core';
      // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
@@ -317,8 +339,9 @@ export default async (req, res, context) => {
 
     // Add application globals
     _.sortBy(Object.values(Server.AppGlobals.list), 'order').forEach(
-        ({ name, value }) => {
-            global[name] = value;
+        ({ name, value, serverValue }) => {
+            global[name] =
+                typeof serverValue !== 'undefined' ? serverValue : value;
             req.appGlobals += `window["${name}"] = ${serialize(value)};\n`;
         },
     );

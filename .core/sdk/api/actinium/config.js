@@ -21,7 +21,7 @@ if (isBrowserWindow()) {
 
         // [browser]: REST API base url provided by window
         // if /api default, proxies to REST_API_URL
-        restAPI: window.restAPI || '/api',
+        restAPI: window.restAPI,
     };
 } else {
     // the api from the server's perspective
@@ -35,7 +35,7 @@ if (isBrowserWindow()) {
         parseAppId: process.env.PARSE_APP_ID || 'Actinium',
 
         // [server]: default api url for local dev with Actinium
-        restAPI: process.env.REST_API_URL || 'http://localhost:9000/api',
+        restAPI: global.restAPI,
     };
 }
 

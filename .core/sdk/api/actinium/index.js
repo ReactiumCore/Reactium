@@ -9,11 +9,15 @@ let Actinium = null;
  * @see https://reactium.io/docs/guide/using-apis
  */
 if (isBrowserWindow()) {
-    // [browser]: client side version of parse
-    Actinium = require('parse');
+    if (window.actiniumAPIEnabled === true) {
+        // [browser]: client side version of parse
+        Actinium = require('parse');
+    }
 } else {
-    // [server]: node SDK for parse
-    Actinium = require('parse/node');
+    if (global.actiniumAPIEnabled === true) {
+        // [server]: node SDK for parse
+        Actinium = require('parse/node');
+    }
 }
 
 if (Actinium) {

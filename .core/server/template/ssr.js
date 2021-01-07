@@ -21,7 +21,6 @@ module.exports = {
                     window.ssr = true;
                     window.defines = ${serialize(defines)};
                     window.INITIAL_STATE = ${serialize(store.getState())};
-                    window.restAPI = '/api';
                     window.actiniumAppId = '${actiniumAppId}';
                     ${req.appGlobals}
                 </script>

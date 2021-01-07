@@ -226,6 +226,13 @@
             "optional": false,
             "field": "value",
             "description": "<p>any javascript value that can be serialized for use in a script tag</p>"
+          },
+          {
+            "group": "global",
+            "type": "Mixed",
+            "optional": true,
+            "field": "serverValue",
+            "description": "<p>optional different value for the server global, useful when value should be used differently on the server code</p>"
           }
         ]
       }

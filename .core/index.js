@@ -55,11 +55,10 @@ if (global.isSSR && global.useJSDOM) {
     global.window.isJSDOM = true;
     console.log('SSR: creating JSDOM object as global.window.');
 }
-
 const apiConfig = SDK.API.ActiniumConfig;
+
 global.parseAppId = apiConfig.parseAppId;
 global.actiniumAppId = apiConfig.actiniumAppId;
-global.restAPI = apiConfig.restAPI;
 
 // SSR Defines
 if (!'defines' in global) {
@@ -132,18 +131,25 @@ const bootup = async () => {
         order: Enums.priority.highest,
     });
 
-    if (restAPI) {
+    if (process.env.PROXY_ACTINIUM_API !== 'off') {
         SDK.Server.Middleware.register('api', {
             name: 'api',
-            use: proxy('/api', {
-                target: restAPI,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': '',
-                },
-                logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
-                ws: true,
-            }),
+            use: (req, res, next) => {
+                if (!global.restAPI) {
+                    next();
+                    return;
+                }
+
+                return proxy('/api', {
+                    target: global.restAPI,
+                    changeOrigin: true,
+                    pathRewrite: {
+                        '^/api': '',
+                    },
+                    logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
+                    ws: true,
+                })(req, res, next);
+            },
             order: Enums.priority.highest,
         });
     }
