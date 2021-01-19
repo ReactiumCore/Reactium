@@ -95,6 +95,7 @@
         "semver": "^7.3.2",
         "serialize-javascript": "^5.0.1",
         "shallow-equals": "^1.0.0",
+        "socket.io-client": "^3.1.0",
         "underscore": "*",
         "uuid": "^3.4.0",
         "xss": "^1.0.8"

@@ -1,6 +1,7 @@
 import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
-
+import { io } from 'socket.io-client';
 import apiConfig from './config';
+
 let Actinium = null;
 
 /**
@@ -36,6 +37,7 @@ if (Actinium) {
         const { host, protocol } = location;
 
         // proxied through express
+        let ioURL = `${protocol}//${host}${restAPI}`;
         Actinium.liveQueryServerURL = `${
             protocol === 'http:' ? 'ws:' : 'wss:'
         }//${host}${restAPI}`;
@@ -43,9 +45,17 @@ if (Actinium) {
         // direct connection (not proxied through express)
         if (/^http/.test(apiConfig.restAPI)) {
             const API = new URL(apiConfig.restAPI);
+            ioURL = API.toString();
             API.protocol = API.protocol === 'http:' ? 'ws:' : 'wss:';
             Actinium.liveQueryServerURL = API.toString();
         }
+
+        ioURL = ioURL.replace('/api', '');
+        Actinium.IO = io(ioURL, {
+            path: '/actinium.io',
+            autoConnect: false,
+            transports: ['polling'],
+        });
 
         Actinium.LiveQuery.on('open', () => {
             console.log('Actinium LiveQuery connection established');

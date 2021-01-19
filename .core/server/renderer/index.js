@@ -208,20 +208,24 @@ SDK.Hook.registerSync(
 SDK.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
     AppGlobals.register('actiniumAPIEnabled', {
         name: 'actiniumAPIEnabled',
-        value: process.env.ACTINIUM_API !== 'off',
+        value: global.actiniumAPIEnabled,
     });
 
-    if (process.env.PROXY_ACTINIUM_API === 'off') {
-        AppGlobals.register('restAPI', {
-            name: 'restAPI',
-            value: process.env.REST_API_URL || 'http://localhost:9000/api',
+    if (global.actiniumAPIEnabled) {
+        AppGlobals.register('actiniumAppId', {
+            name: 'actiniumAppId',
+            value: global.actiniumAppId,
         });
-    } else {
+
+        AppGlobals.register('actiniumAPIEnabled', {
+            name: 'actiniumAPIEnabled',
+            value: global.actiniumAPIEnabled,
+        });
+
         AppGlobals.register('restAPI', {
             name: 'restAPI',
-            value: '/api',
-            serverValue:
-                process.env.REST_API_URL || 'http://localhost:9000/api',
+            value: global.actiniumProxyEnabled ? '/api' : global.restAPI,
+            serverValue: global.restAPI,
         });
     }
 });
