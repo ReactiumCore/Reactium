@@ -15,7 +15,7 @@ if (isBrowserWindow()) {
         Actinium = require('parse');
     }
 } else {
-    if (global.actiniumAPIEnabled === true) {
+    if (process.env.ACTINIUM_API !== 'off') {
         // [server]: node SDK for parse
         Actinium = require('parse/node');
     }
