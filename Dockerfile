@@ -13,9 +13,8 @@ COPY package*.json ./
 # Bundle app source
 COPY . .
 
-RUN chown -R node ./
-
-USER node
+# Allocate as much as 2GB for build heap
+ENV NODE_OPTIONS=--max_old_space_size=2078
 
 # Run App build within container context
 RUN npx -p @atomic-reactor/cli arcli install && npm run build
@@ -28,10 +27,19 @@ FROM node:lts
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY --from=build /tmp/app/node_modules ./node_modules
+# Includes all build assets
 COPY --from=build /tmp/app/public ./public
-COPY --from=build /tmp/app/build ./build
+
+# Dependencies of server
 COPY --from=build /tmp/app/package.json ./package.json
+COPY --from=build /tmp/app/node_modules ./node_modules
+
+# Includes entire server-side app (including reactium_modules)
+COPY --from=build /tmp/app/build ./build
+
+RUN chown -R node ./
+
+USER node
 
 EXPOSE 3030
 

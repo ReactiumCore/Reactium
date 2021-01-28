@@ -29,6 +29,9 @@ global.useJSDOM =
     (!('SSR_MODE_JSDOM' in process.env) ||
         process.env.SSR_MODE_JSDOM !== 'off');
 
+global.actiniumAPIEnabled = process.env.ACTINIUM_API !== 'off';
+global.actiniumProxyEnabled = process.env.PROXY_ACTINIUM_API !== 'off';
+
 if (global.isSSR && global.useJSDOM) {
     // react-side-effect/lib/index.js:85:17 does the opposite of normal
     // it tries to check to see if the DOM is available, and blows up if it
@@ -57,6 +60,7 @@ if (global.isSSR && global.useJSDOM) {
 }
 
 const apiConfig = SDK.API.ActiniumConfig;
+
 global.parseAppId = apiConfig.parseAppId;
 global.actiniumAppId = apiConfig.actiniumAppId;
 global.restAPI = apiConfig.restAPI;
@@ -132,18 +136,45 @@ const bootup = async () => {
         order: Enums.priority.highest,
     });
 
-    if (restAPI) {
+    if (process.env.PROXY_ACTINIUM_API !== 'off') {
         SDK.Server.Middleware.register('api', {
             name: 'api',
-            use: proxy('/api', {
-                target: restAPI,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': '',
-                },
-                logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
-                ws: true,
-            }),
+            use: (req, res, next) => {
+                if (!global.restAPI) {
+                    next();
+                    return;
+                }
+
+                return proxy('/api', {
+                    target: global.restAPI,
+                    changeOrigin: true,
+                    pathRewrite: {
+                        '^/api': '',
+                    },
+                    logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
+                    ws: true,
+                })(req, res, next);
+            },
+            order: Enums.priority.highest,
+        });
+    }
+
+    if (process.env.PROXY_ACTINIUM_API !== 'off') {
+        SDK.Server.Middleware.register('api-socket-io', {
+            name: 'api-socket-io',
+            use: (req, res, next) => {
+                if (!global.restAPI) {
+                    next();
+                    return;
+                }
+
+                return proxy('/actinium.io', {
+                    target: global.restAPI.replace('/api', '') + '/actinium.io',
+                    changeOrigin: true,
+                    logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
+                    ws: true,
+                })(req, res, next);
+            },
             order: Enums.priority.highest,
         });
     }

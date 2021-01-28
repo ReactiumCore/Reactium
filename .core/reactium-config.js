@@ -421,6 +421,12 @@ module.exports = {
                     destination: '/src/app/main.js',
                     source: '/tmp/update/src/app/main.js',
                 },
+                {
+                    overwrite: true,
+                    version: '>=3.6.0',
+                    destination: '/.dockerignore',
+                    source: '/tmp/update/.dockerignore',
+                },
             ],
             remove: [],
         },
