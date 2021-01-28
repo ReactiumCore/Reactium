@@ -13,7 +13,7 @@ const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
 const gzip = require('gulp-gzip');
 const jsonFunctions = require('node-sass-functions-json').default;
-const tildeImporter = require('node-sass-tilde-importer');
+const reactiumImporter = require('@atomic-reactor/node-sass-reactium-importer');
 const less = require('gulp-less');
 const cleanCSS = require('gulp-clean-css');
 const sourcemaps = require('gulp-sourcemaps');
@@ -555,7 +555,7 @@ $assets: (
                         functions: {
                             ...jsonFunctions,
                         },
-                        importer: tildeImporter,
+                        importer: reactiumImporter,
                         includePaths: config.src.includes,
                     }).on('error', sass.logError),
                 ),
