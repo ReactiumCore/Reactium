@@ -9,6 +9,7 @@ import Reactium, { useHookComponent, isBrowserWindow } from 'reactium-core/sdk';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'dependencies';
+import _ from 'underscore';
 
 const hookableComponent = name => props => {
     const Component = useHookComponent(name);
@@ -185,7 +186,7 @@ export const App = async () => {
              * @apiGroup Reactium.Hooks
              * @apiParam {Boolean} ssr If the app is in server-side rendering mode (SSR) `true` is passed to the hook.
              */
-            await Reactium.Hook.run('app-ready', ssr);
+            _.defer(() => Reactium.Hook.run('app-ready', ssr));
         }
     }
 };
