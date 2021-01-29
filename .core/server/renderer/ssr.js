@@ -20,7 +20,9 @@ const renderer = async (req, res, context) => {
     const { store } = await Reactium.Hook.run('store-create', { server: true });
     await Reactium.Hook.run('plugin-dependencies');
     await Reactium.Routing.load();
+    ('plugin-dependencies');
     const routes = Reactium.Routing.get();
+    await Reactium.Hook.run('plugin-ready');
 
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);

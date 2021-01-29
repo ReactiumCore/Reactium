@@ -177,3 +177,40 @@ Reactium.Hook.register(
     },
     Reactium.Enums.priority.highest,
 );
+
+/**
+ * @api {Hook} dependencies-load dependencies-load
+ * @apiName dependencies-load
+ * @apiDescription Called after init to give an application a change to load
+ async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook
+ async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+ * @apiGroup Hooks
+ */
+
+/**
+ * @api {Hook} Hooks Hooks
+ * @apiName Hooks
+ * @apiDescription Here are the standard hooks that fire (in order) on the bootstrap of your Reactium application.
+ | Hook | Description |
+| :---- | :----- |
+| init | Called before all other hooks on startup. |
+| dependencies-load | Called while application dependencies are loaded. |
+| service-worker-init | Called while service worker is loaded. |
+| zone-defaults | Called while rendering zone default components are loaded. |
+| store-create | Called while Redux store is being created. |
+| store-created | Called after Redux store is created. |
+| plugin-dependencies | Called before loading runtime plugins. |
+| plugin-init | Called to initiate plugin registration. |
+| routes-init | Called to initiaze React router |
+| register-route | Called for each route that is registered |
+| data-loaded | Called on route load to pre-load data |
+| plugin-ready | Called after all plugins registration callbacks have completed |
+| component-bindings | Called to sibling React components and their DOM element bindings |
+| app-bindpoint | Called to define the main application bind point. |
+| app-redux-provider | Called to define the Redux provider component |
+| app-router | Called to provide the React router component |
+| app-ssr-mode | Called to make the application aware of server-side rendering mode |
+| app-boot-message | Called to define the javascript console boot message |
+| app-ready | Called when the application is being bound or hydrated by ReactDOM |
+ * @apiGroup Hooks
+ */

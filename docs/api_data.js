@@ -136,6 +136,17 @@ define({ "api": [
   },
   {
     "type": "Hook",
+    "url": "Hooks",
+    "title": "Hooks",
+    "name": "Hooks",
+    "description": "<p>Here are the standard hooks that fire (in order) on the bootstrap of your Reactium application.</p> <table> <thead> <tr> <th style=\"text-align:left\">Hook</th> <th style=\"text-align:left\">Description</th> </tr> </thead> <tbody> <tr> <td style=\"text-align:left\">(#Hooks:init)</td> <td style=\"text-align:left\">Called before all other hooks on startup.</td> </tr> <tr> <td style=\"text-align:left\">dependencies-load</td> <td style=\"text-align:left\">Called while application dependencies are loaded.</td> </tr> <tr> <td style=\"text-align:left\">service-worker-init</td> <td style=\"text-align:left\">Called while service worker is loaded.</td> </tr> <tr> <td style=\"text-align:left\">zone-defaults</td> <td style=\"text-align:left\">Called while rendering zone default components are loaded.</td> </tr> <tr> <td style=\"text-align:left\">store-create</td> <td style=\"text-align:left\">Called while Redux store is being created.</td> </tr> <tr> <td style=\"text-align:left\">store-created</td> <td style=\"text-align:left\">Called after Redux store is created.</td> </tr> <tr> <td style=\"text-align:left\">plugin-dependencies</td> <td style=\"text-align:left\">Called before loading runtime plugins.</td> </tr> <tr> <td style=\"text-align:left\">plugin-init</td> <td style=\"text-align:left\">Called to initiate plugin registration.</td> </tr> <tr> <td style=\"text-align:left\">routes-init</td> <td style=\"text-align:left\">Called to initiaze React router</td> </tr> <tr> <td style=\"text-align:left\">register-route</td> <td style=\"text-align:left\">Called for each route that is registered</td> </tr> <tr> <td style=\"text-align:left\">data-loaded</td> <td style=\"text-align:left\">Called on route load to pre-load data</td> </tr> <tr> <td style=\"text-align:left\">plugin-ready</td> <td style=\"text-align:left\">Called after all plugins registration callbacks have completed</td> </tr> <tr> <td style=\"text-align:left\">component-bindings</td> <td style=\"text-align:left\">Called to sibling React components and their DOM element bindings</td> </tr> <tr> <td style=\"text-align:left\">app-bindpoint</td> <td style=\"text-align:left\">Called to define the main application bind point.</td> </tr> <tr> <td style=\"text-align:left\">app-redux-provider</td> <td style=\"text-align:left\">Called to define the Redux provider component</td> </tr> <tr> <td style=\"text-align:left\">app-router</td> <td style=\"text-align:left\">Called to provide the React router component</td> </tr> <tr> <td style=\"text-align:left\">app-ssr-mode</td> <td style=\"text-align:left\">Called to make the application aware of server-side rendering mode</td> </tr> <tr> <td style=\"text-align:left\">app-boot-message</td> <td style=\"text-align:left\">Called to define the javascript console boot message</td> </tr> <tr> <td style=\"text-align:left\">app-ready</td> <td style=\"text-align:left\">Called when the application is being bound or hydrated by ReactDOM</td> </tr> </tbody> </table>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/reactium-hooks.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
     "url": "Server.AppBindings",
     "title": "Server.AppBindings",
     "name": "Server.AppBindings",
@@ -779,6 +790,30 @@ define({ "api": [
   },
   {
     "type": "Hook",
+    "url": "app-ready",
+    "title": "app-ready",
+    "description": "<p>The final hook run after the front-end application has bee bound or hydrated. After this point, the all hooks are runtime hooks.</p>",
+    "name": "app-ready",
+    "group": "Hooks",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "ssr",
+            "description": "<p>If the app is in server-side rendering mode (SSR) <code>true</code> is passed to the hook.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
     "url": "app-redux-provider",
     "title": "app-redux-provider",
     "name": "app-redux-provider",
@@ -852,6 +887,17 @@ define({ "api": [
   },
   {
     "type": "Hook",
+    "url": "dependencies-load",
+    "title": "dependencies-load",
+    "name": "dependencies-load",
+    "description": "<p>Called after init to give an application a change to load async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/reactium-hooks.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
     "url": "init",
     "title": "init",
     "name": "init",
@@ -880,6 +926,17 @@ define({ "api": [
         ]
       }
     },
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
+    "url": "plugin-ready",
+    "title": "plugin-ready",
+    "name": "plugin-ready",
+    "description": "<p>Called after all plugin registration callbacks have completed and routes have loaded.</p>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/index.js",
@@ -1867,6 +1924,37 @@ define({ "api": [
       }
     ],
     "version": "0.0.0",
+    "filename": "src/app/components/ZTest/Zone.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
+    "url": "useZoneComponents(zone)",
+    "title": "useZoneComponents()",
+    "description": "<p>A React hook used in the <code>Zone</code> component to determine what components should currently be rendered. Useful to observe a zone in another component. If you want to observe to the zone components without necessarily causing a rerender in your component, use <code>Reactium.Zone.getZoneComponents()</code> (to get a list of components in the zone), alone or in combination with <code>Reactium.Zone.subscribe()</code>.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>the zone id.</p>"
+          }
+        ]
+      }
+    },
+    "name": "useZoneComponents",
+    "group": "ReactHook",
+    "examples": [
+      {
+        "title": "Example",
+        "content": "import React from 'react';\nimport { useZoneComponents } from 'reactium-core/sdk';\n\nexport props => {\n    const zoneComponents = useZoneComponents('my-zone');\n\n    return (\n        <div>\n            Components in Zone: {zoneComponents.length}\n        </div>\n    );\n};",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/zone/Zone.js",
     "groupTitle": "ReactHook"
   },
@@ -2769,30 +2857,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/hook/index.js",
     "groupTitle": "Reactium.Hook"
-  },
-  {
-    "type": "Hook",
-    "url": "app-ready",
-    "title": "app-ready",
-    "description": "<p>The final hook run after the front-end application has bee bound or hydrated. After this point, the all hooks are runtime hooks.</p>",
-    "name": "app-ready",
-    "group": "Reactium.Hooks",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": false,
-            "field": "ssr",
-            "description": "<p>If the app is in server-side rendering mode (SSR) <code>true</code> is passed to the hook.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": ".core/app/index.js",
-    "groupTitle": "Reactium.Hooks"
   },
   {
     "type": "Function",
@@ -5963,6 +6027,62 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/registry.js",
     "groupTitle": "Reactium"
+  },
+  {
+    "type": "RegisteredComponent",
+    "url": "Zone",
+    "title": "Zone",
+    "version": "3.1.19",
+    "name": "Zone",
+    "description": "<p>Component used to identify a &quot;zone&quot; in your application where any arbitrary components will render. Plugin components registered for this zone will dynamically render in the zone. Plugins can be registered statically in Reactium by creating a <code>plugin.js</code> file that exports a component definition (<code>arcli plugin component</code> to generate boilerplate for one), or using the Reactium SDK <code>Reactium.Zone.addComponent()</code> call.</p> <p>See also the Zone SDK for filtering, sorting, or mapping over plugin components for a zone.</p> <p>To generate an exportable plugin module, use the <code>arcli plugin module</code> command.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "zone",
+            "description": "<p>Identifier of the zone where plugin components will be rendered.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": true,
+            "field": "passThrough",
+            "defaultValue": "false",
+            "description": "<p>When true, will provide a <code>components</code> property to children of Zone instead of rendering plugin components directly as siblings. This is useful when you wish to make plugin components available, but take more control over how they render.</p> <p>Example Passthrough Usage: Using the <code>jsx-parser</code> module, components could be provided to a JSXParser component, and the actual render of those components could be dictated by a string of JSX and data context provided by a CMS.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "...params",
+            "description": "<p>any number of arbitrary parameters (variadic) can be provided to the Zone, and will be passed automatically as props on your plugin components when they are rendered.</p>"
+          }
+        ]
+      }
+    },
+    "group": "Registered_Component",
+    "examples": [
+      {
+        "title": "PageHeader.js",
+        "content": "import React from 'react';\nimport { useHookComponent } from 'reactium-core/sdk';\n\n// PageHeader is not hard-coded, but adaptable by plugins\nexport default props => {\n    const Zone = useHookComponent('Zone');\n    return (\n        <div class='page-header'>\n            <Zone zone={'page-header'} />\n        </div>\n    );\n};",
+        "type": "json"
+      },
+      {
+        "title": "src/app/components/plugin-src/MyHeaderPlugin/index.js",
+        "content": "import Reactium from 'reactium-core/sdk';\nimport MyHeaderWidget from './MyHeaderWidget';\n\nconst registerPlugin = async () => {\n    await Reactium.Plugin.register('MyHeaderPlugin');\n    Reactium.Zone.addComponent({\n        id: 'MyHeaderWidget',\n        zone: 'page-header',\n        component: MyHeaderWidget,\n    });\n};\nregisterPlugin();",
+        "type": "json"
+      },
+      {
+        "title": "src/app/components/plugin-src/MyHeaderPlugin/MyHeaderWidget.js",
+        "content": "import React from 'react';\n\nexport default props => {\n   return (\n       <div class='my-header-widget'>\n           I will end up in the header zone\n       </div>\n   );\n};",
+        "type": "json"
+      }
+    ],
+    "filename": "src/app/components/ZTest/Zone.js",
+    "groupTitle": "Registered_Component"
   },
   {
     "type": "RegisteredComponent",

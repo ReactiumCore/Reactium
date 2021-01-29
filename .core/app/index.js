@@ -94,6 +94,14 @@ export const App = async () => {
     await Reactium.Hook.run('plugin-dependencies');
     await Reactium.Routing.load();
 
+    /**
+     * @api {Hook} plugin-ready plugin-ready
+     * @apiName plugin-ready
+     * @apiDescription Called after all plugin registration callbacks have completed and routes have loaded.
+     * @apiGroup Hooks
+     */
+    await Reactium.Hook.run('plugin-ready');
+
     if (isBrowserWindow()) {
         /**
          * @api {Hook} component-bindings component-bindings
@@ -183,7 +191,7 @@ export const App = async () => {
              * @apiDescription The final hook run after the front-end application has bee bound or hydrated. After this point,
              the all hooks are runtime hooks.
              * @apiName app-ready
-             * @apiGroup Reactium.Hooks
+             * @apiGroup Hooks
              * @apiParam {Boolean} ssr If the app is in server-side rendering mode (SSR) `true` is passed to the hook.
              */
             _.defer(() => Reactium.Hook.run('app-ready', ssr));
