@@ -10,7 +10,8 @@ const SDK = require('reactium-core/sdk').default;
 const normalizeAssets = assets => _.flatten([assets]);
 
 const isToolkit = str => {
-    return /^\/toolkit/i.test(str);
+    const v = op.get(SDK, 'version', '1.0.23');
+    return semver.gt(v, '1.0.24') ? false : /^\/toolkit/i.test(str);
 };
 
 SDK.Hook.registerSync(
