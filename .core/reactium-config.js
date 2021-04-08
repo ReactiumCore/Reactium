@@ -30,14 +30,17 @@ const defaultLibraryExternals = {
         externalName: 'copy-to-clipboard',
         requirePath: 'copy-to-clipboard',
     },
-    'gsap/umd/TweenMax': {
-        externalName: '/^gsap.*$/',
-        requirePath: 'gsap/umd/TweenMax',
-    },
+
+    // 'gsap/umd/TweenMax': {
+    //     externalName: '/^gsap.*$/',
+    //     requirePath: 'gsap/umd/TweenMax',
+    // },
+
     moment: {
         externalName: 'moment',
         requirePath: 'moment',
     },
+
     'object-path': {
         externalName: 'object-path',
         requirePath: 'object-path',
