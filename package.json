@@ -60,7 +60,7 @@
         "express": "^4.17.1",
         "express-static-gzip": "^2.1.1",
         "globby": "^11.0.3",
-        "gsap": "^2.1.3",
+        "gsap": "^3.6.0",
         "http-auth": "^3.2.4",
         "http-proxy-middleware": "^0.20.0",
         "jed": "^1.1.1",
