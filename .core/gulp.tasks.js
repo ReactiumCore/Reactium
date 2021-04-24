@@ -140,12 +140,12 @@ const reactium = (gulp, config, webpackConfig) => {
         watchProcess.on('message', message => {
             switch (message) {
                 case 'build-started': {
-                    console.log("[00:00:00] Starting 'build'...");
+                    console.log('[00:00:00] Starting \'build\'...');
                     done();
                     return;
                 }
                 case 'restart-watches': {
-                    console.log("[00:00:00] Restarting 'watch'...");
+                    console.log('[00:00:00] Restarting \'watch\'...');
                     watchProcess.kill();
                     watch(_ => _, true);
                     return;
@@ -227,7 +227,7 @@ const reactium = (gulp, config, webpackConfig) => {
             .pipe(rename(assetPath))
             .pipe(gulp.dest(config.dest.assets));
 
-    const build = gulp.series(
+    const defaultBuildTasks = gulp.series(
         task('preBuild'),
         task('ensureReactiumModules'),
         task('clean'),
@@ -241,6 +241,19 @@ const reactium = (gulp, config, webpackConfig) => {
         task('apidocs'),
         task('postBuild'),
     );
+
+    const build = cfg =>
+        !cfg.buildTasks
+            ? defaultBuildTasks
+            : gulp.series(
+                  ...cfg.buildTasks.map(t => {
+                      if (typeof t === 'string') {
+                          return task(t);
+                      } else if (Array.isArray(t)) {
+                          return gulp.parallel(...t.map(task));
+                      }
+                  }),
+              );
 
     const apidocs = done => {
         if (!isDev) done();
@@ -603,7 +616,7 @@ $assets: (
         'local:ssr': local({ ssr: true }),
         assets,
         preBuild: noop,
-        build,
+        build: build(config),
         compress,
         postBuild: noop,
         postServe: noop,
