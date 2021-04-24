@@ -175,5 +175,16 @@ module.exports = config => {
         },
     };
 
+    if (env === 'production') {
+        defaultConfig.module.rules.push({
+            test: [/redux-devtools/],
+            use: [
+                {
+                    loader: 'ignore-loader',
+                },
+            ],
+        });
+    }
+
     return overrides(defaultConfig);
 };
