@@ -88,6 +88,7 @@ Hook.register(
         }
     },
     Enums.priority.highest,
+    'sw'
 );
 
 export default swManager;
