@@ -19,7 +19,6 @@ const cleanCSS = require('gulp-clean-css');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 const chalk = require('chalk');
-const moment = require('moment');
 const reactiumConfig = require('./reactium-config');
 const regenManifest = require('./manifest/manifest-tools');
 const umdWebpackGenerator = require('./umd.webpack.config');
@@ -28,6 +27,11 @@ const { fork, spawn } = require('child_process');
 const workbox = require('workbox-build');
 const { File, FileReader } = require('file-api');
 const handlebars = require('handlebars');
+const timestamp = () => {
+    const now = new Date();
+    const ts = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+    return `[${chalk.blue(ts)}]`;
+};
 
 // For backward compatibility with gulp override tasks using run-sequence module
 // make compatible with gulp4
@@ -69,11 +73,6 @@ const reactium = (gulp, config, webpackConfig) => {
     );
 
     const noop = done => done();
-
-    const timestamp = () => {
-        let now = moment().format('HH:mm:ss');
-        return `[${chalk.blue(now)}]`;
-    };
 
     const watcher = e => {
         let src = path.relative(path.resolve(__dirname), e.path);
@@ -140,12 +139,12 @@ const reactium = (gulp, config, webpackConfig) => {
         watchProcess.on('message', message => {
             switch (message) {
                 case 'build-started': {
-                    console.log('[00:00:00] Starting \'build\'...');
+                    console.log(timestamp() + " Starting 'build'...");
                     done();
                     return;
                 }
                 case 'restart-watches': {
-                    console.log('[00:00:00] Restarting \'watch\'...');
+                    console.log(timestamp() + " Restarting 'watch'...");
                     watchProcess.kill();
                     watch(_ => _, true);
                     return;
@@ -162,7 +161,7 @@ const reactium = (gulp, config, webpackConfig) => {
     ) => {
         const ps = spawn(cmd, args, { stdio: [stdin, stdout, stderr] });
         ps.on('close', code => {
-            if (code !== 0) console.log(`Error executing ${cmd}`);
+            if (code !== 0) console.log(timestamp() + `Error executing ${cmd}`);
             done();
         });
     };
@@ -374,7 +373,9 @@ const reactium = (gulp, config, webpackConfig) => {
 
         for (let umd of umdConfigs) {
             try {
-                console.log(`Generating UMD library ${umd.libraryName}`);
+                console.log(
+                    timestamp() + ` Generating UMD library ${umd.libraryName}`,
+                );
                 await new Promise((resolve, reject) => {
                     webpack(umdWebpackGenerator(umd), (err, stats) => {
                         if (err) {
@@ -409,12 +410,15 @@ const reactium = (gulp, config, webpackConfig) => {
             ...config.sw,
         };
 
-        if (fs.existsSync(config.umd.defaultWorker)) {
-            method = 'injectManifest';
-            swConfig.swSrc = config.umd.defaultWorker;
-            delete swConfig.clientsClaim;
-            delete swConfig.skipWaiting;
+        if (!fs.existsSync(config.umd.defaultWorker)) {
+            console.info(timestamp() + ' Skipping service worker generation.');
+            return Promise.resolve();
         }
+
+        method = 'injectManifest';
+        swConfig.swSrc = config.umd.defaultWorker;
+        delete swConfig.clientsClaim;
+        delete swConfig.skipWaiting;
 
         return workbox[method](swConfig)
             .then(({ warnings }) => {
@@ -422,10 +426,15 @@ const reactium = (gulp, config, webpackConfig) => {
                 for (const warning of warnings) {
                     console.warn(warning);
                 }
-                console.info('Service worker generation completed.');
+                console.info(
+                    timestamp() + ' Service worker generation completed.',
+                );
             })
             .catch(error => {
-                console.warn('Service worker generation failed:', error);
+                console.warn(
+                    timestamp() + ' Service worker generation failed:',
+                    error,
+                );
             });
     };
 
