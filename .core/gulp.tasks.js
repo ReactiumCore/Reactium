@@ -379,7 +379,7 @@ const reactium = (gulp, config, webpackConfig) => {
                 await new Promise((resolve, reject) => {
                     webpack(umdWebpackGenerator(umd), (err, stats) => {
                         if (err) {
-                            reject(err());
+                            reject(err);
                             return;
                         }
 
@@ -397,7 +397,7 @@ const reactium = (gulp, config, webpackConfig) => {
                     });
                 });
             } catch (error) {
-                console.log(error);
+                console.log('error', error);
             }
         }
 
