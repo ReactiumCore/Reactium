@@ -1,9 +1,15 @@
 [ignore]
 <PROJECT_ROOT>/node_modules
+<PROJECT_ROOT>/reactium_modules
 <PROJECT_ROOT>/public
 <PROJECT_ROOT>/dist
+<PROJECT_ROOT>/.core
+<PROJECT_ROOT>/.cli
+.*umd\.js
+.*sw\.js
 
 [include]
+src/
 
 [libs]
 
