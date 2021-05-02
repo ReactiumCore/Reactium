@@ -5,16 +5,15 @@ const semver = require('semver');
 const op = require('object-path');
 const _ = require('underscore');
 const serialize = require('serialize-javascript');
-const SDK = require('reactium-core/sdk').default;
 
 const normalizeAssets = assets => _.flatten([assets]);
 
 const isToolkit = str => {
-    const v = op.get(SDK, 'version', '1.0.23');
+    const v = op.get(ReactiumBoot, 'version', '1.0.23');
     return semver.gt(v, '1.0.24') ? false : /^\/toolkit/i.test(str);
 };
 
-SDK.Hook.registerSync(
+ReactiumBoot.Hook.registerSync(
     'Server.AppStyleSheets',
     (req, AppStyleSheets) => {
         const theme = op.get(
@@ -45,10 +44,16 @@ SDK.Hook.registerSync(
             }
 
             const includes = [defaultStylesheet];
-            SDK.Hook.runSync('Server.AppStyleSheets.includes', includes);
+            ReactiumBoot.Hook.runSync(
+                'Server.AppStyleSheets.includes',
+                includes,
+            );
 
             const excludes = ['core.css', 'toolkit.css'];
-            SDK.Hook.runSync('Server.AppStyleSheets.excludes', excludes);
+            ReactiumBoot.Hook.runSync(
+                'Server.AppStyleSheets.excludes',
+                excludes,
+            );
 
             const included = Boolean(
                 includes.find(search => itemPath.indexOf(search) >= 0),
@@ -70,11 +75,11 @@ SDK.Hook.registerSync(
             });
         });
     },
-    SDK.Enums.priority.highest,
+    ReactiumBoot.Enums.priority.highest,
     'SERVER-APP-STYLESHEETS-CORE',
 );
 
-SDK.Hook.registerSync(
+ReactiumBoot.Hook.registerSync(
     'Server.AppScripts',
     (req, AppScripts, res) => {
         // Webpack assets
@@ -90,7 +95,7 @@ SDK.Hook.registerSync(
                 ]).forEach(path =>
                     AppScripts.register(path, {
                         path: `/${path}`,
-                        order: SDK.Enums.priority.highest,
+                        order: ReactiumBoot.Enums.priority.highest,
                         footer: true,
                     }),
                 );
@@ -112,43 +117,43 @@ SDK.Hook.registerSync(
             .forEach(path =>
                 AppScripts.register(path, {
                     path,
-                    order: SDK.Enums.priority.highest,
+                    order: ReactiumBoot.Enums.priority.highest,
                     footer: true,
                 }),
             );
     },
-    SDK.Enums.priority.highest,
+    ReactiumBoot.Enums.priority.highest,
     'SERVER-APP-SCRIPTS-CORE',
 );
 
-SDK.Hook.registerSync(
+ReactiumBoot.Hook.registerSync(
     'Server.AppHeaders',
     (req, AppHeaders, res) => {
         AppHeaders.register('shortcut', {
             header:
                 '<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
-            order: SDK.Enums.priority.highest,
+            order: ReactiumBoot.Enums.priority.highest,
         });
         AppHeaders.register('favicon', {
             header:
                 '<link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
-            order: SDK.Enums.priority.highest,
+            order: ReactiumBoot.Enums.priority.highest,
         });
         AppHeaders.register('viewport', {
             header:
                 '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
-            order: SDK.Enums.priority.highest,
+            order: ReactiumBoot.Enums.priority.highest,
         });
         AppHeaders.register('charset', {
             header: '<meta charset="UTF-8" />',
-            order: SDK.Enums.priority.highest,
+            order: ReactiumBoot.Enums.priority.highest,
         });
     },
-    SDK.Enums.priority.highest,
+    ReactiumBoot.Enums.priority.highest,
     'SERVER-APP-HEADERS-CORE',
 );
 
-SDK.Hook.registerSync(
+ReactiumBoot.Hook.registerSync(
     'Server.AppBindings',
     (req, AppBindings) => {
         AppBindings.register('DevTools', {
@@ -163,7 +168,7 @@ SDK.Hook.registerSync(
             requestParams: ['content'],
         });
     },
-    SDK.Enums.priority.highest,
+    ReactiumBoot.Enums.priority.highest,
     'SERVER-APP-BINDINGS-CORE',
 );
 
@@ -174,7 +179,7 @@ const sanitizeTemplateVersion = version => {
     return semver.coerce(version);
 };
 
-SDK.Hook.registerSync(
+ReactiumBoot.Hook.registerSync(
     'Server.beforeApp',
     req => {
         const renderMode = op.get(req, 'renderMode', 'feo');
@@ -202,11 +207,11 @@ SDK.Hook.registerSync(
             }
         }
     },
-    SDK.Enums.priority.highest,
+    ReactiumBoot.Enums.priority.highest,
     'SERVER-BEFORE-APP-CORE-TEMPLATES',
 );
 
-SDK.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
+ReactiumBoot.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
     AppGlobals.register('actiniumAPIEnabled', {
         name: 'actiniumAPIEnabled',
         value: global.actiniumAPIEnabled,
@@ -232,35 +237,35 @@ SDK.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
 });
 
 const Server = {};
-Server.AppHeaders = SDK.Utils.registryFactory(
+Server.AppHeaders = ReactiumBoot.Utils.registryFactory(
     'AppHeaders',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumBoot.Utils.Registry.MODES.CLEAN,
 );
-Server.AppScripts = SDK.Utils.registryFactory(
+Server.AppScripts = ReactiumBoot.Utils.registryFactory(
     'AppScripts',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumBoot.Utils.Registry.MODES.CLEAN,
 );
-Server.AppSnippets = SDK.Utils.registryFactory(
+Server.AppSnippets = ReactiumBoot.Utils.registryFactory(
     'AppSnippets',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumBoot.Utils.Registry.MODES.CLEAN,
 );
-Server.AppStyleSheets = SDK.Utils.registryFactory(
+Server.AppStyleSheets = ReactiumBoot.Utils.registryFactory(
     'AppStyleSheets',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumBoot.Utils.Registry.MODES.CLEAN,
 );
-Server.AppBindings = SDK.Utils.registryFactory(
+Server.AppBindings = ReactiumBoot.Utils.registryFactory(
     'AppBindings',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumBoot.Utils.Registry.MODES.CLEAN,
 );
-Server.AppGlobals = SDK.Utils.registryFactory(
+Server.AppGlobals = ReactiumBoot.Utils.registryFactory(
     'AppGlobals',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumBoot.Utils.Registry.MODES.CLEAN,
 );
 
 export const renderAppBindings = req => {
@@ -309,11 +314,11 @@ export default async (req, res, context) => {
      * @apiName Server.beforeApp
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Called before other Server hooks.
      * @apiParam {Object} req express request object
-     * @apiParam {Object} Server SDK Server object.
+     * @apiParam {Object} Server ReactiumBoot Server object.
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.beforeApp', req, Server);
-    await SDK.Hook.run('Server.beforeApp', req, Server);
+    ReactiumBoot.Hook.runSync('Server.beforeApp', req, Server);
+    await ReactiumBoot.Hook.run('Server.beforeApp', req, Server);
 
     /**
      * @api {Hook} Server.AppGlobals Server.AppGlobals
@@ -326,9 +331,8 @@ export default async (req, res, context) => {
      * @apiParam (global) {Mixed} value any javascript value that can be serialized for use in a script tag
      * @apiParam (global) {Mixed} [serverValue] optional different value for the server global, useful when value should be used differently on the server code
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
      // will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs
-     SDK.Hook.registerSync(
+     ReactiumBoot.Hook.registerSync(
          'Server.AppGlobals',
          (req, AppGlobals) => {
              // Find the registered component "DevTools" and bind it
@@ -339,8 +343,8 @@ export default async (req, res, context) => {
          });
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
-    await SDK.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
+    ReactiumBoot.Hook.runSync('Server.AppGlobals', req, Server.AppGlobals);
+    await ReactiumBoot.Hook.run('Server.AppGlobals', req, Server.AppGlobals);
 
     // Add application globals
     _.sortBy(Object.values(Server.AppGlobals.list), 'order').forEach(
@@ -359,8 +363,7 @@ export default async (req, res, context) => {
      * @apiParam {Object} req express request object
      * @apiParam {Object} AppHeaders Server app header registry object.
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {
+     ReactiumBoot.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {
         // given some data was added to req by express middleware
         const seo = req.seo;
         if (seo) {
@@ -378,8 +381,13 @@ export default async (req, res, context) => {
      });
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.AppHeaders', req, Server.AppHeaders, res);
-    await SDK.Hook.run('Server.AppHeaders', req, Server.AppHeaders, res);
+    ReactiumBoot.Hook.runSync('Server.AppHeaders', req, Server.AppHeaders, res);
+    await ReactiumBoot.Hook.run(
+        'Server.AppHeaders',
+        req,
+        Server.AppHeaders,
+        res,
+    );
 
     // Add header tags
     _.sortBy(Object.values(Server.AppHeaders.list), 'order').forEach(
@@ -404,8 +412,7 @@ export default async (req, res, context) => {
      * @apiParam (script) {Boolean} [content] script content
      * @apiParam (script) {Number} [order=0] loading order of script
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.register('Server.AppScripts', async (req, AppScripts) => {
+     ReactiumBoot.Hook.register('Server.AppScripts', async (req, AppScripts) => {
          AppScripts.register('my-onsite-script', {
              path: '/assets/js/some-additional.js'
              footer: true, // load in footer (optional)
@@ -421,8 +428,13 @@ export default async (req, res, context) => {
      });
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.AppScripts', req, Server.AppScripts, res);
-    await SDK.Hook.run('Server.AppScripts', req, Server.AppScripts, res);
+    ReactiumBoot.Hook.runSync('Server.AppScripts', req, Server.AppScripts, res);
+    await ReactiumBoot.Hook.run(
+        'Server.AppScripts',
+        req,
+        Server.AppScripts,
+        res,
+    );
 
     // Add scripts and headerScripts
     _.sortBy(Object.values(Server.AppScripts.list), 'order').forEach(
@@ -479,8 +491,7 @@ export default async (req, res, context) => {
      * @apiParam (stylesheet) {String} [type] the type attribute
      * @apiParam (stylesheet) {Function} [when] callback passed the request object, and returns true or false if the css should be included
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {
+     ReactiumBoot.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {
          AppStyleSheets.register('my-stylesheet', {
              path: '/assets/css/some-additional.css'
          });
@@ -492,8 +503,16 @@ export default async (req, res, context) => {
      });
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.AppStyleSheets', req, Server.AppStyleSheets);
-    await SDK.Hook.run('Server.AppStyleSheets', req, Server.AppStyleSheets);
+    ReactiumBoot.Hook.runSync(
+        'Server.AppStyleSheets',
+        req,
+        Server.AppStyleSheets,
+    );
+    await ReactiumBoot.Hook.run(
+        'Server.AppStyleSheets',
+        req,
+        Server.AppStyleSheets,
+    );
 
     // Add stylesheets
     _.sortBy(Object.values(Server.AppStyleSheets.list), 'order').forEach(
@@ -570,8 +589,7 @@ export default async (req, res, context) => {
      * @apiParam (binding) {String} [component] string name of component to bind directly if possible (must be in a webpack search context in reactium-config)
      * @apiParam (binding) {String} [markup] ordinary markup that React will use to bind the app.
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.registerSync(
+     ReactiumBoot.Hook.registerSync(
          'Server.AppBindings',
          (req, AppBindings) => {
              // Find the registered component "DevTools" and bind it
@@ -584,13 +602,13 @@ export default async (req, res, context) => {
                  markup: '<div id="router"></div>',
              });
          },
-         SDK.Enums.priority.highest,
+         ReactiumBoot.Enums.priority.highest,
          'SERVER-APP-BINDINGS-CORE',
      );
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
-    await SDK.Hook.run('Server.AppBindings', req, Server.AppBindings);
+    ReactiumBoot.Hook.runSync('Server.AppBindings', req, Server.AppBindings);
+    await ReactiumBoot.Hook.run('Server.AppBindings', req, Server.AppBindings);
     req.appBindings = renderAppBindings(req);
 
     /**
@@ -600,8 +618,7 @@ export default async (req, res, context) => {
      * @apiParam {Object} req express request object
      * @apiParam {Object} AppSnippets Server app snippets registry object.
      * @apiExample reactium-boot.js
-     import SDK from '@atomic-reactor/reactium-sdk-core';
-     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {
+     ReactiumBoot.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {
         AppSnippets.register('ga-tracking', {
             snippet: `<script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -617,8 +634,8 @@ ga('send', 'pageview');
      });
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.AppSnippets', req, Server.AppSnippets);
-    await SDK.Hook.run('Server.AppSnippets', req, Server.AppSnippets);
+    ReactiumBoot.Hook.runSync('Server.AppSnippets', req, Server.AppSnippets);
+    await ReactiumBoot.Hook.run('Server.AppSnippets', req, Server.AppSnippets);
 
     // Add entire text script snippets
     _.sortBy(Object.values(Server.AppSnippets.list), 'order').forEach(
@@ -632,11 +649,11 @@ ga('send', 'pageview');
      * @apiName Server.afterApp
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Called after other Server hooks.
      * @apiParam {Object} req express request object
-     * @apiParam {Object} Server SDK Server object.
+     * @apiParam {Object} Server ReactiumBoot Server object.
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.afterApp', req, Server);
-    await SDK.Hook.run('Server.afterApp', req, Server);
+    ReactiumBoot.Hook.runSync('Server.afterApp', req, Server);
+    await ReactiumBoot.Hook.run('Server.afterApp', req, Server);
 
     return require(`./${renderMode}`)(req, res, context);
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-const SDK = require('@atomic-reactor/reactium-sdk-core').default;
+const ReactiumGulp = require('@atomic-reactor/reactium-sdk-core').default;
 const fs = require('fs');
 const path = require('path');
 const gulp = require('gulp');
@@ -26,15 +26,17 @@ globby([
     }
 });
 
-SDK.Hook.runSync('gulp-config', config, webpackConfig);
+global.ReactiumGulp = ReactiumGulp;
+
+ReactiumGulp.Hook.runSync('config', config, webpackConfig);
 
 const tasks = require('./gulp.tasks')(gulp, config, webpackConfig);
 const taskPlaceholder = require('./get-task')(gulp);
 
-const GulpRegistry = SDK.Utils.registryFactory(
+const GulpRegistry = ReactiumGulp.Utils.registryFactory(
     'GulpTasks',
     'name',
-    SDK.Utils.Registry.MODES.CLEAN,
+    ReactiumGulp.Utils.Registry.MODES.CLEAN,
 );
 
 GulpRegistry.unregister = name => {
@@ -51,8 +53,8 @@ Object.entries(tasks).forEach(([name, task]) => {
     });
 });
 
-SDK.Hook.runSync(
-    'gulp-tasks',
+ReactiumGulp.Hook.runSync(
+    'tasks',
     GulpRegistry,
     config,
     webpackConfig,

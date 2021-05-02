@@ -1,4 +1,4 @@
-const SDK = require('@atomic-reactor/reactium-sdk-core').default;
+const ReactiumWebpack = require('@atomic-reactor/reactium-sdk-core').default;
 const op = require('object-path');
 const _ = require('underscore');
 const webpack = require('webpack');
@@ -6,8 +6,10 @@ const globby = require('globby');
 const chalk = require('chalk');
 const path = require('path');
 
+global.ReactiumWebpack = ReactiumWebpack;
+
 let artifacts = {};
-class WebpackSDK {
+class WebpackReactiumWebpack {
     constructor(name, ddd, context) {
         this.name = name;
         this.context = context;
@@ -24,31 +26,31 @@ class WebpackSDK {
             minimize: false,
         };
 
-        this.ignores = SDK.Utils.registryFactory(
+        this.ignores = ReactiumWebpack.Utils.registryFactory(
             'ignores',
             'id',
-            SDK.Utils.Registry.MODES.CLEAN,
+            ReactiumWebpack.Utils.Registry.MODES.CLEAN,
         );
         this.ignores.sdk = this;
 
-        this.externals = SDK.Utils.registryFactory(
+        this.externals = ReactiumWebpack.Utils.registryFactory(
             'externals',
             'id',
-            SDK.Utils.Registry.MODES.CLEAN,
+            ReactiumWebpack.Utils.Registry.MODES.CLEAN,
         );
         this.externals.sdk = this;
 
-        this.rules = SDK.Utils.registryFactory(
+        this.rules = ReactiumWebpack.Utils.registryFactory(
             'rules',
             'id',
-            SDK.Utils.Registry.MODES.CLEAN,
+            ReactiumWebpack.Utils.Registry.MODES.CLEAN,
         );
         this.rules.sdk = this;
 
-        this.plugins = SDK.Utils.registryFactory(
+        this.plugins = ReactiumWebpack.Utils.registryFactory(
             'plugins',
             'id',
-            SDK.Utils.Registry.MODES.CLEAN,
+            ReactiumWebpack.Utils.Registry.MODES.CLEAN,
         );
         this.rules.sdk = this;
 
@@ -175,8 +177,8 @@ class WebpackSDK {
     }
 
     getIgnores() {
-        SDK.Hook.runSync(
-            'webpack-ignores',
+        ReactiumWebpack.Hook.runSync(
+            'ignores',
             this.ignores,
             this.name,
             this.context,
@@ -198,8 +200,8 @@ class WebpackSDK {
     }
 
     getExternals() {
-        SDK.Hook.runSync(
-            'webpack-externals',
+        ReactiumWebpack.Hook.runSync(
+            'externals',
             this.externals,
             this.name,
             this.context,
@@ -217,13 +219,18 @@ class WebpackSDK {
     }
 
     getRules() {
-        SDK.Hook.runSync('webpack-rules', this.rules, this.name, this.context);
+        ReactiumWebpack.Hook.runSync(
+            'rules',
+            this.rules,
+            this.name,
+            this.context,
+        );
         return this.rules.list.map(({ id, rule }) => rule);
     }
 
     getPlugins() {
-        SDK.Hook.runSync(
-            'webpack-plugins',
+        ReactiumWebpack.Hook.runSync(
+            'plugins',
             this.plugins,
             this.name,
             this.context,
@@ -232,7 +239,7 @@ class WebpackSDK {
     }
 
     config() {
-        SDK.Hook.runSync('webpack-before-config', this);
+        ReactiumWebpack.Hook.runSync('before-config', this);
 
         return {
             mode: this.mode,
@@ -253,4 +260,4 @@ class WebpackSDK {
     }
 }
 
-module.exports = WebpackSDK;
+module.exports = WebpackReactiumWebpack;

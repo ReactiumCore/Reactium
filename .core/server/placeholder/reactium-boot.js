@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const xss = require('xss');
-const SDK = require('@atomic-reactor/reactium-sdk-core').default;
-const Enums = SDK.Enums;
+
+const Enums = ReactiumBoot.Enums;
 
 const placeholder = (req, res) => {
     const { width = 640, height = 480, filename = '' } = req.params;
@@ -103,7 +103,7 @@ const placeholder = (req, res) => {
 router.get('/placeholder/:width/:height/:filename', placeholder);
 router.get('/placeholder/:width/:height', placeholder);
 
-SDK.Server.Middleware.register('placeholder', {
+ReactiumBoot.Server.Middleware.register('placeholder', {
     name: 'placeholder',
     use: router,
     order: Enums.priority.highest,

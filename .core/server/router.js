@@ -3,7 +3,6 @@ import renderer from './renderer';
 import fs from 'fs';
 import path from 'path';
 import httpAuth from 'http-auth';
-import SDK from '@atomic-reactor/reactium-sdk-core';
 
 const router = express.Router();
 
@@ -63,13 +62,13 @@ router.use(async (req, res, next) => {
              * @apiParam {Object} res Node/Express response object
              * @apiGroup Hooks
              */
-            SDK.Hook.runSync(
+            ReactiumBoot.Hook.runSync(
                 'Server.ResponseHeaders',
                 responseHeaders,
                 req,
                 res,
             );
-            await SDK.Hook.run(
+            await ReactiumBoot.Hook.run(
                 'Server.ResponseHeaders',
                 responseHeaders,
                 req,

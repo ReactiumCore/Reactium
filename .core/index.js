@@ -5,7 +5,6 @@
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
-import router from './server/router';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import proxy from 'http-proxy-middleware';
@@ -16,10 +15,12 @@ import op from 'object-path';
 import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
 import moment from 'moment';
-import SDK from 'reactium-core/sdk';
 import { sync as globby } from 'globby';
+import ReactiumBoot from 'reactium-core/sdk';
+global.ReactiumBoot = ReactiumBoot;
+const { Enums } = ReactiumBoot;
 
-const { Enums } = SDK;
+const router = require('./server/router').default;
 
 global.defines = {};
 global.rootPath = path.resolve(__dirname, '..');
@@ -59,7 +60,7 @@ if (global.isSSR && global.useJSDOM) {
     console.log('SSR: creating JSDOM object as global.window.');
 }
 
-const apiConfig = SDK.API.ActiniumConfig;
+const apiConfig = ReactiumBoot.API.ActiniumConfig;
 
 global.parseAppId = apiConfig.parseAppId;
 global.actiniumAppId = apiConfig.actiniumAppId;
@@ -123,21 +124,21 @@ const bootup = async () => {
 
     // express middlewares
     if (process.env.DEBUG === 'on') {
-        SDK.Server.Middleware.register('logging', {
+        ReactiumBoot.Server.Middleware.register('logging', {
             name: 'logging',
             use: morgan('combined'),
             order: Enums.priority.highest,
         });
     }
 
-    SDK.Server.Middleware.register('cors', {
+    ReactiumBoot.Server.Middleware.register('cors', {
         name: 'cors',
         use: cors(),
         order: Enums.priority.highest,
     });
 
     if (process.env.PROXY_ACTINIUM_API !== 'off') {
-        SDK.Server.Middleware.register('api', {
+        ReactiumBoot.Server.Middleware.register('api', {
             name: 'api',
             use: (req, res, next) => {
                 if (!global.restAPI) {
@@ -160,7 +161,7 @@ const bootup = async () => {
     }
 
     if (process.env.PROXY_ACTINIUM_API !== 'off') {
-        SDK.Server.Middleware.register('api-socket-io', {
+        ReactiumBoot.Server.Middleware.register('api-socket-io', {
             name: 'api-socket-io',
             use: (req, res, next) => {
                 if (!global.restAPI) {
@@ -180,26 +181,26 @@ const bootup = async () => {
     }
 
     // parsers
-    SDK.Server.Middleware.register('jsonParser', {
+    ReactiumBoot.Server.Middleware.register('jsonParser', {
         name: 'jsonParser',
         use: bodyParser.json(),
         order: Enums.priority.high,
     });
 
-    SDK.Server.Middleware.register('urlEncoded', {
+    ReactiumBoot.Server.Middleware.register('urlEncoded', {
         name: 'urlEncoded',
         use: bodyParser.urlencoded({ extended: true }),
         order: Enums.priority.high,
     });
 
     // cookies
-    SDK.Server.Middleware.register('cookieParser', {
+    ReactiumBoot.Server.Middleware.register('cookieParser', {
         name: 'cookieParser',
         use: cookieParser(),
         order: Enums.priority.high,
     });
 
-    SDK.Server.Middleware.register('cookieSession', {
+    ReactiumBoot.Server.Middleware.register('cookieSession', {
         name: 'cookieSession',
         use: cookieSession({
             name: op.get(process.env, 'COOKIE_SESSION_NAME', 'aljtka4'),
@@ -236,7 +237,7 @@ const bootup = async () => {
 
         const compiler = webpack(webpackConfig);
 
-        SDK.Server.Middleware.register('webpack', {
+        ReactiumBoot.Server.Middleware.register('webpack', {
             name: 'webpack',
             use: wpMiddlware(compiler, {
                 serverSideRender: true,
@@ -246,7 +247,7 @@ const bootup = async () => {
             order: Enums.priority.high,
         });
 
-        SDK.Server.Middleware.register('hmr', {
+        ReactiumBoot.Server.Middleware.register('hmr', {
             name: 'hmr',
             use: wpHotMiddlware(compiler, {
                 reload: true,
@@ -259,7 +260,7 @@ const bootup = async () => {
     const staticAssets =
         process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), 'public');
 
-    SDK.Server.Middleware.register('static', {
+    ReactiumBoot.Server.Middleware.register('static', {
         name: 'static',
         use: staticGzip(staticAssets),
         order: Enums.priority.neutral,
@@ -281,7 +282,7 @@ const bootup = async () => {
             '_static',
         );
         if (fs.existsSync(modStaticPath)) {
-            SDK.Server.Middleware.register(`static.${mod}`, {
+            ReactiumBoot.Server.Middleware.register(`static.${mod}`, {
                 use: staticGzip(modStaticPath),
                 order: Enums.priority.neutral,
             });
@@ -289,7 +290,7 @@ const bootup = async () => {
     });
 
     // default route handler
-    SDK.Server.Middleware.register('service-worker-allowed', {
+    ReactiumBoot.Server.Middleware.register('service-worker-allowed', {
         name: 'service-worker-allowed',
         use: async (req, res, next) => {
             const responseHeaders = {
@@ -308,13 +309,13 @@ const bootup = async () => {
              * @apiName Server.ServiceWorkerAllowed
              * @apiGroup Hooks
              */
-            SDK.Hook.runSync(
+            ReactiumBoot.Hook.runSync(
                 'Server.ServiceWorkerAllowed',
                 responseHeaders,
                 req,
                 res,
             );
-            await SDK.Hook.run(
+            await ReactiumBoot.Hook.run(
                 'Server.ServiceWorkerAllowed',
                 responseHeaders,
                 req,
@@ -334,7 +335,7 @@ const bootup = async () => {
     });
 
     // default route handler
-    SDK.Server.Middleware.register('router', {
+    ReactiumBoot.Server.Middleware.register('router', {
         name: 'router',
         use: router,
         order: Enums.priority.neutral,
@@ -349,7 +350,6 @@ const bootup = async () => {
      * @apiParam (middlware) {Function} use the express middleware function.
      * @apiParam (middlware) {Number} order the loading order of the middleware
      * @apiExample reactium-boot.js
-     const SDK = require('@atomic-reactor/sdk').default;
      const express = require('express');
      const router = express.Router();
      const axios = require('axios');
@@ -359,15 +359,15 @@ const bootup = async () => {
         res.send('Foo!!')
      });
 
-     SDK.Hook.registerSync('Server.Middleware', Middleware => {
+     ReactiumBoot.Hook.registerSync('Server.Middleware', Middleware => {
         Middleware.register('foo-page', {
             name: 'foo-page',
             use: router,
-            order: SDK.Enums.priority.highest,
+            order: ReactiumBoot.Enums.priority.highest,
         })
      });
 
-     SDK.Hook.registerSync('Server.Middleware', Middleware => {
+     ReactiumBoot.Hook.registerSync('Server.Middleware', Middleware => {
         const intercept = express.Router();
         intercept.post('/api*', (req, res) => {
             res.json({
@@ -380,30 +380,36 @@ const bootup = async () => {
             name: 'downapi',
             use: async (res, req, next) => {
                 try {
-                    let healthy = SDK.Cache.get('health-check');
+                    let healthy = ReactiumBoot.Cache.get('health-check');
                     if (healthy === undefined) {
                         const response = await axios.get(process.env.REST_API_URI + '/healthcheck');
                         healthy = response.data;
-                        SDK.Cache.set('health-check', healthy, 1000 * 90);
+                        ReactiumBoot.Cache.set('health-check', healthy, 1000 * 90);
                     }
                 } catch (error) {
                     console.error(error);
-                    SDK.Cache.set('health-check', false, 1000 * 90);
+                    ReactiumBoot.Cache.set('health-check', false, 1000 * 90);
                     healthy = false;
                 }
 
                 if (healthy === true) next();
                 return intercept(req, req, next);
             },
-            order: SDK.Enums.priority.highest,
+            order: ReactiumBoot.Enums.priority.highest,
         })
      });
      * @apiGroup Hooks
      */
-    SDK.Hook.runSync('Server.Middleware', SDK.Server.Middleware);
-    await SDK.Hook.run('Server.Middleware', SDK.Server.Middleware);
+    ReactiumBoot.Hook.runSync(
+        'Server.Middleware',
+        ReactiumBoot.Server.Middleware,
+    );
+    await ReactiumBoot.Hook.run(
+        'Server.Middleware',
+        ReactiumBoot.Server.Middleware,
+    );
 
-    let middlewares = Object.values(SDK.Server.Middleware.list);
+    let middlewares = Object.values(ReactiumBoot.Server.Middleware.list);
 
     // Deprecated: Give app an opportunity to change middlewares
     if (fs.existsSync(`${rootPath}/src/app/server/middleware.js`)) {

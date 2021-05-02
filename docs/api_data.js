@@ -190,7 +190,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.registerSync(\n    'Server.AppBindings',\n    (req, AppBindings) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppBindings.register('DevTools', {\n            component: 'DevTools',\n        });\n\n        // Add ordinary markup for React to bind to\n        AppBindings.register('router', {\n            markup: '<div id=\"router\"></div>',\n        });\n    },\n    SDK.Enums.priority.highest,\n    'SERVER-APP-BINDINGS-CORE',\n);",
+        "content": "ReactiumBoot.Hook.registerSync(\n    'Server.AppBindings',\n    (req, AppBindings) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppBindings.register('DevTools', {\n            component: 'DevTools',\n        });\n\n        // Add ordinary markup for React to bind to\n        AppBindings.register('router', {\n            markup: '<div id=\"router\"></div>',\n        });\n    },\n    ReactiumBoot.Enums.priority.highest,\n    'SERVER-APP-BINDINGS-CORE',\n);",
         "type": "json"
       }
     ],
@@ -251,7 +251,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\n// will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs\nSDK.Hook.registerSync(\n    'Server.AppGlobals',\n    (req, AppGlobals) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppGlobals.register('environment', {\n            name: 'environment',\n            value: 'local',\n        });\n    });",
+        "content": "// will result in window.environment = 'local' in browser and global.environment = 'local' on nodejs\nReactiumBoot.Hook.registerSync(\n    'Server.AppGlobals',\n    (req, AppGlobals) => {\n        // Find the registered component \"DevTools\" and bind it\n        AppGlobals.register('environment', {\n            name: 'environment',\n            value: 'local',\n        });\n    });",
         "type": "json"
       }
     ],
@@ -289,7 +289,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {\n   // given some data was added to req by express middleware\n   const seo = req.seo;\n   if (seo) {\n       if (seo.canonicalURL) {\n           AppHeaders.register('canonical-url', {\n               header: `<link rel=\"canonical\" href=\"${seo.canonicalURL}\" />`\n           });\n       }\n       if (seo.description) {\n           AppHeaders.register('meta-description', {\n               header: `<meta name=\"description\" content=\"${seo.description}\"/>`\n           });\n       }\n   }\n});",
+        "content": "ReactiumBoot.Hook.register('Server.AppHeaders', async (req, AppHeaders) => {\n   // given some data was added to req by express middleware\n   const seo = req.seo;\n   if (seo) {\n       if (seo.canonicalURL) {\n           AppHeaders.register('canonical-url', {\n               header: `<link rel=\"canonical\" href=\"${seo.canonicalURL}\" />`\n           });\n       }\n       if (seo.description) {\n           AppHeaders.register('meta-description', {\n               header: `<meta name=\"description\" content=\"${seo.description}\"/>`\n           });\n       }\n   }\n});",
         "type": "json"
       }
     ],
@@ -398,7 +398,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppScripts', async (req, AppScripts) => {\n    AppScripts.register('my-onsite-script', {\n        path: '/assets/js/some-additional.js'\n        footer: true, // load in footer (optional)\n        header: false, // don't load in header (optional)\n        order: 1, // scripts will be ordered by this\n    });\n\n    AppScripts.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.js'\n        header: true, // maybe for an external\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "content": "ReactiumBoot.Hook.register('Server.AppScripts', async (req, AppScripts) => {\n    AppScripts.register('my-onsite-script', {\n        path: '/assets/js/some-additional.js'\n        footer: true, // load in footer (optional)\n        header: false, // don't load in header (optional)\n        order: 1, // scripts will be ordered by this\n    });\n\n    AppScripts.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.js'\n        header: true, // maybe for an external\n        order: 1, // scripts will be ordered by this\n    });\n});",
         "type": "json"
       }
     ],
@@ -436,7 +436,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "     import SDK from '@atomic-reactor/reactium-sdk-core';\n     SDK.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {\n        AppSnippets.register('ga-tracking', {\n            snippet: `<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n\nga('create', '', 'auto');\nga('send', 'pageview');\n</script>`,\n          order: 1,\n        })\n     });",
+        "content": "     ReactiumBoot.Hook.register('Server.AppSnippets', async (req, AppSnippets) => {\n        AppSnippets.register('ga-tracking', {\n            snippet: `<script>\n(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\nm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');\n\nga('create', '', 'auto');\nga('send', 'pageview');\n</script>`,\n          order: 1,\n        })\n     });",
         "type": "json"
       }
     ],
@@ -541,7 +541,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "import SDK from '@atomic-reactor/reactium-sdk-core';\nSDK.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        path: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "content": "ReactiumBoot.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        path: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
         "type": "json"
       }
     ],
@@ -597,7 +597,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "const SDK = require('@atomic-reactor/sdk').default;\nconst express = require('express');\nconst router = express.Router();\nconst axios = require('axios');\n\n// register a new backend route /foo with express\nrouter.get('/', (req, res) => {\n   res.send('Foo!!')\n});\n\nSDK.Hook.registerSync('Server.Middleware', Middleware => {\n   Middleware.register('foo-page', {\n       name: 'foo-page',\n       use: router,\n       order: SDK.Enums.priority.highest,\n   })\n});\n\nSDK.Hook.registerSync('Server.Middleware', Middleware => {\n   const intercept = express.Router();\n   intercept.post('/api*', (req, res) => {\n       res.json({\n           foo: 'bar'\n       });\n   });\n\n   // check api health every 90 seconds and intercept api if it goes down\n   Middleware.register('downapi', {\n       name: 'downapi',\n       use: async (res, req, next) => {\n           try {\n               let healthy = SDK.Cache.get('health-check');\n               if (healthy === undefined) {\n                   const response = await axios.get(process.env.REST_API_URI + '/healthcheck');\n                   healthy = response.data;\n                   SDK.Cache.set('health-check', healthy, 1000 * 90);\n               }\n           } catch (error) {\n               console.error(error);\n               SDK.Cache.set('health-check', false, 1000 * 90);\n               healthy = false;\n           }\n\n           if (healthy === true) next();\n           return intercept(req, req, next);\n       },\n       order: SDK.Enums.priority.highest,\n   })\n});",
+        "content": "const express = require('express');\nconst router = express.Router();\nconst axios = require('axios');\n\n// register a new backend route /foo with express\nrouter.get('/', (req, res) => {\n   res.send('Foo!!')\n});\n\nReactiumBoot.Hook.registerSync('Server.Middleware', Middleware => {\n   Middleware.register('foo-page', {\n       name: 'foo-page',\n       use: router,\n       order: ReactiumBoot.Enums.priority.highest,\n   })\n});\n\nReactiumBoot.Hook.registerSync('Server.Middleware', Middleware => {\n   const intercept = express.Router();\n   intercept.post('/api*', (req, res) => {\n       res.json({\n           foo: 'bar'\n       });\n   });\n\n   // check api health every 90 seconds and intercept api if it goes down\n   Middleware.register('downapi', {\n       name: 'downapi',\n       use: async (res, req, next) => {\n           try {\n               let healthy = ReactiumBoot.Cache.get('health-check');\n               if (healthy === undefined) {\n                   const response = await axios.get(process.env.REST_API_URI + '/healthcheck');\n                   healthy = response.data;\n                   ReactiumBoot.Cache.set('health-check', healthy, 1000 * 90);\n               }\n           } catch (error) {\n               console.error(error);\n               ReactiumBoot.Cache.set('health-check', false, 1000 * 90);\n               healthy = false;\n           }\n\n           if (healthy === true) next();\n           return intercept(req, req, next);\n       },\n       order: ReactiumBoot.Enums.priority.highest,\n   })\n});",
         "type": "json"
       }
     ],
@@ -703,7 +703,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "Server",
-            "description": "<p>SDK Server object.</p>"
+            "description": "<p>ReactiumBoot Server object.</p>"
           }
         ]
       }
@@ -734,7 +734,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "Server",
-            "description": "<p>SDK Server object.</p>"
+            "description": "<p>ReactiumBoot Server object.</p>"
           }
         ]
       }
@@ -1894,37 +1894,6 @@ define({ "api": [
     ],
     "version": "0.0.0",
     "filename": ".core/sdk/named-exports/window.js",
-    "groupTitle": "ReactHook"
-  },
-  {
-    "type": "ReactHook",
-    "url": "useZoneComponents(zone)",
-    "title": "useZoneComponents()",
-    "description": "<p>A React hook used in the <code>Zone</code> component to determine what components should currently be rendered. Useful to observe a zone in another component. If you want to observe to the zone components without necessarily causing a rerender in your component, use <code>Reactium.Zone.getZoneComponents()</code> (to get a list of components in the zone), alone or in combination with <code>Reactium.Zone.subscribe()</code>.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "zone",
-            "description": "<p>the zone id.</p>"
-          }
-        ]
-      }
-    },
-    "name": "useZoneComponents",
-    "group": "ReactHook",
-    "examples": [
-      {
-        "title": "Example",
-        "content": "import React from 'react';\nimport { useZoneComponents } from 'reactium-core/sdk';\n\nexport props => {\n    const zoneComponents = useZoneComponents('my-zone');\n\n    return (\n        <div>\n            Components in Zone: {zoneComponents.length}\n        </div>\n    );\n};",
-        "type": "json"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "src/app/components/ZTest/Zone.js",
     "groupTitle": "ReactHook"
   },
   {
@@ -6027,62 +5996,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/utils/registry.js",
     "groupTitle": "Reactium"
-  },
-  {
-    "type": "RegisteredComponent",
-    "url": "Zone",
-    "title": "Zone",
-    "version": "3.1.19",
-    "name": "Zone",
-    "description": "<p>Component used to identify a &quot;zone&quot; in your application where any arbitrary components will render. Plugin components registered for this zone will dynamically render in the zone. Plugins can be registered statically in Reactium by creating a <code>plugin.js</code> file that exports a component definition (<code>arcli plugin component</code> to generate boilerplate for one), or using the Reactium SDK <code>Reactium.Zone.addComponent()</code> call.</p> <p>See also the Zone SDK for filtering, sorting, or mapping over plugin components for a zone.</p> <p>To generate an exportable plugin module, use the <code>arcli plugin module</code> command.</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "zone",
-            "description": "<p>Identifier of the zone where plugin components will be rendered.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": true,
-            "field": "passThrough",
-            "defaultValue": "false",
-            "description": "<p>When true, will provide a <code>components</code> property to children of Zone instead of rendering plugin components directly as siblings. This is useful when you wish to make plugin components available, but take more control over how they render.</p> <p>Example Passthrough Usage: Using the <code>jsx-parser</code> module, components could be provided to a JSXParser component, and the actual render of those components could be dictated by a string of JSX and data context provided by a CMS.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Mixed",
-            "optional": false,
-            "field": "...params",
-            "description": "<p>any number of arbitrary parameters (variadic) can be provided to the Zone, and will be passed automatically as props on your plugin components when they are rendered.</p>"
-          }
-        ]
-      }
-    },
-    "group": "Registered_Component",
-    "examples": [
-      {
-        "title": "PageHeader.js",
-        "content": "import React from 'react';\nimport { useHookComponent } from 'reactium-core/sdk';\n\n// PageHeader is not hard-coded, but adaptable by plugins\nexport default props => {\n    const Zone = useHookComponent('Zone');\n    return (\n        <div class='page-header'>\n            <Zone zone={'page-header'} />\n        </div>\n    );\n};",
-        "type": "json"
-      },
-      {
-        "title": "src/app/components/plugin-src/MyHeaderPlugin/index.js",
-        "content": "import Reactium from 'reactium-core/sdk';\nimport MyHeaderWidget from './MyHeaderWidget';\n\nconst registerPlugin = async () => {\n    await Reactium.Plugin.register('MyHeaderPlugin');\n    Reactium.Zone.addComponent({\n        id: 'MyHeaderWidget',\n        zone: 'page-header',\n        component: MyHeaderWidget,\n    });\n};\nregisterPlugin();",
-        "type": "json"
-      },
-      {
-        "title": "src/app/components/plugin-src/MyHeaderPlugin/MyHeaderWidget.js",
-        "content": "import React from 'react';\n\nexport default props => {\n   return (\n       <div class='my-header-widget'>\n           I will end up in the header zone\n       </div>\n   );\n};",
-        "type": "json"
-      }
-    ],
-    "filename": "src/app/components/ZTest/Zone.js",
-    "groupTitle": "Registered_Component"
   },
   {
     "type": "RegisteredComponent",
