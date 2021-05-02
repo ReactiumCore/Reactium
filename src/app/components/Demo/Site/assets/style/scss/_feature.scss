@@ -9,8 +9,8 @@ section.feature {
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-        color: color(dark-grey);
-        background-color: color(white);
+        color: color("dark-grey");
+        background-color: color("white");
         background-position: center;
         background-size: cover;
 
@@ -60,7 +60,7 @@ section.feature {
                 width: px2vw(40);
                 height: 2px;
                 transform: translate(px2vw(-20), -50%);
-                border-bottom: 2px solid color(primary);
+                border-bottom: 2px solid color("primary");
             }
         }
 

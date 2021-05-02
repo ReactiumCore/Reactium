@@ -1,11 +1,11 @@
 $button-text: (
-    primary: color(white),
-    secondary: color(white),
-    tertiary: color(dark-grey),
-    white: color(grey),
-    grey: color(dark-grey),
-    dark-grey: color(white),
-    light-grey: color(dark-grey)
+    primary: color("white"),
+    secondary: color("white"),
+    tertiary: color("dark-grey"),
+    white: color("grey"),
+    grey: color("dark-grey"),
+    dark-grey: color("white"),
+    light-grey: color("dark-grey")
 );
 
 .btn {

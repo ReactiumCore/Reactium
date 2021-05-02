@@ -3,7 +3,7 @@ nav.main {
     position: relative;
     width: 100%;
     height: px2rem(100);
-    background-color: color(white);
+    background-color: color("white");
 
     &.fixed {
         top: 0;
@@ -51,7 +51,7 @@ nav.main {
                     padding: px2rem(20) px2rem(40);
                     text-transform: uppercase;
                     font-weight: 600;
-                    color: color(dark-grey);
+                    color: color("dark-grey");
                     font-size: px2rem(20);
                     transition: all .25s ease-in-out;
                     border-bottom: 3px solid transparent;
@@ -66,14 +66,14 @@ nav.main {
                     &.active,
                     &:hover,
                     &:focus {
-                        color: color(primary);
+                        color: color("primary");
                         text-decoration: none;
-                        border-bottom: 3px solid color(primary);
+                        border-bottom: 3px solid color("primary");
                     }
 
                     &.active {
-                        color: color(grey);
-                        border-bottom: 3px solid color(grey);
+                        color: color("grey");
+                        border-bottom: 3px solid color("grey");
                     }
                 }
             }

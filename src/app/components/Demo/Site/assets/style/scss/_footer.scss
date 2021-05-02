@@ -1,5 +1,5 @@
 footer:first-of-type {
-    background-color: color(grey);
+    background-color: color("grey");
     padding: px2rem(30.5);
     font-size: px2rem(14);
 
@@ -31,7 +31,7 @@ footer:first-of-type {
                 &:not(:first-child) {
                     margin-left: px2rem(16);
                     padding-left: px2rem(16);
-                    border-left: 1px solid color(dark-grey);
+                    border-left: 1px solid color("dark-grey");
 
                     * {
                         display: flex;
