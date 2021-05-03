@@ -246,7 +246,7 @@ class WebpackReactiumWebpack {
             target: this.target,
             output: this.output,
             entry: this.entry,
-            devtool: this.devtool,
+            ...(this.devtool ? { devtool: this.devtool } : {}),
             optimization: this.optimization,
             externals: this.getExternals(),
             module: {

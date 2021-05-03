@@ -12,7 +12,8 @@ let Actinium = null;
 if (isBrowserWindow()) {
     if (window.actiniumAPIEnabled === true) {
         // [browser]: client side version of parse
-        Actinium = require('parse');
+        // Actinium = require('parse');
+        Actinium = false;
     }
 } else {
     if (process.env.ACTINIUM_API !== 'off') {

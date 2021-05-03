@@ -223,7 +223,7 @@ const bootup = async () => {
         const webpack = require('webpack');
         const gulpConfig = require('./gulp.config');
         const webpackConfig = require('./webpack.config')(gulpConfig);
-        const wpMiddlware = require('webpack-dev-middleware');
+        const wpMiddleware = require('webpack-dev-middleware');
         const wpHotMiddlware = require('webpack-hot-middleware');
         const publicPath = `http://localhost:${port}/`;
 
@@ -239,9 +239,9 @@ const bootup = async () => {
 
         ReactiumBoot.Server.Middleware.register('webpack', {
             name: 'webpack',
-            use: wpMiddlware(compiler, {
+            use: wpMiddleware(compiler, {
                 serverSideRender: true,
-                path: '/',
+                // path: '/',
                 publicPath,
             }),
             order: Enums.priority.high,

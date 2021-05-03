@@ -6,7 +6,9 @@ const op = require('object-path');
 const _ = require('underscore');
 const serialize = require('serialize-javascript');
 
-const normalizeAssets = assets => _.flatten([assets]);
+const isObject = obj => typeof obj == 'object' && obj !== null;
+const normalizeAssets = assets =>
+    _.flatten([isObject(assets) ? Object.values(assets) : assets]);
 
 const isToolkit = str => {
     const v = op.get(ReactiumBoot, 'version', '1.0.23');
@@ -84,22 +86,24 @@ ReactiumBoot.Hook.registerSync(
     (req, AppScripts, res) => {
         // Webpack assets
         if (process.env.NODE_ENV === 'development') {
-            const assetsByChunkName = res.locals.webpackStats.toJson()
-                .assetsByChunkName;
+            const { devMiddleware } = res.locals.webpack;
+            const outputFileSystem = devMiddleware.outputFileSystem;
+            const { assetsByChunkName } = devMiddleware.stats.toJson();
 
-            Object.values(assetsByChunkName).forEach(chunk => {
-                _.flatten([
-                    normalizeAssets(chunk)
-                        .filter(path => path.endsWith('.js'))
-                        .filter(path => /main\.js$/.test(path)),
-                ]).forEach(path =>
+            normalizeAssets(assetsByChunkName)
+                .map(path => {
+                    console.log({ path });
+                    return path;
+                })
+                .filter(path => path.endsWith('.js'))
+                .filter(path => /main\.js$/.test(path))
+                .forEach(path => {
                     AppScripts.register(path, {
-                        path: `/${path}`,
+                        path: `${path}`,
                         order: ReactiumBoot.Enums.priority.highest,
                         footer: true,
-                    }),
-                );
-            });
+                    });
+                });
 
             return;
         }

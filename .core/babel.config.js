@@ -52,6 +52,7 @@ module.exports = {
     presets: ['@babel/react', ['@babel/env', env], '@babel/preset-flow'],
     plugins: [
         ['@babel/plugin-syntax-dynamic-import'],
+        ['@babel/plugin-proposal-private-methods', { loose: true }],
         [
             'module-resolver',
             {
@@ -85,6 +86,7 @@ module.exports = {
                     },
                 ],
                 ['@babel/plugin-syntax-dynamic-import'],
+                ['@babel/plugin-proposal-private-methods', { loose: true }],
             ],
         },
         library: {
@@ -104,6 +106,7 @@ module.exports = {
                     },
                 ],
                 ['@babel/plugin-syntax-dynamic-import'],
+                ['@babel/plugin-proposal-private-methods', { loose: true }],
             ],
         },
     },

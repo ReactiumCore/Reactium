@@ -50,12 +50,43 @@ module.exports = config => {
         path: path.resolve(__dirname, dest),
         filename,
     };
-    sdk.devtool = env === 'development' ? 'source-map' : '';
+    sdk.devtool = env === 'development' ? 'source-map' : false;
     sdk.optimization = {
+        emitOnErrors: true,
         minimize: Boolean(env !== 'development'),
         splitChunks: {
-            chunks: 'all',
+            chunks: 'async',
+            minSize: 20000,
+            minRemainingSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 30,
+            maxInitialRequests: 30,
+            enforceSizeThreshold: 50000,
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    reuseExistingChunk: true,
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            },
         },
+        // splitChunks: {
+        //     chunks: 'all',
+        //     name(module, chunks, cacheGroupKey) {
+        //         const moduleFileName = module
+        //             .identifier()
+        //             .split('/')
+        //             .reduceRight(item => item);
+        //         const allChunksNames = chunks.map(item => item.name).join('~');
+        //         console.log('webpack optimization name', { cacheGroupKey, moduleFileName });
+        //         return `${cacheGroupKey}-${allChunksNames}-${moduleFileName}`;
+        //     },
+        // },
     };
 
     Object.keys(defines).forEach(key => {

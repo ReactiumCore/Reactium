@@ -338,20 +338,24 @@ const reactium = (gulp, config, webpackConfig) => {
         if (!isDev) {
             webpack(webpackConfig, (err, stats) => {
                 if (err) {
-                    console.log(err());
+                    console.error(err.stack || err);
+                    if (err.details) {
+                        console.error(err.details);
+                    }
                     done();
                     return;
                 }
 
-                let result = stats.toJson();
+                const info = stats.toJson();
 
-                if (result.errors.length > 0) {
-                    result.errors.forEach(error => {
-                        console.log(error);
-                    });
-
+                if (stats.hasErrors()) {
+                    console.error(info.errors);
                     done();
                     return;
+                }
+
+                if (stats.hasWarnings()) {
+                    console.warn(info.warnings);
                 }
 
                 done();
