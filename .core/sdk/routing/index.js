@@ -7,7 +7,6 @@ import SDK, {
 import uuid from 'uuid/v4';
 import _ from 'underscore';
 import op from 'object-path';
-import moment from 'moment';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import queryString from 'querystring-browser';
 import { matchPath } from 'react-router';
@@ -368,7 +367,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
     }
 
     _update() {
-        this.updated = moment().format('HH:mm:ss');
+        this.updated = new Date();
         Object.values(this.subscriptions).forEach(cb => cb());
     }
 

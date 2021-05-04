@@ -38,7 +38,12 @@ const defaultLibraryExternals = {
 
     moment: {
         externalName: 'moment',
-        requirePath: 'moment',
+        requirePath: 'dayjs',
+    },
+
+    dayjs: {
+        externalName: 'dayjs',
+        requirePath: 'dayjs',
     },
 
     'object-path': {

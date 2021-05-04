@@ -53,26 +53,6 @@ const storeCreator = async ({ server = false } = {}) => {
 
     let middlewares = loadDependencyStack(manifest.allMiddleware, [], server);
 
-    // Get localized state and apply it
-    if (!server && isBrowserWindow()) {
-        const {
-            save: lsSave,
-            load: lsLoad,
-            clear: lsClear,
-        } = require('redux-local-persist');
-
-        if (middlewares.find(mw => mw.name === 'local-persist')) {
-            initialState = {
-                ...initialState,
-                ...sanitizeInitialState(
-                    lsLoad({ initialState: manifest.allInitialStates }),
-                ),
-            };
-        } else {
-            lsClear();
-        }
-    }
-
     // Combine all Top-level reducers into one
     let rootReducer = combineReducers(manifest.allReducers);
 

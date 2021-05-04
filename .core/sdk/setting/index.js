@@ -2,7 +2,6 @@ import API from '../api';
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import op from 'object-path';
 import _ from 'underscore';
-import moment from 'moment';
 
 const { Hook, Cache, Enums } = SDK;
 const Setting = {};
@@ -23,7 +22,7 @@ Setting.load = async (autoRefresh = true) => {
         return cached;
     }
 
-    const cacheLoadedArgs = [moment().format('HH:mm:ss'), Enums.cache.settings];
+    const cacheLoadedArgs = [new Date().toISOString(), Enums.cache.settings];
     if (autoRefresh) cacheLoadedArgs.push(Setting.load);
     Cache.set('settings.loaded', ...cacheLoadedArgs);
 

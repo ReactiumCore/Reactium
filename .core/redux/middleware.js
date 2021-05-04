@@ -10,15 +10,5 @@ export default (middlewares = [], isServer = false) => {
         },
     ];
 
-    if (!isServer && isBrowserWindow()) {
-        const { save: lsSave } = require('redux-local-persist');
-
-        newMiddlewares.push({
-            order: -1000,
-            name: 'local-persist',
-            mw: lsSave(),
-        });
-    }
-
     return [...middlewares, ...newMiddlewares];
 };

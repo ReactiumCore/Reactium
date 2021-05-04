@@ -66,6 +66,7 @@ module.exports = {
             },
         ],
         ['@babel/plugin-proposal-export-default-from'],
+        ['@babel/plugin-proposal-private-methods', { loose: true }],
     ],
     env: {
         test: {
