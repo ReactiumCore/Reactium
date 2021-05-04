@@ -52,7 +52,7 @@ class WebpackReactiumWebpack {
             'id',
             ReactiumWebpack.Utils.Registry.MODES.CLEAN,
         );
-        this.rules.sdk = this;
+        this.plugins.sdk = this;
 
         this.overridesValue = {};
 
