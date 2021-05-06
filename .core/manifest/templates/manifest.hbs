@@ -3,6 +3,7 @@
  * DO NOT directly edit this file !!!!!!
  */
 import op from 'object-path';
+import _ from 'underscore';
 import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 
 const deps = {};
@@ -11,7 +12,10 @@ const reqs = {
     '{{name}}': {
         {{#each domains}}
             '{{domain}}': {
-                req: () => require('{{file}}').default,
+                req: () => {
+                    console.log('Loading {{domain}} domain asset {{file}}...');
+                    return import('{{file}}');
+                },
                 file: '{{file}}',
             },
         {{/each}}
@@ -21,18 +25,35 @@ const reqs = {
 
 const manifest = {
     get: () => {
+        const domainLoaders = {};
         for (const [name, domains] of Object.entries(reqs)) {
+            const loaders = [];
             for (const [domain, item] of Object.entries(domains)) {
-                try {
-                    op.set(deps, [name, domain], item.req());
-                } catch (error) {
-                    const where = isBrowserWindow() ? ' in browser ' : ' on server ';
-                    console.error(`Error loading manifest resource "${item.file}" of type ${name} from domain ${domain}${where}`, error);
-                }
+                loaders.push({
+                    name,
+                    domain,
+                    loader: () => new Promise((resolve, reject) => {
+                        try {
+                            item.req().then(module => {
+                                resolve({
+                                    name,
+                                    domain,
+                                    module,
+                                });
+                            });
+                        } catch (error) {
+                            const where = isBrowserWindow() ? ' in browser ' : ' on server ';
+                            console.error(`Error loading manifest resource "${item.file}" of type ${name} from domain ${domain}${where}`, error);
+                            resolve(false);
+                        }
+                    }),
+                });
             }
+
+            op.set(domainLoaders, [name], loaders);
         }
 
-        return deps;
+        return domainLoaders;
     },
     contexts: {
         {{#each contexts}}

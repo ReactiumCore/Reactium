@@ -1,7 +1,7 @@
 import Reactium, { isBrowserWindow } from 'reactium-core/sdk';
 import { createStore, combineReducers, compose } from 'redux';
 import { applyMiddleware } from 'redux-super-thunk';
-import { manifest } from 'dependencies';
+import deps, { manifest } from 'dependencies';
 import _ from 'underscore';
 
 let store;
@@ -45,21 +45,28 @@ const storeCreator = async ({ server = false } = {}) => {
     if (store) return store;
 
     // Load InitialState first from modules
-    let importedStates = manifest.allInitialStates;
+    let importedStates = await deps().loadAllMerged('allInitialStates');
+
     initialState = {
         ...sanitizeInitialState(importedStates),
         ...initialState,
     };
 
-    let middlewares = loadDependencyStack(manifest.allMiddleware, [], server);
+    let middlewares = loadDependencyStack(
+        await deps().loadAllMerged('allMiddleware'),
+        [],
+        server,
+    );
 
     // Combine all Top-level reducers into one
-    let rootReducer = combineReducers(manifest.allReducers);
+    let rootReducer = combineReducers(
+        await deps().loadAllMerged('allReducers'),
+    );
 
     // add redux enhancers
     let enhancers = _.sortBy(
         loadDependencyStack(
-            manifest.allEnhancers,
+            await deps().loadAllDefaults('allEnhancers'),
             [
                 {
                     name: 'applyMiddleware',

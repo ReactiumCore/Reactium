@@ -1,20 +1,13 @@
-'use strict';
-
 /**
  * -----------------------------------------------------------------------------
  * Includes
  * -----------------------------------------------------------------------------
  */
-import Reactium, { useHookComponent, isBrowserWindow } from 'reactium-core/sdk';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'dependencies';
 import _ from 'underscore';
-
-const hookableComponent = name => props => {
-    const Component = useHookComponent(name);
-    return <Component {...props} />;
-};
+import op from 'object-path';
+import deps from 'dependencies';
 
 /**
  * -----------------------------------------------------------------------------
@@ -24,6 +17,22 @@ const hookableComponent = name => props => {
  * -----------------------------------------------------------------------------
  */
 export const App = async () => {
+    console.log('Loading Core SDK');
+    const {
+        default: Reactium,
+        useHookComponent,
+        isBrowserWindow,
+    } = await import('reactium-core/sdk');
+
+    console.log('Initializing Application Hooks');
+
+    await deps().loadAll('allHooks');
+
+    const hookableComponent = name => props => {
+        const Component = useHookComponent(name);
+        return <Component {...props} />;
+    };
+
     const context = {};
 
     /**
@@ -200,10 +209,10 @@ export const App = async () => {
 };
 
 export const AppError = async error => {
-    const RedBox = require('redbox-react');
-    const { appElement } = await Reactium.Hook.run('app-bindpoint');
-
-    if (appElement) {
-        ReactDOM.render(<RedBox error={error} />, appElement);
-    }
+    // const RedBox = require('redbox-react');
+    // const { appElement } = await Reactium.Hook.run('app-bindpoint');
+    //
+    // if (appElement) {
+    //     ReactDOM.render(<RedBox error={error} />, appElement);
+    // }
 };

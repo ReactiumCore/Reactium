@@ -16,70 +16,71 @@ import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
 import moment from 'moment';
 import { sync as globby } from 'globby';
-import ReactiumBoot from 'reactium-core/sdk';
-global.ReactiumBoot = ReactiumBoot;
-const { Enums } = ReactiumBoot;
-
-const router = require('./server/router').default;
-
-global.defines = {};
-global.rootPath = path.resolve(__dirname, '..');
-global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
-global.useJSDOM =
-    global.isSSR &&
-    (!('SSR_MODE_JSDOM' in process.env) ||
-        process.env.SSR_MODE_JSDOM !== 'off');
-
-global.actiniumAPIEnabled = process.env.ACTINIUM_API !== 'off';
-global.actiniumProxyEnabled = process.env.PROXY_ACTINIUM_API !== 'off';
-
-if (global.isSSR && global.useJSDOM) {
-    // react-side-effect/lib/index.js:85:17 does the opposite of normal
-    // it tries to check to see if the DOM is available, and blows up if it
-    // does on static render
-    // Fixes "You may only call rewind() on the server. Call peek() to read the current state." throw.
-    //
-    // The condition used for this error is set at file scope of this loaded early, so
-    // let's get this in early, before creating global.window with JSDOM.
-    require('react-side-effect');
-
-    const jsdom = require('jsdom');
-    const { JSDOM } = jsdom;
-    const { window } = new JSDOM('<!DOCTYPE html>');
-    const { document, navigator, location } = window;
-
-    // build a soft cushy server-side window environment to catch server-unsafe code
-    global.window = window;
-    global.JSDOM = window;
-    global.document = document;
-    global.navigator = navigator;
-    global.location = location;
-
-    // Important: We'll use this to differential the JSDOM "window" from others.
-    global.window.isJSDOM = true;
-    console.log('SSR: creating JSDOM object as global.window.');
-}
-
-const apiConfig = ReactiumBoot.API.ActiniumConfig;
-
-global.parseAppId = apiConfig.parseAppId;
-global.actiniumAppId = apiConfig.actiniumAppId;
-global.restAPI = apiConfig.restAPI;
-
-// SSR Defines
-if (!'defines' in global) {
-    global.defines = {};
-}
-if (fs.existsSync(`${rootPath}/src/app/server/defines.js`)) {
-    const defs = require(`${rootPath}/src/app/server/defines.js`);
-    Object.keys(defs).forEach(key => {
-        if (key !== 'process.env') {
-            global.defines[key] = defs[key];
-        }
-    });
-}
 
 const bootup = async () => {
+    const ReactiumBoot = (await import('reactium-core/sdk')).default;
+    global.ReactiumBoot = ReactiumBoot;
+    const { Enums } = ReactiumBoot;
+
+    const router = require('./server/router').default;
+
+    global.defines = {};
+    global.rootPath = path.resolve(__dirname, '..');
+    global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
+    global.useJSDOM =
+        global.isSSR &&
+        (!('SSR_MODE_JSDOM' in process.env) ||
+            process.env.SSR_MODE_JSDOM !== 'off');
+
+    global.actiniumAPIEnabled = process.env.ACTINIUM_API !== 'off';
+    global.actiniumProxyEnabled = process.env.PROXY_ACTINIUM_API !== 'off';
+
+    if (global.isSSR && global.useJSDOM) {
+        // react-side-effect/lib/index.js:85:17 does the opposite of normal
+        // it tries to check to see if the DOM is available, and blows up if it
+        // does on static render
+        // Fixes "You may only call rewind() on the server. Call peek() to read the current state." throw.
+        //
+        // The condition used for this error is set at file scope of this loaded early, so
+        // let's get this in early, before creating global.window with JSDOM.
+        require('react-side-effect');
+
+        const jsdom = require('jsdom');
+        const { JSDOM } = jsdom;
+        const { window } = new JSDOM('<!DOCTYPE html>');
+        const { document, navigator, location } = window;
+
+        // build a soft cushy server-side window environment to catch server-unsafe code
+        global.window = window;
+        global.JSDOM = window;
+        global.document = document;
+        global.navigator = navigator;
+        global.location = location;
+
+        // Important: We'll use this to differential the JSDOM "window" from others.
+        global.window.isJSDOM = true;
+        console.log('SSR: creating JSDOM object as global.window.');
+    }
+
+    const apiConfig = ReactiumBoot.API.ActiniumConfig;
+
+    global.parseAppId = apiConfig.parseAppId;
+    global.actiniumAppId = apiConfig.actiniumAppId;
+    global.restAPI = apiConfig.restAPI;
+
+    // SSR Defines
+    if (!'defines' in global) {
+        global.defines = {};
+    }
+    if (fs.existsSync(`${rootPath}/src/app/server/defines.js`)) {
+        const defs = require(`${rootPath}/src/app/server/defines.js`);
+        Object.keys(defs).forEach(key => {
+            if (key !== 'process.env') {
+                global.defines[key] = defs[key];
+            }
+        });
+    }
+
     const app = express();
 
     let gulpConfig;

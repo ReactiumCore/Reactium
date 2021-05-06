@@ -4,7 +4,7 @@ import op from 'object-path';
 import _ from 'underscore';
 import getComponents from 'dependencies/getComponents';
 import RoutedContent from './RoutedContent';
-import manifestLoader from 'manifest';
+import deps from 'dependencies';
 
 const lookupRouteComponent = async route => {
     let Found;
@@ -25,7 +25,7 @@ const lookupRouteComponent = async route => {
 Reactium.Hook.register(
     'routes-init',
     async Routing => {
-        const allRoutes = op.get(manifestLoader.get(), 'allRoutes', {});
+        const allRoutes = await deps().loadAllDefaults('allRoutes');
 
         if (!Object.values(allRoutes || {}).length) {
             return [];
