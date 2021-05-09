@@ -5,6 +5,7 @@ import manifestLoader from 'manifest';
 class ReactiumDependencies {
     constructor() {
         this.loaded = false;
+        this.loadedModules = {};
         this.actions = {};
         this.actionTypes = {
             DOMAIN_UPDATE: 'DOMAIN_UPDATE',
@@ -38,6 +39,7 @@ class ReactiumDependencies {
 
     async loadAllMerged(type) {
         const all = await this.loadAll(type);
+
         return all.reduce(
             (merged, current) => ({
                 ...merged,
@@ -48,49 +50,80 @@ class ReactiumDependencies {
     }
 
     async loadAllDefaults(type) {
-        return (await this.loadAll(type)).map(dep => dep.module.default);
+        return (await this.loadAll(type)).map(dep => {
+            return dep.module.default;
+        });
     }
 
     async loadAll(type) {
         return Promise.all(
-            op.get(this.manifest, [type], []).map(dep => dep.loader()),
+            op.get(this.manifest, [type], []).map(dep => {
+                const { name, domain, loader } = dep;
+                if (op.has(this, ['loadedModules', name, domain])) {
+                    const loadedModule = op.get(this, [
+                        'loadedModules',
+                        name,
+                        domain,
+                    ]);
+                    return Promise.resolve(loadedModule);
+                } else {
+                    return dep.loader().then(loadedModule => {
+                        const { name, domain, module } = loadedModule;
+
+                        op.set(
+                            this,
+                            ['loadedModules', name, domain],
+                            loadedModule,
+                        );
+                        return loadedModule;
+                    });
+                }
+            }),
         );
     }
 
     async load() {
-        if (this.loaded) return Promise.resolve(this);
-
-        for (const depType of Object.keys(this.manifest)) {
-            if (
-                depType in this.coreTypeMap ||
-                !this.coreTypes.includes(depType)
-            ) {
-                const binding = op.get(this.coreTypeMap, [depType], depType);
-                for (const { domain, module } of await this.loadAll(depType)) {
-                    if (binding === 'actionTypes') {
-                        for (const [key, value] of Object.entries(
-                            module.default,
-                        )) {
-                            op.set(this, [binding, key], value);
-                        }
-                    } else {
+        if (!this.loaded) {
+            console.log('Loading core dependencies.');
+            for (const depType of Object.keys(this.manifest)) {
+                if (
+                    depType in this.coreTypeMap ||
+                    !this.coreTypes.includes(depType)
+                ) {
+                    const binding = op.get(
+                        this.coreTypeMap,
+                        [depType],
+                        depType,
+                    );
+                    for (const { name, domain, module } of await this.loadAll(
+                        depType,
+                    )) {
                         op.set(this, [binding, domain], module.default);
+                        if (binding === 'actionTypes') {
+                            for (const [key, value] of Object.entries(
+                                module.default,
+                            )) {
+                                op.set(this, [binding, key], value);
+                            }
+                        } else {
+                            op.set(this, [binding, domain], module.default);
+                        }
                     }
                 }
             }
+
+            try {
+                let plugableConfig = await import('appdir/plugable');
+                if ('default' in plugableConfig) {
+                    plugableConfig = plugableConfig.default;
+                }
+                this.plugableConfig = plugableConfig;
+            } catch (error) {}
+
+            this.loaded = true;
         }
 
-        try {
-            let plugableConfig = await import('appdir/plugable');
-            if ('default' in plugableConfig) {
-                plugableConfig = plugableConfig.default;
-            }
-            this.plugableConfig = plugableConfig;
-        } catch (error) {}
-
-        this.loaded = true;
         return Promise.resolve(this);
-        console.log('Dependencies loaded.');
     }
 }
 

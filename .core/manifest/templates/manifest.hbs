@@ -13,7 +13,6 @@ const reqs = {
         {{#each domains}}
             '{{domain}}': {
                 req: () => {
-                    console.log('Loading {{domain}} domain asset {{file}}...');
                     return import('{{file}}');
                 },
                 file: '{{file}}',

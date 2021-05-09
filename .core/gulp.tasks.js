@@ -54,15 +54,19 @@ const reactium = (gulp, config, webpackConfig) => {
 
     // PORT setup:
     let port = config.port.proxy;
-    let pvar = op.get(process.env, 'PORT_VAR', false);
 
-    if (pvar) {
-        port = op.get(process.env, pvar, port);
+    let node_env = process.env.hasOwnProperty('NODE_ENV')
+        ? process.env.NODE_ENV
+        : 'development';
+
+    const PORT_VAR = op.get(process.env, 'PORT_VAR', 'APP_PORT');
+    if (PORT_VAR && op.has(process.env, [PORT_VAR])) {
+        port = op.get(process.env, [PORT_VAR], port);
     } else {
-        port = op.get(process.env, 'APP_PORT', port);
-        port = op.get(process.env, 'PORT', port);
+        port = op.get(process.env, ['PORT'], port);
     }
-    port = Number(port);
+
+    port = parseInt(port);
 
     // Update config from environment variables
     config.port.proxy = port;
@@ -335,7 +339,7 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const scripts = done => {
         // Compile js
-        if (!isDev) {
+        if (!isDev || process.env.MANUAL_DEV_BUILD === 'true') {
             webpack(webpackConfig, (err, stats) => {
                 if (err) {
                     console.log(err());

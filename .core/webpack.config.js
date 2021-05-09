@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const _ = require('underscore');
 const path = require('path');
 const globby = require('globby');
 const webpack = require('webpack');
@@ -35,6 +36,31 @@ const overrides = config => {
     return config;
 };
 
+const matchChunk = (test, debug) => module => {
+    const chunkNames = [];
+    for (const chunk of module.chunksIterable) {
+        chunkNames.push(chunk.name);
+    }
+
+    const names = _.compact(
+        _.flatten([
+            module.nameForCondition && module.nameForCondition(),
+            chunkNames,
+        ]),
+    );
+
+    const match = !!names.find(name => test.test(name));
+    if (debug && match) {
+        console.log({
+            test: test.toString(),
+            name: module.nameForCondition && module.nameForCondition(),
+            chunkNames,
+        });
+    }
+
+    return match;
+};
+
 module.exports = config => {
     const sdk = new WebpackSDK('reactium', 'reactium-webpack.js', config);
 
@@ -55,6 +81,29 @@ module.exports = config => {
         minimize: Boolean(env !== 'development'),
         splitChunks: {
             chunks: 'all',
+            cacheGroups: {
+                vendors: {
+                    test: matchChunk(/[\\/]node_modules[\\/]/),
+                    priority: -10,
+                    reuseExistingChunk: true,
+                },
+                core: {
+                    test: matchChunk(/[\\/]\.core/),
+                    priority: -10,
+                    reuseExistingChunk: true,
+                },
+                sdk: {
+                    test: matchChunk(/[\\/]\.core[\\/]sdk/),
+                    priority: -20,
+                    priority: 0,
+                    reuseExistingChunk: true,
+                },
+                sw: {
+                    test: matchChunk(/[\\/]node_modules[\\/]workbox/),
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            },
         },
     };
 

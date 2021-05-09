@@ -26,7 +26,6 @@ Reactium.Hook.register(
     'routes-init',
     async Routing => {
         const allRoutes = await deps().loadAllDefaults('allRoutes');
-
         if (!Object.values(allRoutes || {}).length) {
             return [];
         }

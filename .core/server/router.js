@@ -26,12 +26,7 @@ if (fs.existsSync(basicAuthFile)) {
 router.get('/elb-healthcheck', (req, res) => res.send('Up'));
 
 process.on('unhandledRejection', (reason, p) => {
-    console.log(
-        '[Reactium] Unhandled Rejection at: Promise',
-        p,
-        'reason:',
-        reason,
-    );
+    ERROR('Unhandled Rejection at: Promise', p, 'reason:', reason);
     // application specific logging, throwing an error, or other logic here
 });
 
@@ -46,7 +41,7 @@ router.use(async (req, res, next) => {
         try {
             const content = await renderer(req, res, context);
             if (context.url) {
-                console.log('[Reactium] Redirecting to ', context.url);
+                INFO('Redirecting to ', context.url);
                 return res.redirect(302, context.url);
             }
 
@@ -85,7 +80,7 @@ router.use(async (req, res, next) => {
 
             res.status(status).send(content);
         } catch (err) {
-            console.error('[Reactium] React SSR Error', err);
+            ERROR('React SSR Error', err);
             res.status(500).send('[Reactium] Internal Server Error');
         }
     } else {
