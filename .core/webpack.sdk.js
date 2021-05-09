@@ -8,6 +8,31 @@ const path = require('path');
 
 global.ReactiumWebpack = ReactiumWebpack;
 
+const matchChunk = (test, debug) => module => {
+    const chunkNames = [];
+    for (const chunk of module.chunksIterable) {
+        chunkNames.push(chunk.name);
+    }
+
+    const names = _.compact(
+        _.flatten([
+            module.nameForCondition && module.nameForCondition(),
+            chunkNames,
+        ]),
+    );
+
+    const match = !!names.find(name => test.test(name));
+    if (debug && match) {
+        console.log({
+            test: test.toString(),
+            name: module.nameForCondition && module.nameForCondition(),
+            chunkNames,
+        });
+    }
+
+    return match;
+};
+
 let artifacts = {};
 class WebpackReactiumWebpack {
     constructor(name, ddd, context) {
@@ -236,6 +261,105 @@ class WebpackReactiumWebpack {
             this.context,
         );
         return this.plugins.list.map(({ id, plugin }) => plugin);
+    }
+
+    matchChunk(test, debug) {
+        return module => {
+            const chunkNames = [];
+            for (const chunk of module.chunksIterable) {
+                chunkNames.push(chunk.name);
+            }
+
+            const names = _.compact(
+                _.flatten([
+                    module.nameForCondition && module.nameForCondition(),
+                    chunkNames,
+                ]),
+            );
+
+            const match = !!names.find(name => test.test(name));
+            if (debug && match) {
+                console.log({
+                    test: test.toString(),
+                    name: module.nameForCondition && module.nameForCondition(),
+                    chunkNames,
+                });
+            }
+
+            return match;
+        };
+    }
+
+    setNoCodeSplitting(env) {
+        this.optimizationValue = {
+            minimize: Boolean(env !== 'development'),
+        };
+
+        this.addPlugin(
+            'limit-chunks',
+            new webpack.optimize.LimitChunkCountPlugin({
+                maxChunks: 1,
+            }),
+        );
+    }
+
+    setWebpackDefaultOptimize(env) {
+        this.optimizationValue = {
+            minimize: Boolean(env !== 'development'),
+            splitChunks: {
+                chunks: 'async',
+                minSize: 20000,
+                minRemainingSize: 0,
+                minChunks: 1,
+                maxAsyncRequests: 30,
+                maxInitialRequests: 30,
+                enforceSizeThreshold: 50000,
+                cacheGroups: {
+                    defaultVendors: {
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -10,
+                        reuseExistingChunk: true,
+                    },
+                    default: {
+                        minChunks: 2,
+                        priority: -20,
+                        reuseExistingChunk: true,
+                    },
+                },
+            },
+        };
+    }
+
+    setCodeSplittingOptimize(env) {
+        this.optimizationValue = {
+            minimize: Boolean(env !== 'development'),
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    vendors: {
+                        test: this.matchChunk(/[\\/]node_modules[\\/]/),
+                        priority: -10,
+                        reuseExistingChunk: true,
+                    },
+                    core: {
+                        test: this.matchChunk(/[\\/]\.core/),
+                        priority: -10,
+                        reuseExistingChunk: true,
+                    },
+                    sdk: {
+                        test: this.matchChunk(/[\\/]\.core[\\/]sdk/),
+                        priority: -20,
+                        priority: 0,
+                        reuseExistingChunk: true,
+                    },
+                    sw: {
+                        test: this.matchChunk(/[\\/]node_modules[\\/]workbox/),
+                        priority: -20,
+                        reuseExistingChunk: true,
+                    },
+                },
+            },
+        };
     }
 
     config() {
