@@ -4,8 +4,7 @@ const gulpwatch = require('@atomic-reactor/gulp-watch');
 const task = require('./get-task')(gulp);
 
 process.on('message', ({ config, webpackConfig, restart }) => {
-    const tasks = gulpTasks(gulp, config, webpackConfig);
-    Object.entries(tasks).forEach(([name, task]) => gulp.task(name, task));
+    require('./gulp.bootup');
 
     const asyncDone = done => {
         process.send('build-started');
