@@ -10,6 +10,8 @@ const config = require('./gulp.config');
 const webpackConfig = require('./webpack.config')(config);
 const chalk = require('chalk');
 
+global.ReactiumGulp = ReactiumGulp;
+
 // Load reactium-gulp DDD artifact from plugin sources
 globby([
     `${rootPath}/.core/**/reactium-gulp.js`,
@@ -25,8 +27,6 @@ globby([
         console.error(error);
     }
 });
-
-global.ReactiumGulp = ReactiumGulp;
 
 ReactiumGulp.Hook.runSync('config', config, webpackConfig);
 
