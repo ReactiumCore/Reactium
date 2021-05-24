@@ -269,7 +269,6 @@ module.exports = {
             },
             devDependencies: {
                 remove: [
-                    'node-sass-tilde-importer',
                     '@atomic-reactor/cli',
                     'atomic-reactor-cli',
                     'babel-cli',
