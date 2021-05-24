@@ -41,7 +41,7 @@
         "parse/node": false
     },
     "dependencies": {
-        "@atomic-reactor/reactium-sdk-core": "^1.0.27",
+        "@atomic-reactor/reactium-sdk-core": "^1.0.29",
         "@babel/cli": "^7.13.14",
         "@babel/node": "^7.13.13",
         "@loadable/component": "^5.14.1",
@@ -97,7 +97,7 @@
         "xss": "^1.0.8"
     },
     "devDependencies": {
-        "@atomic-reactor/cli": "^2.2.38",
+        "@atomic-reactor/cli": "^2.2.44",
         "@atomic-reactor/gulp-watch": "^5.0.1-patched",
         "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
         "@atomic-reactor/webpack-po-loader": "0.0.3",
