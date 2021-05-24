@@ -15,8 +15,8 @@ import op from 'object-path';
 import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
 import moment from 'moment';
-import { sync as globby } from 'globby';
 import chalk from 'chalk';
+const globby = require('./globby-patch').sync;
 
 const globals = async () => {
     const ReactiumBoot = (await import('reactium-core/sdk')).default;
@@ -349,6 +349,7 @@ const registeredMiddleware = async () => {
 };
 
 const registeredDevMiddleware = () => {
+    console.log('registeredDevMiddleware');
     const { Enums } = ReactiumBoot;
 
     // set app variables

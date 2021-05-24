@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const globby = require('globby');
+const globby = require('./globby-patch');
 const op = require('object-path');
 const rootPath = path.resolve(__dirname, '..');
 const env = process.env.NODE_ENV || 'development';

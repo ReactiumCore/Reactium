@@ -2,7 +2,7 @@ const ReactiumWebpack = require('@atomic-reactor/reactium-sdk-core').default;
 const op = require('object-path');
 const _ = require('underscore');
 const webpack = require('webpack');
-const globby = require('globby');
+const globby = require('./globby-patch');
 const chalk = require('chalk');
 const path = require('path');
 
