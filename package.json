@@ -97,7 +97,7 @@
         "xss": "^1.0.8"
     },
     "devDependencies": {
-        "@atomic-reactor/cli": "^2.2.44",
+        "@atomic-reactor/cli": "^2.2.45",
         "@atomic-reactor/gulp-watch": "^5.0.1-patched",
         "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
         "@atomic-reactor/webpack-po-loader": "0.0.3",
