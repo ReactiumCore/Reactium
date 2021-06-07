@@ -107,7 +107,6 @@ ReactiumBoot.Hook.registerSync(
         const scriptPathBase =
             process.env.PUBLIC_DIRECTORY || `${process.cwd()}/public`;
 
-        console.log('Patched globby? /start');
         globby
             .sync(
                 path
@@ -122,7 +121,6 @@ ReactiumBoot.Hook.registerSync(
                     footer: true,
                 }),
             );
-        console.log('Patched globby? /end');
     },
     ReactiumBoot.Enums.priority.highest,
     'SERVER-APP-SCRIPTS-CORE',
