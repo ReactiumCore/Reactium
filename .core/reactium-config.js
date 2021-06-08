@@ -382,12 +382,6 @@ module.exports = {
                 },
                 {
                     overwrite: false,
-                    version: '>=3.2.1',
-                    destination: '/flow-typed',
-                    source: '/tmp/update/flow-typed',
-                },
-                {
-                    overwrite: false,
                     version: '>=3.2.2',
                     destination: '/.huskyrc',
                     source: '/tmp/update/.huskyrc',
