@@ -10,9 +10,10 @@ const browserSync = require('browser-sync');
 const gulpif = require('gulp-if');
 const gulpwatch = require('@atomic-reactor/gulp-watch');
 const prefix = require('gulp-autoprefixer');
-const sass = require('gulp-dart-sass');
+const sass = require('gulp-sass');
+sass.compiler = require('sass');
+const fiber = require('fibers');
 const gzip = require('gulp-gzip');
-const jsonFunctions = require('node-sass-functions-json').default;
 const reactiumImporter = require('@atomic-reactor/node-sass-reactium-importer');
 const less = require('gulp-less');
 const cleanCSS = require('gulp-clean-css');
@@ -578,11 +579,9 @@ $assets: (
                 gulpif(
                     isSass,
                     sass({
-                        functions: {
-                            ...jsonFunctions,
-                        },
                         importer: reactiumImporter,
                         includePaths: config.src.includes,
+                        fiber,
                     }).on('error', sass.logError),
                 ),
             )

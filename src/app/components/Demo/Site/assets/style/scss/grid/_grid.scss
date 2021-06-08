@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // Creds to https://github.com/kristoferjoseph/flexboxgrid
 // No gutters
 // No text alignment with justified container classes (center-xs, for example)
@@ -68,12 +70,12 @@
   }
   @for $i from 1 through $grid-columns {
     .col-#{$thisPrefix}-#{$i} {
-      flex-basis: 100% / $grid-columns * $i;
-      max-width: 100% / $grid-columns * $i;
+      flex-basis: math.div(100%, $grid-columns) * $i;
+      max-width: math.div(100%, $grid-columns) * $i;
       padding: $gutter;
     }
     .col-#{$thisPrefix}-offset-#{$i} {
-      margin-left: 100% / $grid-columns * $i;
+      margin-left: math.div(100%, $grid-columns) * $i;
     }
   }
   .start-#{$thisPrefix} {

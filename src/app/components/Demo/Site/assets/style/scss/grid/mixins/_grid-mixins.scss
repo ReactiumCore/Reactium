@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import "../variables/main.scss";
 
 @mixin row($full-width: "false") {
@@ -39,8 +41,8 @@
     @if $col-number > $grid-columns or $col-number == 0 {
       @warn "Column number must be greater than 0 and less than or equal to total number of columns in the grid (#{$grid-columns})";
     } @else {
-      flex-basis: 100% / $grid-columns * $col-number;
-      max-width: 100% / $grid-columns * $col-number;
+      flex-basis: math.div(100%, $grid-columns) * $col-number;
+      max-width: math.div(100%, $grid-columns) * $col-number;
       padding: $gutter;
     }
   // If no col number is passed then arg is set to "auto" by default
@@ -92,7 +94,7 @@
   } @else if $offset-number > $grid-columns {
     @warn "Column offset number must be greater than 0 and less than or equal to total number of columns in the grid (#{$grid-columns})";
   } @else {
-    margin-left: 100% / $grid-columns * $offset-number;
+    margin-left: math.div(100%, $grid-columns) * $offset-number;
   }
 } // Condition to run inside of the col-offset mixin * not for developer use *
 
