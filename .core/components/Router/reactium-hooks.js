@@ -41,7 +41,7 @@ Reactium.Hook.register(
             }
         }
 
-        _.chain(
+        const combinedRoutes = _.chain(
             Object.values(allRoutes || {})
                 .concat(globalRoutes)
                 .filter(route => route)
@@ -49,19 +49,20 @@ Reactium.Hook.register(
         )
             .flatten()
             .compact()
-            .value()
-            .forEach(route => {
-                const paths = _.compact(_.flatten([route.path]));
-                paths.forEach(path => {
-                    Reactium.Routing.register(
-                        {
-                            ...route,
-                            path,
-                        },
-                        false,
-                    );
-                });
-            });
+            .value();
+
+        for (const route of combinedRoutes) {
+            const paths = _.compact(_.flatten([route.path]));
+            for (const path of paths) {
+                await Reactium.Routing.register(
+                    {
+                        ...route,
+                        path,
+                    },
+                    false,
+                );
+            }
+        }
     },
     Reactium.Enums.priority.highest,
 );
