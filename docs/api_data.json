@@ -1825,6 +1825,47 @@
   },
   {
     "type": "ReactHook",
+    "url": "useSyncState(initialState)",
+    "title": "useSyncState()",
+    "description": "<p>Intended to provide an object to get and set state synchrounously, while providing a EventTarget object that can dispatch a 'set' event when the state is updated.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "initialState",
+            "description": "<p>The initial state.</p>"
+          }
+        ]
+      }
+    },
+    "name": "useSyncState",
+    "group": "ReactHook",
+    "examples": [
+      {
+        "title": "SimpleExample",
+        "content": "import React from 'react';\nimport { useSyncState } from 'reactium-core/sdk';\nexport const SimpleExample = () => {\n    const clickState = useSyncState({ clicks: 1 });\n    const clicks = clickState.get('clicks');\n    return (\n        <div>Clicked {clicks} times <button\n            onClick={() => clickState.set('clicks', clicks + 1)}>Click Me</button>\n        </div>\n    );\n };",
+        "type": "json"
+      },
+      {
+        "title": "EventTarget",
+        "content": "import React from 'react';\nimport { useSyncState, useRegisterHandle } from 'reactium-core/sdk';\nexport const Clicker = () => {\n    const clickState = useSyncState({ clicks: 1 });\n    const clicks = clickState.get('clicks');\n    useRegisterHandle('ClickState', () => clickState);\n\n    return (\n        <div>Clicked {clicks} times <button\n            onClick={() => clickState.set('clicks', clicks + 1)}>Click Me</button>\n        </div>\n    );\n };",
+        "type": "json"
+      },
+      {
+        "title": "Consumer",
+        "content": "import React, { useState, useEventEffect } from 'react';\nimport { useHandle } from 'reactium-core/sdk';\n// communicate state with other components\nexport const Listener = () => {\n    const [clicked, setClicked] = useState(false);\n    const handle = useHandle('ClickState')\n    const numClicks = handle.get('clicks');\n\n    const remoteClicked = e => {\n        if (numClicks < e.get('clicks')) {\n            setClicked(true);\n        }\n    };\n\n    useEventEffect(handle, { set: remoteClicked }, []);\n\n    return (\n        <div>Clicker {clicked ? 'unclicked' : 'clicked'}</div>\n    );\n };",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/useSyncState.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useWindow()",
     "title": "useWindow()",
     "description": "<p>React hook which resolves to the browser or electron window when run in normal context or in the Reactium toolkit. Otherwise will return <code>undefined</code>. This is important particularly when you need to inspect the window inside the <code>react-frame-component</code> (<code>FrameContextConsumer</code>) which sandboxes your component withing the toolkit. Your component will automatically be rendered inside the WindowProvider, which will provide the correct <code>window</code> and <code>document</code> objects. See <code>useWindowSize()</code> for the most important use case.</p>",

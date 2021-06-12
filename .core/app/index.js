@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import _ from 'underscore';
 import op from 'object-path';
 import deps from 'dependencies';
+import 'externals';
 
 /**
  * -----------------------------------------------------------------------------

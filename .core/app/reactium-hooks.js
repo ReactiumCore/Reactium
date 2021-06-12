@@ -7,11 +7,6 @@ import _ from 'underscore';
 import deps from 'dependencies';
 
 import('reactium-core/sdk').then(async ({ default: Reactium }) => {
-    Reactium.Hook.register('init', async () => {
-        const { default: manifestLoader } = await import('manifest');
-        manifestLoader.externals();
-    });
-
     Reactium.Hook.register(
         'component-bindings',
         async context => {

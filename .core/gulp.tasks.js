@@ -242,7 +242,6 @@ const reactium = (gulp, config, webpackConfig) => {
         task('umdLibraries'),
         task('serviceWorker'),
         task('compress'),
-        task('apidocs'),
         task('postBuild'),
     );
 
@@ -297,7 +296,11 @@ const reactium = (gulp, config, webpackConfig) => {
         gulp.src(config.src.json).pipe(gulp.dest(config.dest.build));
 
     const manifest = gulp.series(
-        gulp.parallel(task('mainManifest'), task('umdManifest')),
+        gulp.parallel(
+            task('mainManifest'),
+            task('externalsManifest'),
+            task('umdManifest'),
+        ),
     );
 
     const umd = gulp.series(task('umdManifest'), task('umdLibraries'));
@@ -314,6 +317,20 @@ const reactium = (gulp, config, webpackConfig) => {
                 'manifest/templates/manifest.hbs',
             ),
             manifestProcessor: require('./manifest/processors/manifest'),
+        });
+        done();
+    };
+
+    const externalsManifest = done => {
+        // Generate manifest.js file
+        regenManifest({
+            manifestFilePath: config.src.externalsManifest,
+            manifestConfig: reactiumConfig.manifest,
+            manifestTemplateFilePath: path.resolve(
+                __dirname,
+                'manifest/templates/externals.hbs',
+            ),
+            manifestProcessor: require('./manifest/processors/externals'),
         });
         done();
     };
@@ -638,6 +655,7 @@ $assets: (
         json,
         manifest,
         mainManifest,
+        externalsManifest,
         umd,
         umdManifest,
         umdLibraries,

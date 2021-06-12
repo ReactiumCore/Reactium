@@ -73,29 +73,9 @@ module.exports = data => {
         };
     });
 
-    const externals = Object.values(
-        op.get(data, 'manifestConfig.pluginExternals', {}),
-    ).map(external => {
-        const { externalName, requirePath } = external;
-        if (/^\/.*\/i?$/.test(externalName))
-            return {
-                ...external,
-                externalName: requirePath,
-                requirePath,
-            };
-
-        return external;
-    });
-
-    const externalAliases = externals.filter(
-        ({ defaultAlias }) => defaultAlias,
-    );
-
     return {
         types,
         contexts,
-        externals,
-        externalAliases,
         contextObj: JSON.stringify(data.contexts, null, 2),
         manifest: JSON.stringify(data.manifest, null, 2),
     };

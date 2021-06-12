@@ -349,7 +349,6 @@ const registeredMiddleware = async () => {
 };
 
 const registeredDevMiddleware = () => {
-    console.log('registeredDevMiddleware');
     const { Enums } = ReactiumBoot;
 
     // set app variables

@@ -39,7 +39,6 @@ const overrides = config => {
 module.exports = config => {
     const sdk = new WebpackSDK('reactium', 'reactium-webpack.js', config);
 
-    let externals = [];
     let filename = '[name].js';
     let dest = config.dest.js;
 

@@ -29,6 +29,7 @@ if (semver.satisfies(semver.coerce(babelCoreVersion), '^7.4.0')) {
 }
 
 const alias = {
+    externals: './.tmp/externals-manifest',
     manifest: './src/manifest',
     appdir: './src/app',
     components: './src/app/components',
