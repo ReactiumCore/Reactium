@@ -30,8 +30,8 @@
     "author": "Cam Tullos <cam@tullos.ninja> (http://cam.tullos.ninja) and John Dillick <john@dillick.us>",
     "license": "MIT",
     "engines": {
-        "node": "12.13.0",
-        "npm": ">=6.12.0"
+        "node": "14.7.0",
+        "npm": "6.14.7"
     },
     "repository": {
         "type": "git",
