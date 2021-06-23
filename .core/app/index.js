@@ -189,16 +189,11 @@ export const App = async () => {
             );
             console.log(...message);
 
-            Reactium.Zone.addComponent({
-                id: 'REACTIUM_ROUTER',
-                zone: 'reactium-provider',
-                order: Reactium.Enums.priority.neutral,
-                component: () => <Router history={Reactium.Routing.history} />,
-            });
-
             ReactDOM[ssr ? 'hydrate' : 'render'](
                 <Provider store={store}>
-                    <Zone zone='reactium-provider' />
+                    <Zone zone='reactium-provider-before' />
+                    <Router history={Reactium.Routing.history} />
+                    <Zone zone='reactium-provider-after' />
                 </Provider>,
                 appElement,
             );
