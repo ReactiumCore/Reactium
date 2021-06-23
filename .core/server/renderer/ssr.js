@@ -7,6 +7,7 @@ import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
 import 'reactium-core/redux/storeCreator';
 import Router from 'reactium-core/components/Router/server';
+import { Zone } from 'reactium-core/sdk';
 
 const app = {};
 app.dependencies = global.dependencies;
@@ -63,12 +64,14 @@ const renderer = async (req, res, context) => {
 
     const content = renderToString(
         <Provider store={store}>
+            <Zone zone='reactium-provider' />
             <Router
                 server={true}
                 location={req.originalUrl}
                 context={context}
                 routes={routes}
             />
+            <Zone zone='reactium-provider-after' />
         </Provider>,
     );
 

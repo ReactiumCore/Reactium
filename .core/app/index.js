@@ -23,6 +23,7 @@ export const App = async () => {
         default: Reactium,
         useHookComponent,
         isBrowserWindow,
+        Zone,
     } = await import('reactium-core/sdk');
 
     console.log('Initializing Application Hooks');
@@ -191,7 +192,9 @@ export const App = async () => {
 
             ReactDOM[ssr ? 'hydrate' : 'render'](
                 <Provider store={store}>
+                    <Zone zone='reactium-provider' />
                     <Router history={Reactium.Routing.history} />
+                    <Zone zone='reactium-provider-after' />
                 </Provider>,
                 appElement,
             );
