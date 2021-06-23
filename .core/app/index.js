@@ -4,11 +4,11 @@
  * -----------------------------------------------------------------------------
  */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'underscore';
 import op from 'object-path';
 import deps from 'dependencies';
-import ReactDOM from 'react-dom';
-import { Zone } from 'reactium-core/sdk';
+import 'externals';
 
 /**
  * -----------------------------------------------------------------------------
@@ -23,6 +23,7 @@ export const App = async () => {
         default: Reactium,
         useHookComponent,
         isBrowserWindow,
+        Zone,
     } = await import('reactium-core/sdk');
 
     console.log('Initializing Application Hooks');
