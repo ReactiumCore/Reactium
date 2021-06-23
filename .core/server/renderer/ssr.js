@@ -64,7 +64,7 @@ const renderer = async (req, res, context) => {
 
     const content = renderToString(
         <Provider store={store}>
-            <Zone zone='reactium-provider-before' />
+            <Zone zone='reactium-provider' />
             <Router
                 server={true}
                 location={req.originalUrl}
