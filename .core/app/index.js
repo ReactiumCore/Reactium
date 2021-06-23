@@ -4,11 +4,11 @@
  * -----------------------------------------------------------------------------
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import _ from 'underscore';
 import op from 'object-path';
 import deps from 'dependencies';
-import 'externals';
+import ReactDOM from 'react-dom';
+import { Zone } from 'reactium-core/sdk';
 
 /**
  * -----------------------------------------------------------------------------
@@ -189,9 +189,16 @@ export const App = async () => {
             );
             console.log(...message);
 
+            Reactium.Zone.addComponent({
+                id: 'REACTIUM_ROUTER',
+                zone: 'reactium-provider',
+                order: Reactium.Enums.priority.neutral,
+                component: () => <Router history={Reactium.Routing.history} />,
+            });
+
             ReactDOM[ssr ? 'hydrate' : 'render'](
                 <Provider store={store}>
-                    <Router history={Reactium.Routing.history} />
+                    <Zone zone='reactium-provider' />
                 </Provider>,
                 appElement,
             );
