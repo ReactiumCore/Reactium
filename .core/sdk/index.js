@@ -1,8 +1,6 @@
 import op from 'object-path';
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import i18n from './i18n';
-import Middleware from './middleware';
-import Reducer from './reducer';
 import Roles from './roles';
 import Routing from './routing';
 import Setting from './setting';
@@ -41,8 +39,6 @@ export default new Proxy(
     Object.assign(SDK, {
         API,
         i18n,
-        Middleware,
-        Reducer,
         Roles,
         Routing,
         Setting,
