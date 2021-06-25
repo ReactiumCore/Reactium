@@ -4,7 +4,7 @@ const globby = require('./globby-patch');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '3.7.0';
+const version = '4.0.0';
 
 const contextMode = () => {
     if (
@@ -30,11 +30,6 @@ const defaultLibraryExternals = {
         externalName: 'copy-to-clipboard',
         requirePath: 'copy-to-clipboard',
     },
-
-    // 'gsap/umd/TweenMax': {
-    //     externalName: '/^gsap.*$/',
-    //     requirePath: 'gsap/umd/TweenMax',
-    // },
 
     moment: {
         externalName: 'moment',

@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "3.7.0",
+  "version": "4.0.0",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,6 @@
     "parse/node": false
   },
   "dependencies": {
-    "@atomic-reactor/reactium-redux": "file:reactium_modules/@atomic-reactor/reactium-redux/_npm",
     "@atomic-reactor/reactium-sdk-core": "^1.0.32",
     "@babel/cli": "^7.13.14",
     "@babel/node": "^7.13.13",
@@ -178,8 +177,5 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "reactiumDependencies": {
-    "@atomic-reactor/reactium-redux": "1.0.2"
   }
 }
