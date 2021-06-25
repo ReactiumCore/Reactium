@@ -1951,6 +1951,14 @@ define({ "api": [
             "optional": false,
             "field": "zone",
             "description": "<p>the zone id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "optional": false,
+            "field": "dereference",
+            "defaultValue": "true",
+            "description": "<p>If true, returns the current value of the components in the zone, separate from the reference. Otherwise, returns the ReactiumSyncState object. This can be useful if you wish to use the components value with a non-memoized value.</p>"
           }
         ]
       }
@@ -1961,6 +1969,11 @@ define({ "api": [
       {
         "title": "Example",
         "content": "import React from 'react';\nimport { useZoneComponents } from 'reactium-core/sdk';\n\nexport props => {\n    const zoneComponents = useZoneComponents('my-zone');\n\n    return (\n        <div>\n            Components in Zone: {zoneComponents.length}\n        </div>\n    );\n};",
+        "type": "json"
+      },
+      {
+        "title": "NoDereference",
+        "content": "import React from 'react';\nimport { useZoneComponents } from 'reactium-core/sdk';\n\n// Use this method when the zone components are not refreshing smoothly on\n// rendering.\nexport props => {\n    const zoneComponents = useZoneComponents('my-zone', false);\n\n    return (\n        <div>\n            Components in Zone: {zoneComponents.get().length}\n        </div>\n    );\n};",
         "type": "json"
       }
     ],

@@ -156,10 +156,6 @@ ReactiumBoot.Hook.registerSync(
 ReactiumBoot.Hook.registerSync(
     'Server.AppBindings',
     (req, AppBindings) => {
-        AppBindings.register('DevTools', {
-            component: 'DevTools',
-        });
-
         AppBindings.register('router', {
             template: ({ content = '' }) => {
                 const binding = `<div id="router">${content}</div>`;

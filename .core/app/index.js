@@ -213,10 +213,5 @@ export const App = async () => {
 };
 
 export const AppError = async error => {
-    // const RedBox = require('redbox-react');
-    // const { appElement } = await Reactium.Hook.run('app-bindpoint');
-    //
-    // if (appElement) {
-    //     ReactDOM.render(<RedBox error={error} />, appElement);
-    // }
+    console.error(error);
 };

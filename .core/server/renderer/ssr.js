@@ -1,22 +1,28 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { renderToString } from 'react-dom/server';
 import querystring from 'querystring';
 import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
-import 'reactium-core/redux/storeCreator';
 import Router from 'reactium-core/components/Router/server';
-import { Zone } from 'reactium-core/sdk';
+import { Zone, useHookComponent } from 'reactium-core/sdk';
 
 const app = {};
 app.dependencies = global.dependencies;
+
+const hookableComponent = name => props => {
+    const Component = useHookComponent(name);
+    return <Component {...props} />;
+};
 
 const renderer = async (req, res, context) => {
     const { store } = await ReactiumBoot.Hook.run('store-create', {
         server: true,
     });
+
     await ReactiumBoot.Hook.run('plugin-ready');
+
+    await ReactiumBoot.Hook.run('app-redux-provider');
 
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);
@@ -62,6 +68,7 @@ const renderer = async (req, res, context) => {
         ERROR('Page data loading error.', error);
     }
 
+    const Provider = hookableComponent('ReduxProvider');
     const content = renderToString(
         <Provider store={store}>
             <Zone zone='reactium-provider' />

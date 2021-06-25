@@ -1,6 +1,5 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import 'reactium-core/redux/storeCreator';
 import 'reactium-core/components/Router/reactium-hooks';
 import op from 'object-path';
 import _ from 'underscore';
@@ -128,15 +127,14 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
         console.log('Initializing Content Zones');
     });
 
+    const NoopProvider = ({ children }) => children;
     Reactium.Hook.register(
         'app-redux-provider',
         async () => {
-            const { Provider } = await import('react-redux');
-            Reactium.Component.register('ReduxProvider', Provider);
-            console.log('Defining Redux Provider.');
-            return Promise.resolve();
+            Reactium.Component.register('ReduxProvider', NoopProvider);
         },
         Reactium.Enums.priority.highest,
+        'NOOP_REDUX_PROVIDER',
     );
 
     Reactium.Hook.register(
