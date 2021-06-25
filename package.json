@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@atomic-reactor/reactium-redux": "file:reactium_modules/@atomic-reactor/reactium-redux/_npm",
-    "@atomic-reactor/reactium-sdk-core": "^1.0.31",
+    "@atomic-reactor/reactium-sdk-core": "^1.0.32",
     "@babel/cli": "^7.13.14",
     "@babel/node": "^7.13.13",
     "@loadable/component": "^5.14.1",
@@ -80,7 +80,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^5.2.1",
-    "react-redux": "^7.2.3",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
     "regenerator-runtime": "^0.13.7",
@@ -181,6 +180,6 @@
     ]
   },
   "reactiumDependencies": {
-    "@atomic-reactor/reactium-redux": "1.0.0"
+    "@atomic-reactor/reactium-redux": "1.0.2"
   }
 }
