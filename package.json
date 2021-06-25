@@ -30,8 +30,8 @@
     "author": "Cam Tullos <cam@tullos.ninja> (http://cam.tullos.ninja) and John Dillick <john@dillick.us>",
     "license": "MIT",
     "engines": {
-        "node": "14.7.0",
-        "npm": "6.14.7"
+        "node": ">= 14.7.0",
+        "npm": ">= 6.14.7"
     },
     "repository": {
         "type": "git",
@@ -98,8 +98,8 @@
         "xss": "^1.0.8"
     },
     "devDependencies": {
-        "@atomic-reactor/cli": "^2.2.47",
-        "@atomic-reactor/gulp-watch": "^5.0.1-patched",
+        "@atomic-reactor/cli": "^2.2.48",
+        "@atomic-reactor/gulp-watch": "^5.0.2",
         "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
         "@atomic-reactor/webpack-po-loader": "0.0.3",
         "@babel/core": "^7.13.14",
