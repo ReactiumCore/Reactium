@@ -4,16 +4,19 @@
  * -----------------------------------------------------------------------------
  */
 
-const chalk = require('chalk');
-const prettier = require('prettier');
-const fs = require('fs-extra');
+
+
+
 const path = require('path');
+const fs = require('fs-extra');
+const chalk = require('chalk');
+const _ = require('underscore');
+const op = require('object-path');
+const slugify = require('slugify');
+const prettier = require('prettier');
 const camelCase = require('camelcase');
 const decamelize = require('decamelize');
-const slugify = require('slugify');
-const _ = require('underscore');
 const generator = require('./generator');
-const op = require('object-path');
 const mod = path.dirname(require.main.filename);
 const pad = require(`${mod}/lib/pad`);
 
