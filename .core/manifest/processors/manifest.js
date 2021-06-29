@@ -63,20 +63,8 @@ module.exports = data => {
         };
     });
 
-    const contexts = Object.entries(data.contexts).map(([context, pattern]) => {
-        const { modulePath, filePattern, mode } = pattern;
-        return {
-            context,
-            modulePath,
-            filePattern,
-            mode,
-        };
-    });
-
     return {
         types,
-        contexts,
-        contextObj: JSON.stringify(data.contexts, null, 2),
         manifest: JSON.stringify(data.manifest, null, 2),
     };
 };

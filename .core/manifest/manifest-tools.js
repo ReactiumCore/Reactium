@@ -190,7 +190,6 @@ module.exports = function({
     let fileContents = template(
         manifestProcessor({
             manifest,
-            contexts: manifestConfig.contexts,
             manifestConfig,
         }),
     );

@@ -1,76 +1,18 @@
-import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
+import {
+    isBrowserWindow,
+    useHookComponent,
+} from '@atomic-reactor/reactium-sdk-core';
 import React, { Suspense, lazy } from 'react';
 import manifestLoader from 'manifest';
 
-export default (elms = []) => {
-    let cmps = {};
-    if (isBrowserWindow()) {
-        const contexts = manifestLoader.contexts;
-
-        // Traverse the Array of bindable elements and require the components for them
-        elms.forEach(({ type, path }) => {
-            let req;
-
-            // The path to the component
-            path = !path ? type : path;
-            Object.entries(contexts).forEach(([name, context]) => {
-                [
-                    `./${path}/index.js`,
-                    `./${path}/index.jsx`,
-                    `./${path}.js`,
-                    `./${path}.jsx`,
-                ].forEach(attempt => {
-                    // Exit if the component has already been defined
-                    if (cmps[type]) {
-                        return;
-                    }
-
-                    const found = context.keys().find(key => key === attempt);
-                    if (found) {
-                        req = context(attempt);
-                    }
-
-                    if (req) {
-                        let Component;
-                        if ('default' in req) {
-                            // sync context
-                            Component = req.default;
-                        } else {
-                            let Fallback = () => (
-                                <div className='get-components-loading' />
-                            );
-
-                            try {
-                                Fallback = require('components/Fallback')
-                                    .default;
-                            } catch (err) {
-                                console.log(err);
-                                // left intentionally blank
-                            }
-
-                            // async context
-                            const Found = lazy(() => req);
-                            Component = () => (
-                                <Suspense fallback={<Fallback />}>
-                                    <Found />
-                                </Suspense>
-                            );
-                        }
-
-                        cmps[type] = Component;
-                    }
-                });
-            });
-        });
-    }
-
-    // SSR and not found component cases
-    elms.forEach(({ type, path }) => {
-        if (!cmps[type]) {
-            cmps[type] = () => null;
-        }
-    });
-
-    // Output the Components Object
-    return cmps;
+const hookableComponent = name => props => {
+    const Component = useHookComponent(name);
+    return <Component {...props} />;
 };
+
+export default (elms = []) =>
+    elms.reduce((cmps, { type, path }) => {
+        if (path) console.warn('path no longer supported in getComponents');
+        cmps[type] = hookableComponent(type);
+        return cmps;
+    }, {});

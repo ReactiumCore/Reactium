@@ -54,14 +54,6 @@ const manifest = {
 
         return domainLoaders;
     },
-    contexts: {
-        {{#each contexts}}
-        '{{context}}': isBrowserWindow() && require.context('{{modulePath}}', true, /{{filePattern}}/, '{{mode}}'),
-        {{/each}}
-    },
-    listContexts: () => {
-        return {{{contextObj}}}
-    },
     list: () => {
         return {{{manifest}}};
     },
