@@ -214,11 +214,7 @@ module.exports = function({
 
     // Write Manifest only if it does not exist or has changed
     if (!fs.existsSync(manifestFilePath) || manifestHasChanged()) {
-        console.log(
-            `[${moment().format('HH:mm:ss')}] Writing  '${chalk.cyan(
-                manifestFilePath,
-            )}'...`,
-        );
+        console.log(`'${chalk.cyan(manifestFilePath)}'...`);
         const dir = path.dirname(manifestFilePath);
         fs.ensureDirSync(dir);
         fs.writeFileSync(manifestFilePath, fileContents);
