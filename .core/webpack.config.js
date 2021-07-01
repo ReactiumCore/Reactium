@@ -140,6 +140,7 @@ module.exports = config => {
     sdk.addIgnore('reactium-boot', /reactium-boot.js$/);
     sdk.addIgnore('reactium-gulp', /reactium-gulp.js$/);
     sdk.addIgnore('reactium-webpack', /reactium-webpack.js$/);
+    sdk.addIgnore('parse-node', /parse\/node/);
 
     if (env === 'production') {
         sdk.addIgnore('redux-devtools', /redux-devtools/);

@@ -1,8 +1,6 @@
-import Roles from '../roles';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useAsyncEffect } from '@atomic-reactor/reactium-sdk-core';
 import uuid from 'uuid/v4';
-import op from 'object-path';
 
 /**
  * @api {ReactHook} useRoles(search) useRoles()
@@ -18,10 +16,11 @@ export const useRoles = search => {
         ref.current = roles;
         update(uuid());
     };
+    const { default: SDK } = require('reactium-core/sdk');
 
     useAsyncEffect(
         async isMounted => {
-            const roles = await Roles.get(search);
+            const roles = await SDK.Roles.get(search);
             if (isMounted()) setRoles(roles);
         },
         [search],

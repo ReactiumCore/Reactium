@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,13 @@
     "parse/node": false
   },
   "dependencies": {
+    "@atomic-reactor/reactium-api": "file:reactium_modules/@atomic-reactor/reactium-api/_npm",
+    "@atomic-reactor/reactium-capability": "file:reactium_modules/@atomic-reactor/reactium-capability/_npm",
+    "@atomic-reactor/reactium-role": "file:reactium_modules/@atomic-reactor/reactium-role/_npm",
     "@atomic-reactor/reactium-sdk-core": "^1.1.0",
+    "@atomic-reactor/reactium-service-worker": "file:reactium_modules/@atomic-reactor/reactium-service-worker/_npm",
+    "@atomic-reactor/reactium-setting": "file:reactium_modules/@atomic-reactor/reactium-setting/_npm",
+    "@atomic-reactor/reactium-user": "file:reactium_modules/@atomic-reactor/reactium-user/_npm",
     "@babel/cli": "^7.13.14",
     "@babel/node": "^7.13.13",
     "@loadable/component": "^5.14.1",
@@ -89,6 +95,7 @@
     "socket.io-client": "^3.1.0",
     "underscore": "*",
     "uuid": "^3.4.0",
+    "webpack-bundle-analyzer": "^4.4.2",
     "xss": "^1.0.8"
   },
   "devDependencies": {
@@ -177,5 +184,13 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "reactiumDependencies": {
+    "@atomic-reactor/reactium-api": "1.0.0",
+    "@atomic-reactor/reactium-capability": "1.0.0",
+    "@atomic-reactor/reactium-role": "1.0.0",
+    "@atomic-reactor/reactium-user": "1.0.1",
+    "@atomic-reactor/reactium-setting": "1.0.0",
+    "@atomic-reactor/reactium-service-worker": "1.0.0"
   }
 }

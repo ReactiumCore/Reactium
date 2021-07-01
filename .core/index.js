@@ -109,6 +109,22 @@ const globals = async () => {
     global.LOG = global.BOOT;
 };
 
+const reactiumBootHooks = async () => {
+    // include boot DDD artifacts
+    globby([
+        `${rootPath}/.core/**/reactium-boot.js`,
+        `${rootPath}/src/**/reactium-boot.js`,
+        `${rootPath}/reactium_modules/**/reactium-boot.js`,
+        `${rootPath}/node_modules/**/reactium-plugin/**/reactium-boot.js`,
+    ]).map(item => {
+        const p = path.normalize(item);
+        require(p);
+    });
+
+    ReactiumBoot.Hook.runSync('sdk-init', ReactiumBoot);
+    await ReactiumBoot.Hook.run('sdk-init', ReactiumBoot);
+};
+
 global.rootPath = path.resolve(__dirname, '..');
 
 const ssrStartup = async () => {
@@ -168,11 +184,13 @@ const ssrStartup = async () => {
 };
 
 const apiConfig = async () => {
-    const apiConfig = ReactiumBoot.API.ActiniumConfig;
+    if (ReactiumBoot.API && ReactiumBoot.API.ActiniumConfig) {
+        const apiConfig = ReactiumBoot.API.ActiniumConfig;
 
-    global.parseAppId = apiConfig.parseAppId;
-    global.actiniumAppId = apiConfig.actiniumAppId;
-    global.restAPI = apiConfig.restAPI;
+        global.parseAppId = apiConfig.parseAppId;
+        global.actiniumAppId = apiConfig.actiniumAppId;
+        global.restAPI = apiConfig.restAPI;
+    }
 
     global.app = express();
 };
@@ -195,7 +213,7 @@ const registeredMiddleware = async () => {
         order: Enums.priority.highest,
     });
 
-    if (restAPI && process.env.PROXY_ACTINIUM_API !== 'off') {
+    if (global.restAPI && process.env.PROXY_ACTINIUM_API !== 'off') {
         ReactiumBoot.Server.Middleware.register('api', {
             name: 'api',
             use: proxy('/api', {
@@ -211,7 +229,7 @@ const registeredMiddleware = async () => {
         });
     }
 
-    if (restAPI && process.env.PROXY_ACTINIUM_API !== 'off') {
+    if (global.restAPI && process.env.PROXY_ACTINIUM_API !== 'off') {
         ReactiumBoot.Server.Middleware.register('api-socket-io', {
             name: 'api-socket-io',
             use: proxy('/actinium.io', {
@@ -353,17 +371,6 @@ const registeredDevMiddleware = () => {
 
     // set app variables
     app.set('x-powered-by', false);
-
-    // include boot DDD artifacts
-    globby([
-        `${rootPath}/.core/**/reactium-boot.js`,
-        `${rootPath}/src/**/reactium-boot.js`,
-        `${rootPath}/reactium_modules/**/reactium-boot.js`,
-        `${rootPath}/node_modules/**/reactium-plugin/**/reactium-boot.js`,
-    ]).map(item => {
-        const p = path.normalize(item);
-        require(p);
-    });
 
     // development mode
     if (process.env.NODE_ENV === 'development') {
@@ -508,6 +515,7 @@ const bootup = async () => {
     const logger = console;
     try {
         await globals();
+        await reactiumBootHooks();
         await ssrStartup();
         await apiConfig();
         await startServer();

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { renderToString } from 'react-dom/server';
-import querystring from 'querystring';
 import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
 import Router from 'reactium-core/components/Router/server';

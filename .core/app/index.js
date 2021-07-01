@@ -30,6 +30,9 @@ export const App = async () => {
 
     await deps().loadAll('allHooks');
 
+    Reactium.Hook.runSync('sdk-init', Reactium);
+    await Reactium.Hook.run('sdk-init', Reactium);
+
     const hookableComponent = name => props => {
         const Component = useHookComponent(name);
         return <Component {...props} />;
@@ -55,8 +58,6 @@ export const App = async () => {
      * @apiGroup Hooks
      */
     await Reactium.Hook.run('dependencies-load');
-
-    Reactium.ServiceWorker.init();
 
     /**
      * @api {Hook} zone-defaults zone-defaults

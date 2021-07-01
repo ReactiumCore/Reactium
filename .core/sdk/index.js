@@ -1,13 +1,6 @@
-import op from 'object-path';
 import SDK from '@atomic-reactor/reactium-sdk-core';
 import i18n from './i18n';
-import Roles from './roles';
 import Routing from './routing';
-import Setting from './setting';
-import User from './user';
-import Capability from './capability';
-import ServiceWorker from './service-worker';
-import API from './api';
 
 export * from '@atomic-reactor/reactium-sdk-core';
 export * from './named-exports';
@@ -15,9 +8,11 @@ export * from './named-exports';
 const apiHandler = {
     get(SDK, prop) {
         if (prop in SDK) return SDK[prop];
-        if (prop in SDK.API) return SDK.API[prop];
-        if (SDK.API.Actinium && prop in SDK.API.Actinium)
-            return SDK.API.Actinium[prop];
+        if (SDK.API) {
+            if (prop in SDK.API) return SDK.API[prop];
+            if (SDK.API.Actinium && prop in SDK.API.Actinium)
+                return SDK.API.Actinium[prop];
+        }
     },
 
     set(SDK, prop, value) {
@@ -37,14 +32,8 @@ const apiHandler = {
 
 export default new Proxy(
     Object.assign(SDK, {
-        API,
         i18n,
-        Roles,
         Routing,
-        Setting,
-        User,
-        Capability,
-        ServiceWorker,
     }),
     apiHandler,
 );

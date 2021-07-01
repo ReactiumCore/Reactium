@@ -1,7 +1,6 @@
 import uuid from 'uuid/v4';
 import { useState, useRef, useEffect } from 'react';
 import Routing from '../routing';
-import op from 'object-path';
 
 export const useRouting = () => {
     const [, update] = useState(new Date());

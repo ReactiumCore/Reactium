@@ -1,5 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
-import Setting from '../setting';
+import { useRef, useState } from 'react';
 import { useCapabilityCheck } from './capability';
 import { useAsyncEffect } from '@atomic-reactor/reactium-sdk-core';
 
@@ -57,6 +56,8 @@ export const useSettingGroup = group => {
         updateGetter(getter + 1);
     };
 
+    const { default: SDK } = require('reactium-core/sdk');
+
     const updateSettingRef = settingGroup => {
         settingRef.current = settingGroup;
         refresh();
@@ -66,7 +67,11 @@ export const useSettingGroup = group => {
         if (canSet) {
             updateSettingRef(settingGroup);
             setLoading(true);
-            const settings = await Setting.set(group, settingGroup, setPublic);
+            const settings = await SDK.Setting.set(
+                group,
+                settingGroup,
+                setPublic,
+            );
             setLoading(false);
             return settings;
         } else {
@@ -79,7 +84,7 @@ export const useSettingGroup = group => {
     useAsyncEffect(
         async isMounted => {
             if (group && canGet) {
-                const settingGroup = await Setting.get(group);
+                const settingGroup = await SDK.Setting.get(group);
                 if (isMounted()) {
                     updateSettingRef(settingGroup);
                     setLoading(false);

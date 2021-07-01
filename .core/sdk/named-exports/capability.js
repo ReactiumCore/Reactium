@@ -1,7 +1,5 @@
-import Capability from '../capability';
 import { useAsyncEffect } from '@atomic-reactor/reactium-sdk-core';
 import { useRef, useState, useEffect } from 'react';
-import op from 'object-path';
 import _ from 'underscore';
 
 /**
@@ -16,6 +14,7 @@ export const useCapabilityCheck = (capabilities, strict = true) => {
     const allowedRef = useRef(false);
     const [, update] = useState(new Date());
     const caps = _.uniq(_.compact(_.flatten([capabilities])));
+    const { default: SDK } = require('reactium-core/sdk');
 
     useAsyncEffect(
         async isMounted => {
@@ -23,7 +22,7 @@ export const useCapabilityCheck = (capabilities, strict = true) => {
             if (caps.length < 1) {
                 allowedRef.current = true;
             } else {
-                allowedRef.current = await Capability.check(caps);
+                allowedRef.current = await SDK.Capability.check(caps);
             }
 
             if (isMounted()) update(new Date());
@@ -48,10 +47,11 @@ export const useCapability = capability => {
         ref.current = cap;
         update(new Date());
     };
+    const { default: SDK } = require('reactium-core/sdk');
 
     useAsyncEffect(
         async isMounted => {
-            const cap = await Capability.get(capability);
+            const cap = await SDK.Capability.get(capability);
             if (isMounted()) updateCapRef(cap);
         },
         [capability],
