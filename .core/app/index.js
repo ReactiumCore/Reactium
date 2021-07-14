@@ -21,7 +21,7 @@ export const App = async () => {
     console.log('Loading Core SDK');
     const {
         default: Reactium,
-        useHookComponent,
+        hookableComponent,
         isBrowserWindow,
         Zone,
     } = await import('reactium-core/sdk');
@@ -32,11 +32,6 @@ export const App = async () => {
 
     Reactium.Hook.runSync('sdk-init', Reactium);
     await Reactium.Hook.run('sdk-init', Reactium);
-
-    const hookableComponent = name => props => {
-        const Component = useHookComponent(name);
-        return <Component {...props} />;
-    };
 
     const context = {};
 

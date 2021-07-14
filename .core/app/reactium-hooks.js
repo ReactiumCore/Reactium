@@ -74,6 +74,7 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
             return Promise.resolve();
         },
         Reactium.Enums.priority.highest,
+        'REACTIUM_COMPONENT_BINDINGS',
     );
 
     Reactium.Hook.register(
@@ -86,6 +87,7 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
             return Promise.resolve();
         },
         Reactium.Enums.priority.highest,
+        'REACTIUM_PLUGIN_DEPENDENCIES',
     );
 
     Reactium.Hook.register(
@@ -95,6 +97,7 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
             return Promise.resolve();
         },
         Reactium.Enums.priority.highest,
+        'REACTIUM_APP_BINDPOINT',
     );
 
     const getSaneZoneComponents = () => {
@@ -121,11 +124,16 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
         );
     };
 
-    Reactium.Hook.register('zone-defaults', async context => {
-        op.set(context, 'controls', deps().plugableConfig);
-        op.set(context, 'components', getSaneZoneComponents());
-        console.log('Initializing Content Zones');
-    });
+    Reactium.Hook.register(
+        'zone-defaults',
+        async context => {
+            op.set(context, 'controls', deps().plugableConfig);
+            op.set(context, 'components', getSaneZoneComponents());
+            console.log('Initializing Content Zones');
+        },
+        Reactium.Enums.priority.highest,
+        'REACTIUM_ZONE_DEFAULTS',
+    );
 
     const NoopProvider = ({ children }) => children;
     Reactium.Hook.register(
@@ -147,6 +155,7 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
             console.log('Defining Router.');
         },
         Reactium.Enums.priority.highest,
+        'REACTIUM_APP_ROUTER',
     );
 
     Reactium.Hook.register(
@@ -156,6 +165,7 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
             return Promise.resolve();
         },
         Reactium.Enums.priority.highest,
+        'REACTIUM_APP_SSR_MODE',
     );
 
     Reactium.Hook.register(
@@ -174,6 +184,7 @@ import('reactium-core/sdk').then(async ({ default: Reactium }) => {
             return Promise.resolve();
         },
         Reactium.Enums.priority.highest,
+        'REACTIUM_APP_BOOT_MESSAGE',
     );
 });
 

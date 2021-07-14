@@ -1,26 +1,10 @@
-import Reactium, { isBrowserWindow } from 'reactium-core/sdk';
-import React, { forwardRef } from 'react';
-import op from 'object-path';
+import Reactium, {
+    hookableComponent,
+    isBrowserWindow,
+} from 'reactium-core/sdk';
 import _ from 'underscore';
-import getComponents from 'dependencies/getComponents';
 import RoutedContent from './RoutedContent';
 import deps from 'dependencies';
-
-const lookupRouteComponent = async route => {
-    let Found;
-    if (typeof route.component === 'string') {
-        route.component = Reactium.Component.get(
-            route.component,
-            op.get(
-                getComponents([{ type: route.component }]),
-                route.component,
-                forwardRef(() => null),
-            ),
-        );
-    }
-
-    return route;
-};
 
 Reactium.Hook.register(
     'routes-init',
@@ -65,16 +49,20 @@ Reactium.Hook.register(
         }
     },
     Reactium.Enums.priority.highest,
+    'REACTIUM_ROUTES_INIT',
 );
 
-Reactium.Hook.register('register-route', lookupRouteComponent);
+Reactium.Hook.register(
+    'register-route',
+    async route => {
+        if (typeof route.component === 'string') {
+            route.component = hookableComponent(route.component);
+        }
 
-let { NotFound = null } = getComponents([{ type: 'NotFound' }]);
-if (NotFound !== null)
-    Reactium.Component.register(
-        'NotFound',
-        NotFound,
-        Reactium.Enums.priority.highest,
-    );
+        return route;
+    },
+    Reactium.Enums.priority.highest,
+    'REACTIUM_REGISTER_ROUTE',
+);
 
 Reactium.Component.register('RoutedContent', RoutedContent);
