@@ -20,6 +20,8 @@ const defaultConfig = {
         browsersync: 3000,
         proxy: 3030,
     },
+    serverRetries: 4,
+    serverRetryDelay: 2000,
     open: true,
     cssPreProcessor: 'sass',
     watch: {

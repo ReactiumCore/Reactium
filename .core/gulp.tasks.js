@@ -29,12 +29,22 @@ const workbox = require('workbox-build');
 const { File, FileReader } = require('file-api');
 const handlebars = require('handlebars');
 const { resolve } = require('path');
+const axios = require('axios');
+const axiosRetry = require('axios-retry');
 
 // For backward compatibility with gulp override tasks using run-sequence module
 // make compatible with gulp4
 require('module-alias').addAlias('run-sequence', 'gulp4-run-sequence');
 
 const reactium = (gulp, config, webpackConfig) => {
+    axiosRetry(axios, {
+        retries: config.serverRetries,
+        retryDelay: retryCount => {
+            console.log(`retry attempt: ${retryCount}`);
+            return retryCount * config.serverRetryDelay; // time interval between retries
+        },
+    });
+
     const task = require('./get-task')(gulp);
 
     const env = process.env.NODE_ENV || 'development';
@@ -109,23 +119,21 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const serve = ({ open } = { open: config.open }) => done => {
         const proxy = `localhost:${config.port.proxy}`;
-        require('axios')
-            .get(`http://${proxy}`)
-            .then(() => {
-                browserSync({
-                    notify: false,
-                    timestamps: false,
-                    port: config.port.browsersync,
-                    ui: { port: config.port.browsersync + 1 },
-                    proxy,
-                    open: open,
-                    ghostMode: false,
-                    startPath: config.dest.startPath,
-                    ws: true,
-                });
-
-                done();
+        axios.get(`http://${proxy}`).then(() => {
+            browserSync({
+                notify: false,
+                timestamps: false,
+                port: config.port.browsersync,
+                ui: { port: config.port.browsersync + 1 },
+                proxy,
+                open: open,
+                ghostMode: false,
+                startPath: config.dest.startPath,
+                ws: true,
             });
+
+            done();
+        });
     };
 
     const watch = (done, restart = false) => {
@@ -142,9 +150,20 @@ const reactium = (gulp, config, webpackConfig) => {
                     return;
                 }
                 case 'restart-watches': {
-                    console.log("Restarting 'watch'...");
-                    watchProcess.kill();
-                    watch(_ => _, true);
+                    console.log('Waiting for server...');
+                    new Promise(resolve =>
+                        setTimeout(resolve, config.serverRetryDelay),
+                    )
+                        .then(() => {
+                            const proxy = `localhost:${config.port.proxy}`;
+                            return axios.get(`http://${proxy}`);
+                        })
+                        .then(() => {
+                            console.log("Restarting 'watch'...");
+                            watchProcess.kill();
+                            watch(_ => _, true);
+                        })
+                        .catch(error => console.error(error));
                     return;
                 }
             }
