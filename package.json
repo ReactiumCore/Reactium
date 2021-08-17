@@ -185,7 +185,7 @@
   },
   "reactiumDependencies": {
     "@atomic-reactor/reactium-api": "1.0.1",
-    "@atomic-reactor/reactium-capability": "1.0.0",
+    "@atomic-reactor/reactium-capability": "1.0.1",
     "@atomic-reactor/reactium-role": "1.0.0",
     "@atomic-reactor/reactium-user": "1.0.1",
     "@atomic-reactor/reactium-setting": "1.0.0",
