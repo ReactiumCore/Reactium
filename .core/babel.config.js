@@ -68,6 +68,7 @@ module.exports = {
         ],
         ['@babel/plugin-proposal-export-default-from'],
         ['@babel/plugin-proposal-private-methods', { loose: true }],
+        ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
     ],
     env: {
         test: {
@@ -106,6 +107,10 @@ module.exports = {
                     },
                 ],
                 ['@babel/plugin-syntax-dynamic-import'],
+                [
+                    '@babel/plugin-proposal-private-property-in-object',
+                    { loose: true },
+                ],
             ],
         },
     },
