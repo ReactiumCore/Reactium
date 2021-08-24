@@ -30,6 +30,13 @@ export const App = async () => {
 
     await deps().loadAll('allHooks');
 
+    /**
+     * @api {Hook} sdk-init sdk-init
+     * @apiName sdk-init
+     * @apiDescription Called after reactium-hooks.js DDD artifacts are loaded, to allow
+     * the Reactium SDK singleton to be extended before the init hook.
+     * @apiGroup Hooks
+     */
     Reactium.Hook.runSync('sdk-init', Reactium);
     await Reactium.Hook.run('sdk-init', Reactium);
 
