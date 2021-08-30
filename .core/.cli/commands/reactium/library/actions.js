@@ -6,6 +6,7 @@ const run = require('gulp-run');
 const globby = require('globby');
 const op = require('object-path');
 const prettier = require('prettier');
+const del = require('del');
 
 module.exports = spinner => {
     const message = text => {
@@ -15,6 +16,25 @@ module.exports = spinner => {
     };
 
     return {
+        no_node_modules: async ({ action, params, props }) => {
+            const { source } = params;
+
+            if (!fs.existsSync(path.resolve(source, 'node_modules'))) return;
+
+            message(`Removing node_modules from source directory...`);
+
+            return del(path.resolve(source, 'node_modules'));
+        },
+
+        clean: async ({ action, params, props }) => {
+            const { destination } = params;
+
+            message(
+                `Cleanup destination directory ${chalk.cyan(destination)}...`,
+            );
+
+            return del(destination);
+        },
         buildPackage: ({ action, params, props }) => {
             const { destination, newPackage, source } = params;
 
@@ -61,7 +81,7 @@ module.exports = spinner => {
             });
         },
         create: async ({ action, params, props }) => {
-            const { source, destination } = params;
+            const { source, destination, verbosity = 0 } = params;
 
             message(
                 `Creating library from ${chalk.cyan(path.basename(source))}...`,
@@ -69,7 +89,7 @@ module.exports = spinner => {
 
             const babel = new run.Command(
                 `cross-env NODE_ENV=library babel "${source}" --out-dir "${destination}"`,
-                { verbosity: 0 },
+                { verbosity },
             );
 
             return new Promise(resolve => babel.exec(null, () => resolve()));

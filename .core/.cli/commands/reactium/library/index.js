@@ -109,6 +109,9 @@ const CONFORM = ({ input, props }) => {
         const pkg = op.get(output, 'newPackage', {});
 
         switch (key) {
+            case 'verbosity':
+                output[key] = Math.max(Math.min(parseInt(val), 3), 0) || 0;
+                break;
             case 'destination':
             case 'source':
                 output[key] = formatsource(val, props);
@@ -195,13 +198,13 @@ const CONFORM = ({ input, props }) => {
  */
 const HELP = () =>
     console.log(`
-Example:
-  $ arcli library -s components/MyComponentLibrary -d cwd/lib -n MyComponentLibrary
-
-When specifying the source [-d, --source] the following shortcuts are available:
-  ${chalk.cyan('components/')}  The /.src/app/components source.
-  ${chalk.cyan('common-ui/')}   The /.src/app/components/common-ui source.
-`);
+ Example:
+   $ arcli library -s components/MyComponentLibrary -d cwd/lib -n MyComponentLibrary
+ 
+ When specifying the source [-d, --source] the following shortcuts are available:
+   ${chalk.cyan('components/')}  The /.src/app/components source.
+   ${chalk.cyan('common-ui/')}   The /.src/app/components/common-ui source.
+ `);
 
 /**
  * FLAGS
@@ -213,6 +216,7 @@ const FLAGS = [
     'source',
     'destination',
     'version',
+    'verbosity',
     'main',
     'author',
     'dependencies',
@@ -274,6 +278,11 @@ const SCHEMA_SOURCE = ({ params, props }) => {
             destination: {
                 description: chalk.white('Destination:'),
                 default: path.join('cwd', 'lib', name),
+            },
+            verbosity: {
+                description: chalk.white('Verbosity [0-3] (0):'),
+                default: 0,
+                required: false,
             },
         },
     };
@@ -469,6 +478,10 @@ const COMMAND = ({ program, props }) =>
         .option('-s, --source [source]', 'The library source.')
         .option('-d, --destination [destination]', 'The library destination.')
         .option('-V, --ver [version]', 'The version of the library.')
+        .option(
+            '-T, --verbosity [verbosity]',
+            'The 0-3 verbosity of output. Default 0.',
+        )
         .option('-m, --main [main]', 'The library entry point or main js file.')
         .option('-a, --author [author]', 'The library author.')
         .option('--dependencies [dependencies]', 'The library dependencies.')
