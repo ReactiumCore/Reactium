@@ -46,7 +46,7 @@
     "@atomic-reactor/reactium-capability": "file:reactium_modules/@atomic-reactor/reactium-capability/_npm",
     "@atomic-reactor/reactium-demo": "file:reactium_modules/@atomic-reactor/reactium-demo/_npm",
     "@atomic-reactor/reactium-role": "file:reactium_modules/@atomic-reactor/reactium-role/_npm",
-    "@atomic-reactor/reactium-sdk-core": "^1.1.3",
+    "@atomic-reactor/reactium-sdk-core": "^1.1.4",
     "@atomic-reactor/reactium-service-worker": "file:reactium_modules/@atomic-reactor/reactium-service-worker/_npm",
     "@atomic-reactor/reactium-setting": "file:reactium_modules/@atomic-reactor/reactium-setting/_npm",
     "@atomic-reactor/reactium-user": "file:reactium_modules/@atomic-reactor/reactium-user/_npm",
