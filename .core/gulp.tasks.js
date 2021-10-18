@@ -540,6 +540,14 @@ $assets: (
     };
 
     const dddStylesPartial = done => {
+        const SassPartialSort = ReactiumGulp.Utils.registryFactory(
+            'SassPartialSort',
+            'id',
+            ReactiumGulp.Utils.Registry.MODES.CLEAN,
+        );
+
+        ReactiumGulp.Hook.runSync('ddd-styles-partial-sort', SassPartialSort);
+
         const stylePartials = globby
             .sync(config.src.styleDDD)
             .map(partial => {
@@ -552,7 +560,23 @@ $assets: (
                     path.resolve(rootPath, partial),
                 );
             })
-            .map(partial => partial.replace(/\.scss$/, ''));
+            .map(partial => partial.replace(/\.scss$/, ''))
+            .sort((a, b) => {
+                const aMatch =
+                    SassPartialSort.list.find(({ pattern }) =>
+                        pattern.test(a),
+                    ) || {};
+                const bMatch =
+                    SassPartialSort.list.find(({ pattern }) =>
+                        pattern.test(b),
+                    ) || {};
+                const aOrder = op.get(aMatch, 'order', 0);
+                const bOrder = op.get(bMatch, 'order', 0);
+
+                if (aOrder > bOrder) return 1;
+                else if (bOrder > aOrder) return -1;
+                return 0;
+            });
 
         const template = handlebars.compile(`
 // WARNING: Do not directly edit this file !!!!
@@ -649,6 +673,7 @@ $assets: (
         gulp.watch(config.watch.colors, gulp.task('styles:colors'));
         gulp.watch(config.watch.pluginAssets, gulp.task('styles:pluginAssets'));
         gulp.watch(config.watch.style, gulp.task('styles:compile'));
+        gulp.watch(config.src.styleDDD, gulp.task('styles:partials'));
         gulpwatch(config.watch.markup, watcher);
         gulpwatch(config.watch.assets, watcher);
         const scriptWatcher = gulp.watch(
