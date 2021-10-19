@@ -539,6 +539,92 @@ $assets: (
         done();
     };
 
+    const sassPartialPreRegistrations = SassPartial => {
+        SassPartial.register('mixins-dir', {
+            pattern: /mixins\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.MIXINS,
+        });
+
+        SassPartial.register('mixins-ddd', {
+            pattern: /_reactium-style-mixins/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.MIXINS,
+        });
+
+        SassPartial.register('variables-dir', {
+            pattern: /variables\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.VARIABLES,
+        });
+
+        SassPartial.register('variables-ddd', {
+            pattern: /_reactium-style-variables/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.VARIABLES,
+        });
+
+        SassPartial.register('base-dir', {
+            pattern: /base\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.BASE,
+        });
+
+        SassPartial.register('base-ddd', {
+            pattern: /_reactium-style-base/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.BASE,
+        });
+
+        SassPartial.register('atoms-dir', {
+            pattern: /atoms\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.ATOMS,
+        });
+
+        SassPartial.register('atoms-ddd', {
+            pattern: /_reactium-style-atoms/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.ATOMS,
+        });
+
+        SassPartial.register('molecules-dir', {
+            pattern: /molecules\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.MOLECULES,
+        });
+
+        SassPartial.register('molecules-ddd', {
+            pattern: /_reactium-style-molecules/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.MOLECULES,
+        });
+
+        SassPartial.register('organisms-dir', {
+            pattern: /organisms\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.ORGANISMS,
+        });
+
+        SassPartial.register('organisms-ddd', {
+            pattern: /_reactium-style-organisms/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.ORGANISMS,
+        });
+
+        SassPartial.register('overrides-dir', {
+            pattern: /overrides\/_reactium-style/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.OVERRIDES,
+        });
+
+        SassPartial.register('overrides-ddd', {
+            pattern: /_reactium-style-overrides/,
+            exclude: false,
+            order: ReactiumGulp.Enums.style.OVERRIDES,
+        });
+    };
+
     const dddStylesPartial = done => {
         const SassPartialRegistry = ReactiumGulp.Utils.registryFactory(
             'SassPartialRegistry',
@@ -546,6 +632,7 @@ $assets: (
             ReactiumGulp.Utils.Registry.MODES.CLEAN,
         );
 
+        sassPartialPreRegistrations(SassPartialRegistry);
         ReactiumGulp.Hook.runSync('ddd-styles-partial', SassPartialRegistry);
 
         const stylePartials = globby
