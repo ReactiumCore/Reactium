@@ -540,13 +540,13 @@ $assets: (
     };
 
     const dddStylesPartial = done => {
-        const SassPartialSort = ReactiumGulp.Utils.registryFactory(
-            'SassPartialSort',
+        const SassPartialRegistry = ReactiumGulp.Utils.registryFactory(
+            'SassPartialRegistry',
             'id',
             ReactiumGulp.Utils.Registry.MODES.CLEAN,
         );
 
-        ReactiumGulp.Hook.runSync('ddd-styles-partial-sort', SassPartialSort);
+        ReactiumGulp.Hook.runSync('ddd-styles-partial', SassPartialRegistry);
 
         const stylePartials = globby
             .sync(config.src.styleDDD)
@@ -563,19 +563,35 @@ $assets: (
             .map(partial => partial.replace(/\.scss$/, ''))
             .sort((a, b) => {
                 const aMatch =
-                    SassPartialSort.list.find(({ pattern }) =>
+                    SassPartialRegistry.list.find(({ pattern }) =>
                         pattern.test(a),
                     ) || {};
                 const bMatch =
-                    SassPartialSort.list.find(({ pattern }) =>
+                    SassPartialRegistry.list.find(({ pattern }) =>
                         pattern.test(b),
                     ) || {};
-                const aOrder = op.get(aMatch, 'order', 0);
-                const bOrder = op.get(bMatch, 'order', 0);
+
+                const aOrder = op.get(
+                    aMatch,
+                    'order',
+                    ReactiumGulp.Enums.style.ORGANISMS,
+                );
+                const bOrder = op.get(
+                    bMatch,
+                    'order',
+                    ReactiumGulp.Enums.style.ORGANISMS,
+                );
 
                 if (aOrder > bOrder) return 1;
                 else if (bOrder > aOrder) return -1;
                 return 0;
+            })
+            .filter(partial => {
+                const match =
+                    SassPartialRegistry.list.find(({ pattern }) =>
+                        pattern.test(partial),
+                    ) || {};
+                return !match || op.get(match, 'exclude', false) !== true;
             });
 
         const template = handlebars.compile(`

@@ -3,10 +3,6 @@
  * Imports
  * -----------------------------------------------------------------------------
  */
-
-
-
-
 const path = require('path');
 const fs = require('fs-extra');
 const chalk = require('chalk');
@@ -210,10 +206,6 @@ const CONFORM = ({ input, props }) => {
                         : val;
                 break;
 
-            case 'inject':
-                output[key] = formatImport(val, props);
-                break;
-
             default:
                 output[key] = val;
                 break;
@@ -244,29 +236,18 @@ const CONFORM = ({ input, props }) => {
     // Set the style import statement
     if (output.stylesheet === true) {
         const stylesheetFile = path.normalize(
-            path.join(output.destination, '_style.scss'),
-        );
-
-        const importString = output.inject.map(filepath =>
-            path
-                .relative(filepath, stylesheetFile)
-                .replace(/^\..\//, '')
-                .replace('_style.scss', 'style'),
+            path.join(output.destination, '_reactium-style.scss'),
         );
 
         output.stylesheet = {
-            filename: '_style.scss',
+            filename: '_reactium-style.scss',
             filepath: stylesheetFile,
             destination: output.destination,
             name: 'style',
             ext: '.scss',
             overwrite: '',
-            inject: Array.from(output.inject),
-            importString: importString,
         };
     }
-
-    delete output.inject;
 
     return output;
 };
@@ -414,25 +395,6 @@ const SCHEMA = ({ props }) => {
                 ask: () => overwritable(prompt),
                 before: val => {
                     return String(val).toUpperCase() === 'Y';
-                },
-            },
-            inject: {
-                pattern: /[0-9\s]/,
-                description: `${chalk.white(
-                    'Import stylesheet to:',
-                )} ${styles}\n    ${chalk.white('Select:')}`,
-                required: true,
-                message: 'Select a number or list of numbers. Example: 1 2 3',
-                ask: () => {
-                    try {
-                        return (
-                            prompt.override['stylesheet'] ||
-                            (prompt.history('stylesheet').value &&
-                                overwritable(prompt))
-                        );
-                    } catch (err) {
-                        return false;
-                    }
                 },
             },
             services: {

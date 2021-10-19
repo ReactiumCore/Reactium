@@ -159,10 +159,6 @@ const CONFORM = ({ input, props }) => {
                 output[key] = formatFilename(val);
                 break;
 
-            case 'inject':
-                output[key] = formatImport(val, props);
-                break;
-
             default:
                 output[key] = val;
                 break;
@@ -179,12 +175,6 @@ const CONFORM = ({ input, props }) => {
     const fnameReplace = output.filename.replace(/^_/, '').replace(ext, '');
     output['name'] = fnameReplace;
     output['ext'] = ext;
-    output['importString'] = output.inject.map(filepath =>
-        path
-            .relative(filepath, output.filepath)
-            .replace(/^\..\//, '')
-            .replace(output.filename, fnameReplace),
-    );
 
     return output;
 };
@@ -275,26 +265,6 @@ const SCHEMA = ({ props }) => {
                 },
                 before: val => {
                     return String(val).toLowerCase() === 'y';
-                },
-            },
-            inject: {
-                pattern: /[0-9\s]/,
-                description: `${chalk.white(
-                    'Import to:',
-                )} ${styles}\n    ${chalk.white('Select:')}`,
-                required: true,
-                message: 'Select a number or list of numbers. Example: 1 2 3',
-                ask: () => {
-                    let overwrite;
-                    try {
-                        overwrite =
-                            prompt.override['overwrite'] ||
-                            prompt.history('overwrite').value;
-                    } catch (err) {
-                        overwrite = true;
-                    }
-
-                    return overwrite !== false;
                 },
             },
         },

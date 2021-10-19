@@ -67,8 +67,8 @@ const defaultConfig = {
             '!{reactium_modules/**/_*.scss}',
         ],
         styleDDD: [
-            'src/**/*/_reactium-style.scss',
-            'reactium_modules/**/*/_reactium-style.scss',
+            'src/**/*/_reactium-style*.scss',
+            'reactium_modules/**/*/_reactium-style*.scss',
         ],
         assets: [
             '.core/assets/**/*',

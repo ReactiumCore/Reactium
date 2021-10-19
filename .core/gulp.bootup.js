@@ -66,6 +66,16 @@ global.LOG = global.BOOT;
 
 global.ReactiumGulp = ReactiumGulp;
 
+ReactiumGulp.Enums.style = {
+    MIXINS: -1000,
+    VARIABLES: -900,
+    BASE: -800,
+    ATOMS: 0,
+    MOLECULES: 800,
+    ORGANISMS: 900,
+    OVERRIDES: 1000,
+};
+
 // Load reactium-gulp DDD artifact from plugin sources
 globby([
     `${rootPath}/.core/**/reactium-gulp.js`,

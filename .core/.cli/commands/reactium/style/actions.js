@@ -5,6 +5,7 @@ const prettier = require('prettier');
 const chalk = require('chalk');
 const homedir = require('os').homedir();
 const handlebars = require('handlebars').compile;
+const uuid = require('uuid/v4');
 
 module.exports = spinner => {
     const message = text => {
@@ -76,48 +77,34 @@ module.exports = spinner => {
             });
         },
 
-        inject: ({ action, params }) => {
-            const { importString = [], inject = [] } = params;
+        partialOrder: async ({ action, params }) => {
+            const { destination, filename, filepath, overwrite } = params;
 
-            const promises =
-                inject.length > 0
-                    ? inject.map(
-                          (filepath, i) =>
-                              new Promise((resolve, reject) => {
-                                  const istring = `\n@import '${
-                                      importString[i]
-                                  }';`;
-                                  let content = fs.readFileSync(
-                                      filepath,
-                                      'utf-8',
-                                  );
-                                  if (content.indexOf(istring) < 0) {
-                                      content += istring;
-                                      fs.writeFile(filepath, content, error => {
-                                          if (error) {
-                                              reject(error);
-                                          } else {
-                                              resolve({
-                                                  action,
-                                                  filepath,
-                                                  status: 200,
-                                              });
-                                          }
-                                      });
-                                  } else {
-                                      resolve({
-                                          action,
-                                          filepath,
-                                          status: 200,
-                                      });
-                                  }
-                              }),
-                      )
-                    : [];
+            message(`reactium-gulp for ${chalk.cyan(filename)}...`);
 
-            return promises.length > 0
-                ? Promise.all(promises)
-                : new Promise(resolve => resolve({ action, status: 200 }));
+            fs.ensureDirSync(path.normalize(destination));
+            const baseDir = path.basename(destination);
+            const reactumGulp = path.resolve(destination, 'reactium-gulp.js');
+
+            // Template content
+            const template = path.normalize(
+                `${__dirname}/template/reactium-gulp.hbs`,
+            );
+            const content = handlebars(fs.readFileSync(template, 'utf-8'))({
+                ...params,
+                id: uuid(),
+                pattern: `/${baseDir}\\/${filename.replace('.scss', '')}/`,
+            });
+
+            return new Promise((resolve, reject) => {
+                fs.writeFile(reactumGulp, content, error => {
+                    if (error) {
+                        reject(error.Error);
+                    } else {
+                        resolve({ action, status: 200 });
+                    }
+                });
+            });
         },
     };
 };
