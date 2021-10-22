@@ -543,85 +543,85 @@ $assets: (
         SassPartial.register('mixins-dir', {
             pattern: /mixins\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.MIXINS,
+            priority: ReactiumGulp.Enums.style.MIXINS,
         });
 
         SassPartial.register('mixins-ddd', {
             pattern: /_reactium-style-mixins/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.MIXINS,
+            priority: ReactiumGulp.Enums.style.MIXINS,
         });
 
         SassPartial.register('variables-dir', {
             pattern: /variables\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.VARIABLES,
+            priority: ReactiumGulp.Enums.style.VARIABLES,
         });
 
         SassPartial.register('variables-ddd', {
             pattern: /_reactium-style-variables/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.VARIABLES,
+            priority: ReactiumGulp.Enums.style.VARIABLES,
         });
 
         SassPartial.register('base-dir', {
             pattern: /base\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.BASE,
+            priority: ReactiumGulp.Enums.style.BASE,
         });
 
         SassPartial.register('base-ddd', {
             pattern: /_reactium-style-base/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.BASE,
+            priority: ReactiumGulp.Enums.style.BASE,
         });
 
         SassPartial.register('atoms-dir', {
             pattern: /atoms\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.ATOMS,
+            priority: ReactiumGulp.Enums.style.ATOMS,
         });
 
         SassPartial.register('atoms-ddd', {
             pattern: /_reactium-style-atoms/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.ATOMS,
+            priority: ReactiumGulp.Enums.style.ATOMS,
         });
 
         SassPartial.register('molecules-dir', {
             pattern: /molecules\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.MOLECULES,
+            priority: ReactiumGulp.Enums.style.MOLECULES,
         });
 
         SassPartial.register('molecules-ddd', {
             pattern: /_reactium-style-molecules/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.MOLECULES,
+            priority: ReactiumGulp.Enums.style.MOLECULES,
         });
 
         SassPartial.register('organisms-dir', {
             pattern: /organisms\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.ORGANISMS,
+            priority: ReactiumGulp.Enums.style.ORGANISMS,
         });
 
         SassPartial.register('organisms-ddd', {
             pattern: /_reactium-style-organisms/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.ORGANISMS,
+            priority: ReactiumGulp.Enums.style.ORGANISMS,
         });
 
         SassPartial.register('overrides-dir', {
             pattern: /overrides\/_reactium-style/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.OVERRIDES,
+            priority: ReactiumGulp.Enums.style.OVERRIDES,
         });
 
         SassPartial.register('overrides-ddd', {
             pattern: /_reactium-style-overrides/,
             exclude: false,
-            order: ReactiumGulp.Enums.style.OVERRIDES,
+            priority: ReactiumGulp.Enums.style.OVERRIDES,
         });
     };
 
@@ -658,19 +658,19 @@ $assets: (
                         pattern.test(b),
                     ) || {};
 
-                const aOrder = op.get(
+                const aPriority = op.get(
                     aMatch,
-                    'order',
+                    'priority',
                     ReactiumGulp.Enums.style.ORGANISMS,
                 );
-                const bOrder = op.get(
+                const bPriority = op.get(
                     bMatch,
-                    'order',
+                    'priority',
                     ReactiumGulp.Enums.style.ORGANISMS,
                 );
 
-                if (aOrder > bOrder) return 1;
-                else if (bOrder > aOrder) return -1;
+                if (aPriority > bPriority) return 1;
+                else if (bPriority > aPriority) return -1;
                 return 0;
             })
             .filter(partial => {

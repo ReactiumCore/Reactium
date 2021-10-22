@@ -16,6 +16,6 @@ ReactiumGulp.Hook.registerSync('ddd-styles-partial', SassPartial => {
     SassPartial.register('{{id}}', {
         pattern: {{pattern}},
         exclude: false,
-        order: ReactiumGulp.Enums.style.ORGANISMS,
+        priority: ReactiumGulp.Enums.style.ORGANISMS,
     })
 });
