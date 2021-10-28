@@ -1491,6 +1491,49 @@ define({ "api": [
   },
   {
     "type": "ReactHook",
+    "url": "useRegisterSyncHandle(id,cb,deps)",
+    "title": "useRegisterSyncHandle()",
+    "description": "<p>React hook to create a new imperative handle reference, similar to <code>useRegisterHandle()</code> except that it returns a sync state object (see useSyncState) and will cause rerenders in the controlled component.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Array of properties, or <code>.</code> separated object path. e.g. ['path','to','handle'] or 'path.to.handle'. Identifies the full path to an imperative handle.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "initial",
+            "description": "<p>value of the state handle.</p>"
+          }
+        ]
+      }
+    },
+    "name": "useRegisterSyncHandle",
+    "group": "ReactHook",
+    "examples": [
+      {
+        "title": "Counter.js",
+        "content": "import React, { useState } from 'react';\nimport { useRegisterSyncHandle } from 'reactium-core/sdk';\n\nconst Counter = ({id = 1}) => {\n    const state = useRegisterSyncHandle('counter', {\n        foo: {\n            count: Number(id)\n        },\n    });\n\n    state.extend('incrementCount', () => {\n        state.set('foo.count', state.get('foo.count', id) + 1);\n    });\n\n    return (\n        <div>\n            <h1>Counter {id}</h1>\n            Count: {state.get('foo.count', id)}\n        </div>\n    );\n};\n\nexport default Counter;",
+        "type": "json"
+      },
+      {
+        "title": "CounterControl.js",
+        "content": "import React from 'react';\nimport { useSelectHandle } from 'reactium-core/sdk';\n\nconst noop = () => {};\nconst CounterControl = () => {\n    const { handle, count } = useSelectHandle('counter', 'foo.count', 1);\n\n    // set state for Counter, as well as cause this component to rerender\n\n    return (\n        <div>\n            <h1>CounterControl</h1>\n            <button onClick={handle.incrementCount}>\n              Increment Counter ({count})\n            </button>\n        </div>\n    );\n};\n\nexport default CounterControl;",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/sync-handle.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useRoles(search)",
     "title": "useRoles()",
     "description": "<p>React hook to get roles object. If search is provided, will retrieve a specific role.</p>",
@@ -1511,6 +1554,44 @@ define({ "api": [
     "group": "ReactHook",
     "version": "0.0.0",
     "filename": ".core/sdk/named-exports/roles.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
+    "url": "useSelectHandle(id,cb,deps)",
+    "title": "useSelectHandle()",
+    "description": "<p>React hook to subscribe to updates to state on an imperative handle created by useRegisterSyncHandle. See useRegisterSyncHandle for full example.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Array of properties, or <code>.</code> separated object path. e.g. ['path','to','handle'] or 'path.to.handle'. Identifies the full path to an imperative handle.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String|Array|Function",
+            "optional": false,
+            "field": "selector",
+            "description": "<p>object path string or array, or selector function passed the sync state object (see useSyncState); returns seleted state</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": true,
+            "field": "default",
+            "description": "<p>default selected value (if selector is String or Array)</p>"
+          }
+        ]
+      }
+    },
+    "name": "useSelectHandle",
+    "group": "ReactHook",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/sync-handle.js",
     "groupTitle": "ReactHook"
   },
   {
