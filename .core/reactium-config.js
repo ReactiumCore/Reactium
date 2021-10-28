@@ -154,7 +154,7 @@ const defaultManifestConfig = {
         ],
         searchParams: {
             extensions: /\.(js|json)$/,
-            exclude: [/.ds_store/i, /.core/i, /.cli\//i, /src\/assets/],
+            exclude: [/\.ds_store/i, /\.core/i, /\.cli\//i, /src\/assets/],
         },
     },
 };
