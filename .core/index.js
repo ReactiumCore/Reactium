@@ -520,7 +520,7 @@ const bootup = async () => {
         await apiConfig();
         await startServer();
     } catch (error) {
-        ERROR('Error on server startup:', error);
+        console.error('Error on server startup:', error);
     }
 };
 

@@ -1,9 +1,25 @@
-import SDK from '@atomic-reactor/reactium-sdk-core';
-import i18n from './i18n';
-import Routing from './routing';
+import {
+    Hook,
+    Enums,
+    Component,
+    Server,
+    ZoneRegistry as Zone,
+    Plugin,
+    Utils,
+} from '@atomic-reactor/reactium-sdk-core';
 
 export * from '@atomic-reactor/reactium-sdk-core';
 export * from './named-exports';
+
+const SDK = {
+    Hook,
+    Enums,
+    Component,
+    Server,
+    Zone,
+    Plugin,
+    Utils,
+};
 
 const apiHandler = {
     get(SDK, prop) {
@@ -30,10 +46,4 @@ const apiHandler = {
     },
 };
 
-export default new Proxy(
-    Object.assign(SDK, {
-        i18n,
-        Routing,
-    }),
-    apiHandler,
-);
+export default new Proxy(SDK, apiHandler);

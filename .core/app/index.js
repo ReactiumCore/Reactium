@@ -37,8 +37,8 @@ export const App = async () => {
      * the Reactium SDK singleton to be extended before the init hook.
      * @apiGroup Hooks
      */
-    Reactium.Hook.runSync('sdk-init', Reactium);
     await Reactium.Hook.run('sdk-init', Reactium);
+    Reactium.Hook.runSync('sdk-init', Reactium);
 
     const context = {};
 
