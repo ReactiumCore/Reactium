@@ -6,6 +6,10 @@ import {
     ZoneRegistry as Zone,
     Plugin,
     Utils,
+    Handle,
+    Pulse,
+    Prefs,
+    Cache,
 } from '@atomic-reactor/reactium-sdk-core';
 
 export * from '@atomic-reactor/reactium-sdk-core';
@@ -19,6 +23,10 @@ const SDK = {
     Zone,
     Plugin,
     Utils,
+    Handle,
+    Pulse,
+    Prefs,
+    Cache,
 };
 
 const apiHandler = {
