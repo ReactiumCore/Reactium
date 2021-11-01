@@ -8,11 +8,6 @@ const serialize = require('serialize-javascript');
 
 const normalizeAssets = assets => _.flatten([assets]);
 
-const isToolkit = str => {
-    const v = op.get(ReactiumBoot, 'version', '1.0.23');
-    return semver.gt(v, '1.0.24') ? false : /^\/toolkit/i.test(str);
-};
-
 ReactiumBoot.Hook.registerSync(
     'Server.AppStyleSheets',
     (req, AppStyleSheets) => {
@@ -37,11 +32,6 @@ ReactiumBoot.Hook.registerSync(
 
         const when = (req, itemPath) => {
             const [url] = req.originalUrl.split('?');
-
-            if (isToolkit(url)) {
-                if (/core.css$/.test(itemPath)) return true;
-                return false;
-            }
 
             const includes = [defaultStylesheet];
             ReactiumBoot.Hook.runSync(
