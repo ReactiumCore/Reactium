@@ -1558,6 +1558,39 @@
   },
   {
     "type": "ReactHook",
+    "url": "useScrollToggle()",
+    "title": "useScrollToggle()",
+    "description": "<p>React hook to that returns a control allowing you to <code>enable</code>, <code>disable</code>, or <code>toggle</code> scroll locking on the body element. Also registers the returned handle as <code>BodyScroll</code>. To use the BodyScroll handle, you need only apply useSelectHandle() in one global component. See useSelectHandle() for information on using registered handles.</p>",
+    "name": "useScrollToggle",
+    "group": "ReactHook",
+    "version": "1.2.7",
+    "examples": [
+      {
+        "title": "NPM Usage",
+        "content": "import { useScrollToggle } from '@atomic-reactor/reactium-sdk-core';",
+        "type": "json"
+      },
+      {
+        "title": "Reactium Usage",
+        "content": "import { useScrollToggle } from 'reactium-core/sdk';",
+        "type": "json"
+      },
+      {
+        "title": "Modal.js",
+        "content": "import React, { useRef } from 'react';\nimport ReactDOM from 'react-dom';\nimport {\n    cxFactory,\n    useScrollToggle,\n    useIsContainer,\n    useEventEffect,\n    useRegister\n    HookComponent,\n} from '@atomic-reactor/reactium-sdk-core';\n\n const Modal = () => {\n    const bodyScroll = useScrollToggle();\n    const handle = useRegisterSyncHandle('Modal', {\n        open: false,\n        Contents: {\n            Component: () => null,\n        },\n    });\n\n    // Close modal and disable scroll lock on body\n    handle.extend('close', () => {\n        handle.set('open', false);\n        bodyScroll.enable();\n    });\n\n    // Open modal, showing component, and stop scroll on body\n    handle.extend('open', Component => {\n        handle.set('Contents', { Component });\n        handle.set('open', true);\n        bodyScroll.disable();\n    });\n\n    const isContainer = useIsContainer();\n    const container = useRef();\n    const content = useRef();\n    const dismiss = e => {\n        if (\n            isContainer(e.target, container.current) &&\n            !isContainer(e.target, content.current)\n        ) {\n            handle.close();\n        }\n    };\n\n    useEventEffect(\n        window,\n        {\n            mousedown: dismiss,\n            touchstart: dismiss,\n        },\n        [container.current],\n    );\n\n    const cn = cxFactory('modal');\n    const Component = handle.get('Contents.Component', () => null);\n\n    return ReactDOM.createPortal(\n        <div\n            ref={container}\n            className={`${cn()} ${cn({ open: handle.get('open', false) })}`}>\n            <div ref={content} className={cn('contents')}>\n                <Component modal={handle} />\n            </div>\n        </div>,\n        document.querySelector('body'),\n    );\n};",
+        "type": "json"
+      },
+      {
+        "title": "LockToggle.js",
+        "content": "import React from 'react';\nimport {\n    useSelectHandle,\n} from '@atomic-reactor/reactium-sdk-core';\n\n// Somewhere else in the app, useScrollToggle() has been invoked.\nconst LockToggle = () => {\n    const { handle: BodyScroll } = useSelectHandle('BodyScroll');\n    return (\n        <button onClick={BodyScroll.toggle}>\n        {\n            BodyScroll.get('enabled') ? 'Lock Scrolling' : 'Unlock Scrolling'\n        }\n        </button>\n    );\n};",
+        "type": "json"
+      }
+    ],
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/useScrollToggle.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useSelectHandle(id,cb,deps)",
     "title": "useSelectHandle()",
     "description": "<p>React hook to subscribe to updates to state on an imperative handle created by useRegisterSyncHandle. See useRegisterSyncHandle for full example.</p>",
