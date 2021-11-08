@@ -1,6 +1,6 @@
-import Context from 'reactium-core/components/WindowProvider/Context';
+import { Context } from 'reactium-core/components/WindowProvider';
 import { useContext, useEffect, useState, useRef } from 'react';
-import SDK from '@atomic-reactor/reactium-sdk-core';
+import SDK, { breakpoints, isWindow } from '@atomic-reactor/reactium-sdk-core';
 import _ from 'underscore';
 import op from 'object-path';
 
@@ -79,7 +79,7 @@ export const useDocument = () => {
 export const useBreakpoints = () => {
     const iWindow = useWindow();
     const iDocument = useDocument();
-    return Utils.breakpoints(iWindow, iDocument);
+    return breakpoints(iWindow, iDocument);
 };
 
 /**
@@ -101,7 +101,7 @@ export const useBreakpoint = width => {
     const iWindow = useWindow();
     const iDocument = useDocument();
 
-    return Utils.breakpoint(width, iWindow, iDocument);
+    return breakpoint(width, iWindow, iDocument);
 };
 
 /**
@@ -164,7 +164,7 @@ export const useBreakpoint = width => {
 export const useWindowSize = (params = {}) => {
     const iWin = useWindow();
     const iDoc = useWindow();
-    const hasWindow = Utils.isWindow(iWin);
+    const hasWindow = isWindow(iWin);
 
     let { defaultWidth = 1, defaultHeight = 1, delay = 0 } = params;
 
@@ -173,12 +173,12 @@ export const useWindowSize = (params = {}) => {
             ? {
                   width: iWin.innerWidth,
                   height: iWin.innerHeight,
-                  breakpoint: Utils.breakpoint(iWin.innerWidth, iWin, iDoc),
+                  breakpoint: breakpoint(iWin.innerWidth, iWin, iDoc),
               }
             : {
                   width: defaultWidth,
                   height: defaultHeight,
-                  breakpoint: Utils.breakpoint(defaultWidth),
+                  breakpoint: breakpoint(defaultWidth),
               };
     };
 

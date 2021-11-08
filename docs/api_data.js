@@ -655,6 +655,17 @@ define({ "api": [
   },
   {
     "type": "Hook",
+    "url": "app-context-provider",
+    "title": "app-context-provider",
+    "name": "app-context-provider",
+    "description": "<p>Called after app-bindpoint to define the registered Redux Provider component (i.e. <code>Reactium.Component.register('ReduxProvider'...)</code>) for all bind points and the SPA. async only - used in front-end application only</p>",
+    "group": "Hooks",
+    "version": "0.0.0",
+    "filename": ".core/app/index.js",
+    "groupTitle": "Hooks"
+  },
+  {
+    "type": "Hook",
     "url": "app-ready",
     "title": "app-ready",
     "description": "<p>The final hook run after the front-end application has bee bound or hydrated. After this point, the all hooks are runtime hooks.</p>",
@@ -673,17 +684,6 @@ define({ "api": [
         ]
       }
     },
-    "version": "0.0.0",
-    "filename": ".core/app/index.js",
-    "groupTitle": "Hooks"
-  },
-  {
-    "type": "Hook",
-    "url": "app-redux-provider",
-    "title": "app-redux-provider",
-    "name": "app-redux-provider",
-    "description": "<p>Called after app-bindpoint to define the registered Redux Provider component (i.e. <code>Reactium.Component.register('ReduxProvider'...)</code>) for all bind points and the SPA. async only - used in front-end application only</p>",
-    "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/index.js",
     "groupTitle": "Hooks"
@@ -881,7 +881,7 @@ define({ "api": [
     },
     "group": "Hooks",
     "version": "0.0.0",
-    "filename": ".core/app/index.js",
+    "filename": ".core/app/reactium-hooks.js",
     "groupTitle": "Hooks"
   },
   {

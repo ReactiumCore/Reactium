@@ -24,6 +24,7 @@ export const App = async () => {
         hookableComponent,
         isBrowserWindow,
         Zone,
+        AppContexts,
     } = await import('reactium-core/sdk');
 
     console.log('Initializing Application Hooks');
@@ -75,19 +76,6 @@ export const App = async () => {
      */
     // Note: zone-defaults is run from @atomic-reactor/reactium-sdk-core inside Zone.init()
     await Reactium.Zone.init();
-
-    /**
-     * @api {Hook} store-create store-create
-     * @apiName store-create
-     * @apiDescription Called after dependencies-load to trigger Redux store creator.
-     async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
-     * @apiParam {Object} params params.server indicate if is store creation on the server, or in the front-end application
-     * @apiParam {Object} context Core implementation of this hook will create the Redux store and set it to context.store.
-     * @apiGroup Hooks
-     */
-    const { store } = await Reactium.Hook.run('store-create', {
-        server: false,
-    });
 
     /**
      * @api {Hook} plugin-dependencies plugin-dependencies
@@ -145,13 +133,13 @@ export const App = async () => {
         const { appElement } = await Reactium.Hook.run('app-bindpoint');
 
         /**
-         * @api {Hook} app-redux-provider app-redux-provider
-         * @apiName app-redux-provider
+         * @api {Hook} app-context-provider app-context-provider
+         * @apiName app-context-provider
          * @apiDescription Called after app-bindpoint to define the registered Redux Provider component (i.e. `Reactium.Component.register('ReduxProvider'...)`) for all bind points and the SPA.
          async only - used in front-end application only
          * @apiGroup Hooks
          */
-        await Reactium.Hook.run('app-redux-provider');
+        await Reactium.Hook.run('app-context-provider');
 
         /**
          * @api {Hook} app-router app-router
@@ -163,14 +151,13 @@ export const App = async () => {
          */
         await Reactium.Hook.run('app-router');
 
-        const Provider = hookableComponent('ReduxProvider');
         const Router = hookableComponent('Router');
 
         // Render the React Components
         if (bindPoints.length > 0) {
             bindPoints.forEach(item => {
                 ReactDOM.render(
-                    <Provider store={store}>{item.component}</Provider>,
+                    <AppContexts>{item.component}</AppContexts>,
                     item.element,
                 );
             });
@@ -194,11 +181,11 @@ export const App = async () => {
             console.log(...message);
 
             ReactDOM[ssr ? 'hydrate' : 'render'](
-                <Provider store={store}>
+                <AppContexts>
                     <Zone zone='reactium-provider' />
                     <Router history={Reactium.Routing.history} />
                     <Zone zone='reactium-provider-after' />
-                </Provider>,
+                </AppContexts>,
                 appElement,
             );
 

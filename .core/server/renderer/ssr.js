@@ -4,24 +4,17 @@ import { renderToString } from 'react-dom/server';
 import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
 import Router from 'reactium-core/components/Router/server';
-import { Zone, useHookComponent } from 'reactium-core/sdk';
+import { Zone, AppContexts } from 'reactium-core/sdk';
 
 const app = {};
 app.dependencies = global.dependencies;
 
-const hookableComponent = name => props => {
-    const Component = useHookComponent(name);
-    return <Component {...props} />;
-};
-
 const renderer = async (req, res, context) => {
-    const { store } = await ReactiumBoot.Hook.run('store-create', {
-        server: true,
-    });
-
     await ReactiumBoot.Hook.run('plugin-ready');
 
-    await ReactiumBoot.Hook.run('app-redux-provider');
+    await ReactiumBoot.Hook.run('app-context-provider');
+
+    const store = ReactiumBoot.store;
 
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);
@@ -67,9 +60,8 @@ const renderer = async (req, res, context) => {
         ERROR('Page data loading error.', error);
     }
 
-    const Provider = hookableComponent('ReduxProvider');
     const content = renderToString(
-        <Provider store={store}>
+        <AppContexts>
             <Zone zone='reactium-provider' />
             <Router
                 server={true}
@@ -78,7 +70,7 @@ const renderer = async (req, res, context) => {
                 routes={routes}
             />
             <Zone zone='reactium-provider-after' />
-        </Provider>,
+        </AppContexts>,
     );
 
     req.content = content;

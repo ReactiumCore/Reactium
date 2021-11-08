@@ -12,6 +12,8 @@ import {
     Cache,
 } from '@atomic-reactor/reactium-sdk-core';
 
+import { AppContext } from './named-exports';
+
 export * from '@atomic-reactor/reactium-sdk-core';
 export * from './named-exports';
 
@@ -27,6 +29,7 @@ const SDK = {
     Pulse,
     Prefs,
     Cache,
+    AppContext,
 };
 
 const apiHandler = {
