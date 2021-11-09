@@ -339,8 +339,8 @@ define({ "api": [
             "group": "stylesheet",
             "type": "String",
             "optional": true,
-            "field": "path",
-            "description": "<p>the src of the javascript</p>"
+            "field": "href",
+            "description": "<p>the src of the stylesheet or resource</p>"
           },
           {
             "group": "stylesheet",
@@ -348,7 +348,7 @@ define({ "api": [
             "optional": true,
             "field": "order",
             "defaultValue": "0",
-            "description": "<p>loading order of script</p>"
+            "description": "<p>loading order of stylesheet or resource</p>"
           },
           {
             "group": "stylesheet",
@@ -406,7 +406,7 @@ define({ "api": [
     "examples": [
       {
         "title": "reactium-boot.js",
-        "content": "ReactiumBoot.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        path: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        path: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
+        "content": "ReactiumBoot.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {\n    AppStyleSheets.register('my-stylesheet', {\n        href: '/assets/css/some-additional.css'\n    });\n\n    AppStyleSheets.register('my-csn-script', {\n        href: 'https://cdn.example.com/cdn.loaded.css'\n        order: 1, // scripts will be ordered by this\n    });\n});",
         "type": "json"
       }
     ],
