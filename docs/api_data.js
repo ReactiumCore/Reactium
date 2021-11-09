@@ -658,7 +658,7 @@ define({ "api": [
     "url": "app-context-provider",
     "title": "app-context-provider",
     "name": "app-context-provider",
-    "description": "<p>Called after app-bindpoint to define the registered Redux Provider component (i.e. <code>Reactium.Component.register('ReduxProvider'...)</code>) for all bind points and the SPA. async only - used in front-end application only</p>",
+    "description": "<p>Called after app-bindpoint to define any React context providers, using the <a href=\"#api-Reactium-Reactium.AppContext\">Reactium.AppContext</a> registry.</p>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/index.js",
@@ -4166,6 +4166,76 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/sdks/zone/index.js",
     "groupTitle": "Reactium.Zone"
+  },
+  {
+    "type": "Object",
+    "url": "Reactium.AppContext",
+    "title": "Reactium.AppContext",
+    "group": "Reactium",
+    "name": "Reactium.AppContext",
+    "description": "<p>A Registry used for top-level React wrapping context provider, such as Redux or Theme. See <a href=\"#api-Reactium-Registry\">Registry</a> for full details on Registry methods / properties. Use this to register a React context provider, as well as any properties that are passed to the context.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Getter",
+            "optional": false,
+            "field": "list",
+            "description": "<p>get list of most recent (or highest order) registered objects, filtering out unregistered or banned objects.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Method",
+            "optional": false,
+            "field": "register",
+            "description": "<p><code>reg.register(id,data)</code> pass an identifier and a data object to register the object. The identifier will be added if it is not already registered (but protected) and not banned.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Method",
+            "optional": false,
+            "field": "unregister",
+            "description": "<p><code>reg.unregister(id)</code> pass an identifier to unregister an object. When in HISTORY mode (default), previous registration will be retained, but the object will not be listed. In CLEAN mode, the previous registrations will be removed, unless protected.</p>"
+          }
+        ],
+        "register": [
+          {
+            "group": "register",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>the id of the data object to be registered</p>"
+          },
+          {
+            "group": "register",
+            "type": "Provider",
+            "optional": false,
+            "field": "data",
+            "description": "<p>the object to be registered</p>"
+          }
+        ],
+        "Provider": [
+          {
+            "group": "Provider",
+            "type": "ContextProvider",
+            "optional": false,
+            "field": "provider",
+            "description": "<p>the context provider. This provider must be a React component that will render children.</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "reactium-hooks.js",
+        "content": "// Example of Registering Material UI Theme\nimport Reactium from 'reactium-core/sdk';\nimport { createTheme, ThemeProvider } from '@mui/material/styles';\nimport { purple } from '@mui/material/colors';\n\n(async () => {\n    await Reactium.Plugin.register('MUI-Theme');\n\n    await Reactium.Hook.register('app-context-provider', async () => {\n        const theme = createTheme({\n            palette: {\n                primary: {\n                    // Purple and green play nicely together.\n                    main: purple[500],\n                },\n                secondary: {\n                    // This is green.A700 as hex.\n                    main: '#11cb5f',\n                },\n            },\n        });\n\n        Reactium.AppContext.register('ThemeProvider', {\n            // provider required\n            provider: ThemeProvider,\n\n            // remainder are optional props passed to your provider, in this case the theme\n            theme,\n        });\n    })\n})();",
+        "type": "json"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": ".core/sdk/named-exports/app-context.js",
+    "groupTitle": "Reactium"
   },
   {
     "type": "Object",

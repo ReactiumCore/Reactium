@@ -135,8 +135,7 @@ export const App = async () => {
         /**
          * @api {Hook} app-context-provider app-context-provider
          * @apiName app-context-provider
-         * @apiDescription Called after app-bindpoint to define the registered Redux Provider component (i.e. `Reactium.Component.register('ReduxProvider'...)`) for all bind points and the SPA.
-         async only - used in front-end application only
+         * @apiDescription Called after app-bindpoint to define any React context providers, using the [Reactium.AppContext](#api-Reactium-Reactium.AppContext) registry.
          * @apiGroup Hooks
          */
         await Reactium.Hook.run('app-context-provider');
