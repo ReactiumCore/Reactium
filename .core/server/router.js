@@ -3,6 +3,8 @@ import renderer from './renderer';
 import fs from 'fs';
 import path from 'path';
 import httpAuth from 'http-auth';
+import op from 'object-path';
+import _ from 'underscore';
 
 const router = express.Router();
 
@@ -24,6 +26,37 @@ if (fs.existsSync(basicAuthFile)) {
 }
 
 router.get('/elb-healthcheck', (req, res) => res.send('Up'));
+
+router.get('/ssg-paths', async (req, res) => {
+    if (process.env.SSR_MODE !== 'on') {
+        res.status(403).json({
+            error: 'You must start server in Server Side Rendering mode.',
+        });
+        return;
+    }
+
+    let paths = [];
+    for (let route of ReactiumBoot.Routing.get()) {
+        const loadPaths = op.get(
+            route,
+            'component.loadPaths',
+            op.get(route, 'loadPaths'),
+        );
+        if (typeof loadPaths == 'function') {
+            try {
+                const routePaths = await loadPaths(route);
+                paths = paths.concat(routePaths);
+            } catch (error) {
+                console.error(
+                    'Unable to load Server Side Generation paths for route',
+                    { route },
+                );
+            }
+        }
+    }
+
+    res.send(_.uniq(paths));
+});
 
 process.on('unhandledRejection', (reason, p) => {
     ERROR('Unhandled Rejection at: Promise', p, 'reason:', reason);

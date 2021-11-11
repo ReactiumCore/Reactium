@@ -117,6 +117,7 @@ const renderer = async (req, res, context) => {
         );
         if (loadPaths) {
             const ssgPaths = (await loadPaths(route)) || [];
+
             if (Array.isArray(ssgPaths) && ssgPaths.includes(req.originalUrl)) {
                 const staticHTMLPath = path.normalize(
                     staticHTML + req.originalUrl,
