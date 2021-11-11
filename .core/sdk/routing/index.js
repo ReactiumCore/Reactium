@@ -126,7 +126,10 @@ class Routing {
                         current: new ReactiumSyncState({}),
                     });
 
-                    const content = await getContent(op.get(updates, 'active'));
+                    const route = op.get(updates, 'active.match.route', {});
+                    const params = op.get(updates, 'active.match.params', {});
+                    const search = op.get(updates, 'active.match.search', {});
+                    const content = await getContent({ route, params, search });
                     const handle = op.get(Handle.handles, [
                         handleId,
                         'current',
