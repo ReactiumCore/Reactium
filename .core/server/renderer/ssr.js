@@ -2,6 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { renderToString } from 'react-dom/server';
 import op from 'object-path';
+import fs from 'fs-extra';
+import path from 'path';
 import { matchRoutes } from 'react-router-config';
 import Router from 'reactium-core/components/Router/server';
 import {
@@ -16,10 +18,6 @@ const app = {};
 app.dependencies = global.dependencies;
 
 const renderer = async (req, res, context) => {
-    await ReactiumBoot.Hook.run('plugin-ready');
-
-    await ReactiumBoot.Hook.run('app-context-provider');
-
     const store = ReactiumBoot.store;
 
     const [url] = req.originalUrl.split('?');
@@ -89,30 +87,53 @@ const renderer = async (req, res, context) => {
             route.query,
         );
         INFO('Page data loading complete.');
+
+        const content = renderToString(
+            <AppContexts>
+                <Zone zone='reactium-provider' />
+                <Router
+                    server={true}
+                    location={req.originalUrl}
+                    context={context}
+                    routes={routes}
+                />
+                <Zone zone='reactium-provider-after' />
+            </AppContexts>,
+        );
+
+        req.content = content;
+
+        await ReactiumBoot.Hook.run('app-ready', true);
+
+        const helmet = Helmet.renderStatic();
+
+        const html = req.template(content, helmet, store, req, res);
+
+        // Server Side Generation - Conditionally Caching Routed Components markup
+        const loadPaths = op.get(
+            route,
+            'component.loadPaths',
+            op.get(route, 'loadPaths'),
+        );
+        if (loadPaths) {
+            const ssgPaths = (await loadPaths(route)) || [];
+            if (Array.isArray(ssgPaths) && ssgPaths.includes(req.originalUrl)) {
+                const staticHTMLPath = path.normalize(
+                    staticHTML + req.originalUrl,
+                );
+                fs.ensureDirSync(staticHTMLPath);
+                fs.writeFileSync(
+                    path.resolve(staticHTMLPath, 'index.html'),
+                    html,
+                    'utf8',
+                );
+            }
+        }
+
+        return html;
     } catch (error) {
         ERROR('Page data loading error.', error);
     }
-
-    const content = renderToString(
-        <AppContexts>
-            <Zone zone='reactium-provider' />
-            <Router
-                server={true}
-                location={req.originalUrl}
-                context={context}
-                routes={routes}
-            />
-            <Zone zone='reactium-provider-after' />
-        </AppContexts>,
-    );
-
-    req.content = content;
-
-    await ReactiumBoot.Hook.run('app-ready', true);
-
-    const helmet = Helmet.renderStatic();
-
-    return req.template(content, helmet, store, req, res);
 };
 
 module.exports = renderer;

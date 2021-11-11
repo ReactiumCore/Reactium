@@ -130,6 +130,9 @@ const ssrStartup = async () => {
                 }
             });
         }
+
+        await ReactiumBoot.Hook.run('plugin-ready');
+        await ReactiumBoot.Hook.run('app-context-provider');
     }
 };
 
@@ -231,12 +234,22 @@ const registeredMiddleware = async () => {
     });
 
     // serve the static files out of ./public or specified directory
-    const staticAssets =
+    global.staticAssets =
         process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), 'public');
+
+    global.staticHTML =
+        process.env.PUBLIC_HTML ||
+        path.resolve(process.cwd(), 'public/static-html');
 
     ReactiumBoot.Server.Middleware.register('static', {
         name: 'static',
         use: staticGzip(staticAssets),
+        order: Enums.priority.neutral,
+    });
+
+    ReactiumBoot.Server.Middleware.register('static-html', {
+        name: 'static-html',
+        use: staticGzip(staticHTML),
         order: Enums.priority.neutral,
     });
 

@@ -7,7 +7,6 @@ const ServerRouter = props => {
         <StaticRouter context={props.context} location={location}>
             <Switch>
                 {routes.map(({ id, ...route }) => {
-                    console.log({ route });
                     return <Route {...route} key='route' />;
                 })}
             </Switch>
