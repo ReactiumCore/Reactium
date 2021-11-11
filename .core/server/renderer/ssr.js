@@ -4,7 +4,13 @@ import { renderToString } from 'react-dom/server';
 import op from 'object-path';
 import { matchRoutes } from 'react-router-config';
 import Router from 'reactium-core/components/Router/server';
-import { Zone, AppContexts } from 'reactium-core/sdk';
+import {
+    Zone,
+    AppContexts,
+    Handle,
+    ReactiumSyncState,
+} from 'reactium-core/sdk';
+import uuid from 'uuid/v4';
 
 const app = {};
 app.dependencies = global.dependencies;
@@ -46,6 +52,33 @@ const renderer = async (req, res, context) => {
                     maybeThunk(store.dispatch, store.getState, store),
                 );
             else data = await Promise.resolve(maybeThunk);
+        }
+
+        const getContent = op.get(
+            route,
+            'component.getContent',
+            op.get(route, 'getContent'),
+        );
+        const handleId = op.get(
+            route,
+            'component.handleId',
+            op.get(route, 'handleId', uuid()),
+        );
+
+        // for consistency
+        op.set(route, 'component.handleId', handleId);
+        op.set(route, 'handleId', handleId);
+        op.set(context, 'handleId', handleId);
+        if (typeof getContent == 'function') {
+            data = await getContent({
+                route,
+                params: route.params,
+                search: route.query,
+            });
+            Handle.register(handleId, {
+                routeId: op.get(route, 'id'),
+                current: new ReactiumSyncState(data),
+            });
         }
 
         await ReactiumBoot.Hook.run(

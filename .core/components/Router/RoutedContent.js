@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Reactium, { useRouting, useSyncState } from 'reactium-core/sdk';
 import { Route } from 'react-router';
+import op from 'object-path';
 
 const useRoutes = () => {
     const routeState = useSyncState(Reactium.Routing.get());
@@ -24,7 +25,14 @@ const RoutedContent = () => {
     const Component = routing.get('active.match.route.component');
 
     // if we have a route with no component, let react-router handle it however it will
-    return Component ? <Component {...routing.get()} /> : <Route {...route} />;
+    return Component ? (
+        <Component
+            staticContext={{ handleId: op.get(route, 'handleId') }}
+            {...routing.get()}
+        />
+    ) : (
+        <Route {...route} />
+    );
 };
 
 export default RoutedContent;

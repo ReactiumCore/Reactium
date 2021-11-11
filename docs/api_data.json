@@ -1690,6 +1690,30 @@
   },
   {
     "type": "ReactHook",
+    "url": "useSyncHandle(id,cb,deps)",
+    "title": "useSyncHandle()",
+    "description": "<p>React hook to subscribe to updates for a registered sync handle.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Mixed",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Array of properties, or <code>.</code> separated object path. e.g. ['path','to','handle'] or 'path.to.handle'. Identifies the full path to an imperative handle.</p>"
+          }
+        ]
+      }
+    },
+    "name": "useSyncHandle",
+    "group": "ReactHook",
+    "version": "0.0.0",
+    "filename": "node_modules/@atomic-reactor/reactium-sdk-core/lib/named-exports/sync-handle.js",
+    "groupTitle": "ReactHook"
+  },
+  {
+    "type": "ReactHook",
     "url": "useSyncState(initialState)",
     "title": "useSyncState()",
     "description": "<p>Intended to provide an object to get and set state synchrounously, while providing a EventTarget object that can dispatch a 'set' event when the state is updated.</p>",

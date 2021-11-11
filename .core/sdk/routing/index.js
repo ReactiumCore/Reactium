@@ -127,6 +127,12 @@ class Routing {
                     });
 
                     const route = op.get(updates, 'active.match.route', {});
+
+                    // for consistency
+                    op.set(route, 'handleId', handleId);
+                    if (route.component)
+                        op.set(route, 'component.handleId', handleId);
+
                     const params = op.get(updates, 'active.match.params', {});
                     const search = op.get(updates, 'active.match.search', {});
                     const content = await getContent({ route, params, search });
