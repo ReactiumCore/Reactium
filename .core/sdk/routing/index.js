@@ -108,13 +108,13 @@ class Routing {
                     Handle.unregister(id);
                 });
 
-            const getContent = op.get(
+            const loadState = op.get(
                 updates,
-                'active.match.route.component.getContent',
-                op.get(updates, 'active.match.route.getContent'),
+                'active.match.route.component.loadState',
+                op.get(updates, 'active.match.route.loadState'),
             );
 
-            if (typeof getContent === 'function') {
+            if (typeof loadState === 'function') {
                 try {
                     const handleId = op.get(
                         updates,
@@ -135,7 +135,7 @@ class Routing {
 
                     const params = op.get(updates, 'active.match.params', {});
                     const search = op.get(updates, 'active.match.search', {});
-                    const content = await getContent({ route, params, search });
+                    const content = await loadState({ route, params, search });
                     const handle = op.get(Handle.handles, [
                         handleId,
                         'current',
@@ -218,7 +218,7 @@ class Routing {
         };
 
         // Automatic Content Loading
-        this.routeListeners.register('getContent', {
+        this.routeListeners.register('loadState', {
             handler: () => this.handleFrontEndDataLoading(updates),
         });
 

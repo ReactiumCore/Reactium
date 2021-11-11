@@ -54,10 +54,10 @@ const renderer = async (req, res, context) => {
             else data = await Promise.resolve(maybeThunk);
         }
 
-        const getContent = op.get(
+        const loadState = op.get(
             route,
-            'component.getContent',
-            op.get(route, 'getContent'),
+            'component.loadState',
+            op.get(route, 'loadState'),
         );
         const handleId = op.get(
             route,
@@ -69,8 +69,8 @@ const renderer = async (req, res, context) => {
         op.set(route, 'component.handleId', handleId);
         op.set(route, 'handleId', handleId);
         op.set(context, 'handleId', handleId);
-        if (typeof getContent == 'function') {
-            data = await getContent({
+        if (typeof loadState == 'function') {
+            data = await loadState({
                 route,
                 params: route.params,
                 search: route.query,
