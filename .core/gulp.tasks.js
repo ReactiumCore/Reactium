@@ -468,7 +468,19 @@ const reactium = (gulp, config, webpackConfig) => {
     const ssgWarm = async () => {
         console.log(chalk.green('Warming Server Side Generated HTML'));
         const serverUrl = `http://localhost:${port}`;
-        const { data: paths } = await axios.get(serverUrl + '/ssg-paths');
+
+        let paths = [];
+        try {
+            const { data = [] } = await axios.get(serverUrl + '/ssg-paths');
+            paths = data;
+        } catch ({ response = {} }) {
+            const { status, statusText, data } = response;
+            const error = op.get(data, 'error', { status, statusText, data });
+            throw new Error(
+                `Getting generation paths: ${JSON.stringify(error)}`,
+            );
+        }
+
         for (let chunk of _.chunk(paths, 5)) {
             try {
                 await Promise.all(
