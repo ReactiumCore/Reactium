@@ -13,12 +13,12 @@
  * Set exclude to true to disable a partial by pattern.
  */
 
-(async () => {
+(() => {
     ReactiumGulp.Hook.registerSync('ddd-styles-partial', SassPartial => {
         SassPartial.register('{{id}}', {
             pattern: {{pattern}},
             exclude: false,
-            priority: ReactiumGulp.Enums.style.ORGANISMS,
+            priority: ReactiumGulp.Enums.style.MOLECULES,
         });
     });
 })();
