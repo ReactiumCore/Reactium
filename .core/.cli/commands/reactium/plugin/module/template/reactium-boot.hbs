@@ -4,11 +4,13 @@
  */
 const { development } = require('./reactium-hooks.json');
 
-ReactiumBoot.Hook.registerSync('Server.AppStyleSheets', (req, AppStyleSheets) => {
-    if (development === true) {
-        AppStyleSheets.register('site-plugin', {
-            path: '{{FILENAME}}',
-            order: SDK.Enums.priority.normal,
-        });
-    }
-});
+(async () => {
+    ReactiumBoot.Hook.registerSync('Server.AppStyleSheets', (req, AppStyleSheets) => {
+        if (development === true) {
+            AppStyleSheets.register('site-plugin', {
+                path: '{{FILENAME}}',
+                order: SDK.Enums.priority.normal,
+            });
+        }
+    });
+})();

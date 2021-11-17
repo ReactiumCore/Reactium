@@ -7,17 +7,19 @@
 import Reactium from 'reactium-core/sdk';
 import op from 'object-path';
 
-Reactium.Hook.register(
-    'plugin-dependencies',
-    async () => {
-        const runtime = require('./reactium-hooks.json');
+(async () => {
+    Reactium.Hook.register(
+        'plugin-dependencies',
+        async () => {
+            const runtime = require('./reactium-hooks.json');
 
-        if (op.get(runtime, 'development', false)) {
-            Reactium.Plugin.unregister('{{NAME}}');
+            if (op.get(runtime, 'development', false)) {
+                Reactium.Plugin.unregister('{{NAME}}');
 
-            // make your edits to index.js, not here
-            require('./index');
-        }
-    },
-    Reactium.Enums.priority.highest,
-);
+                // make your edits to index.js, not here
+                require('./index');
+            }
+        },
+        Reactium.Enums.priority.highest,
+    );
+})();

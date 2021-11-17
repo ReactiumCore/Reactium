@@ -7,6 +7,7 @@
 import Component from './index';
 import Reactium from 'reactium-core/sdk';
 
-Reactium.Plugin.register('{{name}}-plugin').then(() => {
+(async () => {
+    await Reactium.Plugin.register('{{name}}-plugin');
     Reactium.Component.register('{{name}}', Component);
-});
+})();
