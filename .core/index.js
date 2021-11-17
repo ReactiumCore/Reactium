@@ -56,57 +56,7 @@ const globals = async () => {
 
     PORT = parseInt(PORT) || defaultPort;
 
-    global.LOG_LEVELS = {
-        DEBUG: 1000,
-        INFO: 500,
-        BOOT: 0,
-        WARN: -500,
-        ERROR: -1000,
-    };
-
-    global.LOG_LEVEL = op.get(
-        LOG_LEVELS,
-        op.get(process.env, 'LOG_LEVEL', 'BOOT'),
-        LOG_LEVELS.BOOT,
-    );
-
-    const APP_NAME = op.get(process.env, 'APP_NAME', 'Reactium');
-    const LOG_THRESHOLD = op.get(LOG_LEVELS, [LOG_LEVEL], LOG_LEVELS.BOOT);
-
-    const reactiumConsole = global.console;
-    for (const [LEVEL, THRESHOLD] of Object.entries(LOG_LEVELS)) {
-        global[LEVEL] = (...args) => {
-            if (
-                process.env.NO_LOGGING === 'true' ||
-                THRESHOLD > LOG_THRESHOLD
-            ) {
-                return;
-            }
-
-            const _W = THRESHOLD <= LOG_LEVELS.WARN;
-            const _E = THRESHOLD <= LOG_LEVELS.ERROR;
-            let color = _W ? chalk.yellow.bold : chalk.cyan;
-            color = _E ? chalk.red.bold : color;
-
-            const time = `[${chalk.magenta(moment().format('HH:mm:ss'))}]`;
-            let name = `${color(String(APP_NAME))}`;
-            name = _E ? `%${name}%` : _W ? `!${name}!` : `[${name}]`;
-
-            let logMethod = op.get(reactiumConsole, LEVEL, reactiumConsole.log);
-            logMethod =
-                typeof logMethod === 'function'
-                    ? logMethod
-                    : reactiumConsole.log;
-            logMethod(time, name, ...args);
-        };
-    }
-    global.console = {
-        log: global.BOOT,
-        warn: global.WARN,
-        error: global.ERROR,
-    };
-
-    global.LOG = global.BOOT;
+    require('./reactium.log');
 };
 
 const reactiumBootHooks = async () => {
@@ -180,6 +130,9 @@ const ssrStartup = async () => {
                 }
             });
         }
+
+        await ReactiumBoot.Hook.run('plugin-ready');
+        await ReactiumBoot.Hook.run('app-context-provider');
     }
 };
 
@@ -281,12 +234,22 @@ const registeredMiddleware = async () => {
     });
 
     // serve the static files out of ./public or specified directory
-    const staticAssets =
+    global.staticAssets =
         process.env.PUBLIC_DIRECTORY || path.resolve(process.cwd(), 'public');
+
+    global.staticHTML =
+        process.env.PUBLIC_HTML ||
+        path.resolve(process.cwd(), 'public/static-html');
 
     ReactiumBoot.Server.Middleware.register('static', {
         name: 'static',
         use: staticGzip(staticAssets),
+        order: Enums.priority.neutral,
+    });
+
+    ReactiumBoot.Server.Middleware.register('static-html', {
+        name: 'static-html',
+        use: staticGzip(staticHTML),
         order: Enums.priority.neutral,
     });
 

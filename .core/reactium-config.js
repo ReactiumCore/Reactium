@@ -279,12 +279,6 @@ module.exports = {
                 },
                 {
                     overwrite: false,
-                    version: '>=3.0.3',
-                    destination: '/src/app/components/Fallback',
-                    source: '/tmp/update/src/app/components/Fallback',
-                },
-                {
-                    overwrite: false,
                     version: '>=3.0.19',
                     destination: '/jest.config.js',
                     source: '/tmp/update/jest.config.js',

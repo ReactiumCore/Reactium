@@ -467,8 +467,8 @@ export default async (req, res, context) => {
      * @apiDescription Before index.html template render for SPA template (both Front-end and Server-Side Render). Defines css files to be loaded.
      * @apiParam {Object} req express request object
      * @apiParam {Object} AppStyleSheets Server app styles registry object.
-     * @apiParam (stylesheet) {String} [path] the src of the javascript
-     * @apiParam (stylesheet) {Number} [order=0] loading order of script
+     * @apiParam (stylesheet) {String} [href] the src of the stylesheet or resource
+     * @apiParam (stylesheet) {Number} [order=0] loading order of stylesheet or resource
      * @apiParam (stylesheet) {String} [rel=stylesheet] the rel attribute
      * @apiParam (stylesheet) {String} [crossorigin] the crossorigin attribute
      * @apiParam (stylesheet) {String} [referrerpolicy] the referrerpolicy attribute
@@ -479,11 +479,11 @@ export default async (req, res, context) => {
      * @apiExample reactium-boot.js
      ReactiumBoot.Hook.register('Server.AppStyleSheets', async (req, AppStyleSheets) => {
          AppStyleSheets.register('my-stylesheet', {
-             path: '/assets/css/some-additional.css'
+             href: '/assets/css/some-additional.css'
          });
 
          AppStyleSheets.register('my-csn-script', {
-             path: 'https://cdn.example.com/cdn.loaded.css'
+             href: 'https://cdn.example.com/cdn.loaded.css'
              order: 1, // scripts will be ordered by this
          });
      });
@@ -504,6 +504,7 @@ export default async (req, res, context) => {
     _.sortBy(Object.values(Server.AppStyleSheets.list), 'order').forEach(
         ({
             path,
+            href,
             rel = 'stylesheet',
             crossorigin,
             referrerpolicy,
@@ -513,6 +514,7 @@ export default async (req, res, context) => {
             type,
             when = () => true,
         }) => {
+            const hrefPath = path || href;
             const attributes = {
                 rel:
                     typeof rel === 'string' &&
@@ -548,7 +550,7 @@ export default async (req, res, context) => {
                         'unsafe-url',
                     ].includes(referrerpolicy) &&
                     `referrerpolicy="${referrerpolicy}"`,
-                href: typeof path === 'string' && `href="${path}"`,
+                href: typeof hrefPath === 'string' && `href="${hrefPath}"`,
                 hrefLang:
                     typeof hrefLang === 'string' && `hreflang="${hrefLang}"`,
                 media: typeof media === 'string' && `media="${media}"`,
@@ -562,7 +564,7 @@ export default async (req, res, context) => {
             const stylesSheet = `<link ${_.compact(
                 Object.values(attributes),
             ).join(' ')} />\n`;
-            if (when(req, path)) req.styles += stylesSheet;
+            if (when(req, hrefPath)) req.styles += stylesSheet;
         },
     );
 

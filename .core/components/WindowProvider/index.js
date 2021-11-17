@@ -1,3 +1,7 @@
-import Context from './Context';
+import { createContext } from 'react';
+import { isBrowserWindow } from '@atomic-reactor/reactium-sdk-core';
 
-export default Context.Provider;
+export const Context = createContext({
+    iWindow: isBrowserWindow() ? window : undefined,
+    iDocument: isBrowserWindow() ? document : undefined,
+});
