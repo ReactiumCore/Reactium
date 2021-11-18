@@ -18,7 +18,7 @@ const app = {};
 app.dependencies = global.dependencies;
 
 const renderer = async (req, res, context) => {
-    const store = ReactiumBoot.store;
+    req.store = ReactiumBoot.store;
 
     const [url] = req.originalUrl.split('?');
     const matches = matchRoutes(routes, url);
@@ -43,11 +43,19 @@ const renderer = async (req, res, context) => {
         INFO('Loading page data...');
 
         let data;
-        if ('thunk' in route && typeof route.thunk === 'function') {
+        if (
+            req.store &&
+            'thunk' in route &&
+            typeof route.thunk === 'function'
+        ) {
             const maybeThunk = route.thunk(route.params, route.query);
             if (typeof maybeThunk === 'function')
                 data = await Promise.resolve(
-                    maybeThunk(store.dispatch, store.getState, store),
+                    maybeThunk(
+                        req.store.dispatch,
+                        req.store.getState,
+                        req.store,
+                    ),
                 );
             else data = await Promise.resolve(maybeThunk);
         }
@@ -88,6 +96,12 @@ const renderer = async (req, res, context) => {
         );
         INFO('Page data loading complete.');
 
+        await ReactiumBoot.Hook.run('ssr-before-render', {
+            data,
+            route,
+            req,
+        });
+
         const content = renderToString(
             <AppContexts>
                 <Zone zone='reactium-provider' />
@@ -103,11 +117,17 @@ const renderer = async (req, res, context) => {
 
         req.content = content;
 
+        await ReactiumBoot.Hook.run('ssr-after-render', {
+            data,
+            route,
+            req,
+        });
+
         await ReactiumBoot.Hook.run('app-ready', true);
 
-        const helmet = Helmet.renderStatic();
+        req.helmet = Helmet.renderStatic();
 
-        const html = req.template(content, helmet, store, req, res);
+        const html = req.template(content, req, res);
 
         // Server Side Generation - Conditionally Caching Routed Components markup
         const loadPaths = op.get(
