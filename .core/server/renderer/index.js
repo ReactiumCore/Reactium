@@ -222,41 +222,9 @@ ReactiumBoot.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
     }
 });
 
-const Server = {};
-Server.AppHeaders = ReactiumBoot.Utils.registryFactory(
-    'AppHeaders',
-    'name',
-    ReactiumBoot.Utils.Registry.MODES.CLEAN,
-);
-Server.AppScripts = ReactiumBoot.Utils.registryFactory(
-    'AppScripts',
-    'name',
-    ReactiumBoot.Utils.Registry.MODES.CLEAN,
-);
-Server.AppSnippets = ReactiumBoot.Utils.registryFactory(
-    'AppSnippets',
-    'name',
-    ReactiumBoot.Utils.Registry.MODES.CLEAN,
-);
-Server.AppStyleSheets = ReactiumBoot.Utils.registryFactory(
-    'AppStyleSheets',
-    'name',
-    ReactiumBoot.Utils.Registry.MODES.CLEAN,
-);
-Server.AppBindings = ReactiumBoot.Utils.registryFactory(
-    'AppBindings',
-    'name',
-    ReactiumBoot.Utils.Registry.MODES.CLEAN,
-);
-Server.AppGlobals = ReactiumBoot.Utils.registryFactory(
-    'AppGlobals',
-    'name',
-    ReactiumBoot.Utils.Registry.MODES.CLEAN,
-);
-
 export const renderAppBindings = req => {
     let bindingsMarkup = '';
-    _.sortBy(Object.values(Server.AppBindings.list), 'order').forEach(
+    _.sortBy(Object.values(req.Server.AppBindings.list), 'order').forEach(
         ({ component, markup, template, requestParams = [] }) => {
             // Reactium App will lookup these components and bind them
             if (component && typeof component === 'string') {
@@ -276,12 +244,48 @@ export const renderAppBindings = req => {
     return bindingsMarkup;
 };
 
+const requestRegistries = () => {
+    const Server = {};
+    Server.AppHeaders = ReactiumBoot.Utils.registryFactory(
+        'AppHeaders',
+        'name',
+        ReactiumBoot.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppScripts = ReactiumBoot.Utils.registryFactory(
+        'AppScripts',
+        'name',
+        ReactiumBoot.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppSnippets = ReactiumBoot.Utils.registryFactory(
+        'AppSnippets',
+        'name',
+        ReactiumBoot.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppStyleSheets = ReactiumBoot.Utils.registryFactory(
+        'AppStyleSheets',
+        'name',
+        ReactiumBoot.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppBindings = ReactiumBoot.Utils.registryFactory(
+        'AppBindings',
+        'name',
+        ReactiumBoot.Utils.Registry.MODES.CLEAN,
+    );
+    Server.AppGlobals = ReactiumBoot.Utils.registryFactory(
+        'AppGlobals',
+        'name',
+        ReactiumBoot.Utils.Registry.MODES.CLEAN,
+    );
+
+    return Server;
+};
+
 export default async (req, res, context) => {
+    const Server = (req.Server = requestRegistries());
     let template,
         renderMode = isSSR ? 'ssr' : 'feo';
 
     req.Server = Server;
-
     req.isSSR = isSSR;
     req.renderMode = renderMode;
     req.scripts = '';
