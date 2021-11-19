@@ -58,9 +58,9 @@ const renderer = async (req, res, context) => {
     const [url] = req.originalUrl.split('?');
 
     try {
+        const ssr = fork(path.resolve(__dirname, './ssr-thread.js'));
         const { rendered, context: ssrContext } = await new Promise(
             (resolve, reject) => {
-                const ssr = fork(path.resolve(__dirname, './ssr-thread.js'));
                 ssr.send({
                     url,
                     query: op.get(req, 'query', {}),
@@ -72,6 +72,7 @@ const renderer = async (req, res, context) => {
                 ssr.on('error', reject);
             },
         );
+        ssr.kill();
 
         // pass context up
         Object.entries(ssrContext).forEach(([key, value]) =>
