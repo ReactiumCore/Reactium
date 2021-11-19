@@ -1,3 +1,4 @@
+const { fork } = require('child_process');
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { renderToString } from 'react-dom/server';
@@ -11,134 +12,83 @@ import {
     AppContexts,
     Handle,
     ReactiumSyncState,
+    Hook,
 } from 'reactium-core/sdk';
 import uuid from 'uuid/v4';
+import { StylesContext } from '@mui/styles';
 
 const app = {};
 app.dependencies = global.dependencies;
 
-const renderer = async (req, res, context) => {
-    req.store = ReactiumBoot.store;
+const simplifyRequest = req => {
+    const reqFields = [
+        'baseUrl',
+        'body',
+        'cookies',
+        'fresh',
+        'hostname',
+        'ip',
+        'ips',
+        'method',
+        'originalUrl',
+        'params',
+        'path',
+        'protocol',
+        'query',
+        'isSSR',
+        'renderMode',
+        'scripts',
+        'headerScripts',
+        'styles',
+        'appGlobals',
+        'appAfterScripts',
+        'headTags',
+        'appBindings',
+    ];
 
+    Hook.run('ssr-request-fields', reqFields);
+
+    return reqFields.reduce((fields, field) => {
+        fields[field] = op.get(req, field);
+        return fields;
+    }, {});
+};
+
+const renderer = async (req, res, context) => {
     const [url] = req.originalUrl.split('?');
-    const matches = matchRoutes(routes, url);
 
     try {
-        let [match] = matches;
-        if (matches.length > 1) {
-            match = matches.find(match => match.isExact);
-        }
-
-        const matchedRoute = op.get(match, 'route', {});
-        const route = {
-            ...matchedRoute,
-            params: op.get(match, 'match.params', {}),
-            query: req.query ? req.query : {},
-        };
-
-        // Check for 404
-        context.notFound = !matches.length || !('path' in matchedRoute);
-
-        // Wait for loader or go ahead and render on error
-        INFO('Loading page data...');
-
-        let data;
-        if (
-            req.store &&
-            'thunk' in route &&
-            typeof route.thunk === 'function'
-        ) {
-            const maybeThunk = route.thunk(route.params, route.query);
-            if (typeof maybeThunk === 'function')
-                data = await Promise.resolve(
-                    maybeThunk(
-                        req.store.dispatch,
-                        req.store.getState,
-                        req.store,
-                    ),
-                );
-            else data = await Promise.resolve(maybeThunk);
-        }
-
-        const loadState = op.get(
-            route,
-            'component.loadState',
-            op.get(route, 'loadState'),
-        );
-        const handleId = op.get(
-            route,
-            'component.handleId',
-            op.get(route, 'handleId', uuid()),
+        const { rendered, context: ssrContext } = await new Promise(
+            (resolve, reject) => {
+                const ssr = fork(path.resolve(__dirname, './ssr-thread.js'));
+                ssr.send({
+                    url,
+                    query: op.get(req, 'query', {}),
+                    req: simplifyRequest(req),
+                    bootHooks: global.bootHooks,
+                    appGlobals: req.Server.AppGlobals.list,
+                });
+                ssr.on('message', resolve);
+                ssr.on('error', reject);
+            },
         );
 
-        // for consistency
-        op.set(route, 'component.handleId', handleId);
-        op.set(route, 'handleId', handleId);
-        op.set(context, 'handleId', handleId);
-        if (typeof loadState == 'function') {
-            data = await loadState({
-                route,
-                params: route.params,
-                search: route.query,
-            });
-            Handle.register(handleId, {
-                routeId: op.get(route, 'id'),
-                current: new ReactiumSyncState(data),
-            });
-        }
-
-        await ReactiumBoot.Hook.run(
-            'data-loaded',
-            data,
-            route,
-            route.params,
-            route.query,
+        // pass context up
+        Object.entries(ssrContext).forEach(([key, value]) =>
+            op.set(context, key, value),
         );
-        INFO('Page data loading complete.');
-
-        await ReactiumBoot.Hook.run('ssr-before-render', {
-            data,
-            route,
-            req,
-        });
-
-        const content = renderToString(
-            <AppContexts>
-                <Zone zone='reactium-provider' />
-                <Router
-                    server={true}
-                    location={req.originalUrl}
-                    context={context}
-                    routes={routes}
-                />
-                <Zone zone='reactium-provider-after' />
-            </AppContexts>,
+        Object.entries(rendered).forEach(([key, value]) =>
+            op.set(req, key, value),
         );
 
-        req.content = content;
-
-        await ReactiumBoot.Hook.run('ssr-after-render', {
-            data,
-            route,
-            req,
-        });
-
-        await ReactiumBoot.Hook.run('app-ready', true);
-
-        req.helmet = Helmet.renderStatic();
-
-        const html = req.template(content, req, res);
+        const html = req.template(req);
 
         // Server Side Generation - Conditionally Caching Routed Components markup
-        const loadPaths = op.get(
-            route,
-            'component.loadPaths',
-            op.get(route, 'loadPaths'),
-        );
-        if (loadPaths) {
-            const ssgPaths = (await loadPaths(route)) || [];
-
-            if (Array.isArray(ssgPaths) && ssgPaths.includes(req.originalUrl)) {
+        if (req.ssgPaths) {
+            if (
+                Array.isArray(req.ssgPaths) &&
+                req.ssgPaths.includes(req.originalUrl)
+            ) {
                 const staticHTMLPath = path.normalize(
                     staticHTML + req.originalUrl,
                 );

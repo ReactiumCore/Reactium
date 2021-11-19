@@ -35,6 +35,10 @@ router.get('/ssg-paths', async (req, res) => {
         return;
     }
 
+    if (!Boolean(ReactiumBoot.Routing.get().length)) {
+        await require('../ssr-startup')();
+    }
+
     let paths = [];
     for (let route of ReactiumBoot.Routing.get()) {
         const loadPaths = op.get(
