@@ -15,7 +15,6 @@ import {
     Hook,
 } from 'reactium-core/sdk';
 import uuid from 'uuid/v4';
-import { StylesContext } from '@mui/styles';
 
 const app = {};
 app.dependencies = global.dependencies;
