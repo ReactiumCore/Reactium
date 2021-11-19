@@ -1,20 +1,8 @@
 const { fork } = require('child_process');
-import React from 'react';
-import { Helmet } from 'react-helmet';
-import { renderToString } from 'react-dom/server';
 import op from 'object-path';
 import fs from 'fs-extra';
 import path from 'path';
-import { matchRoutes } from 'react-router-config';
-import Router from 'reactium-core/components/Router/server';
-import {
-    Zone,
-    AppContexts,
-    Handle,
-    ReactiumSyncState,
-    Hook,
-} from 'reactium-core/sdk';
-import uuid from 'uuid/v4';
+import { Hook } from 'reactium-core/sdk';
 
 const app = {};
 app.dependencies = global.dependencies;
