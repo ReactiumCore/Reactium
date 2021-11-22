@@ -114,13 +114,14 @@ class Routing {
                 op.get(updates, 'active.match.route.loadState'),
             );
 
+            const handleId = op.get(
+                updates,
+                'active.match.route.component.handleId',
+                op.get(updates, 'active.match.route.handleId', uuid()),
+            );
+
             if (typeof loadState === 'function') {
                 try {
-                    const handleId = op.get(
-                        updates,
-                        'active.match.route.component.handleId',
-                        op.get(updates, 'active.match.route.handleId', uuid()),
-                    );
                     Handle.register(handleId, {
                         routeId: op.get(updates, 'active.match.route.id'),
                         current: new ReactiumSyncState({}),
