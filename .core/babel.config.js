@@ -117,10 +117,6 @@ ReactiumBabel.Presets.register('@babel/env', {
     preset: ['@babel/env', ReactiumBabel.env],
     envs: ['default', 'test', 'library'],
 });
-ReactiumBabel.Presets.register('@babel/preset-flow', {
-    preset: '@babel/preset-flow',
-    envs: ['default', 'test', 'library'],
-});
 
 ReactiumBabel.Hook.runSync('presets', ReactiumBabel.Presets);
 
