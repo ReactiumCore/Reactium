@@ -23,7 +23,6 @@ const regenManifest = require('./manifest/manifest-tools');
 const umdWebpackGenerator = require('./umd.webpack.config');
 const rootPath = path.resolve(__dirname, '..');
 const { fork, spawn, execSync } = require('child_process');
-const workbox = require('workbox-build');
 const { File, FileReader } = require('file-api');
 const handlebars = require('handlebars');
 const { resolve } = require('path');
@@ -428,34 +427,8 @@ const reactium = (gulp, config, webpackConfig) => {
         done();
     };
 
-    const serviceWorker = () => {
-        let method = 'generateSW';
-        let swConfig = {
-            ...config.sw,
-        };
-
-        if (!fs.existsSync(config.umd.defaultWorker)) {
-            console.log('Skipping service worker generation.');
-            return Promise.resolve();
-        }
-
-        method = 'injectManifest';
-        swConfig.swSrc = config.umd.defaultWorker;
-        delete swConfig.clientsClaim;
-        delete swConfig.skipWaiting;
-
-        return workbox[method](swConfig)
-            .then(({ warnings }) => {
-                // In case there are any warnings from workbox-build, log them.
-                for (const warning of warnings) {
-                    console.warn(warning);
-                }
-                console.log('Service worker generation completed.');
-            })
-            .catch(error => {
-                console.warn('Service worker generation failed:', error);
-            });
-    };
+    // Stub serviceWorker task. Implementation moved to @atomic-reactor/reactium-service-worker plugin
+    const serviceWorker = () => Promise.resolve();
 
     const ssg = gulp.series(task('ssg:flush'), task('ssg:warm'));
 
