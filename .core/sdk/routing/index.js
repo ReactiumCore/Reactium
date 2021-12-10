@@ -134,8 +134,8 @@ class Routing {
                     if (route.component)
                         op.set(route, 'component.handleId', handleId);
 
-                    const params = op.get(updates, 'active.match.params', {});
-                    const search = op.get(updates, 'active.match.search', {});
+                    const params = op.get(updates, 'active.params', {});
+                    const search = op.get(updates, 'active.search', {});
                     const content = await loadState({ route, params, search });
                     const handle = op.get(Handle.handles, [
                         handleId,
