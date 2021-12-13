@@ -243,7 +243,7 @@ import('reactium-core/sdk').then(
 | plugin-ready | Called after all plugins registration callbacks have completed |
 | component-bindings | Called to sibling React components and their DOM element bindings |
 | app-bindpoint | Called to define the main application bind point. |
-| app-redux-provider | Called to define the Redux provider component |
+| app-context-provider | Called to define React application-wrapping context providers, such as Redux / Theme, etc. |
 | app-router | Called to provide the React router component |
 | app-ssr-mode | Called to make the application aware of server-side rendering mode |
 | app-boot-message | Called to define the javascript console boot message |
