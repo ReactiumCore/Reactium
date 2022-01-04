@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "4.1.8",
+  "version": "4.1.9",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -100,7 +100,7 @@
     "xss": "^1.0.10"
   },
   "devDependencies": {
-    "@atomic-reactor/cli": "^2.2.69",
+    "@atomic-reactor/cli": "^2.2.70",
     "@atomic-reactor/gulp-watch": "^5.0.2",
     "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
     "@atomic-reactor/webpack-po-loader": "0.0.3",
