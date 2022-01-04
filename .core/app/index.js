@@ -143,7 +143,7 @@ export const App = async () => {
         /**
          * @api {Hook} app-router app-router
          * @apiName app-router
-         * @apiDescription Called after app-redux-provider to define the registered Router component (i.e. `Reactium.Component.register('Router'...)`).
+         * @apiDescription Called after app-context-provider to define the registered Router component (i.e. `Reactium.Component.register('Router'...)`).
          After this hook, the ReactDOM bindings will actually take place.
          async only - used in front-end application only
          * @apiGroup Hooks

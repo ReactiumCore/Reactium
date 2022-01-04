@@ -104,6 +104,11 @@ class Routing {
                         op.get(updates, 'previous.match.route.id', false)
                     );
                 })
+                .filter(
+                    ([id]) =>
+                        Handle.get(id) &&
+                        op.get(Handle.get(id), 'persistHandle', false) !== true,
+                )
                 .forEach(([id]) => {
                     Handle.unregister(id);
                 });
@@ -122,10 +127,18 @@ class Routing {
 
             if (typeof loadState === 'function') {
                 try {
-                    Handle.register(handleId, {
-                        routeId: op.get(updates, 'active.match.route.id'),
-                        current: new ReactiumSyncState({}),
-                    });
+                    const persistHandle = op.get(
+                        updates,
+                        'active.match.route.persistHandle',
+                        false,
+                    );
+                    if (!persistHandle || !Handle.get(handleId)) {
+                        Handle.register(handleId, {
+                            routeId: op.get(updates, 'active.match.route.id'),
+                            persistHandle,
+                            current: new ReactiumSyncState({}),
+                        });
+                    }
 
                     const route = op.get(updates, 'active.match.route', {});
 
@@ -134,8 +147,8 @@ class Routing {
                     if (route.component)
                         op.set(route, 'component.handleId', handleId);
 
-                    const params = op.get(updates, 'active.match.params', {});
-                    const search = op.get(updates, 'active.match.search', {});
+                    const params = op.get(updates, 'active.params', {});
+                    const search = op.get(updates, 'active.search', {});
                     const content = await loadState({ route, params, search });
                     const handle = op.get(Handle.handles, [
                         handleId,
