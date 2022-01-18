@@ -89,3 +89,4 @@ src/manifest.js
 
 # Editor configs
 *.code-workspace
+*.vscode
