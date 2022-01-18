@@ -86,3 +86,6 @@ src/manifest.js
 
 # Translation .mo
 *.mo
+
+# Editor configs
+*.code-workspace

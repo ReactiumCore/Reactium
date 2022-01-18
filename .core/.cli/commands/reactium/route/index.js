@@ -3,29 +3,30 @@ arcli.Reactium = require('@atomic-reactor/reactium-sdk-core').default;
 const { ActionSequence, ora, path, Reactium } = arcli;
 
 const ENUMS = {
-    CANCELED: 'style canceled!',
-    DESC: 'Reactium: Create or replace a component stylesheet',
+    CANCELED: 'route canceled!',
+    DESC: 'Reactium: Create or replace a component route file',
     FLAGS: {
         destination: {
             flag: '-d, --destination [destination]',
-            desc: 'Directory to save stylesheet',
+            desc: 'Directory to save the file',
         },
-        type: {
-            flag: '-t, --type [type]',
-            desc: 'Stylesheet type',
+        route: {
+            flag: '-r, --route [route]',
+            desc:
+                'Add routes to the component. /route-1, /route-2, /route/with/:param',
         },
         unattended: {
             flag: '-u, --unattended [unattended]',
             desc: 'Bypass the preflight confirmation and any input prompts',
         },
     },
-    NAME: 'style',
+    NAME: 'route',
 };
 
 // prettier-ignore
 const HELP = () => console.log(`
 Example:
-  $ arcli style -h
+  $ arcli route -h
 `);
 
 const ACTION = async ({ opt, props }) => {
@@ -46,39 +47,39 @@ const ACTION = async ({ opt, props }) => {
 
     let params = arcli.flagsToParams({ opt, flags: Object.keys(ENUMS.FLAGS) });
 
-    await Reactium.Hook.run('arcli-style-init', {
+    await Reactium.Hook.run('arcli-route-init', {
         ...props,
         params,
         ENUMS,
     });
 
-    await Reactium.Hook.run('arcli-style-enums', {
+    await Reactium.Hook.run('arcli-route-enums', {
         ...props,
         params,
         ENUMS,
     });
 
     if (params.unattended !== true) {
-        await Reactium.Hook.run('arcli-style-input', {
+        await Reactium.Hook.run('arcli-route-input', {
             ...props,
             params,
             ENUMS,
         });
     }
 
-    await Reactium.Hook.run('arcli-style-conform', {
+    await Reactium.Hook.run('arcli-route-conform', {
         ...props,
         params,
         ENUMS,
     });
 
     if (params.unattended !== true) {
-        await Reactium.Hook.run('arcli-style-preflight', {
+        await Reactium.Hook.run('arcli-route-preflight', {
             ...props,
             params,
         });
 
-        await Reactium.Hook.run('arcli-style-confirm', {
+        await Reactium.Hook.run('arcli-route-confirm', {
             ...props,
             params,
             ENUMS,
@@ -98,10 +99,11 @@ const ACTION = async ({ opt, props }) => {
     spinner.start();
 
     let actions = {};
-    await Reactium.Hook.run('arcli-style-actions', {
+    await Reactium.Hook.run('arcli-route-actions', {
         ...props,
         params,
         actions,
+        spinner,
         ENUMS,
     });
 

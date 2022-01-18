@@ -1,11 +1,7 @@
-import {{name}} from './index';
-{{#if actions}}import deps from 'dependencies';{{/if}}
+import Component from './index';
 
 export default {
-    path: {{{route}}},
     exact: true,
-    component: {{name}},
-    {{#if actions}}
-    load: (params, search) => deps().actions.{{name}}.load({ params, search }),
-    {{/if}}
+    component: Component,
+    path: {{{route}}},
 };

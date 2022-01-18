@@ -3,29 +3,25 @@ arcli.Reactium = require('@atomic-reactor/reactium-sdk-core').default;
 const { ActionSequence, ora, path, Reactium } = arcli;
 
 const ENUMS = {
-    CANCELED: 'style canceled!',
-    DESC: 'Reactium: Create or replace a component stylesheet',
+    CANCELED: 'domain canceled!',
+    DESC: 'Reactium: Create or replace a component domain file',
     FLAGS: {
         destination: {
             flag: '-d, --destination [destination]',
-            desc: 'Directory to save stylesheet',
-        },
-        type: {
-            flag: '-t, --type [type]',
-            desc: 'Stylesheet type',
+            desc: 'Directory to save the file',
         },
         unattended: {
             flag: '-u, --unattended [unattended]',
             desc: 'Bypass the preflight confirmation and any input prompts',
         },
     },
-    NAME: 'style',
+    NAME: 'domain',
 };
 
 // prettier-ignore
 const HELP = () => console.log(`
 Example:
-  $ arcli style -h
+  $ arcli domain -h
 `);
 
 const ACTION = async ({ opt, props }) => {
@@ -46,39 +42,39 @@ const ACTION = async ({ opt, props }) => {
 
     let params = arcli.flagsToParams({ opt, flags: Object.keys(ENUMS.FLAGS) });
 
-    await Reactium.Hook.run('arcli-style-init', {
+    await Reactium.Hook.run('arcli-domain-init', {
         ...props,
         params,
         ENUMS,
     });
 
-    await Reactium.Hook.run('arcli-style-enums', {
+    await Reactium.Hook.run('arcli-domain-enums', {
         ...props,
         params,
         ENUMS,
     });
 
     if (params.unattended !== true) {
-        await Reactium.Hook.run('arcli-style-input', {
+        await Reactium.Hook.run('arcli-domain-input', {
             ...props,
             params,
             ENUMS,
         });
     }
 
-    await Reactium.Hook.run('arcli-style-conform', {
+    await Reactium.Hook.run('arcli-domain-conform', {
         ...props,
         params,
         ENUMS,
     });
 
     if (params.unattended !== true) {
-        await Reactium.Hook.run('arcli-style-preflight', {
+        await Reactium.Hook.run('arcli-domain-preflight', {
             ...props,
             params,
         });
 
-        await Reactium.Hook.run('arcli-style-confirm', {
+        await Reactium.Hook.run('arcli-domain-confirm', {
             ...props,
             params,
             ENUMS,
@@ -98,10 +94,11 @@ const ACTION = async ({ opt, props }) => {
     spinner.start();
 
     let actions = {};
-    await Reactium.Hook.run('arcli-style-actions', {
+    await Reactium.Hook.run('arcli-domain-actions', {
         ...props,
         params,
         actions,
+        spinner,
         ENUMS,
     });
 
