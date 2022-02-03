@@ -115,8 +115,29 @@ const reactium = (gulp, config, webpackConfig) => {
         console.log(`File ${e.event}: ${displaySrc} -> ${displayDest}`);
     };
 
+    const _opnWrapperMonkeyPatch = open =>
+        function(url, name, bs) {
+            const app = op.get(
+                process.env,
+                'BROWERSYNC_OPEN_BROWSER',
+                'chrome',
+            );
+            let browser = open.apps.chrome;
+            if (app in open.apps) browser = open.apps[app];
+
+            open(url, { app: { name: browser } }).catch(function(error) {
+                bs.events.emit('browser:error');
+            });
+        };
+
     const serve = ({ open } = { open: config.open }) => done => {
         const proxy = `localhost:${config.port.proxy}`;
+
+        // monkey-path opnWrapper for linux support
+        const open = require('open');
+        const utils = require('browser-sync/dist/utils');
+        utils.opnWrapper = _opnWrapperMonkeyPatch(open);
+
         axios.get(`http://${proxy}`).then(() => {
             browserSync({
                 notify: false,
