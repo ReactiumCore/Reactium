@@ -142,7 +142,6 @@ const defaultConfig = {
         'umdLibraries',
         'serviceWorker',
         'compress',
-        'apidocs',
         'postBuild',
     ],
 };

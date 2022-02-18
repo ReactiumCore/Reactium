@@ -141,6 +141,7 @@ module.exports = config => {
     sdk.addIgnore('reactium-gulp', /reactium-gulp.js$/);
     sdk.addIgnore('reactium-webpack', /reactium-webpack.js$/);
     sdk.addIgnore('parse-node', /parse\/node/);
+    sdk.addIgnore('xmlhttprequest', /xmlhttprequest/);
 
     if (env === 'production') {
         sdk.addIgnore('redux-devtools', /redux-devtools/);
