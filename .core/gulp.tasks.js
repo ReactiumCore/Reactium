@@ -672,10 +672,13 @@ $assets: (
                     return partial.replace('reactium_modules/', '+');
                 }
 
-                return path.relative(
-                    path.dirname(config.dest.modulesPartial),
-                    path.resolve(rootPath, partial),
-                );
+                return path
+                    .relative(
+                        path.dirname(config.dest.modulesPartial),
+                        path.resolve(rootPath, partial),
+                    )
+                    .split(/[\\\/]/g)
+                    .join(path.posix.sep);
             })
             .map(partial => partial.replace(/\.scss$/, ''))
             .sort((a, b) => {
