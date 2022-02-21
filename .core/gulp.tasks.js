@@ -681,6 +681,27 @@ $assets: (
                     .join(path.posix.sep);
             })
             .map(partial => partial.replace(/\.scss$/, ''))
+            // sort by directory basename
+            .sort((a, b) => {
+                const aBase = path
+                    .basename(path.dirname(a))
+                    .toLocaleLowerCase();
+                const bBase = path
+                    .basename(path.dirname(b))
+                    .toLocaleLowerCase();
+                if (aBase > bBase) return 1;
+                if (aBase < bBase) return -1;
+                return 0;
+            })
+            // sort by file basename
+            .sort((a, b) => {
+                const aBase = path.basename(a).toLocaleLowerCase();
+                const bBase = path.basename(b).toLocaleLowerCase();
+                if (aBase > bBase) return 1;
+                if (aBase < bBase) return -1;
+                return 0;
+            })
+            // sort by priority
             .sort((a, b) => {
                 const aMatch =
                     SassPartialRegistry.list.find(({ pattern }) =>
