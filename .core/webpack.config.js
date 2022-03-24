@@ -27,7 +27,7 @@ const overrides = config => {
         ])
         .forEach(file => {
             try {
-                require(path.resolve(file))(config);
+                config = require(path.resolve(file))(config);
             } catch (error) {
                 console.error(chalk.red(`Error loading ${file}:`));
                 console.error(error);
