@@ -51,6 +51,20 @@ class WebpackReactiumWebpack {
             minimize: false,
         };
 
+        this.resolveAliases = ReactiumWebpack.Utils.registryFactory(
+            'resolveAliases',
+            'id',
+            ReactiumWebpack.Utils.Registry.MODES.CLEAN,
+        );
+        this.resolveAliases.sdk = this;
+
+        this.transpiledDependencies = ReactiumWebpack.Utils.registryFactory(
+            'transpiledDependencies',
+            'module',
+            ReactiumWebpack.Utils.Registry.MODES.CLEAN,
+        );
+        this.transpiledDependencies.sdk = this;
+
         this.ignores = ReactiumWebpack.Utils.registryFactory(
             'ignores',
             'id',
@@ -159,6 +173,10 @@ class WebpackReactiumWebpack {
         return this.overridesValue || {};
     }
 
+    addResolveAlias(id, alias) {
+        this.resolveAliases.register(id, { alias });
+    }
+
     addRule(id, rule) {
         this.rules.register(id, { rule });
     }
@@ -169,6 +187,10 @@ class WebpackReactiumWebpack {
 
     addPlugin(id, plugin) {
         this.plugins.register(id, { plugin });
+    }
+
+    addTranspiledDependency(module) {
+        this.transpiledDependencies.register(module);
     }
 
     addContext(id, context) {
@@ -365,7 +387,29 @@ class WebpackReactiumWebpack {
     config() {
         ReactiumWebpack.Hook.runSync('before-config', this);
 
-        return {
+        if (this.transpiledDependencies.list.length > 0) {
+            this.addRule('babel-loader', {
+                test: [/\.jsx|js($|\?)/],
+                exclude: [
+                    new RegExp(
+                        `node_modules\/(?!(${this.transpiledDependencies.list
+                            .map(({ module }) => module)
+                            .join('|')})\/).*`,
+                    ),
+                    /umd.js$/,
+                ],
+                resolve: {
+                    extensions: ['.js', '.jsx', '.json'],
+                },
+                use: [
+                    {
+                        loader: 'babel-loader',
+                    },
+                ],
+            });
+        }
+
+        const theConfig = {
             mode: this.mode,
             target: this.target,
             output: this.output,
@@ -381,6 +425,17 @@ class WebpackReactiumWebpack {
             plugins: this.getPlugins(),
             ...this.overrides,
         };
+
+        if (this.resolveAliases.list.length > 0) {
+            const alias = {};
+            this.resolveAliases.list.forEach(({ id: from, alias: to }) => {
+                alias[from] = to;
+            });
+            theConfig.resolve = { alias };
+        }
+
+        ReactiumWebpack.Hook.runSync('after-config', theConfig, this);
+        return theConfig;
     }
 }
 
