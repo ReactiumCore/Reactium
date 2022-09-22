@@ -656,6 +656,9 @@ $assets: (
     };
 
     const dddStylesPartial = done => {
+        const currentPartial =
+            fs.existsSync(config.dest.modulesPartial) &&
+            fs.readFileSync(config.dest.modulesPartial, 'utf8');
         const SassPartialRegistry = ReactiumGulp.Utils.registryFactory(
             'SassPartialRegistry',
             'id',
@@ -744,12 +747,15 @@ $assets: (
 {{/each}}
 `);
 
-        fs.ensureFileSync(config.dest.modulesPartial);
-        fs.writeFileSync(
-            config.dest.modulesPartial,
-            template(stylePartials),
-            'utf8',
-        );
+        const newPartial = template(stylePartials);
+        if (currentPartial !== newPartial) {
+            fs.ensureFileSync(config.dest.modulesPartial);
+            fs.writeFileSync(
+                config.dest.modulesPartial,
+                template(stylePartials),
+                'utf8',
+            );
+        }
         done();
     };
 
