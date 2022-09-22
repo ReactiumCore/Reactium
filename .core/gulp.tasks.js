@@ -826,18 +826,47 @@ $assets: (
                   .pipe(gulp.dest(config.dest.assets));
 
     const watchFork = done => {
+        const watchers = {};
         // Watch for file changes
-        gulp.watch(config.watch.colors, gulp.task('styles:colors'));
-        gulp.watch(config.watch.pluginAssets, gulp.task('styles:pluginAssets'));
-        gulp.watch(config.watch.style, gulp.task('styles:compile'));
-        gulp.watch(config.src.styleDDD, gulp.task('styles:partials'));
+        watchers['styles:colors'] = gulp.watch(
+            config.watch.colors,
+            gulp.task('styles:colors'),
+        );
+        watchers['styles:pluginAssets'] = gulp.watch(
+            config.watch.pluginAssets,
+            gulp.task('styles:pluginAssets'),
+        );
+        watchers['styles:compile'] = gulp.watch(
+            config.watch.style,
+            gulp.task('styles:compile'),
+        );
+        watchers['styles:partials'] = gulp.watch(
+            config.src.styleDDD,
+            gulp.task('styles:partials'),
+        );
         gulpwatch(config.watch.markup, watcher);
         gulpwatch(config.watch.assets, watcher);
         const scriptWatcher = gulp.watch(
             config.watch.js,
             gulp.parallel(task('manifest')),
         );
+
+        watchLogger(watchers);
         done();
+    };
+
+    const watchLogger = watchers => {
+        Object.entries(watchers).forEach(([type, watcher]) => {
+            [
+                ['change', chalk.green(`[${type} change]`)],
+                ['add', chalk.green(`[${type} add]`)],
+                ['unlink', chalk.green(`[${type} delete]`)],
+            ].forEach(([eventName, label]) => {
+                watcher.on(eventName, changed => {
+                    console.log(label, changed);
+                });
+            });
+        });
     };
 
     const tasks = {
