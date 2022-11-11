@@ -8,31 +8,6 @@ const path = require('path');
 
 global.ReactiumWebpack = ReactiumWebpack;
 
-const matchChunk = (test, debug) => module => {
-    const chunkNames = [];
-    for (const chunk of module.chunksIterable) {
-        chunkNames.push(chunk.name);
-    }
-
-    const names = _.compact(
-        _.flatten([
-            module.nameForCondition && module.nameForCondition(),
-            chunkNames,
-        ]),
-    );
-
-    const match = !!names.find(name => test.test(name));
-    if (debug && match) {
-        console.log({
-            test: test.toString(),
-            name: module.nameForCondition && module.nameForCondition(),
-            chunkNames,
-        });
-    }
-
-    return match;
-};
-
 let artifacts = {};
 class WebpackReactiumWebpack {
     constructor(name, ddd, context) {
@@ -286,9 +261,12 @@ class WebpackReactiumWebpack {
     }
 
     matchChunk(test, debug) {
-        return module => {
+        return (module, chunks) => {
             const chunkNames = [];
-            for (const chunk of module.chunksIterable) {
+
+            for (const chunk of chunks.chunkGraph.getModuleChunksIterable(
+                module,
+            )) {
                 chunkNames.push(chunk.name);
             }
 
