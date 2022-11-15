@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "4.1.9",
+  "version": "5.0.0-alpha-1",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
