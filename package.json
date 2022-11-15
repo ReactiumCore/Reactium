@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node build/.core/index.js",
     "test": "jest",
-    "build": "npm-run-all build:*",
+    "build": "run-s build:*",
     "build:gulp": "cross-env NODE_ENV=production gulp",
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
     "build:babel-reactium_modules": "cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules",
