@@ -8,31 +8,6 @@ const path = require('path');
 
 global.ReactiumWebpack = ReactiumWebpack;
 
-const matchChunk = (test, debug) => module => {
-    const chunkNames = [];
-    for (const chunk of module.chunksIterable) {
-        chunkNames.push(chunk.name);
-    }
-
-    const names = _.compact(
-        _.flatten([
-            module.nameForCondition && module.nameForCondition(),
-            chunkNames,
-        ]),
-    );
-
-    const match = !!names.find(name => test.test(name));
-    if (debug && match) {
-        console.log({
-            test: test.toString(),
-            name: module.nameForCondition && module.nameForCondition(),
-            chunkNames,
-        });
-    }
-
-    return match;
-};
-
 let artifacts = {};
 class WebpackReactiumWebpack {
     constructor(name, ddd, context) {
@@ -285,30 +260,11 @@ class WebpackReactiumWebpack {
         return this.plugins.list.map(({ id, plugin }) => plugin);
     }
 
-    matchChunk(test, debug) {
+    matchChunk(test) {
         return module => {
-            const chunkNames = [];
-            for (const chunk of module.chunksIterable) {
-                chunkNames.push(chunk.name);
-            }
-
-            const names = _.compact(
-                _.flatten([
-                    module.nameForCondition && module.nameForCondition(),
-                    chunkNames,
-                ]),
-            );
-
-            const match = !!names.find(name => test.test(name));
-            if (debug && match) {
-                console.log({
-                    test: test.toString(),
-                    name: module.nameForCondition && module.nameForCondition(),
-                    chunkNames,
-                });
-            }
-
-            return match;
+            const moduleName =
+                module.nameForCondition && module.nameForCondition();
+            return test.test(moduleName);
         };
     }
 
@@ -355,6 +311,7 @@ class WebpackReactiumWebpack {
     setCodeSplittingOptimize(env) {
         this.optimizationValue = {
             minimize: Boolean(env !== 'development'),
+            chunkIds: 'named',
             splitChunks: {
                 chunks: 'all',
                 cacheGroups: {
@@ -414,7 +371,6 @@ class WebpackReactiumWebpack {
             target: this.target,
             output: this.output,
             entry: this.entry,
-            devtool: this.devtool,
             optimization: this.optimization,
             externals: this.getExternals(),
             module: {
@@ -425,6 +381,8 @@ class WebpackReactiumWebpack {
             plugins: this.getPlugins(),
             ...this.overrides,
         };
+
+        if (this.devtool) theConfig.devtool = this.devtool;
 
         if (this.resolveAliases.list.length > 0) {
             const alias = {};

@@ -74,43 +74,46 @@ ReactiumBoot.Hook.registerSync(
     (req, AppScripts, res) => {
         // Webpack assets
         if (process.env.NODE_ENV === 'development') {
-            const assetsByChunkName = res.locals.webpackStats.toJson()
-                .assetsByChunkName;
-
-            Object.values(assetsByChunkName).forEach(chunk => {
-                _.flatten([
-                    normalizeAssets(chunk)
-                        .filter(path => path.endsWith('.js'))
-                        .filter(path => /main\.js$/.test(path)),
-                ]).forEach(path =>
+            const { stats: context } = res.locals.webpack.devMiddleware;
+            const stats = context.toJson();
+            _.pluck(stats.namedChunkGroups.main.assets, 'name').forEach(
+                path => {
                     AppScripts.register(path, {
                         path: `/${path}`,
                         order: ReactiumBoot.Enums.priority.highest,
                         footer: true,
-                    }),
-                );
-            });
+                    });
+                },
+            );
 
             return;
         }
 
-        const scriptPathBase =
-            process.env.PUBLIC_DIRECTORY || `${process.cwd()}/public`;
+        try {
+            const webpackAssets = JSON.parse(
+                fs.readFileSync(
+                    path.resolve(
+                        rootPath,
+                        'src/app/server/webpack-manifest.json',
+                    ),
+                ),
+            );
 
-        globby
-            .sync(
-                path
-                    .resolve(scriptPathBase, 'assets', 'js', '*main.js')
-                    .replace(/\\/g, '/'),
-            )
-            .map(script => `/assets/js/${path.parse(script).base}`)
-            .forEach(path =>
-                AppScripts.register(path, {
-                    path,
+            ReactiumBoot.Hook.runSync('webpack-server-assets', webpackAssets);
+            webpackAssets.forEach(asset =>
+                AppScripts.register(asset, {
+                    path: `/assets/js/${asset}`,
                     order: ReactiumBoot.Enums.priority.highest,
                     footer: true,
                 }),
             );
+        } catch (error) {
+            console.error(
+                'build/src/app/server/webpack-manifest.json not found or invalid JSON',
+                error,
+            );
+            process.exit(1);
+        }
     },
     ReactiumBoot.Enums.priority.highest,
     'SERVER-APP-SCRIPTS-CORE',
