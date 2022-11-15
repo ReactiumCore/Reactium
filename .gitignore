@@ -83,6 +83,7 @@ Thumbs.db
 
 # Manifest
 src/manifest.js
+src/app/server/webpack-manifest.json
 
 # Translation .mo
 *.mo

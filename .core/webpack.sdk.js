@@ -260,33 +260,11 @@ class WebpackReactiumWebpack {
         return this.plugins.list.map(({ id, plugin }) => plugin);
     }
 
-    matchChunk(test, debug) {
-        return (module, chunks) => {
-            const chunkNames = [];
-
-            for (const chunk of chunks.chunkGraph.getModuleChunksIterable(
-                module,
-            )) {
-                chunkNames.push(chunk.name);
-            }
-
-            const names = _.compact(
-                _.flatten([
-                    module.nameForCondition && module.nameForCondition(),
-                    chunkNames,
-                ]),
-            );
-
-            const match = !!names.find(name => test.test(name));
-            if (debug && match) {
-                console.log({
-                    test: test.toString(),
-                    name: module.nameForCondition && module.nameForCondition(),
-                    chunkNames,
-                });
-            }
-
-            return match;
+    matchChunk(test) {
+        return module => {
+            const moduleName =
+                module.nameForCondition && module.nameForCondition();
+            return test.test(moduleName);
         };
     }
 
@@ -333,6 +311,7 @@ class WebpackReactiumWebpack {
     setCodeSplittingOptimize(env) {
         this.optimizationValue = {
             minimize: Boolean(env !== 'development'),
+            chunkIds: 'named',
             splitChunks: {
                 chunks: 'all',
                 cacheGroups: {
@@ -392,7 +371,6 @@ class WebpackReactiumWebpack {
             target: this.target,
             output: this.output,
             entry: this.entry,
-            devtool: this.devtool,
             optimization: this.optimization,
             externals: this.getExternals(),
             module: {
@@ -403,6 +381,8 @@ class WebpackReactiumWebpack {
             plugins: this.getPlugins(),
             ...this.overrides,
         };
+
+        if (this.devtool) theConfig.devtool = this.devtool;
 
         if (this.resolveAliases.list.length > 0) {
             const alias = {};

@@ -233,7 +233,6 @@ const registeredDevMiddleware = () => {
             name: 'webpack',
             use: wpMiddlware(compiler, {
                 serverSideRender: true,
-                path: '/',
                 publicPath,
             }),
             order: Enums.priority.high,

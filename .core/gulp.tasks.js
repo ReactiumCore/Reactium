@@ -384,21 +384,44 @@ const reactium = (gulp, config, webpackConfig) => {
         if (!isDev || process.env.MANUAL_DEV_BUILD === 'true') {
             webpack(webpackConfig, (err, stats) => {
                 if (err) {
-                    console.log(err());
-                    done();
-                    return;
-                }
-
-                let result = stats.toJson();
-
-                if (result.errors.length > 0) {
-                    result.errors.forEach(error => {
-                        console.log(error);
-                    });
+                    console.error(err.stack || err);
+                    if (err.details) {
+                        console.error(err.details);
+                    }
 
                     done();
                     return;
                 }
+
+                const info = stats.toJson();
+                if (stats.hasErrors()) {
+                    console.error(info.errors);
+                    done();
+                    return;
+                }
+
+                if (stats.hasWarnings()) {
+                    if (process.env.DEBUG === 'on') console.warn(info.warnings);
+                }
+
+                const mainEntryAssets = _.pluck(
+                    info.namedChunkGroups.main.assets,
+                    'name',
+                );
+                ReactiumGulp.Hook.runSync(
+                    'main-webpack-assets',
+                    mainEntryAssets,
+                    info,
+                    stats,
+                );
+                const serverAppPath = path.resolve(rootPath, 'src/app/server');
+
+                fs.ensureDirSync(serverAppPath);
+                fs.writeFileSync(
+                    path.resolve(serverAppPath, 'webpack-manifest.json'),
+                    JSON.stringify(mainEntryAssets),
+                    'utf-8',
+                );
 
                 done();
             });
