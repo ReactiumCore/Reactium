@@ -88,14 +88,14 @@ module.exports = config => {
         sdk.addPlugin('asset-compression', new CompressionPlugin());
     }
 
-    // sdk.addRule('po-loader', {
-    //     test: [/\.pot?$/],
-    //     use: [
-    //         {
-    //             loader: '@atomic-reactor/webpack-po-loader',
-    //         },
-    //     ],
-    // });
+    sdk.addRule('po-loader', {
+        test: [/\.pot?$/],
+        use: [
+            {
+                loader: '@atomic-reactor/webpack-po-loader',
+            },
+        ],
+    });
 
     sdk.addRule('babel-loader', {
         test: [/\.jsx|js($|\?)/],
