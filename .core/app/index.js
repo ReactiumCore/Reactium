@@ -4,11 +4,10 @@
  * -----------------------------------------------------------------------------
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import _ from 'underscore';
-import op from 'object-path';
 import deps from 'dependencies';
 import 'externals';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 
 /**
  * -----------------------------------------------------------------------------
@@ -154,12 +153,11 @@ export const App = async () => {
 
         // Render the React Components
         if (bindPoints.length > 0) {
-            bindPoints.forEach(item => {
-                ReactDOM.render(
+            bindPoints.forEach(item =>
+                createRoot(item.element).render(
                     <AppContexts>{item.component}</AppContexts>,
-                    item.element,
-                );
-            });
+                ),
+            );
         }
 
         // ensure router DOM Element is on the page
@@ -179,14 +177,24 @@ export const App = async () => {
             );
             console.log(...message);
 
-            ReactDOM[ssr ? 'hydrate' : 'render'](
-                <AppContexts>
-                    <Zone zone='reactium-provider' />
-                    <Router history={Reactium.Routing.history} />
-                    <Zone zone='reactium-provider-after' />
-                </AppContexts>,
-                appElement,
-            );
+            if (ssr) {
+                hydrateRoot(
+                    appElement,
+                    <AppContexts>
+                        <Zone zone='reactium-provider' />
+                        <Router history={Reactium.Routing.history} />
+                        <Zone zone='reactium-provider-after' />
+                    </AppContexts>,
+                );
+            } else {
+                createRoot(appElement).render(
+                    <AppContexts>
+                        <Zone zone='reactium-provider' />
+                        <Router history={Reactium.Routing.history} />
+                        <Zone zone='reactium-provider-after' />
+                    </AppContexts>,
+                );
+            }
 
             /**
              * @api {Hook} app-ready app-ready
