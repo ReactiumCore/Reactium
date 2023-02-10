@@ -1,76 +1,29 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 import 'reactium-core/components/Router/reactium-hooks';
 import op from 'object-path';
 import _ from 'underscore';
 import deps from 'dependencies';
 
 import('reactium-core/sdk').then(
-    async ({ default: Reactium, HookComponent, isServerWindow }) => {
+    async ({ default: Reactium, useHookComponent }) => {
         Reactium.Hook.register(
             'component-bindings',
             async context => {
-                const { default: getComponents } = await import(
-                    'dependencies/getComponents'
-                );
+                const { hookableComponent } = await import('reactium-core/sdk');
 
                 // Placeholder for the bindable elements
                 const bindPoints = [];
 
-                // <Component /> DOM Elements array
-                const elements =
-                    typeof document !== 'undefined'
-                        ? Array.prototype.slice.call(
-                              document.querySelectorAll('component'),
-                          )
-                        : [];
+                const elements = Array.from(
+                    document.querySelectorAll('[data-reactium-bind]'),
+                );
 
                 if (elements.length > 0) {
                     let types = [];
-
-                    let elms = elements.map(elm => {
-                        let path = elm.getAttribute('path');
-                        let type = elm.getAttribute('type');
-
-                        types.push(type);
-
-                        return { path, type };
-                    });
-
-                    let components = getComponents(elms);
-
-                    elements.forEach(elm => {
-                        // Get the component type
-                        let type = elm.getAttribute('type');
-
-                        if (!components.hasOwnProperty(type)) {
-                            return;
-                        }
-
-                        // Get parameters from container element
-                        let params = {};
-                        let exclude = ['type', 'path'];
-                        Object.entries(elm.attributes).forEach(
-                            ([key, attr]) => {
-                                key = String(key).toLowerCase();
-                                if (exclude.indexOf(key) < 0) {
-                                    return;
-                                }
-                                params[attr.name] = attr.value;
-                            },
-                        );
-
-                        // Get the children from the element and pass them to the component
-                        let children = elm.innerHTML;
-                        if (children) {
-                            params['children'] = children;
-                        }
-
-                        // Create the React element and apply parameters
-                        let cmp = React.createElement(components[type], params);
-                        bindPoints.push({ component: cmp, element: elm });
-                        console.log('Binding components.');
-                    });
+                    for (const Element of elements) {
+                        const type = Element.getAttribute('data-reactium-bind');
+                        const Component = hookableComponent(type);
+                        bindPoints.push({ type, Element, Component });
+                    }
                 }
 
                 context.bindPoints = bindPoints;
@@ -142,7 +95,7 @@ import('reactium-core/sdk').then(
         Reactium.Hook.register(
             'app-router',
             async () => {
-                const { default: Router } = await import(
+                const { Router } = await import(
                     'reactium-core/components/Router'
                 );
                 Reactium.Component.register('Router', Router);

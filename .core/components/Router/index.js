@@ -1,12 +1,12 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
+import { Router as Dom } from 'react-router-dom';
 import { useHookComponent } from 'reactium-core/sdk';
 
-export default ({ history }) => {
+export const Router = ({ history }) => {
     const RoutedContent = useHookComponent('RoutedContent');
     return (
-        <Router history={history}>
+        <Dom history={history}>
             <RoutedContent />
-        </Router>
+        </Dom>
     );
 };

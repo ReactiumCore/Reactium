@@ -13,6 +13,11 @@ module.exports = {
                 ${req.headerScripts}
                 ${req.appBindings}
 
+                <div data-reactium-bind="Loader"></div>
+                <div data-reactium-bind="App"></div>
+                <div data-reactium-bind="Foo"></div>
+                <div data-reactium-bind="Bar"></div>
+
                 <script>
                     window.defines = ${serialize(defines)};
                     ${req.appGlobals}

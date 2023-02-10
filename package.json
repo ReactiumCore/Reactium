@@ -43,7 +43,6 @@
   "dependencies": {
     "@atomic-reactor/reactium-api": "file:reactium_modules/@atomic-reactor/reactium-api/_npm",
     "@atomic-reactor/reactium-capability": "file:reactium_modules/@atomic-reactor/reactium-capability/_npm",
-    "@atomic-reactor/reactium-demo": "file:reactium_modules/@atomic-reactor/reactium-demo/_npm",
     "@atomic-reactor/reactium-role": "file:reactium_modules/@atomic-reactor/reactium-role/_npm",
     "@atomic-reactor/reactium-sdk-core": "^1.2.18",
     "@atomic-reactor/reactium-service-worker": "file:reactium_modules/@atomic-reactor/reactium-service-worker/_npm",
@@ -177,7 +176,6 @@
   "reactiumDependencies": {
     "@atomic-reactor/reactium-api": "2.0.4",
     "@atomic-reactor/reactium-capability": "2.0.0",
-    "@atomic-reactor/reactium-demo": "1.0.1",
     "@atomic-reactor/reactium-role": "2.0.0",
     "@atomic-reactor/reactium-user": "2.0.0",
     "@atomic-reactor/reactium-setting": "2.0.0",

@@ -7,24 +7,12 @@ import React from 'react';
 import _ from 'underscore';
 import deps from 'dependencies';
 import 'externals';
-import { createRoot, hydrateRoot } from 'react-dom/client';
 
-/**
- * -----------------------------------------------------------------------------
- * @function App()
- * @description Scan DOM for <Component> elements and render React components
- * inside of them.
- * -----------------------------------------------------------------------------
- */
-export const App = async () => {
+export const Loader = async () => {};
+
+const loadFramework = async () => {
     console.log('Loading Core SDK');
-    const {
-        default: Reactium,
-        hookableComponent,
-        isBrowserWindow,
-        Zone,
-        AppContexts,
-    } = await import('reactium-core/sdk');
+    const { default: Reactium } = await import('reactium-core/sdk');
 
     console.log('Initializing Application Hooks');
 
@@ -39,8 +27,6 @@ export const App = async () => {
      */
     await Reactium.Hook.run('sdk-init', Reactium);
     Reactium.Hook.runSync('sdk-init', Reactium);
-
-    const context = {};
 
     /**
      * @api {Hook} init init
@@ -102,96 +88,97 @@ export const App = async () => {
      * @apiGroup Hooks
      */
     await Reactium.Hook.run('plugin-ready');
+};
 
-    if (isBrowserWindow()) {
-        /**
-         * @api {Hook} component-bindings component-bindings
-         * @apiName component-bindings
-         * @apiDescription Called after plugin and routing initialization to define element and dynamic component for
-         one-off component bindings to the DOM. e.g. In development mode, used to render Redux Dev tools.
-         async only - used in front-end application only
-         * @apiParam {Object} context context.bindPoints MUST be an array of binding objects after this hook is called
-         * @apiParam (binding) {HTMLElement} the DOM element to bind to (e.g. document.getElementById('my-element'))
-         * @apiParam (binding) {String} string matching a React component module in one of the Reactium built-in webpack contexts
-         (src/app/components or src/app/components/common-ui) e.g. 'DevTools' maps to src/app/components/DevTools
-         * @apiGroup Hooks
-         */
-        const { bindPoints } = await Reactium.Hook.run('component-bindings');
+/**
+ * -----------------------------------------------------------------------------
+ * @function App()
+ * @description Scan DOM for <Component> elements and render React components
+ * inside of them.
+ * -----------------------------------------------------------------------------
+ */
+export const App = async () => {
+    const {
+        default: Reactium,
+        hookableComponent,
+        Zone,
+        AppContexts,
+    } = await import('reactium-core/sdk');
 
-        /**
-         * @api {Hook} app-bindpoint app-bindpoint
-         * @apiName app-bindpoint
-         * @apiDescription Called after plugin and routing initialization to define the DOM element used for mounting the Single-Page application (SPA).
-         By default, the application will bind to `document.getElementById('router')`, but this can be changed with this hook. This is related to the HTML
-         template artifacts left by the server-side `Server.AppBindings` hook.
-         async only - used in front-end application only
-         * @apiParam {Object} context context.appElement MUST be an HTMLElement where your React appliation will bind to the DOM.
-         * @apiParam (appElement) {HTMLElement} the DOM element to bind to - by default `document.getElementById('router')`.
-         * @apiGroup Hooks
-         */
-        const { appElement } = await Reactium.Hook.run('app-bindpoint');
+    await loadFramework();
 
-        /**
-         * @api {Hook} app-context-provider app-context-provider
-         * @apiName app-context-provider
-         * @apiDescription Called after app-bindpoint to define any React context providers, using the [Reactium.AppContext](#api-Reactium-Reactium.AppContext) registry.
-         * @apiGroup Hooks
-         */
-        await Reactium.Hook.run('app-context-provider');
+    /**
+     * @api {Hook} component-bindings component-bindings
+     * @apiName component-bindings
+     * @apiDescription Called after plugin and routing initialization to define element and dynamic component for
+     one-off component bindings to the DOM. e.g. In development mode, used to render Redux Dev tools.
+        async only - used in front-end application only
+        * @apiParam {Object} context context.bindPoints MUST be an array of binding objects after this hook is called
+        * @apiParam (binding) {HTMLElement} the DOM element to bind to (e.g. document.getElementById('my-element'))
+        * @apiParam (binding) {String} string matching a React component module in one of the Reactium built-in webpack contexts
+        (src/app/components or src/app/components/common-ui) e.g. 'DevTools' maps to src/app/components/DevTools
+        * @apiGroup Hooks
+        */
+    const { bindPoints } = await Reactium.Hook.run('component-bindings');
 
-        /**
-         * @api {Hook} app-router app-router
-         * @apiName app-router
-         * @apiDescription Called after app-context-provider to define the registered Router component (i.e. `Reactium.Component.register('Router'...)`).
-         After this hook, the ReactDOM bindings will actually take place.
-         async only - used in front-end application only
-         * @apiGroup Hooks
-         */
-        await Reactium.Hook.run('app-router');
+    /**
+     * @api {Hook} app-context-provider app-context-provider
+     * @apiName app-context-provider
+     * @apiDescription Called after app-bindpoint to define any React context providers, using the [Reactium.AppContext](#api-Reactium-Reactium.AppContext) registry.
+     * @apiGroup Hooks
+     */
+    await Reactium.Hook.run('app-context-provider');
 
-        const Router = hookableComponent('Router');
+    // Render the React Components
+    if (bindPoints.length > 0) {
+        const { createRoot } = await import('react-dom/client');
 
-        // Render the React Components
-        if (bindPoints.length > 0) {
-            bindPoints.forEach(item =>
-                createRoot(item.element).render(
-                    <AppContexts>{item.component}</AppContexts>,
-                ),
-            );
+        console.log('Binding components.');
+        for (const { type, Component, Element } of bindPoints) {
+            if (type === 'App') {
+                /**
+                 * @api {Hook} app-router app-router
+                 * @apiName app-router
+                 * @apiDescription Called after app-context-provider to define the registered Router component (i.e. `Reactium.Component.register('Router'...)`).
+                 After this hook, the ReactDOM bindings will actually take place.
+                async only - used in front-end application only
+                * @apiGroup Hooks
+                */
+                await Reactium.Hook.run('app-router');
+
+                const Router = hookableComponent('Router');
+                const { message = [] } = await Reactium.Hook.run(
+                    'app-boot-message',
+                );
+
+                console.log(...message);
+
+                createRoot(Element).render(
+                    <AppContexts>
+                        <Zone zone='reactium-provider' />
+                        <Router history={Reactium.Routing.history} />
+                        <Zone zone='reactium-provider-after' />
+                    </AppContexts>,
+                );
+
+                /**
+                 * @api {Hook} app-ready app-ready
+                 * @apiDescription The final hook run after the front-end application has bee bound or hydrated. After this point,
+                 the all hooks are runtime hooks.
+                * @apiName app-ready
+                * @apiGroup Hooks
+                */
+            } else {
+                // createRoot(Element).render(<Component />);
+                createRoot(Element).render(
+                    <AppContexts>
+                        <Component />
+                    </AppContexts>,
+                );
+            }
         }
 
-        // ensure router DOM Element is on the page
-        if (appElement) {
-            /**
-             * @api {Hook} app-boot-message app-boot-message
-             * @apiName app-boot-message
-             * @apiDescription Called during application binding, this minor hook will allow you to
-             change the format of the of the front-end Javascript console message indicating application start.
-             async only - used in front-end application only
-             * @apiGroup Hooks
-             */
-            const { message = [] } = await Reactium.Hook.run(
-                'app-boot-message',
-            );
-            console.log(...message);
-
-            createRoot(appElement).render(
-                <AppContexts>
-                    <Zone zone='reactium-provider' />
-                    <Router history={Reactium.Routing.history} />
-                    <Zone zone='reactium-provider-after' />
-                </AppContexts>,
-            );
-
-            /**
-             * @api {Hook} app-ready app-ready
-             * @apiDescription The final hook run after the front-end application has bee bound or hydrated. After this point,
-             the all hooks are runtime hooks.
-             * @apiName app-ready
-             * @apiGroup Hooks
-             */
-            _.defer(() => Reactium.Hook.run('app-ready'));
-        }
+        _.defer(() => Reactium.Hook.run('app-ready'));
     }
 };
 
