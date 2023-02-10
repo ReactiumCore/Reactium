@@ -315,24 +315,8 @@ class WebpackReactiumWebpack {
             splitChunks: {
                 chunks: 'all',
                 cacheGroups: {
-                    vendors: {
-                        test: this.matchChunk(/[\\/]node_modules[\\/]/),
-                        priority: -10,
-                        reuseExistingChunk: true,
-                    },
-                    core: {
-                        test: this.matchChunk(/[\\/]\.core/),
-                        priority: -10,
-                        reuseExistingChunk: true,
-                    },
-                    sdk: {
-                        test: this.matchChunk(/[\\/]\.core[\\/]sdk/),
-                        priority: -20,
-                        priority: 0,
-                        reuseExistingChunk: true,
-                    },
-                    sw: {
-                        test: this.matchChunk(/[\\/]node_modules[\\/]workbox/),
+                    main: {
+                        minChunks: 1,
                         priority: -20,
                         reuseExistingChunk: true,
                     },
