@@ -45,7 +45,6 @@
     "@atomic-reactor/reactium-capability": "file:reactium_modules/@atomic-reactor/reactium-capability/_npm",
     "@atomic-reactor/reactium-role": "file:reactium_modules/@atomic-reactor/reactium-role/_npm",
     "@atomic-reactor/reactium-sdk-core": "^1.2.18",
-    "@atomic-reactor/reactium-service-worker": "file:reactium_modules/@atomic-reactor/reactium-service-worker/_npm",
     "@atomic-reactor/reactium-setting": "file:reactium_modules/@atomic-reactor/reactium-setting/_npm",
     "@atomic-reactor/reactium-svg": "file:reactium_modules/@atomic-reactor/reactium-svg/_npm",
     "@atomic-reactor/reactium-user": "file:reactium_modules/@atomic-reactor/reactium-user/_npm",
@@ -179,7 +178,6 @@
     "@atomic-reactor/reactium-role": "2.0.0",
     "@atomic-reactor/reactium-user": "2.0.0",
     "@atomic-reactor/reactium-setting": "2.0.0",
-    "@atomic-reactor/reactium-service-worker": "2.0.1",
     "@atomic-reactor/reactium-svg": "0.0.3"
   }
 }
