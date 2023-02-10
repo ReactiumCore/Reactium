@@ -139,7 +139,7 @@ define({ "api": [
     "url": "Hooks",
     "title": "Hooks",
     "name": "Hooks",
-    "description": "<p>Here are the standard hooks that fire (in order) on the bootstrap of your Reactium application.</p> <table> <thead> <tr> <th style=\"text-align:left\">Hook</th> <th style=\"text-align:left\">Description</th> </tr> </thead> <tbody> <tr> <td style=\"text-align:left\">init</td> <td style=\"text-align:left\">Called before all other hooks on startup.</td> </tr> <tr> <td style=\"text-align:left\">dependencies-load</td> <td style=\"text-align:left\">Called while application dependencies are loaded.</td> </tr> <tr> <td style=\"text-align:left\">service-worker-init</td> <td style=\"text-align:left\">Called while service worker is loaded.</td> </tr> <tr> <td style=\"text-align:left\">zone-defaults</td> <td style=\"text-align:left\">Called while rendering zone default components are loaded.</td> </tr> <tr> <td style=\"text-align:left\">store-create</td> <td style=\"text-align:left\">Called while Redux store is being created.</td> </tr> <tr> <td style=\"text-align:left\">store-created</td> <td style=\"text-align:left\">Called after Redux store is created.</td> </tr> <tr> <td style=\"text-align:left\">plugin-dependencies</td> <td style=\"text-align:left\">Called before loading runtime plugins.</td> </tr> <tr> <td style=\"text-align:left\">plugin-init</td> <td style=\"text-align:left\">Called to initiate plugin registration.</td> </tr> <tr> <td style=\"text-align:left\">routes-init</td> <td style=\"text-align:left\">Called to initiaze React router</td> </tr> <tr> <td style=\"text-align:left\">register-route</td> <td style=\"text-align:left\">Called for each route that is registered</td> </tr> <tr> <td style=\"text-align:left\">data-loaded</td> <td style=\"text-align:left\">Called on route load to pre-load data</td> </tr> <tr> <td style=\"text-align:left\">plugin-ready</td> <td style=\"text-align:left\">Called after all plugins registration callbacks have completed</td> </tr> <tr> <td style=\"text-align:left\">component-bindings</td> <td style=\"text-align:left\">Called to sibling React components and their DOM element bindings</td> </tr> <tr> <td style=\"text-align:left\">app-bindpoint</td> <td style=\"text-align:left\">Called to define the main application bind point.</td> </tr> <tr> <td style=\"text-align:left\">app-context-provider</td> <td style=\"text-align:left\">Called to define React application-wrapping context providers, such as Redux / Theme, etc.</td> </tr> <tr> <td style=\"text-align:left\">app-router</td> <td style=\"text-align:left\">Called to provide the React router component</td> </tr> <tr> <td style=\"text-align:left\">app-ssr-mode</td> <td style=\"text-align:left\">Called to make the application aware of server-side rendering mode</td> </tr> <tr> <td style=\"text-align:left\">app-boot-message</td> <td style=\"text-align:left\">Called to define the javascript console boot message</td> </tr> <tr> <td style=\"text-align:left\">app-ready</td> <td style=\"text-align:left\">Called when the application is being bound or hydrated by ReactDOM</td> </tr> </tbody> </table>",
+    "description": "<p>Here are the standard hooks that fire (in order) on the bootstrap of your Reactium application.</p> <table> <thead> <tr> <th style=\"text-align:left\">Hook</th> <th style=\"text-align:left\">Description</th> </tr> </thead> <tbody> <tr> <td style=\"text-align:left\">init</td> <td style=\"text-align:left\">Called before all other hooks on startup.</td> </tr> <tr> <td style=\"text-align:left\">dependencies-load</td> <td style=\"text-align:left\">Called while application dependencies are loaded.</td> </tr> <tr> <td style=\"text-align:left\">service-worker-init</td> <td style=\"text-align:left\">Called while service worker is loaded.</td> </tr> <tr> <td style=\"text-align:left\">zone-defaults</td> <td style=\"text-align:left\">Called while rendering zone default components are loaded.</td> </tr> <tr> <td style=\"text-align:left\">store-create</td> <td style=\"text-align:left\">Called while Redux store is being created.</td> </tr> <tr> <td style=\"text-align:left\">store-created</td> <td style=\"text-align:left\">Called after Redux store is created.</td> </tr> <tr> <td style=\"text-align:left\">plugin-dependencies</td> <td style=\"text-align:left\">Called before loading runtime plugins.</td> </tr> <tr> <td style=\"text-align:left\">plugin-init</td> <td style=\"text-align:left\">Called to initiate plugin registration.</td> </tr> <tr> <td style=\"text-align:left\">routes-init</td> <td style=\"text-align:left\">Called to initiaze React router</td> </tr> <tr> <td style=\"text-align:left\">register-route</td> <td style=\"text-align:left\">Called for each route that is registered</td> </tr> <tr> <td style=\"text-align:left\">data-loaded</td> <td style=\"text-align:left\">Called on route load to pre-load data</td> </tr> <tr> <td style=\"text-align:left\">plugin-ready</td> <td style=\"text-align:left\">Called after all plugins registration callbacks have completed</td> </tr> <tr> <td style=\"text-align:left\">component-bindings</td> <td style=\"text-align:left\">Called to sibling React components and their DOM element bindings</td> </tr> <tr> <td style=\"text-align:left\">app-bindpoint</td> <td style=\"text-align:left\">Called to define the main application bind point.</td> </tr> <tr> <td style=\"text-align:left\">app-context-provider</td> <td style=\"text-align:left\">Called to define React application-wrapping context providers, such as Redux / Theme, etc.</td> </tr> <tr> <td style=\"text-align:left\">app-router</td> <td style=\"text-align:left\">Called to provide the React router component</td> </tr> <tr> <td style=\"text-align:left\">app-boot-message</td> <td style=\"text-align:left\">Called to define the javascript console boot message</td> </tr> <tr> <td style=\"text-align:left\">app-ready</td> <td style=\"text-align:left\">Called when the application is being bound or hydrated by ReactDOM</td> </tr> </tbody> </table>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/reactium-hooks.js",
@@ -806,19 +806,6 @@ define({ "api": [
     "description": "<p>The final hook run after the front-end application has bee bound or hydrated. After this point, the all hooks are runtime hooks.</p>",
     "name": "app-ready",
     "group": "Hooks",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Boolean",
-            "optional": false,
-            "field": "ssr",
-            "description": "<p>If the app is in server-side rendering mode (SSR) <code>true</code> is passed to the hook.</p>"
-          }
-        ]
-      }
-    },
     "version": "0.0.0",
     "filename": ".core/app/index.js",
     "groupTitle": "Hooks"
@@ -879,7 +866,7 @@ define({ "api": [
     "url": "dependencies-load",
     "title": "dependencies-load",
     "name": "dependencies-load",
-    "description": "<p>Called after init to give an application a change to load async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "description": "<p>Called after init to give an application a change to load async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook async only - used in front-end</p>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/index.js",
@@ -890,7 +877,7 @@ define({ "api": [
     "url": "dependencies-load",
     "title": "dependencies-load",
     "name": "dependencies-load",
-    "description": "<p>Called after init to give an application a change to load async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "description": "<p>Called after init to give an application a change to load async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook async only - used in front-end</p>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/reactium-hooks.js",
@@ -901,7 +888,7 @@ define({ "api": [
     "url": "init",
     "title": "init",
     "name": "init",
-    "description": "<p>Called before all other hooks on Reactium application startup. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "description": "<p>Called before all other hooks on Reactium application startup. async only - used in front-end</p>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/app/index.js",
@@ -912,7 +899,7 @@ define({ "api": [
     "url": "plugin-dependencies",
     "title": "plugin-dependencies",
     "name": "plugin-dependencies",
-    "description": "<p>Called to indicate all bootstrap dependencies should now be loaded, but before application routes have been initialized. There are 2 default registered callback in Reactium core on this hook. 1. (Highest Priority): The generated src/manifest.js dependencies are attached to this hook context (as context.deps). 2. (High Priority): <code>plugin-init</code> hook will be invoked, at which point all Reactium.Plugin registrations will be called.</p> <pre><code> Any hooks that registered after Reactium.Plugin will only be useful if they happen to be invoked during the normal runtime operations of the application.  An important exception to this is `routes-init`, which is deferred until after plugins initialize so they may dynamically add routes before Reactium hands off  control to the Router.  async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</code></pre>",
+    "description": "<p>Called to indicate all bootstrap dependencies should now be loaded, but before application routes have been initialized. There are 2 default registered callback in Reactium core on this hook. 1. (Highest Priority): The generated src/manifest.js dependencies are attached to this hook context (as context.deps). 2. (High Priority): <code>plugin-init</code> hook will be invoked, at which point all Reactium.Plugin registrations will be called.</p> <pre><code> Any hooks that registered after Reactium.Plugin will only be useful if they happen to be invoked during the normal runtime operations of the application.  An important exception to this is `routes-init`, which is deferred until after plugins initialize so they may dynamically add routes before Reactium hands off  control to the Router.  async only - used in front-end</code></pre>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -947,7 +934,7 @@ define({ "api": [
     "url": "register-route",
     "title": "register-route",
     "name": "register-route",
-    "description": "<p>Called on boot after routes-init, and during runtime operation of the front-end application, whenever a new route is registered. Can be used to augment a router object before it is registered to the router. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "description": "<p>Called on boot after routes-init, and during runtime operation of the front-end application, whenever a new route is registered. Can be used to augment a router object before it is registered to the router. async only - used in front-end</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -971,7 +958,7 @@ define({ "api": [
     "url": "routes-init",
     "title": "routes-init",
     "name": "routes-init",
-    "description": "<p>Called after plugin-init, to add React Router routes to Reactium.Routing register before the Router component is initialized and finally the application is bound to the DOM. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "description": "<p>Called after plugin-init, to add React Router routes to Reactium.Routing register before the Router component is initialized and finally the application is bound to the DOM. async only - used in front-end</p>",
     "group": "Hooks",
     "version": "0.0.0",
     "filename": ".core/sdk/routing/index.js",
@@ -1001,41 +988,10 @@ define({ "api": [
   },
   {
     "type": "Hook",
-    "url": "store-create",
-    "title": "store-create",
-    "name": "store-create",
-    "description": "<p>Called after dependencies-load to trigger Redux store creator. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "params",
-            "description": "<p>params.server indicate if is store creation on the server, or in the front-end application</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Object",
-            "optional": false,
-            "field": "context",
-            "description": "<p>Core implementation of this hook will create the Redux store and set it to context.store.</p>"
-          }
-        ]
-      }
-    },
-    "group": "Hooks",
-    "version": "0.0.0",
-    "filename": ".core/app/reactium-hooks.js",
-    "groupTitle": "Hooks"
-  },
-  {
-    "type": "Hook",
     "url": "zone-defaults",
     "title": "zone-defaults",
     "name": "zone-defaults",
-    "description": "<p>Called after dependencies-load by Reactium.Zone.init() for loading default component rendering Zone controls and components. async only - used in front-end or isomorphically when running server-side rendering mode (SSR)</p>",
+    "description": "<p>Called after dependencies-load by Reactium.Zone.init() for loading default component rendering Zone controls and components. async only - used in front-end</p>",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -3664,7 +3620,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "route",
-            "description": "<p>object to be used as properties of React Router <code>&lt;Route /&gt;</code> component, including:</p> <ol> <li>path - the routing pattern</li> <li>exact - true/false if the pattern should be matched exactly</li> <li>component - the React component to render on this route</li> <li>order - (special) the priority of this route in the list of routes (which route will resolve first)</li> <li>load - (special) high-order Redux action function (thunk) to run when this route is resolved (should return a promise)</li> <li>... any other property <code>&lt;Route /&gt;</code> component accepts</li> </ol> <h2>Important Note</h2> <p>Unless called in isomorphic javascript (ie. code executed both in browser and in node.js), these routes will not yield Server-Side-Rendered html in SSR mode. The browser will still render the route correctly (will not break the page), however the server will deliver a 404 status code on cold loads of the page (i.e. hard-refresh of the browser).</p>"
+            "description": "<p>object to be used as properties of React Router <code>&lt;Route /&gt;</code> component, including:</p> <ol> <li>path - the routing pattern</li> <li>exact - true/false if the pattern should be matched exactly</li> <li>component - the React component to render on this route</li> <li>order - (special) the priority of this route in the list of routes (which route will resolve first)</li> <li>load - (special) high-order Redux action function (thunk) to run when this route is resolved (should return a promise)</li> <li>... any other property <code>&lt;Route /&gt;</code> component accepts</li> </ol> <h2>Important Note</h2> <p>The browser will still render the route correctly (will not break the page), however the server will deliver a 404 status code on cold loads of the page (i.e. hard-refresh of the browser).</p>"
           }
         ]
       }
