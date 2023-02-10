@@ -42,7 +42,7 @@ const CANCELED = 'Action canceled!';
  * TYPES
  * @description types of server templates that can be created
  */
-const TYPES = ['feo', 'ssr'];
+const TYPES = ['feo'];
 
 /**
  * confirm({ props:Object, params:Object }) Function
@@ -124,9 +124,6 @@ Example:
 Exclude the front-end template:
   $ arcli server template --no-feo
 
-Exclude the server side render template:
-  $ arcli server template --no-ssr
-
 Overwrite existing server templates
   $ arcli server template --overwrite
 `);
@@ -136,7 +133,7 @@ Overwrite existing server templates
  * @description Array of flags passed from the commander options.
  * @since 2.0.18
  */
-const FLAGS = ['feo', 'ssr', 'overwrite'];
+const FLAGS = ['feo', 'overwrite'];
 
 /**
  * FLAGS_TO_PARAMS Function
@@ -159,11 +156,8 @@ const isTemplate = cwd => {
     const destFEO = fs.existsSync(
         path.normalize(`${cwd}/src/app/server/template/feo.js`),
     );
-    const destSSR = fs.existsSync(
-        path.normalize(`${cwd}/src/app/server/template/ssr.js`),
-    );
 
-    return destFEO || destSSR;
+    return destFEO;
 };
 
 /**
@@ -218,9 +212,9 @@ const ACTION = ({ action, opt, props }) => {
             input = { ...ovr, ...input };
             params = CONFORM({ input, props });
 
-            const { feo, ssr } = params;
+            const { feo } = params;
 
-            if (!op.has(params, 'overwrite') || (!feo && !ssr)) {
+            if (!op.has(params, 'overwrite') || !feo) {
                 reject(CANCELED);
                 return;
             }
@@ -253,7 +247,6 @@ const COMMAND = ({ program, props }) =>
         .description(DESC)
         .action((action, opt) => ACTION({ action, opt, props }))
         .option('-F, --no-feo [feo]', 'Front-end template.')
-        .option('-S, --no-ssr [ssr]', 'Server-side rendering template.')
         .option(
             '-o, --overwrite [overwrite]',
             'Overwrite existing template files.',

@@ -204,8 +204,7 @@ const reactium = (gulp, config, webpackConfig) => {
         return ps;
     };
 
-    const local = ({ ssr = false } = {}) => async done => {
-        const SSR_MODE = ssr ? 'on' : 'off';
+    const local = async done => {
         const crossEnvModulePath = path.resolve(
             path.dirname(require.resolve('cross-env')),
             '..',
@@ -221,22 +220,12 @@ const reactium = (gulp, config, webpackConfig) => {
 
         await gulp.task('mainManifest')(() => Promise.resolve());
 
-        command(
-            'node',
-            [
-                crossEnvBin,
-                `SSR_MODE=${SSR_MODE}`,
-                'NODE_ENV=development',
-                'gulp',
-            ],
-            done,
-        );
+        command('node', [crossEnvBin, 'NODE_ENV=development', 'gulp'], done);
 
         command(
             'node',
             [
                 crossEnvBin,
-                `SSR_MODE=${SSR_MODE}`,
                 'NODE_ENV=development',
                 'nodemon',
                 './.core/index.js',
@@ -900,8 +889,7 @@ $assets: (
 
     const tasks = {
         apidocs,
-        local: local(),
-        'local:ssr': local({ ssr: true }),
+        local,
         assets,
         preBuild: noop,
         build: build(config),

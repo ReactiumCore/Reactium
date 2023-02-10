@@ -16,7 +16,7 @@ module.exports = spinner => {
             message(`Creating ${chalk.cyan('templates')}...`);
 
             const { cwd } = props;
-            const { feo, ssr } = params;
+            const { feo } = params;
 
             const reactium = require(path.normalize(
                 `${cwd}/.core/reactium-config`,
@@ -30,16 +30,6 @@ module.exports = spinner => {
                     path.normalize(`${cwd}/.core/server/template/feo.js`),
                 );
                 template['feo'] = String(template.feo).replace(
-                    /\%TEMPLATE_VERSION\%/gi,
-                    ver,
-                );
-            }
-
-            if (ssr) {
-                template['ssr'] = fs.readFileSync(
-                    path.normalize(`${cwd}/.core/server/template/ssr.js`),
-                );
-                template['ssr'] = String(template.ssr).replace(
                     /\%TEMPLATE_VERSION\%/gi,
                     ver,
                 );

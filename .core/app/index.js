@@ -46,7 +46,7 @@ export const App = async () => {
      * @api {Hook} init init
      * @apiName init
      * @apiDescription Called before all other hooks on Reactium application startup. async only - used in
-     front-end or isomorphically when running server-side rendering mode (SSR)
+     front-end
      * @apiGroup Hooks
      */
     await Reactium.Hook.run('init');
@@ -56,7 +56,7 @@ export const App = async () => {
      * @apiName dependencies-load
      * @apiDescription Called after init to give an application a change to load
      async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook
-     async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+     async only - used in front-end
      * @apiGroup Hooks
      */
     await Reactium.Hook.run('dependencies-load');
@@ -66,7 +66,7 @@ export const App = async () => {
      * @apiName zone-defaults
      * @apiDescription Called after dependencies-load by Reactium.Zone.init() for
      loading default component rendering Zone controls and components.
-     async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+     async only - used in front-end
      * @apiParam {Object} context used to create initial controls and components.
      controls.filter for default filtering, controls.sort for default sorting, controls.mapper for default mapping
      and controls.components for initial registered components. zone.js Domain Driven Design (DDD) artifacts from generated src/manifest.js
@@ -88,7 +88,7 @@ export const App = async () => {
      Any hooks that registered after Reactium.Plugin will only be useful if they happen to be invoked during the normal runtime operations of the application.
      An important exception to this is `routes-init`, which is deferred until after plugins initialize so they may dynamically add routes before Reactium hands off
      control to the Router.
-     async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+     async only - used in front-end
      * @apiParam {Object} context Core attaches generated manifest loaded dependencies to context.deps
      * @apiGroup Hooks
      */
@@ -162,7 +162,6 @@ export const App = async () => {
 
         // ensure router DOM Element is on the page
         if (appElement) {
-            const { ssr } = await Reactium.Hook.run('app-ssr-mode');
             /**
              * @api {Hook} app-boot-message app-boot-message
              * @apiName app-boot-message
@@ -173,28 +172,16 @@ export const App = async () => {
              */
             const { message = [] } = await Reactium.Hook.run(
                 'app-boot-message',
-                ssr,
             );
             console.log(...message);
 
-            if (ssr) {
-                hydrateRoot(
-                    appElement,
-                    <AppContexts>
-                        <Zone zone='reactium-provider' />
-                        <Router history={Reactium.Routing.history} />
-                        <Zone zone='reactium-provider-after' />
-                    </AppContexts>,
-                );
-            } else {
-                createRoot(appElement).render(
-                    <AppContexts>
-                        <Zone zone='reactium-provider' />
-                        <Router history={Reactium.Routing.history} />
-                        <Zone zone='reactium-provider-after' />
-                    </AppContexts>,
-                );
-            }
+            createRoot(appElement).render(
+                <AppContexts>
+                    <Zone zone='reactium-provider' />
+                    <Router history={Reactium.Routing.history} />
+                    <Zone zone='reactium-provider-after' />
+                </AppContexts>,
+            );
 
             /**
              * @api {Hook} app-ready app-ready
@@ -202,9 +189,8 @@ export const App = async () => {
              the all hooks are runtime hooks.
              * @apiName app-ready
              * @apiGroup Hooks
-             * @apiParam {Boolean} ssr If the app is in server-side rendering mode (SSR) `true` is passed to the hook.
              */
-            _.defer(() => Reactium.Hook.run('app-ready', ssr));
+            _.defer(() => Reactium.Hook.run('app-ready'));
         }
     }
 };

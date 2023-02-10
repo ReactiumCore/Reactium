@@ -324,7 +324,7 @@ class Routing {
          * @apiName routes-init
          * @apiDescription Called after plugin-init, to add React Router routes to Reactium.Routing register before
          the Router component is initialized and finally the application is bound to the DOM.
-         async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+         async only - used in front-end
          * @apiGroup Hooks
          */
         await Hook.run('routes-init', this.routesRegistry);
@@ -373,8 +373,7 @@ class Routing {
 
  ## Important Note
 
- Unless called in isomorphic javascript (ie. code executed both in browser and in node.js),
- these routes will not yield Server-Side-Rendered html in SSR mode. The browser will still
+ The browser will still
  render the route correctly (will not break the page), however the server will deliver a 404 status code on
  cold loads of the page (i.e. hard-refresh of the browser).
  * @apiName Routing.register
@@ -432,7 +431,7 @@ Reactium.Plugin.register('myPlugin').then(() => {
          * @apiName register-route
          * @apiDescription Called on boot after routes-init, and during runtime operation of the front-end application, whenever
          a new route is registered. Can be used to augment a router object before it is registered to the router.
-         async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+         async only - used in front-end
          * @apiParam {Object} route the new or updated route, indentified by unique id (route.id)
          * @apiGroup Hooks
          */

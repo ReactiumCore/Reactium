@@ -23,7 +23,6 @@ class i18n {
     };
 
     getStrings() {
-        // TODO: ssr version
         const defaultStrings = { strings: JSON.stringify({}) };
 
         try {

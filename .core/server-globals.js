@@ -23,12 +23,6 @@ module.exports = async () => {
     const ReactiumBoot = (await import('reactium-core/sdk')).default;
     global.ReactiumBoot = ReactiumBoot;
     global.defines = {};
-    global.isSSR = 'SSR_MODE' in process.env && process.env.SSR_MODE === 'on';
-    global.useJSDOM =
-        global.isSSR &&
-        (!('SSR_MODE_JSDOM' in process.env) ||
-            process.env.SSR_MODE_JSDOM !== 'off');
-
     global.actiniumAPIEnabled = process.env.ACTINIUM_API !== 'off';
     global.actiniumProxyEnabled = process.env.PROXY_ACTINIUM_API !== 'off';
 

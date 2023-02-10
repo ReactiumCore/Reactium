@@ -171,17 +171,12 @@ const sanitizeTemplateVersion = version => {
 ReactiumBoot.Hook.registerSync(
     'Server.beforeApp',
     req => {
-        const renderMode = op.get(req, 'renderMode', 'feo');
         const {
             semver: coreSemver,
         } = require(`${rootPath}/.core/reactium-config`);
 
-        if (
-            fs.existsSync(
-                `${rootPath}/src/app/server/template/${renderMode}.js`,
-            )
-        ) {
-            let localTemplate = require(`${rootPath}/src/app/server/template/${renderMode}`);
+        if (fs.existsSync(`${rootPath}/src/app/server/template/feo.js`)) {
+            let localTemplate = require(`${rootPath}/src/app/server/template/feo`);
             let templateVersion = sanitizeTemplateVersion(
                 localTemplate.version,
             );
@@ -191,7 +186,7 @@ ReactiumBoot.Hook.registerSync(
                 req.template = localTemplate.template;
             } else {
                 console.warn(
-                    `${rootPath}/src/app/server/template/${renderMode}.js is out of date, and will not be used. Use 'arcli server template' command to update.`,
+                    `${rootPath}/src/app/server/template/feo.js is out of date, and will not be used. Use 'arcli server template' command to update.`,
                 );
             }
         }
@@ -285,12 +280,8 @@ const requestRegistries = () => {
 
 export default async (req, res, context) => {
     const Server = (req.Server = requestRegistries());
-    let template,
-        renderMode = isSSR ? 'ssr' : 'feo';
 
     req.Server = Server;
-    req.isSSR = isSSR;
-    req.renderMode = renderMode;
     req.scripts = '';
     req.headerScripts = '';
     req.styles = '';
@@ -299,7 +290,7 @@ export default async (req, res, context) => {
     req.headTags = '';
     req.appBindings = '';
 
-    const coreTemplate = require(`../template/${renderMode}`);
+    const coreTemplate = require(`../template/feo`);
     req.template = coreTemplate.template;
 
     /**
@@ -650,5 +641,5 @@ ga('send', 'pageview');
     ReactiumBoot.Hook.runSync('Server.afterApp', req, Server);
     await ReactiumBoot.Hook.run('Server.afterApp', req, Server);
 
-    return require(`./${renderMode}`)(req, res, context);
+    return require(`./feo`)(req, res, context);
 };

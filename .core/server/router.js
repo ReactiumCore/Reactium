@@ -27,41 +27,6 @@ if (fs.existsSync(basicAuthFile)) {
 
 router.get('/elb-healthcheck', (req, res) => res.send('Up'));
 
-router.get('/ssg-paths', async (req, res) => {
-    if (process.env.SSR_MODE !== 'on') {
-        res.status(403).json({
-            error: 'You must start server in Server Side Rendering mode.',
-        });
-        return;
-    }
-
-    if (!Boolean(ReactiumBoot.Routing.get().length)) {
-        await require('../ssr-startup')();
-    }
-
-    let paths = [];
-    for (let route of ReactiumBoot.Routing.get()) {
-        const loadPaths = op.get(
-            route,
-            'component.loadPaths',
-            op.get(route, 'loadPaths'),
-        );
-        if (typeof loadPaths == 'function') {
-            try {
-                const routePaths = await loadPaths(route);
-                paths = paths.concat(routePaths);
-            } catch (error) {
-                console.error(
-                    'Unable to load Server Side Generation paths for route',
-                    { route },
-                );
-            }
-        }
-    }
-
-    res.send(_.uniq(paths));
-});
-
 process.on('unhandledRejection', (reason, p) => {
     ERROR('Unhandled Rejection at: Promise', p, 'reason:', reason);
     // application specific logging, throwing an error, or other logic here
@@ -117,7 +82,7 @@ router.use(async (req, res, next) => {
 
             res.status(status).send(content);
         } catch (err) {
-            ERROR('React SSR Error', err);
+            ERROR('React Server Error', err);
             res.status(500).send('[Reactium] Internal Server Error');
         }
     } else {

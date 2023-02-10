@@ -14,7 +14,6 @@ module.exports = {
                 ${req.appBindings}
 
                 <script>
-                    window.ssr = false;
                     window.defines = ${serialize(defines)};
                     ${req.appGlobals}
                 </script>

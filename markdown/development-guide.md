@@ -589,22 +589,6 @@ Deploy the entire project directory if you wish to run the node/express server t
 
 By default, running the server with `npm start` will start the server on port 3030 in front-end rendering mode.
 
-## Server-Side Rendering
-
-To bind port 80, and use server-side rendering, start the application like so (for linux/mac):
-
-```
-SSR_MODE=on APP_PORT=80 npm start
-```
-
-For Windows:
-
-```
-set SSR_MODE=on
-set APP_PORT=80
-npm start
-```
-
 ## The Build Process
 
 ![](https://image.ibb.co/jeddNw/reactium_build_process_2.png)

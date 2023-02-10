@@ -8,18 +8,11 @@ An opinionated framework for creating React + Redux apps.
 
 ## Quick Start
 
-To run in **front-end only** (no server side rendering) development mode from your project directory for local development:
+To run in development mode from your project directory for local development:
 
 ```
 $ npm install
 $ npm run local
-```
-
-To run in **server side rendering** development mode from your project directory for local development:
-
-```
-$ npm install
-$ npm run local:ssr
 ```
 
 ## The Approach
