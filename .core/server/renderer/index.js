@@ -151,7 +151,7 @@ ReactiumBoot.Hook.registerSync(
     (req, AppBindings) => {
         AppBindings.register('router', {
             template: () => {
-                const binding = `<div id="router">${req.content || ''}</div>`;
+                const binding = ` <div data-reactium-bind="App"></div>`;
                 return binding;
             },
             requestParams: ['content'],
@@ -585,7 +585,7 @@ export default async (req, res, context) => {
 
              // Add ordinary markup for React to bind to
              AppBindings.register('router', {
-                 markup: '<div id="router"></div>',
+                 markup: ' <div data-reactium-bind="App"></div>',
              });
          },
          ReactiumBoot.Enums.priority.highest,

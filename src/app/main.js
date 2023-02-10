@@ -2,18 +2,14 @@
 // import 'core-js/stable';
 // import 'regenerator-runtime/runtime';
 
-let App, AppError;
+import { Shell } from 'reactium-core/app/shell';
 
 (async () => {
-    const mod = await import('reactium-core/app');
-
-    App = mod.App;
-    AppError = mod.AppError;
-
     try {
-        App();
+        await Shell();
     } catch (error) {
-        AppError(error);
+        const { AppError } = await import('reactium-core/app');
+        await AppError(error);
     }
 
     /**

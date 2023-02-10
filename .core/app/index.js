@@ -8,8 +8,6 @@ import _ from 'underscore';
 import deps from 'dependencies';
 import 'externals';
 
-export const Loader = async () => {};
-
 const loadFramework = async () => {
     console.log('Loading Core SDK');
     const { default: Reactium } = await import('reactium-core/sdk');

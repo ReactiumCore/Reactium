@@ -1,0 +1,59 @@
+$reactium-blue: #4f82ba !default;
+$reactium-white: #ffffff !default;
+
+.reactium-loading {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: $reactium-white;
+
+    &,
+    * {
+        box-sizing: border-box;
+    }
+
+    &:before {
+        content: '';
+        width: 64px;
+        height: 64px;
+        border-radius: 100%;
+        z-index: 1;
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 0 rgba($reactium-blue, 1);
+        animation: reactium-pulse 1.2s infinite;
+    }
+
+    &:after {
+        content: '';
+        width: 64px;
+        height: 64px;
+        z-index: 2;
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url('/assets/images/logo.png');
+    }
+}
+
+@keyframes reactium-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba($reactium-blue, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 12px rgba($reactium-blue, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba($reactium-white, 0);
+    }
+}
