@@ -139,37 +139,6 @@ import('reactium-core/sdk').then(
             'REACTIUM_ZONE_DEFAULTS',
         );
 
-        const NoopProvider = ({ children }) => children;
-        Reactium.Hook.register(
-            'app-context-provider',
-            async () => {
-                /**
-             * @api {Hook} store-create store-create
-             * @apiName store-create
-             * @apiDescription Called after dependencies-load to trigger Redux store creator.
-             async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
-            * @apiParam {Object} params params.server indicate if is store creation on the server, or in the front-end application
-            * @apiParam {Object} context Core implementation of this hook will create the Redux store and set it to context.store.
-            * @apiGroup Hooks
-            */
-                const { store } = await Reactium.Hook.run('store-create', {
-                    server: isServerWindow(),
-                });
-                Reactium.store = store;
-
-                const ReduxProvider = ({ store }) => (
-                    <HookComponent hookName='ReduxProvider' store={store} />
-                );
-
-                Reactium.AppContext.register('ReduxProvider', {
-                    provider: NoopProvider,
-                    store,
-                });
-            },
-            Reactium.Enums.priority.highest,
-            'NOOP_REDUX_PROVIDER',
-        );
-
         Reactium.Hook.register(
             'app-router',
             async () => {
@@ -184,22 +153,10 @@ import('reactium-core/sdk').then(
         );
 
         Reactium.Hook.register(
-            'app-ssr-mode',
-            context => {
-                context.ssr = window && 'ssr' in window && window.ssr;
-                return Promise.resolve();
-            },
-            Reactium.Enums.priority.highest,
-            'REACTIUM_APP_SSR_MODE',
-        );
-
-        Reactium.Hook.register(
             'app-boot-message',
-            (ssr = false, context) => {
-                const mode = ssr ? 'SSR' : 'FE';
-                const binding = ssr ? 'Hydrating' : 'Binding';
+            context => {
                 context.message = [
-                    `%c [Reactium] ${mode} Mode: %c⚡💡 %c${binding} Reactium. %c⚡💡 `,
+                    `%c [Reactium] %c⚡💡 %cBinding Reactium. %c⚡💡 `,
                     'font-size: 16px; color: #fff; background-color: #4F82BA',
                     'font-size: 16px; color: #F4F19C; background-color: #4F82BA',
                     'font-size: 16px; color: #fff; background-color: #4F82BA',
@@ -219,7 +176,7 @@ import('reactium-core/sdk').then(
  * @apiName dependencies-load
  * @apiDescription Called after init to give an application a change to load
  async dependencies. Many Domain Driven Design (DDD) artifacts from generated src/manifest.js are loaded on this hook
- async only - used in front-end or isomorphically when running server-side rendering mode (SSR)
+ async only - used in front-end
  * @apiGroup Hooks
  */
 
@@ -245,7 +202,6 @@ import('reactium-core/sdk').then(
 | app-bindpoint | Called to define the main application bind point. |
 | app-context-provider | Called to define React application-wrapping context providers, such as Redux / Theme, etc. |
 | app-router | Called to provide the React router component |
-| app-ssr-mode | Called to make the application aware of server-side rendering mode |
 | app-boot-message | Called to define the javascript console boot message |
 | app-ready | Called when the application is being bound or hydrated by ReactDOM |
  * @apiGroup Hooks

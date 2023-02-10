@@ -223,7 +223,6 @@ module.exports = {
                         'cross-env NODE_ENV=production babel src --out-dir build/src',
                     static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
-                    'local:ssr': 'gulp local:ssr',
                 },
                 remove: [
                     'build',
@@ -234,6 +233,7 @@ module.exports = {
                     'local-fe-start',
                     'local-fe:gulp',
                     'local-fe:babel-node',
+                    'local-ssr',
                     'local-ssr-start',
                     'local-ssr:gulp',
                     'local-ssr:babel-node',

@@ -13,7 +13,6 @@ You can generate a static site by ensuring your project has a `~/public/index-st
         <div id="router"></div>
 
         <script>
-            window.ssr = false;
             window.restAPI = '/api';
             window.parseAppId = 'Actinium';
         </script>

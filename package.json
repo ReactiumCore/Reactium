@@ -14,7 +14,6 @@
     "heroku-prebuild": "npx -p @atomic-reactor/cli@2.2.77 arcli install",
     "static": "npm-run-all build:* && gulp static",
     "local": "gulp local",
-    "local:ssr": "gulp local:ssr",
     "clean": "gulp clean",
     "docker": "npm-run-all -s clean docker:*",
     "docker:build": "cross-env docker image build -t $npm_package_name:$npm_package_version -t $npm_package_name:latest .",
