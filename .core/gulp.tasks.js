@@ -463,53 +463,6 @@ const reactium = (gulp, config, webpackConfig) => {
     // Stub serviceWorker task. Implementation moved to @atomic-reactor/reactium-service-worker plugin
     const serviceWorker = () => Promise.resolve();
 
-    const ssg = gulp.series(task('ssg:flush'), task('ssg:warm'));
-
-    const ssgFlush = () => {
-        console.log(chalk.yellow('Flushing Server Side Generated HTML'));
-        del.sync([config.dest.dist + '/static-html']);
-        return Promise.resolve();
-    };
-
-    const ssgWarm = async () => {
-        console.log(chalk.green('Warming Server Side Generated HTML'));
-        const serverUrl = `http://localhost:${port}`;
-
-        let paths = [];
-        try {
-            const { data = [] } = await axios.get(serverUrl + '/ssg-paths');
-            paths = data;
-        } catch ({ response = {} }) {
-            const { status, statusText, data } = response;
-            const error = op.get(data, 'error', { status, statusText, data });
-            throw new Error(
-                `Getting generation paths: ${JSON.stringify(error)}`,
-            );
-        }
-
-        for (let chunk of _.chunk(paths, 5)) {
-            try {
-                await Promise.all(
-                    chunk.map(warmPath => {
-                        console.log(
-                            chalk.green('Warming URL:'),
-                            chalk.blueBright(serverUrl + warmPath),
-                        );
-                        return axios
-                            .get(serverUrl + warmPath)
-                            .catch(error =>
-                                console.error(
-                                    `Error warming ${serverUrl + warmPath}`,
-                                ),
-                            );
-                    }),
-                );
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    };
-
     const staticTask = task('static:copy');
 
     const staticCopy = done => {
@@ -912,9 +865,6 @@ $assets: (
         'serve-restart': serve({ open: false }),
         serviceWorker,
         sw,
-        ssg,
-        'ssg:flush': ssgFlush,
-        'ssg:warm': ssgWarm,
         static: staticTask,
         'static:copy': staticCopy,
         'styles:partials': dddStylesPartial,
