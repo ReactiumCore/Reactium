@@ -314,6 +314,7 @@ class WebpackReactiumWebpack {
             chunkIds: 'named',
             splitChunks: {
                 chunks: 'all',
+                minSizeReduction: 500000,
                 cacheGroups: {
                     main: {
                         minChunks: 1,
