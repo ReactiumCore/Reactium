@@ -11,7 +11,6 @@ const gulpif = require('gulp-if');
 const gulpwatch = require('@atomic-reactor/gulp-watch');
 const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass')(require('sass'));
-const fiber = require('fibers');
 const gzip = require('gulp-gzip');
 const reactiumImporter = require('@atomic-reactor/node-sass-reactium-importer');
 const cleanCSS = require('gulp-clean-css');
@@ -770,7 +769,6 @@ $assets: (
                 sass({
                     importer: reactiumImporter,
                     includePaths: config.src.includes,
-                    fiber,
                 }).on('error', sass.logError),
             )
             .pipe(prefix(config.browsers))
