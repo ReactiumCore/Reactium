@@ -97,6 +97,7 @@
   },
   "devDependencies": {
     "@atomic-reactor/cli": "^2.2.78",
+    "@atomic-reactor/gulp-run": "^1.8.0",
     "@atomic-reactor/gulp-watch": "^5.0.2",
     "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
     "@atomic-reactor/webpack-po-loader": "5.0.1",
@@ -135,7 +136,6 @@
     "gulp-gzip": "^1.4.2",
     "gulp-if": "^3.0.0",
     "gulp-rename": "^2.0.0",
-    "gulp-run": "^1.7.1",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "gulp4-run-sequence": "^1.0.1",
