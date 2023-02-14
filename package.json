@@ -125,7 +125,6 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "fast-diff": "^1.2.0",
-    "fibers": "^5.0.3",
     "file-api": "^0.10.4",
     "fs-readdir-recursive": "^1.1.0",
     "gettext-extract": "^2.0.1",
