@@ -102,7 +102,7 @@ ReactiumBoot.Hook.registerSync(
             ReactiumBoot.Hook.runSync('webpack-server-assets', webpackAssets);
             webpackAssets.forEach(asset =>
                 AppScripts.register(asset, {
-                    path: `/assets/js/${asset}`,
+                    path: `${global.resourceBaseUrl}${asset}`,
                     order: ReactiumBoot.Enums.priority.highest,
                     footer: true,
                 }),
@@ -218,6 +218,14 @@ ReactiumBoot.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
             serverValue: global.restAPI,
         });
     }
+
+    AppGlobals.register('resourceBaseUrl', {
+        name: 'resourceBaseUrl',
+        value:
+            process.env.NODE_ENV === 'development'
+                ? '/'
+                : process.env.WEBPACK_RESOURCE_BASE || '/assets/js/',
+    });
 });
 
 export const renderAppBindings = req => {

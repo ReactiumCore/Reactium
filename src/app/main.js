@@ -4,6 +4,8 @@
 
 import { Shell } from 'reactium-core/app/shell';
 
+__webpack_public_path__ = window.resourceBaseUrl || '/assets/js/';
+
 (async () => {
     try {
         await Shell();
