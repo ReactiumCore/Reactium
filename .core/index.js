@@ -41,35 +41,6 @@ const registeredMiddleware = async () => {
         order: Enums.priority.highest,
     });
 
-    if (global.restAPI && process.env.PROXY_ACTINIUM_API !== 'off') {
-        ReactiumBoot.Server.Middleware.register('api', {
-            name: 'api',
-            use: proxy('/api', {
-                target: global.restAPI,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/api': '',
-                },
-                logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
-                ws: true,
-            }),
-            order: Enums.priority.highest,
-        });
-    }
-
-    if (global.restAPI && process.env.PROXY_ACTINIUM_API !== 'off') {
-        ReactiumBoot.Server.Middleware.register('api-socket-io', {
-            name: 'api-socket-io',
-            use: proxy('/actinium.io', {
-                target: global.restAPI.replace('/api', '') + '/actinium.io',
-                changeOrigin: true,
-                logLevel: process.env.DEBUG === 'on' ? 'debug' : 'error',
-                ws: true,
-            }),
-            order: Enums.priority.highest,
-        });
-    }
-
     // parsers
     ReactiumBoot.Server.Middleware.register('jsonParser', {
         name: 'jsonParser',
