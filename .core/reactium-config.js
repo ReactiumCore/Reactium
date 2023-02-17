@@ -4,7 +4,7 @@ const globby = require('./globby-patch');
 const rootPath = path.resolve(__dirname, '..');
 const gulpConfig = require('./gulp.config');
 
-const version = '4.1.13';
+const version = '5.0.0-alpha-2';
 
 const defaultLibraryExternals = {
     axios: {
