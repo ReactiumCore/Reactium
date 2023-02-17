@@ -1,5 +1,4 @@
 import path from 'path';
-import op from 'object-path';
 import _ from 'underscore';
 const globby = require('./globby-patch').sync;
 

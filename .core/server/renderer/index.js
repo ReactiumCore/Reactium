@@ -196,29 +196,6 @@ ReactiumBoot.Hook.registerSync(
 );
 
 ReactiumBoot.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
-    AppGlobals.register('actiniumAPIEnabled', {
-        name: 'actiniumAPIEnabled',
-        value: global.actiniumAPIEnabled,
-    });
-
-    if (global.actiniumAPIEnabled) {
-        AppGlobals.register('actiniumAppId', {
-            name: 'actiniumAppId',
-            value: global.actiniumAppId,
-        });
-
-        AppGlobals.register('actiniumAPIEnabled', {
-            name: 'actiniumAPIEnabled',
-            value: global.actiniumAPIEnabled,
-        });
-
-        AppGlobals.register('restAPI', {
-            name: 'restAPI',
-            value: global.actiniumProxyEnabled ? '/api' : global.restAPI,
-            serverValue: global.restAPI,
-        });
-    }
-
     AppGlobals.register('resourceBaseUrl', {
         name: 'resourceBaseUrl',
         value:
