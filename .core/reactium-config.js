@@ -220,7 +220,7 @@ module.exports = {
                     'build:babel-reactium_modules':
                         'cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules',
                     'build:babel-src':
-                        'cross-env NODE_ENV=production babel src --out-dir build/src',
+                        'cross-env NODE_ENV=production babel src --out-dir build/src --copy-files',
                     static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
                 },
