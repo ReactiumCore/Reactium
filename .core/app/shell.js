@@ -1,6 +1,19 @@
-export const Shell = async LoadingComponent => {
+const onLoaded = () => {
+    if (
+        window.LoadingRef &&
+        window.LoadingRef.current &&
+        typeof window.LoadingRef.current.setVisible == 'function'
+    ) {
+        window.LoadingRef.current.setVisible(false);
+    }
+};
+
+export const Shell = async (
+    LoadingComponent,
+    loadCb = onLoaded,
+    delay = 250,
+) => {
     const { default: React, useRef } = await import('react');
-    const { default: _ } = await import('underscore');
     const { createRoot } = await import('react-dom/client');
 
     let Loading;
@@ -22,10 +35,5 @@ export const Shell = async LoadingComponent => {
     const { App } = await import('./index');
     await App();
 
-    _.defer(
-        () =>
-            window.LoadingRef.current &&
-            _.isFunction(window.LoadingRef.current.setVisible) &&
-            window.LoadingRef.current.setVisible(false),
-    );
+    setTimeout(loadCb, delay);
 };
