@@ -30,6 +30,8 @@ const defaultConfig = {
         pluginAssets: [
             'src/app/**/plugin-assets.json',
             'src/app/**/style-assets.json',
+            '.core/**/style-assets.json',
+            'reactium_modules/**/style-assets.json',
         ],
         restartWatches: [
             'src/**/assets/style/*.scss',
@@ -57,7 +59,12 @@ const defaultConfig = {
     src: {
         app: 'src',
         colors: ['src/**/*/colors.json'],
-        pluginAssets: ['src/app/**/plugin-assets.json'],
+        pluginAssets: [
+            'src/app/**/plugin-assets.json',
+            'src/app/**/style-assets.json',
+            '.core/**/style-assets.json',
+            'reactium_modules/**/style-assets.json',
+        ],
         js: ['src/app/**/*'],
         json: ['src/**/*.json'],
         markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
