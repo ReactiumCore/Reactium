@@ -518,7 +518,7 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
                             fileName,
                         )} to partial at ${path.resolve(
                             base,
-                            '_plugin-assets.scss',
+                            '_reactium-style-variables.scss',
                         )}`,
                     );
                     const dataURL = await fileReader(
@@ -528,13 +528,13 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
                 }
 
                 fs.writeFileSync(
-                    path.resolve(base, '_plugin-assets.scss'),
+                    path.resolve(base, '_reactium-style-variables.scss'),
                     pluginAssetsTemplate(mappings),
                     'utf8',
                 );
             } catch (error) {
                 console.error(
-                    'error generating sass partial _plugin-assets.scss in ' +
+                    'error generating sass partial _reactium-style-variables.scss in ' +
                         base,
                     error,
                 );
@@ -792,8 +792,8 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
 
     const styles = gulp.series(
         task('styles:colors'),
-        task('styles:partials'),
         task('styles:pluginAssets'),
+        task('styles:partials'),
         task('styles:compile'),
     );
 

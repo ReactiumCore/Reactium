@@ -27,7 +27,10 @@ const defaultConfig = {
         js: ['src/app/**/*', 'reactium_modules/**/*'],
         markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
         colors: ['src/**/*/colors.json'],
-        pluginAssets: ['src/app/**/plugin-assets.json'],
+        pluginAssets: [
+            'src/app/**/plugin-assets.json',
+            'src/app/**/style-assets.json',
+        ],
         restartWatches: [
             'src/**/assets/style/*.scss',
             '!src/**/assets/style/_*.scss',
