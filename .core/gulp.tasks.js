@@ -486,12 +486,15 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const pluginAssetsTemplate = data => {
         const template = handlebars.compile(`
+@use "sass:map";
+
+$assets: () !default;
+
 // Generated Data URLs from plugin-assets.json
-$assets: (
-    {{#each this}}
-    '{{key}}': '{{{dataURL}}}',
-    {{/each}}
-);`);
+{{#each this}}
+$assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
+{{/each}}
+`);
 
         return template(data);
     };
@@ -501,7 +504,6 @@ $assets: (
         for (const file of files) {
             const manifest = path.resolve(file);
             const base = path.dirname(manifest);
-
             try {
                 let assets = fs.readFileSync(manifest);
                 assets = JSON.parse(assets);
@@ -510,6 +512,15 @@ $assets: (
                 const mappings = [];
                 for (const entry of entries) {
                     const [key, fileName] = entry;
+                    console.log(
+                        `Adding ${key}: ${path.resolve(
+                            base,
+                            fileName,
+                        )} to partial at ${path.resolve(
+                            base,
+                            '_plugin-assets.scss',
+                        )}`,
+                    );
                     const dataURL = await fileReader(
                         new File(path.resolve(base, fileName)),
                     );
