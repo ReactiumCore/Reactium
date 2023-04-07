@@ -4,27 +4,20 @@ const path = require('path');
 const rootPath = path.resolve(__dirname, '../../..');
 const chalk = require('chalk');
 module.exports = data => {
+    const explicitDomains = require(path.resolve(rootPath, 'src/domains.js'));
+
     const types = Object.entries(data.manifest).map(([name, typeDomains]) => {
-        const domainRegExp = new RegExp('/([A-Za-z_0-9-]+?)/[A-Za-z_0-9-]+$');
+        const { fileToDomain } = require('../manifest-tools');
         const { imports, type } = typeDomains;
 
-        const fileToDomain = file => {
-            let [, domain] = file.match(domainRegExp) || [];
-            try {
-                const relativeOriginalPath = path.resolve(
-                    rootPath,
-                    typeDomains.originals[file],
-                );
-                const potentialDomainFile = path.normalize(
-                    path.dirname(relativeOriginalPath) + '/domain.js',
-                );
-                if (fs.existsSync(potentialDomainFile)) {
-                    const { name } = require(potentialDomainFile);
-                    if (name) domain = name;
-                }
-            } catch (error) {
-                // intentionally blank
-            }
+        const mapDomain = file => {
+            let domain = fileToDomain(file);
+            const relative = domain;
+            domain = op.get(
+                explicitDomains,
+                ['relative', path.dirname(typeDomains.originals[file])],
+                domain,
+            );
 
             if (!domain)
                 console.log(
@@ -36,9 +29,9 @@ module.exports = data => {
         const domains = [];
         imports
             .map(file => file.replace(/\\/g, '/'))
-            .filter(fileToDomain)
+            .filter(mapDomain)
             .forEach(file => {
-                const domain = fileToDomain(file);
+                const domain = mapDomain(file);
                 let existing;
                 if (
                     (existing = domains.find(({ domain: d }) => d === domain))

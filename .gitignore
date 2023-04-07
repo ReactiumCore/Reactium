@@ -82,7 +82,9 @@ Thumbs.db
 .cli-cache
 
 # Manifest
+src/domains.js
 src/manifest.js
+src/externals-manifest.js
 src/app/server/webpack-manifest.json
 
 # Translation .mo

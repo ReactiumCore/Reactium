@@ -4,11 +4,12 @@ const fs = require('fs-extra');
 const _ = require('underscore');
 const op = require('object-path');
 const prettier = require('prettier');
-const moment = require('moment');
 const chalk = require('chalk');
 const diff = require('fast-diff');
 const hb = require('handlebars');
+const rootPath = path.resolve(__dirname, '../..');
 
+// flatten a tree of files from directory-tree module
 const flattenRegistry = (registry = { children: [] }, manifest = []) => {
     op.get(registry, 'children', []).forEach(item => {
         const type = op.get(item, 'type');
@@ -29,8 +30,13 @@ const flattenRegistry = (registry = { children: [] }, manifest = []) => {
     return manifest;
 };
 
-const sources = (sourcePath, searchParams) =>
-    flattenRegistry(tree(sourcePath, searchParams));
+/**
+ * For a given sourcepath relative to the project directory, returns a flat list of matching files.
+ */
+const sources = (sourcePath, searchParams) => {
+    const t = tree(sourcePath, searchParams);
+    return flattenRegistry(t);
+};
 
 const isRegExp = regEx =>
     typeof regEx === 'object' && regEx.constructor == RegExp;
@@ -168,7 +174,7 @@ const find = (searches = [], sourceMappings = [], searchParams = {}) => {
     return mappings;
 };
 
-module.exports = function({
+const regenManifest = function({
     manifestFilePath,
     manifestConfig,
     manifestTemplateFilePath,
@@ -219,4 +225,21 @@ module.exports = function({
         fs.ensureDirSync(dir);
         fs.writeFileSync(manifestFilePath, fileContents);
     }
+};
+
+const domainRegExp = new RegExp('/([A-Za-z_0-9-]+?)[\\/][A-Za-z_0-9-]+$');
+const fileToDomain = file => {
+    let [, domain] = file.match(domainRegExp) || [];
+    const relativeOriginalPath = path.resolve(rootPath, file);
+
+    return domain;
+};
+
+module.exports = {
+    regenManifest,
+    flattenRegistry,
+    sources,
+    isRegExp,
+    find,
+    fileToDomain,
 };

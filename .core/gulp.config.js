@@ -99,9 +99,10 @@ const defaultConfig = {
         includes: ['./node_modules'],
         appdir: path.resolve(__dirname, 'src/app'),
         rootdir: path.resolve(__dirname),
+        domainManifest: path.normalize(`${rootPath}/src/domains.js`),
         manifest: path.normalize(`${rootPath}/src/manifest.js`),
         externalsManifest: path.normalize(
-            `${rootPath}/.tmp/externals-manifest.js`,
+            `${rootPath}/src/externals-manifest.js`,
         ),
         reactiumModules: path.normalize(`${rootPath}/reactium_modules`),
     },
