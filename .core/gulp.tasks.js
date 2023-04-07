@@ -18,7 +18,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 const chalk = require('chalk');
 const reactiumConfig = require('./reactium-config');
-const regenManifest = require('./manifest/manifest-tools');
+const { regenManifest } = require('./manifest/manifest-tools');
 const umdWebpackGenerator = require('./umd.webpack.config');
 const rootPath = path.resolve(__dirname, '..');
 const { fork, spawn, execSync } = require('child_process');
@@ -217,6 +217,7 @@ const reactium = (gulp, config, webpackConfig) => {
             crossEnvPackage.bin['cross-env'],
         );
 
+        await gulp.task('domainsManifest')(() => Promise.resolve());
         await gulp.task('mainManifest')(() => Promise.resolve());
 
         command('node', [crossEnvBin, 'NODE_ENV=development', 'gulp'], done);
@@ -308,7 +309,7 @@ const reactium = (gulp, config, webpackConfig) => {
 
     const manifest = gulp.series(
         gulp.parallel(
-            task('mainManifest'),
+            gulp.series(task('domainsManifest'), task('mainManifest')),
             task('externalsManifest'),
             task('umdManifest'),
         ),
@@ -317,6 +318,21 @@ const reactium = (gulp, config, webpackConfig) => {
     const umd = gulp.series(task('umdManifest'), task('umdLibraries'));
 
     const sw = gulp.series(task('umd'), task('serviceWorker'));
+
+    const domainsManifest = done => {
+        // Generate domains.js file
+        regenManifest({
+            manifestFilePath: config.src.domainManifest,
+            manifestConfig: reactiumConfig.manifest.domains,
+            manifestTemplateFilePath: path.resolve(
+                __dirname,
+                'manifest/templates/domains.hbs',
+            ),
+            manifestProcessor: require('./manifest/processors/domains'),
+        });
+
+        done();
+    };
 
     const mainManifest = done => {
         // Generate manifest.js file
@@ -810,7 +826,13 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
 
     const watchFork = done => {
         const watchers = {};
+
         // Watch for file changes
+        watchers['manifest'] = gulp.watch(
+            config.watch.js,
+            gulp.parallel(task('manifest')),
+        );
+
         watchers['styles:colors'] = gulp.watch(
             config.watch.colors,
             gulp.task('styles:colors'),
@@ -829,10 +851,6 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
         );
         gulpwatch(config.watch.markup, watcher);
         gulpwatch(config.watch.assets, watcher);
-        const scriptWatcher = gulp.watch(
-            config.watch.js,
-            gulp.parallel(task('manifest')),
-        );
 
         watchLogger(watchers);
         done();
@@ -866,6 +884,7 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
         default: defaultTask,
         json,
         manifest,
+        domainsManifest,
         mainManifest,
         externalsManifest,
         umd,
