@@ -29,7 +29,7 @@ const defaultConfig = {
         colors: ['src/**/*/colors.json'],
         pluginAssets: [
             'src/app/**/plugin-assets.json',
-            'src/app/**/style-assets.json',
+            'src/**/style-assets.json',
             '.core/**/style-assets.json',
             'reactium_modules/**/style-assets.json',
         ],
@@ -61,7 +61,7 @@ const defaultConfig = {
         colors: ['src/**/*/colors.json'],
         pluginAssets: [
             'src/app/**/plugin-assets.json',
-            'src/app/**/style-assets.json',
+            'src/**/style-assets.json',
             '.core/**/style-assets.json',
             'reactium_modules/**/style-assets.json',
         ],
