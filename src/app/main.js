@@ -15,9 +15,6 @@ __webpack_public_path__ = window.resourceBaseUrl || '/assets/js/';
     }
 
     if (module.hot) {
-        module.hot.accept(['../../.core/app/shell.js'], cause => {
-            console.log(`${cause} triggered reload.`);
-            window.location.reload();
-        });
+        module.hot.accept(['../../.core/app/shell.js'], window.location.reload);
     }
 })();
