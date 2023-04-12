@@ -14,19 +14,10 @@ __webpack_public_path__ = window.resourceBaseUrl || '/assets/js/';
         await AppError(error);
     }
 
-    /**
-     * @description Initialize the app.
-     */
     if (module.hot) {
-        module.hot.accept(
-            [
-                '../.././.core/dependencies/index.js',
-                '../.././.core/app.js',
-                '../.././.core/sdk/index.js',
-            ],
-            () => {
-                window.location.reload();
-            },
-        );
+        module.hot.accept(['./main.js', '../../.core/app/shell'], cause => {
+            console.log(`${cause} triggered reload.`);
+            window.location.reload();
+        });
     }
 })();
