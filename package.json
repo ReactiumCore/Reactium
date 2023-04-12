@@ -146,6 +146,7 @@
     "ora": "^5.4.1",
     "readdir-recursive": "0.0.4",
     "sass": "^1.59.3",
+    "sass-embedded": "^1.62.0",
     "slugify": "^1.6.5",
     "stylelint": "^13.12.0",
     "webpack": "^5.76.2",
