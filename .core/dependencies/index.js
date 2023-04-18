@@ -1,4 +1,5 @@
 import op from 'object-path';
+import _ from 'underscore';
 import Reactium, { isBrowserWindow } from 'reactium-core/sdk';
 import manifestLoader from 'manifest';
 
@@ -6,32 +7,15 @@ class ReactiumDependencies {
     constructor() {
         this.loaded = false;
         this.loadedModules = {};
-        this.actions = {};
-        this.actionTypes = {
-            DOMAIN_UPDATE: 'DOMAIN_UPDATE',
-        };
         this.services = {};
-        this.reducers = {};
         this.plugins = {};
         this.plugableConfig = {};
 
         // Just used to determine if is a custom type
-        this.coreTypes = [
-            'allActionTypes',
-            'allActions',
-            'allReducers',
-            'allInitialStates',
-            'allServices',
-            'allMiddleware',
-            'allEnhancers',
-            'allPlugins',
-            'allHooks',
-        ];
+        this.coreTypes = ['allServices', 'allPlugins', 'allHooks'];
 
         // Things to be mapped on deps now
         this.coreTypeMap = {
-            allActionTypes: 'actionTypes',
-            allActions: 'actions',
             allServices: 'services',
             allPlugins: 'plugins',
         };
@@ -56,29 +40,48 @@ class ReactiumDependencies {
     }
 
     async loadAll(type) {
-        return Promise.all(
-            op.get(this.manifest, [type], []).map(dep => {
-                const { name, domain, loader } = dep;
-                if (op.has(this, ['loadedModules', name, domain])) {
-                    const loadedModule = op.get(this, [
-                        'loadedModules',
-                        name,
-                        domain,
-                    ]);
-                    return Promise.resolve(loadedModule);
-                } else {
-                    return dep.loader().then(loadedModule => {
-                        const { name, domain, module } = loadedModule;
-
-                        op.set(
-                            this,
-                            ['loadedModules', name, domain],
-                            loadedModule,
+        return _.compact(
+            await Promise.all(
+                op.get(this.manifest, [type], []).map(async dep => {
+                    try {
+                        const { name, domain, loader } = dep;
+                        const { load = true } = await Reactium.Hook.run(
+                            'load-dependency',
+                            { name, domain, module },
+                            Reactium.Enums.priority.highest,
+                            'REACTIUM-DEP-MODULE-LOAD',
                         );
-                        return loadedModule;
-                    });
-                }
-            }),
+
+                        if (load) {
+                            if (op.has(this, ['loadedModules', name, domain])) {
+                                const loadedModule = op.get(this, [
+                                    'loadedModules',
+                                    name,
+                                    domain,
+                                ]);
+
+                                return loadedModule;
+                            } else {
+                                const loadedModule = await loader();
+                                const { name, domain } = loadedModule;
+
+                                op.set(
+                                    this,
+                                    ['loadedModules', name, domain],
+                                    loadedModule,
+                                );
+
+                                return loadedModule;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('loadAll error', error);
+                        return Promise.resolve(undefined);
+                    }
+
+                    return;
+                }),
+            ),
         );
     }
 
