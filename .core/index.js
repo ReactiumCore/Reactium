@@ -7,13 +7,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
-import proxy from 'http-proxy-middleware';
 import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
 import op from 'object-path';
 import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
+import chalk from 'chalk';
 
 const globby = require('./globby-patch').sync;
 
@@ -307,15 +307,46 @@ const startServer = async () => {
         }
     });
 
-    // TODO: Handle TLS server automatically
     // start server on the specified port and binding host
-    app.listen(PORT, '0.0.0.0', function() {
-        BOOT(`Reactium Server running on port '${PORT}'...`);
-    });
+    if (process.env.REACTIUM_TLS_MODE !== 'on') {
+        app.listen(PORT, '0.0.0.0', function() {
+            BOOT(
+                `Reactium Server running ${chalk.red(
+                    'PLAIN',
+                )} on port '${PORT}'...`,
+            );
+        });
+    } else {
+        const spdy = require('spdy');
+        const options = {
+            key: fs.readFileSync(
+                op.get(
+                    process.env,
+                    'REACTIUM_TLS_KEY',
+                    path.resolve(__dirname, '../src', 'server.key'),
+                ),
+            ),
+            cert: fs.readFileSync(
+                op.get(
+                    process.env,
+                    'REACTIUM_TLS_CERT',
+                    path.resolve(__dirname, '../src', 'server.crt'),
+                ),
+            ),
+        };
+        await ReactiumBoot.Hook.run('spdy-options', options);
 
-    // Provide opportunity for ssl server
-    if (fs.existsSync(`${rootPath}/src/app/server/ssl.js`)) {
-        require(`${rootPath}/src/app/server/ssl.js`)(app);
+        spdy.createServer(options, app).listen(PORT, error => {
+            if (error) {
+                ERROR(error);
+                process.exit(1);
+            }
+            BOOT(
+                `Reactium Server running ${chalk.red(
+                    'TLS',
+                )} on port '${PORT}'...`,
+            );
+        });
     }
 };
 
