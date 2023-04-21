@@ -32,6 +32,8 @@ module.exports = async () => {
 
     PORT = parseInt(PORT) || defaultPort;
 
+    global.TLS_PORT = op.get(process.env, 'TLS_PORT', 3443);
+
     require('./reactium.log');
 
     await reactiumBootHooks();
