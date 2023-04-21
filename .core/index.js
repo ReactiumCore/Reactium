@@ -308,15 +308,15 @@ const startServer = async () => {
     });
 
     // start server on the specified port and binding host
-    if (process.env.REACTIUM_TLS_MODE !== 'on') {
-        app.listen(PORT, '0.0.0.0', function() {
-            BOOT(
-                `Reactium Server running ${chalk.red(
-                    'PLAIN',
-                )} on port '${PORT}'...`,
-            );
-        });
-    } else {
+    app.listen(PORT, '0.0.0.0', function() {
+        BOOT(
+            `Reactium Server running ${chalk.red(
+                'PLAIN',
+            )} on port '${PORT}'...`,
+        );
+    });
+
+    if (process.env.REACTIUM_TLS_MODE === 'on') {
         const spdy = require('spdy');
         const options = {
             key: fs.readFileSync(
@@ -336,15 +336,15 @@ const startServer = async () => {
         };
         await ReactiumBoot.Hook.run('spdy-options', options);
 
-        spdy.createServer(options, app).listen(PORT, error => {
+        spdy.createServer(options, app).listen(TLS_PORT, error => {
             if (error) {
                 ERROR(error);
                 process.exit(1);
             }
             BOOT(
-                `Reactium Server running ${chalk.red(
+                `Reactium Server running ${chalk.green(
                     'TLS',
-                )} on port '${PORT}'...`,
+                )} on port '${TLS_PORT}'...`,
             );
         });
     }
