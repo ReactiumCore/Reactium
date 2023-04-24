@@ -9,8 +9,7 @@ const generator = require('./generator');
 const prettier = require('prettier');
 const path = require('path');
 const op = require('object-path');
-const mod = path.dirname(require.main.filename);
-const { error, message } = require(`${mod}/lib/messenger`);
+const { error, message } = arcli;
 const _ = require('underscore');
 
 const formatsource = (val, props) => {

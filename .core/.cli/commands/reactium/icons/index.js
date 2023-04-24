@@ -11,8 +11,7 @@ const op = require('object-path');
 const prettier = require('prettier');
 const camelcase = require('camelcase');
 const generator = require('./generator');
-const mod = path.dirname(require.main.filename);
-const { error, message } = require(`${mod}/lib/messenger`);
+const { error, message } = arcli;
 
 const formatDestination = (val, props) => {
     const { cwd } = props;

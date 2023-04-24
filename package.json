@@ -1,6 +1,6 @@
 {
   "name": "reactium",
-  "version": "5.0.0-alpha-2",
+  "version": "5.0.0-alpha-3",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
     "build:babel-reactium_modules": "cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules",
     "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src --copy-files",
-    "heroku-prebuild": "npx -p @atomic-reactor/cli@2.2.77 arcli install",
+    "heroku-prebuild": "npx -p @atomic-reactor/cli arcli install",
     "static": "npm-run-all build:* && gulp static",
     "local": "gulp local",
     "clean": "gulp clean",
@@ -40,7 +40,7 @@
     "parse/node": false
   },
   "dependencies": {
-    "@atomic-reactor/reactium-sdk-core": "^1.2.20",
+    "@atomic-reactor/reactium-sdk-core": "^1.2.21",
     "@babel/cli": "^7.21.0",
     "@babel/node": "^7.20.7",
     "@loadable/component": "^5.15.3",
@@ -89,7 +89,7 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "@atomic-reactor/cli": "^2.2.78",
+    "@atomic-reactor/cli": "^3.0.5",
     "@atomic-reactor/gulp-run": "^1.8.0",
     "@atomic-reactor/gulp-watch": "^5.0.2",
     "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",

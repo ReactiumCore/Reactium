@@ -4,15 +4,12 @@
  * -----------------------------------------------------------------------------
  */
 const path = require('path');
-const mod = path.dirname(require.main.filename);
-
 const chalk = require('chalk');
 const generator = require('./generator');
 const prettier = require('prettier');
 const _ = require('underscore');
 const op = require('object-path');
-const { error, message } = require(`${mod}/lib/messenger`);
-const pad = require(`${mod}/lib/pad`);
+const { error, message, pad } = arcli;
 const M = require('./manifest')();
 
 const NAME = 'plugin <zones>';

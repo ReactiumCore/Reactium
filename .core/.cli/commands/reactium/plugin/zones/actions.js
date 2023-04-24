@@ -6,8 +6,7 @@ const op = require('object-path');
 const prettier = require('prettier');
 const globby = require('globby');
 
-const mod = path.dirname(require.main.filename);
-const pad = require(`${mod}/lib/pad`);
+const pad = arlci.pad;
 
 module.exports = spinner => {
     const message = text => {
