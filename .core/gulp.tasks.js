@@ -130,7 +130,7 @@ const reactium = (gulp, config, webpackConfig) => {
         };
 
     const serve = ({ open } = { open: config.open }) => done => {
-        const proxy = `localhost:${config.port.proxy}`;
+        const proxy = `127.0.0.1:${config.port.proxy}`;
 
         // monkey-path opnWrapper for linux support
         const open = require('open');
@@ -173,7 +173,7 @@ const reactium = (gulp, config, webpackConfig) => {
                         setTimeout(resolve, config.serverRetryDelay),
                     )
                         .then(() => {
-                            const proxy = `localhost:${config.port.proxy}`;
+                            const proxy = `127.0.0.1:${config.port.proxy}`;
                             return axios.get(`http://${proxy}`);
                         })
                         .then(() => {
