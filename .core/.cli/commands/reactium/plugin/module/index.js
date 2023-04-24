@@ -9,8 +9,7 @@ const prettier = require('prettier');
 const path = require('path');
 const fs = require('fs-extra');
 const op = require('object-path');
-const mod = path.dirname(require.main.filename);
-const { error, message } = require(`${mod}/lib/messenger`);
+const { error, message } = arcli;
 const GENERATOR = require('./generator');
 const slugify = require('slugify');
 
