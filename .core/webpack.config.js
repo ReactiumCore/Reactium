@@ -6,6 +6,7 @@ const path = require('path');
 const globby = require('./globby-patch');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const env = process.env.NODE_ENV || 'development';
 const rootPath = path.resolve(__dirname, '..');
 const chalk = require('chalk');
@@ -78,7 +79,12 @@ module.exports = config => {
     }
 
     sdk.addPlugin('defines', new webpack.DefinePlugin(config.defines));
-
+    sdk.addPlugin(
+        'node-polyfills',
+        new NodePolyfillPlugin({
+            excludeAliases: ['console'],
+        }),
+    );
     sdk.addContext('reactium-modules-context', {
         from: /reactium-translations$/,
         to: path.resolve('./src/reactium-translations'),
