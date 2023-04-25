@@ -4,7 +4,7 @@ import _ from 'underscore';
 import deps from 'dependencies';
 
 import('reactium-core/sdk').then(
-    async ({ default: Reactium, useHookComponent }) => {
+    async ({ default: Reactium, ReactiumSyncState }) => {
         Reactium.Hook.register(
             'component-bindings',
             async context => {
@@ -120,6 +120,17 @@ import('reactium-core/sdk').then(
             },
             Reactium.Enums.priority.highest,
             'REACTIUM_APP_BOOT_MESSAGE',
+        );
+
+        Reactium.Hook.register(
+            'sdk-init',
+            async () => {
+                Reactium.State = new ReactiumSyncState(
+                    op.get(window, 'state', {}),
+                );
+            },
+            Reactium.Enums.priority.highest,
+            'REACTIUM-STATE-INIT',
         );
     },
 );
