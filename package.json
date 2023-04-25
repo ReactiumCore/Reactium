@@ -89,7 +89,7 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "reactium": "^3.0.8",
+    "reactium": "^3.0.10",
     "@atomic-reactor/gulp-run": "^1.8.0",
     "@atomic-reactor/gulp-watch": "^5.0.2",
     "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
