@@ -130,7 +130,7 @@ import('reactium-core/sdk').then(
                 );
             },
             Reactium.Enums.priority.highest,
-            'REACTIUM-STATE-INIT',
+            'REACTIUM_STATE_INIT',
         );
     },
 );
