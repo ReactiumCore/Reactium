@@ -35,7 +35,7 @@ COPY --from=build /tmp/app/package.json ./package.json
 COPY --from=build /tmp/app/node_modules ./node_modules
 
 # Includes entire server-side app (including reactium_modules)
-COPY --from=build /tmp/app/build ./build
+COPY --from=build /tmp/app/.core ./.core
 
 RUN chown -R node ./
 
