@@ -48,6 +48,7 @@
     "axios": "^0.26.0",
     "axios-retry": "^3.2.4",
     "body-parser": "^1.20.2",
+    "camelcase": "^7.0.1",
     "chalk": "^4.1.2",
     "classnames": "^2.3.2",
     "cookie-parser": "^1.4.6",
@@ -89,7 +90,6 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "reactium": "^3.0.10",
     "@atomic-reactor/gulp-run": "^1.8.0",
     "@atomic-reactor/gulp-watch": "^5.0.2",
     "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
@@ -108,7 +108,6 @@
     "babel-loader": "^9.1.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "browser-sync": "^2.28.3",
-    "camelcase": "^6.3.0",
     "cli-spinners": "^2.7.0",
     "compression-webpack-plugin": "^10.0.0",
     "decamelize": "^3.2.0",
@@ -139,6 +138,7 @@
     "nodemon": "^2.0.21",
     "open": "^8.4.2",
     "ora": "^5.4.1",
+    "reactium": "^3.0.10",
     "readdir-recursive": "0.0.4",
     "sass": "^1.59.3",
     "sass-embedded": "^1.62.0",
