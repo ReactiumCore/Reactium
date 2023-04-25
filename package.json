@@ -10,7 +10,7 @@
     "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
     "build:babel-reactium_modules": "cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules",
     "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src --copy-files",
-    "heroku-prebuild": "npx -p @atomic-reactor/cli arcli install",
+    "heroku-prebuild": "npx reactium install",
     "static": "npm-run-all build:* && gulp static",
     "local": "gulp local",
     "clean": "gulp clean",
@@ -89,7 +89,7 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "@atomic-reactor/cli": "^3.0.5",
+    "reactium": "^3.0.10",
     "@atomic-reactor/gulp-run": "^1.8.0",
     "@atomic-reactor/gulp-watch": "^5.0.2",
     "@atomic-reactor/node-sass-reactium-importer": "^1.0.0",
