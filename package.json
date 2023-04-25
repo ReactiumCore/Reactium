@@ -40,7 +40,13 @@
     "parse/node": false
   },
   "dependencies": {
+    "@atomic-reactor/reactium-api": "file:reactium_modules/@atomic-reactor/reactium-api/_npm",
+    "@atomic-reactor/reactium-capability": "file:reactium_modules/@atomic-reactor/reactium-capability/_npm",
+    "@atomic-reactor/reactium-role": "file:reactium_modules/@atomic-reactor/reactium-role/_npm",
     "@atomic-reactor/reactium-sdk-core": "^1.2.22",
+    "@atomic-reactor/reactium-setting": "file:reactium_modules/@atomic-reactor/reactium-setting/_npm",
+    "@atomic-reactor/reactium-svg": "file:reactium_modules/@atomic-reactor/reactium-svg/_npm",
+    "@atomic-reactor/reactium-user": "file:reactium_modules/@atomic-reactor/reactium-user/_npm",
     "@babel/cli": "^7.21.0",
     "@babel/node": "^7.20.7",
     "@loadable/component": "^5.15.3",
