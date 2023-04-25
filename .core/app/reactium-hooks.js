@@ -124,7 +124,7 @@ import('reactium-core/sdk').then(
 
         Reactium.Hook.register(
             'sdk-init',
-            async () => {
+            async Reactium => {
                 Reactium.State = new ReactiumSyncState(
                     op.get(window, 'state', {}),
                 );
