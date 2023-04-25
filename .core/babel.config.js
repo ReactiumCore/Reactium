@@ -32,7 +32,7 @@ if (semver.satisfies(semver.coerce(babelCoreVersion), '^7.4.0')) {
     }
 }
 
-require('./reactium.log');
+require('./reactium.log.cjs');
 
 global.ReactiumBabel = ReactiumBabel;
 

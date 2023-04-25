@@ -1,4 +1,4 @@
-import serialize from 'serialize-javascript';
+const serialize = require('serialize-javascript');
 
 module.exports = {
     version: '%TEMPLATE_VERSION%',

@@ -4,12 +4,8 @@
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
-    "start": "node build/.core/index.js",
-    "build": "run-s build:*",
-    "build:gulp": "cross-env NODE_ENV=production gulp",
-    "build:babel-core": "cross-env NODE_ENV=production babel .core --out-dir build/.core",
-    "build:babel-reactium_modules": "cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules",
-    "build:babel-src": "cross-env NODE_ENV=production babel src --out-dir build/src --copy-files",
+    "start": "node .core/index.mjs",
+    "build": "cross-env NODE_ENV=production gulp",
     "heroku-prebuild": "npx reactium install",
     "static": "npm-run-all build:* && gulp static",
     "local": "gulp local",
@@ -40,6 +36,7 @@
     "parse/node": false
   },
   "dependencies": {
+    "@atomic-reactor/dirname": "^1.0.2",
     "@atomic-reactor/reactium-api": "file:reactium_modules/@atomic-reactor/reactium-api/_npm",
     "@atomic-reactor/reactium-capability": "file:reactium_modules/@atomic-reactor/reactium-capability/_npm",
     "@atomic-reactor/reactium-role": "file:reactium_modules/@atomic-reactor/reactium-role/_npm",

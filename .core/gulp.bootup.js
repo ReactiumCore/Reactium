@@ -8,7 +8,7 @@ const config = require('./gulp.config');
 const webpackConfig = require('./webpack.config')(config);
 const chalk = require('chalk');
 
-require('./reactium.log');
+require('./reactium.log.cjs');
 
 global.ReactiumGulp = ReactiumGulp;
 

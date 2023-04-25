@@ -1,5 +1,5 @@
 import express from 'express';
-import renderer from './renderer';
+import renderer from './renderer/index.mjs';
 import fs from 'fs';
 import path from 'path';
 import httpAuth from 'http-auth';

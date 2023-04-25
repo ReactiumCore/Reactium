@@ -8,16 +8,19 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
 import morgan from 'morgan';
-import path from 'path';
-import fs from 'fs';
 import op from 'object-path';
 import _ from 'underscore';
 import staticGzip from 'express-static-gzip';
 import chalk from 'chalk';
+import globals from './server-globals.mjs';
+import path from 'node:path';
+import fs from 'fs-extra';
+import globbyPatched from './globby-patch.js';
+import router from './server/router.mjs';
+import { dirname } from '@atomic-reactor/dirname';
 
-const globby = require('./globby-patch').sync;
-
-const globals = require('./server-globals');
+const __dirname = dirname(import.meta.url);
+const globby = globbyPatched.sync;
 
 global.rootPath = path.resolve(__dirname, '..');
 
@@ -101,7 +104,7 @@ const registeredMiddleware = async () => {
 
     const reactiumModules = Object.keys(
         op.get(
-            require(path.resolve(process.cwd(), 'package.json')),
+            fs.readJsonSync(path.resolve(process.cwd(), 'package.json')),
             'reactiumDependencies',
             {},
         ),
@@ -170,12 +173,12 @@ const registeredMiddleware = async () => {
     // default route handler
     ReactiumBoot.Server.Middleware.register('router', {
         name: 'router',
-        use: require('./server/router').default,
+        use: router,
         order: Enums.priority.neutral,
     });
 };
 
-const registeredDevMiddleware = () => {
+const registeredDevMiddleware = async () => {
     const { Enums } = ReactiumBoot;
 
     // set app variables
@@ -183,11 +186,16 @@ const registeredDevMiddleware = () => {
 
     // development mode
     if (process.env.NODE_ENV === 'development') {
-        const webpack = require('webpack');
-        const gulpConfig = require('./gulp.config');
-        const webpackConfig = require('./webpack.config')(gulpConfig);
-        const wpMiddlware = require('webpack-dev-middleware');
-        const wpHotMiddlware = require('webpack-hot-middleware');
+        const { default: webpack } = await import('webpack');
+        const { default: gulpConfig } = await import('./gulp.config.js');
+        const { default: webpackConfigFactory } = await import(
+            './webpack.config.js'
+        );
+        const webpackConfig = webpackConfigFactory(gulpConfig);
+        const { default: wpMiddleware } = await import('webpack-dev-middleware');
+        const { default: wpHotMiddleware } = await import(
+            'webpack-hot-middleware'
+        );
         const publicPath = `http://localhost:${PORT}/`;
 
         // local development overrides for webpack config
@@ -202,7 +210,7 @@ const registeredDevMiddleware = () => {
 
         ReactiumBoot.Server.Middleware.register('webpack', {
             name: 'webpack',
-            use: wpMiddlware(compiler, {
+            use: wpMiddleware(compiler, {
                 serverSideRender: true,
                 publicPath,
             }),
@@ -211,7 +219,7 @@ const registeredDevMiddleware = () => {
 
         ReactiumBoot.Server.Middleware.register('hmr', {
             name: 'hmr',
-            use: wpHotMiddlware(compiler, {
+            use: wpHotMiddleware(compiler, {
                 reload: true,
             }),
             order: Enums.priority.high,
@@ -317,7 +325,7 @@ const startServer = async () => {
     });
 
     if (process.env.REACTIUM_TLS_MODE === 'on') {
-        const spdy = require('spdy');
+        const spdy = await import('spdy');
         const options = {
             key: fs.readFileSync(
                 op.get(

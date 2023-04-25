@@ -1,209 +1,216 @@
-const globby = require('globby');
-const path = require('path');
-const fs = require('fs');
-const semver = require('semver');
-const op = require('object-path');
-const _ = require('underscore');
-const serialize = require('serialize-javascript');
+import globby from 'globby';
+import path from 'path';
+import fs from 'fs';
+import semver from 'semver';
+import op from 'object-path';
+import _ from 'underscore';
+import serialize from 'serialize-javascript';
+import reactiumConfig from '../../reactium-config.js';
 
 const normalizeAssets = assets => _.flatten([assets]);
 
-ReactiumBoot.Hook.registerSync(
-    'Server.AppStyleSheets',
-    (req, AppStyleSheets) => {
-        const theme = op.get(
-            req,
-            'query.theme',
-            process.env.DEFAULT_THEME || 'style',
-        );
-
-        const defaultStylesheet = `${theme}.css`;
-
-        let styles = [];
-        let publicDir =
-            process.env.PUBLIC_DIRECTORY ||
-            path.resolve(process.cwd(), 'public');
-        let styleDir = path.normalize(path.join(publicDir, '/assets/style'));
-
-        const corePath = path
-            .normalize(path.join(styleDir, 'core.css'))
-            .split(publicDir)
-            .join('');
-
-        const when = (req, itemPath) => {
-            const [url] = req.originalUrl.split('?');
-
-            const includes = [defaultStylesheet];
-            ReactiumBoot.Hook.runSync(
-                'Server.AppStyleSheets.includes',
-                includes,
+(async () => {
+    ReactiumBoot.Hook.registerSync(
+        'Server.AppStyleSheets',
+        (req, AppStyleSheets) => {
+            const theme = op.get(
+                req,
+                'query.theme',
+                process.env.DEFAULT_THEME || 'style',
             );
 
-            const excludes = ['core.css', 'toolkit.css'];
-            ReactiumBoot.Hook.runSync(
-                'Server.AppStyleSheets.excludes',
-                excludes,
+            const defaultStylesheet = `${theme}.css`;
+
+            let styles = [];
+            let publicDir =
+                process.env.PUBLIC_DIRECTORY ||
+                path.resolve(process.cwd(), 'public');
+            let styleDir = path.normalize(
+                path.join(publicDir, '/assets/style'),
             );
 
-            const included = Boolean(
-                includes.find(search => itemPath.indexOf(search) >= 0),
-            );
-            const excluded = Boolean(
-                excludes.find(search => itemPath.indexOf(search) >= 0),
-            );
+            const corePath = path
+                .normalize(path.join(styleDir, 'core.css'))
+                .split(publicDir)
+                .join('');
 
-            return included && !excluded;
-        };
+            const when = (req, itemPath) => {
+                const [url] = req.originalUrl.split('?');
 
-        fs.readdirSync(styleDir).forEach(item => {
-            const itemPath = path.normalize(path.join(styleDir, item));
-            const cssPath = itemPath.split(publicDir).join('');
+                const includes = [defaultStylesheet];
+                ReactiumBoot.Hook.runSync(
+                    'Server.AppStyleSheets.includes',
+                    includes,
+                );
 
-            AppStyleSheets.register(path.basename(itemPath), {
-                path: itemPath.split(publicDir).join(''),
-                when,
+                const excludes = ['core.css', 'toolkit.css'];
+                ReactiumBoot.Hook.runSync(
+                    'Server.AppStyleSheets.excludes',
+                    excludes,
+                );
+
+                const included = Boolean(
+                    includes.find(search => itemPath.indexOf(search) >= 0),
+                );
+                const excluded = Boolean(
+                    excludes.find(search => itemPath.indexOf(search) >= 0),
+                );
+
+                return included && !excluded;
+            };
+
+            fs.readdirSync(styleDir).forEach(item => {
+                const itemPath = path.normalize(path.join(styleDir, item));
+                const cssPath = itemPath.split(publicDir).join('');
+
+                AppStyleSheets.register(path.basename(itemPath), {
+                    path: itemPath.split(publicDir).join(''),
+                    when,
+                });
             });
-        });
-    },
-    ReactiumBoot.Enums.priority.highest,
-    'SERVER-APP-STYLESHEETS-CORE',
-);
+        },
+        ReactiumBoot.Enums.priority.highest,
+        'SERVER-APP-STYLESHEETS-CORE',
+    );
 
-ReactiumBoot.Hook.registerSync(
-    'Server.AppScripts',
-    (req, AppScripts, res) => {
-        // Webpack assets
-        if (process.env.NODE_ENV === 'development') {
-            const { stats: context } = res.locals.webpack.devMiddleware;
-            const stats = context.toJson();
-            _.pluck(stats.namedChunkGroups.main.assets, 'name').forEach(
-                path => {
-                    AppScripts.register(path, {
-                        path: `/${path}`,
+    ReactiumBoot.Hook.registerSync(
+        'Server.AppScripts',
+        (req, AppScripts, res) => {
+            // Webpack assets
+            if (process.env.NODE_ENV === 'development') {
+                const { stats: context } = res.locals.webpack.devMiddleware;
+                const stats = context.toJson();
+                _.pluck(stats.namedChunkGroups.main.assets, 'name').forEach(
+                    path => {
+                        AppScripts.register(path, {
+                            path: `/${path}`,
+                            order: ReactiumBoot.Enums.priority.highest,
+                            footer: true,
+                        });
+                    },
+                );
+
+                return;
+            }
+
+            try {
+                const webpackAssets = JSON.parse(
+                    fs.readFileSync(
+                        path.resolve(
+                            rootPath,
+                            'src/app/server/webpack-manifest.json',
+                        ),
+                    ),
+                );
+
+                ReactiumBoot.Hook.runSync(
+                    'webpack-server-assets',
+                    webpackAssets,
+                );
+                webpackAssets.forEach(asset =>
+                    AppScripts.register(asset, {
+                        path: `${global.resourceBaseUrl}${asset}`,
                         order: ReactiumBoot.Enums.priority.highest,
                         footer: true,
-                    });
-                },
-            );
-
-            return;
-        }
-
-        try {
-            const webpackAssets = JSON.parse(
-                fs.readFileSync(
-                    path.resolve(
-                        rootPath,
-                        'src/app/server/webpack-manifest.json',
-                    ),
-                ),
-            );
-
-            ReactiumBoot.Hook.runSync('webpack-server-assets', webpackAssets);
-            webpackAssets.forEach(asset =>
-                AppScripts.register(asset, {
-                    path: `${global.resourceBaseUrl}${asset}`,
-                    order: ReactiumBoot.Enums.priority.highest,
-                    footer: true,
-                }),
-            );
-        } catch (error) {
-            console.error(
-                'build/src/app/server/webpack-manifest.json not found or invalid JSON',
-                error,
-            );
-            process.exit(1);
-        }
-    },
-    ReactiumBoot.Enums.priority.highest,
-    'SERVER-APP-SCRIPTS-CORE',
-);
-
-ReactiumBoot.Hook.registerSync(
-    'Server.AppHeaders',
-    (req, AppHeaders, res) => {
-        AppHeaders.register('shortcut', {
-            header:
-                '<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
-            order: ReactiumBoot.Enums.priority.highest,
-        });
-        AppHeaders.register('favicon', {
-            header:
-                '<link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
-            order: ReactiumBoot.Enums.priority.highest,
-        });
-        AppHeaders.register('viewport', {
-            header:
-                '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
-            order: ReactiumBoot.Enums.priority.highest,
-        });
-        AppHeaders.register('charset', {
-            header: '<meta charset="UTF-8" />',
-            order: ReactiumBoot.Enums.priority.highest,
-        });
-    },
-    ReactiumBoot.Enums.priority.highest,
-    'SERVER-APP-HEADERS-CORE',
-);
-
-ReactiumBoot.Hook.registerSync(
-    'Server.AppBindings',
-    (req, AppBindings) => {
-        AppBindings.register('router', {
-            template: () => {
-                const binding = ` <div data-reactium-bind="App"></div>`;
-                return binding;
-            },
-            requestParams: ['content'],
-        });
-    },
-    ReactiumBoot.Enums.priority.highest,
-    'SERVER-APP-BINDINGS-CORE',
-);
-
-const sanitizeTemplateVersion = version => {
-    if (semver.valid(version)) {
-        return version;
-    }
-    return semver.coerce(version);
-};
-
-ReactiumBoot.Hook.registerSync(
-    'Server.beforeApp',
-    req => {
-        const {
-            semver: coreSemver,
-        } = require(`${rootPath}/.core/reactium-config`);
-
-        if (fs.existsSync(`${rootPath}/src/app/server/template/feo.js`)) {
-            let localTemplate = require(`${rootPath}/src/app/server/template/feo`);
-            let templateVersion = sanitizeTemplateVersion(
-                localTemplate.version,
-            );
-
-            // Check to see if local template should be compatible with core
-            if (semver.satisfies(templateVersion, coreSemver)) {
-                req.template = localTemplate.template;
-            } else {
-                console.warn(
-                    `${rootPath}/src/app/server/template/feo.js is out of date, and will not be used. Use 'arcli server template' command to update.`,
+                    }),
                 );
+            } catch (error) {
+                console.error(
+                    'build/src/app/server/webpack-manifest.json not found or invalid JSON',
+                    error,
+                );
+                process.exit(1);
             }
-        }
-    },
-    ReactiumBoot.Enums.priority.highest,
-    'SERVER-BEFORE-APP-CORE-TEMPLATES',
-);
+        },
+        ReactiumBoot.Enums.priority.highest,
+        'SERVER-APP-SCRIPTS-CORE',
+    );
 
-ReactiumBoot.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
-    AppGlobals.register('resourceBaseUrl', {
-        name: 'resourceBaseUrl',
-        value:
-            process.env.NODE_ENV === 'development'
-                ? '/'
-                : process.env.WEBPACK_RESOURCE_BASE || '/assets/js/',
+    ReactiumBoot.Hook.registerSync(
+        'Server.AppHeaders',
+        (req, AppHeaders, res) => {
+            AppHeaders.register('shortcut', {
+                header:
+                    '<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
+                order: ReactiumBoot.Enums.priority.highest,
+            });
+            AppHeaders.register('favicon', {
+                header:
+                    '<link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />',
+                order: ReactiumBoot.Enums.priority.highest,
+            });
+            AppHeaders.register('viewport', {
+                header:
+                    '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
+                order: ReactiumBoot.Enums.priority.highest,
+            });
+            AppHeaders.register('charset', {
+                header: '<meta charset="UTF-8" />',
+                order: ReactiumBoot.Enums.priority.highest,
+            });
+        },
+        ReactiumBoot.Enums.priority.highest,
+        'SERVER-APP-HEADERS-CORE',
+    );
+
+    ReactiumBoot.Hook.registerSync(
+        'Server.AppBindings',
+        (req, AppBindings) => {
+            AppBindings.register('router', {
+                template: () => {
+                    const binding = ` <div data-reactium-bind="App"></div>`;
+                    return binding;
+                },
+                requestParams: ['content'],
+            });
+        },
+        ReactiumBoot.Enums.priority.highest,
+        'SERVER-APP-BINDINGS-CORE',
+    );
+
+    const sanitizeTemplateVersion = version => {
+        if (semver.valid(version)) {
+            return version;
+        }
+        return semver.coerce(version);
+    };
+
+    ReactiumBoot.Hook.register(
+        'Server.beforeApp',
+        async req => {
+            if (fs.existsSync(`${rootPath}/src/app/server/template/feo.js`)) {
+                let { default: localTemplate } = await import(
+                    `${rootPath}/src/app/server/template/feo.js`
+                );
+
+                let templateVersion = sanitizeTemplateVersion(
+                    localTemplate.version,
+                );
+
+                // Check to see if local template should be compatible with core
+                if (semver.satisfies(templateVersion, reactiumConfig.semver)) {
+                    req.template = localTemplate.template;
+                } else {
+                    console.warn(
+                        `${rootPath}/src/app/server/template/feo.js is out of date, and will not be used. Use 'arcli server template' command to update.`,
+                    );
+                }
+            }
+        },
+        ReactiumBoot.Enums.priority.highest,
+        'SERVER-BEFORE-APP-CORE-TEMPLATES',
+    );
+
+    ReactiumBoot.Hook.registerSync('Server.AppGlobals', (req, AppGlobals) => {
+        AppGlobals.register('resourceBaseUrl', {
+            name: 'resourceBaseUrl',
+            value:
+                process.env.NODE_ENV === 'development'
+                    ? '/'
+                    : process.env.WEBPACK_RESOURCE_BASE || '/assets/js/',
+        });
     });
-});
+})();
 
 export const renderAppBindings = req => {
     let bindingsMarkup = '';
@@ -275,7 +282,7 @@ export default async (req, res, context) => {
     req.headTags = '';
     req.appBindings = '';
 
-    const coreTemplate = require(`../template/feo`);
+    const { default: coreTemplate } = await import(`../template/feo.js`);
     req.template = coreTemplate.template;
 
     /**
@@ -625,6 +632,7 @@ ga('send', 'pageview');
      */
     ReactiumBoot.Hook.runSync('Server.afterApp', req, Server);
     await ReactiumBoot.Hook.run('Server.afterApp', req, Server);
+    const { default: feo } = await import('./feo.js');
 
-    return require(`./feo`)(req, res, context);
+    return feo(req, res, context);
 };
