@@ -166,10 +166,10 @@
   },
   "reactiumDependencies": {
     "@atomic-reactor/reactium-api": "5.0.2",
-    "@atomic-reactor/reactium-capability": "2.0.0",
-    "@atomic-reactor/reactium-role": "2.0.0",
-    "@atomic-reactor/reactium-user": "2.0.0",
-    "@atomic-reactor/reactium-setting": "2.0.0",
+    "@atomic-reactor/reactium-capability": "5.0.1",
+    "@atomic-reactor/reactium-role": "5.0.1",
+    "@atomic-reactor/reactium-user": "5.0.1",
+    "@atomic-reactor/reactium-setting": "5.0.1",
     "@atomic-reactor/reactium-svg": "0.0.3"
   }
 }
