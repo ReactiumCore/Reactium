@@ -240,15 +240,8 @@ module.exports = {
             },
             scripts: {
                 add: {
+                    start: 'node .core/index.mjs',
                     build: 'npm-run-all build:*',
-                    'build:gulp': 'cross-env NODE_ENV=production gulp',
-                    'build:babel-core':
-                        'cross-env NODE_ENV=production babel .core --out-dir build/.core',
-                    'build:babel-reactium_modules':
-                        'cross-env NODE_ENV=production babel reactium_modules --out-dir build/reactium_modules',
-                    'build:babel-src':
-                        'cross-env NODE_ENV=production babel src --out-dir build/src --copy-files',
-                    static: 'npm-run-all build:* && gulp static',
                     local: 'gulp local',
                 },
                 remove: [
@@ -265,7 +258,9 @@ module.exports = {
                     'local-ssr:gulp',
                     'local-ssr:babel-node',
                     'react-redux',
+                    'start',
                     'static:build',
+                    'static',
                 ],
             },
             husky: {
