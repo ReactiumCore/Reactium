@@ -1,10 +1,10 @@
 import _ from 'underscore';
-import cc from 'camelcase';
 import op from 'object-path';
 import {
     ComponentEvent,
     useEventEffect,
 } from '@atomic-reactor/reactium-sdk-core';
+import cc from 'camelcase';
 
 export const useDispatcherFactory = Reactium => ({ props, state }) => (
     type,

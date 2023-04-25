@@ -99,6 +99,9 @@ ReactiumBabel.env = {
         browsers: ['> 1%', 'IE 11'],
     },
 };
+
+if (!global.ReactiumWebpack) ReactiumBabel.env.targets = { node: '18' };
+
 ReactiumBabel.Hook.runSync('env', ReactiumBabel.env);
 
 /**

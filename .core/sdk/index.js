@@ -13,7 +13,10 @@ import {
 } from '@atomic-reactor/reactium-sdk-core';
 
 import { AppContext } from './named-exports';
-import { useDispatcherFactory, useStateEffectFactory } from './named-exports';
+import {
+    useDispatcherFactory,
+    useStateEffectFactory,
+} from './named-exports/useDispatcher';
 export * from '@atomic-reactor/reactium-sdk-core';
 export * from './named-exports';
 
