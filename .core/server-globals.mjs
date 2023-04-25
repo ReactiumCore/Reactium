@@ -1,14 +1,17 @@
-import path from 'path';
 import op from 'object-path';
 import _ from 'underscore';
-import reactiumBootHooks from './boot-hooks';
+import reactiumBootHooks from './boot-hooks.mjs';
+import path from 'node:path';
+import { dirname } from '@atomic-reactor/dirname';
+import ReactiumBoot from '@atomic-reactor/reactium-sdk-core';
+
+global.ReactiumBoot = ReactiumBoot;
+
+const __dirname = dirname(import.meta.url);
 
 global.rootPath = path.resolve(__dirname, '..');
 
-module.exports = async () => {
-    const ReactiumBoot = (await import('@atomic-reactor/reactium-sdk-core'))
-        .default;
-    global.ReactiumBoot = ReactiumBoot;
+export default async () => {
     global.defines = {};
 
     const defaultPort = 3030;
@@ -35,7 +38,7 @@ module.exports = async () => {
 
     global.TLS_PORT = op.get(process.env, 'TLS_PORT', 3443);
 
-    require('./reactium.log');
+    await import('./reactium.log.cjs');
 
     await reactiumBootHooks();
 };
