@@ -4,11 +4,8 @@ import hb from 'handlebars';
 import cc from 'camelcase';
 import op from 'object-path';
 import path from 'node:path';
+import { dirname } from '@atomic-reactor/dirname';
 
-// import { fileURLToPath } from 'node:url';
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-import dirname from '../dirname.mjs';
 const __dirname = dirname(import.meta.url);
 
 const handlebars = hb.compile;

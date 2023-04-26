@@ -1,12 +1,11 @@
-const componentGen = require('./componentGen');
+import formatRoute from './formatRoute.cjs';
+import componentGen from './componentGen.cjs';
+import formatDestination from './formatDestination.cjs';
+import selectDestination from './selectDestination.cjs';
+import selectStyleDefault from './selectStyle.cjs';
+import camelcase from 'camelcase';
 
-const formatRoute = require('./formatRoute');
-const formatDestination = require('./formatDestination');
-const selectDestination = require('./selectDestination');
-const { selectStyle, styleTypes } = require('./selectStyle');
-
-const camelcase = require('camelcase');
-
+const { selectStyle, styleTypes } = selectStyleDefault;
 const { _, chalk, prefix, Reactium } = arcli;
 
 const cc = str => camelcase(str, { pascalCase: true });

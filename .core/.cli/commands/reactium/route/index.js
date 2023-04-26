@@ -1,6 +1,6 @@
-arcli.Reactium = require('@atomic-reactor/reactium-sdk-core').default;
+import Reactium from '@atomic-reactor/reactium-sdk-core';
 
-const { ActionSequence, ora, path, Reactium } = arcli;
+const { ActionSequence, ora, path } = arcli;
 
 const ENUMS = {
     CANCELED: 'route canceled!',
@@ -31,19 +31,19 @@ Example:
 
 const ACTION = async ({ opt, props }) => {
     // load hooks
-    arcli
-        .globby(
-            [
-                './.core/**/reactium-arcli.js',
-                './src/**/reactium-arcli.js',
-                './reactium_modules/**/reactium-arcli.js',
-                './node_modules/**/reactium-arcli.js',
-            ],
-            {
-                dot: true,
-            },
-        )
-        .forEach(file => require(path.resolve(file)));
+    for (const file of arcli.globby(
+        [
+            './.core/**/reactium-arcli.js',
+            './src/**/reactium-arcli.js',
+            './reactium_modules/**/reactium-arcli.js',
+            './node_modules/**/reactium-arcli.js',
+        ],
+        {
+            dot: true,
+        },
+    )) {
+        await import(path.resolve(file));
+    }
 
     let params = arcli.flagsToParams({ opt, flags: Object.keys(ENUMS.FLAGS) });
 
@@ -123,7 +123,7 @@ const ACTION = async ({ opt, props }) => {
         });
 };
 
-const COMMAND = ({ program, props }) => {
+export const COMMAND = ({ program, props }) => {
     program
         .command(ENUMS.NAME)
         .description(ENUMS.DESC)
@@ -141,7 +141,4 @@ const COMMAND = ({ program, props }) => {
     return program;
 };
 
-module.exports = {
-    COMMAND,
-    NAME: ENUMS.NAME,
-};
+export const NAME = ENUMS.NAME;
