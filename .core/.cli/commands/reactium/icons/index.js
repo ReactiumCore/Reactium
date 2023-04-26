@@ -4,14 +4,16 @@
  * -----------------------------------------------------------------------------
  */
 
-const path = require('path');
-const chalk = require('chalk');
-const _ = require('underscore');
-const op = require('object-path');
-const prettier = require('prettier');
-const camelcase = require('camelcase');
-const generator = require('./generator');
-const { error, message } = arcli;
+import generator from './generator.js';
+import { fileURLToPath } from 'node:url';
+
+const { _, fs, chalk, op, camelcase, message, path, prettier } = arcli;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const pkg = JSON.parse(
+    fs.readFileSync(path.normalize(`${__dirname}/package.json`)),
+);
 
 const formatDestination = (val, props) => {
     const { cwd } = props;
@@ -37,7 +39,7 @@ const formatDestination = (val, props) => {
 
 const NAME = 'icons';
 
-const DESC = 'Reactium: Import icons from an Icomoon selection file.';
+const DESC = pkg.description;
 
 const CANCELED = 'Action canceled!';
 
@@ -154,8 +156,6 @@ const PREFLIGHT = ({ params }) => {
 };
 
 const SCHEMA = () => {
-    //const { cwd, prompt } = props;
-
     return {
         properties: {
             name: {
@@ -180,7 +180,7 @@ const SCHEMA = () => {
 
 const ACTION = ({ opt, props }) => {
     let params;
-    const { cwd, prompt } = props;
+    const { prompt } = props;
     const schema = SCHEMA({ props });
     const ovr = FLAGS_TO_PARAMS({ opt });
 
@@ -232,7 +232,4 @@ const COMMAND = ({ program, props }) =>
         .option('-n, --name [name]', 'Name of the icon package.')
         .on('--help', () => HELP(props));
 
-module.exports = {
-    COMMAND,
-    NAME,
-};
+export { COMMAND, NAME };

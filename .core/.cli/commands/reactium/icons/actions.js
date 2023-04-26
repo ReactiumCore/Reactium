@@ -1,13 +1,19 @@
-const path = require('path');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const _ = require('underscore');
-const op = require('object-path');
-const prettier = require('prettier').format;
-const handlebars = require('handlebars').compile;
-const cc = require('camelcase');
+import chalk from 'chalk';
+import fs from 'fs-extra';
+import hb from 'handlebars';
+import cc from 'camelcase';
+import op from 'object-path';
+import path from 'node:path';
 
-module.exports = spinner => {
+// import { fileURLToPath } from 'node:url';
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+import dirname from '../dirname.mjs';
+const __dirname = dirname(import.meta.url);
+
+const handlebars = hb.compile;
+
+export default spinner => {
     const message = text => {
         if (spinner) {
             spinner.text = text;
@@ -17,7 +23,7 @@ module.exports = spinner => {
     let svgs = {};
 
     return {
-        scan: ({ action, params, props }) => {
+        scan: async ({ action, params }) => {
             const { source } = params;
 
             message(
@@ -25,7 +31,7 @@ module.exports = spinner => {
             );
 
             const filePath = path.normalize(source);
-            const icons = require(filePath).icons;
+            const { icons } = await import(filePath);
 
             svgs = icons.reduce((obj, item) => {
                 const id = cc(op.get(item, 'properties.name'), {
@@ -39,7 +45,7 @@ module.exports = spinner => {
             return Promise.resolve({ action, status: 200 });
         },
 
-        create: ({ action, params, props }) => {
+        create: ({ action, params }) => {
             const { destination, name } = params;
             const dir = path.normalize(path.join(destination, 'svg'));
 
@@ -64,7 +70,7 @@ module.exports = spinner => {
             return Promise.resolve({ action, status: 200 });
         },
 
-        index: ({ action, params, props }) => {
+        index: ({ action, params }) => {
             const { destination, name } = params;
             const dir = path.normalize(path.join(destination, name));
 
