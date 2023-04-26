@@ -1,9 +1,11 @@
+import componentGen from '../component/componentGen.cjs';
+import formatDestination from '../component/formatDestination.cjs';
+import selectDestination from '../component/selectDestination.cjs';
+import selectStyleDefault from '../component/selectStyle.cjs';
+
 const { _, chalk, Reactium } = arcli;
 
-const componentGen = require('../component/componentGen');
-const formatDestination = require('../component/formatDestination');
-const selectDestination = require('../component/selectDestination');
-const { selectStyle, styleTypes } = require('../component/selectStyle');
+const { selectStyle, styleTypes } = selectStyleDefault;
 
 const PREFLIGHT = ({ msg, params }) => {
     arcli.message(msg || 'Preflight checklist:');

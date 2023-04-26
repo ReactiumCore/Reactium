@@ -1,7 +1,7 @@
-const componentGen = require('../component/componentGen');
-const formatRoute = require('../component/formatRoute');
-const formatDestination = require('../component/formatDestination');
-const selectDestination = require('../component/selectDestination');
+import componentGen from '../component/componentGen.cjs';
+import formatDestination from '../component/formatDestination.cjs';
+import selectDestination from '../component/selectDestination.cjs';
+import formatRoute from '../component/formatRoute.cjs';
 
 const { _, chalk, prefix, Reactium } = arcli;
 

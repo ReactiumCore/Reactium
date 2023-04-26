@@ -1,6 +1,6 @@
 const { _, chalk, prefix } = arcli;
 const suffix = chalk.magenta(': ');
-const styleTypes = require('./styleTypes');
+const styleTypes = require('./styleTypes.cjs');
 
 const selectStyle = props => ({
     prefix,
