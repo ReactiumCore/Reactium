@@ -241,32 +241,35 @@ const reactium = (gulp, config, webpackConfig) => {
             .pipe(rename(assetPath))
             .pipe(gulp.dest(config.dest.assets));
 
-    const defaultBuildTasks = gulp.series(
-        task('preBuild'),
-        task('ensureReactiumModules'),
-        task('clean'),
-        task('manifest'),
-        gulp.parallel(task('markup'), task('json')),
-        gulp.parallel(task('assets'), task('styles')),
-        task('scripts'),
-        task('umdLibraries'),
-        task('serviceWorker'),
-        task('compress'),
-        task('postBuild'),
-    );
+    const generateSeries = (arr = []) => {
+        return arr.map(t => {
+            if (typeof t === 'string') {
+                return task(t);
+            } else if (Array.isArray(t)) {
+                return gulp.parallel(...t.map(task));
+            }
+        });
+    };
 
-    const build = cfg =>
-        !cfg.buildTasks
-            ? defaultBuildTasks
-            : gulp.series(
-                  ...cfg.buildTasks.map(t => {
-                      if (typeof t === 'string') {
-                          return task(t);
-                      } else if (Array.isArray(t)) {
-                          return gulp.parallel(...t.map(task));
-                      }
-                  }),
-              );
+    const build = cfg => {
+        const series = cfg.buildTasks || [
+            'preBuild',
+            'ensureReactiumModules',
+            'clean',
+            'manifest',
+            ['markup', 'json'],
+            ['assets', 'styles'],
+            'scripts',
+            'umdLibraries',
+            'serviceWorker',
+            'compress',
+            'postBuild',
+        ];
+
+        ReactiumGulp.Hook.runSync('build-series', series);
+
+        return gulp.series(...generateSeries(series));
+    };
 
     const apidocs = done => {
         if (!isDev) done();
@@ -827,12 +830,20 @@ $color: map.set($color, "{{key}}", \${{{ key }}});
             .pipe(gulpif(isDev, browserSync.stream()));
     };
 
-    const styles = gulp.series(
-        task('styles:colors'),
-        task('styles:pluginAssets'),
-        task('styles:partials'),
-        task('styles:compile'),
-    );
+    const getStyleSeries = () => {
+        const series = [
+            'styles:colors',
+            'styles:pluginAssets',
+            'styles:partials',
+            'styles:compile',
+        ];
+
+        ReactiumGulp.Hook.runSync('style-series', series);
+
+        return series;
+    };
+
+    const styles = gulp.series(...generateSeries(getStyleSeries()));
 
     const compress = done =>
         isDev
