@@ -26,7 +26,7 @@ const defaultConfig = {
     watch: {
         js: ['src/app/**/*', 'reactium_modules/**/*'],
         markup: ['src/**/*.html', 'src/**/*.css', 'reactium_modules/**/*.css'],
-        colors: ['src/**/*/colors.json'],
+        colors: ['src/**/*/colors*.json', 'reactium_modules/**/*/colors*.json'],
         pluginAssets: [
             'src/app/**/plugin-assets.json',
             'src/**/style-assets.json',
@@ -58,7 +58,7 @@ const defaultConfig = {
     },
     src: {
         app: 'src',
-        colors: ['src/**/*/colors.json'],
+        colors: ['src/**/*/colors*.json', 'reactium_modules/**/*/colors*.json'],
         pluginAssets: [
             'src/app/**/plugin-assets.json',
             'src/**/style-assets.json',
