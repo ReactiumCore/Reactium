@@ -1,21 +1,13 @@
-@use "sass:map";
-
 $reactium-blue: #4f82ba !default;
 $reactium-white: #ffffff !default;
-$jmj-loading-bg: radial-gradient(#1D2758, #111735);
-$jmj-image-logo: map.get($assets, "jmj-loader-logo") !default;
-
-$reactium-loading-zindex: 1000 !default;
 
 .reactium-loading {
-    z-index: $reactium-loading-zindex;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     position: fixed;
     background-color: $reactium-white;
-    background-image: $jmj-loading-bg;
 
     &,
     * {
@@ -24,22 +16,22 @@ $reactium-loading-zindex: 1000 !default;
 
     &:before {
         content: '';
-        width: 224px;
-        height: 224px;
+        width: 64px;
+        height: 64px;
         border-radius: 100%;
-        z-index: $reactium-loading-zindex + 1;
+        z-index: 1;
         left: 50%;
         top: 50%;
         position: absolute;
         transform: translate(-50%, -50%);
-        box-shadow: 0 0 0 0 rgba(#111735, 1);
+        box-shadow: 0 0 0 0 rgba($reactium-blue, 1);
         animation: reactium-pulse 1.2s infinite;
     }
 
     &:after {
         content: '';
-        width: 224px;
-        height: 150px;
+        width: 64px;
+        height: 64px;
         z-index: 2;
         left: 50%;
         top: 50%;
@@ -48,20 +40,20 @@ $reactium-loading-zindex: 1000 !default;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        background-image: url($jmj-image-logo);
+        background-image: url('/assets/images/logo.png');
     }
 }
 
 @keyframes reactium-pulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(#111735, 0.7);
+        box-shadow: 0 0 0 0 rgba($reactium-blue, 0.7);
     }
 
     70% {
-        box-shadow: 0 0 0 48px rgba(#1D2758, 0);
+        box-shadow: 0 0 0 12px rgba($reactium-blue, 0);
     }
 
     100% {
-        box-shadow: 0 0 0 0 rgba(#fff, 0);
+        box-shadow: 0 0 0 0 rgba($reactium-white, 0);
     }
 }
