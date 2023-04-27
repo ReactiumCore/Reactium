@@ -241,14 +241,28 @@ const reactium = (gulp, config, webpackConfig) => {
             .pipe(rename(assetPath))
             .pipe(gulp.dest(config.dest.assets));
 
+    const generateParallel = (arr = []) => {
+        return gulp.parallel(
+            ...arr.map(t => {
+                if (typeof t === 'string') {
+                    return task(t);
+                } else if (Array.isArray(t)) {
+                    return generateSeries(t);
+                }
+            }),
+        );
+    };
+
     const generateSeries = (arr = []) => {
-        return arr.map(t => {
-            if (typeof t === 'string') {
-                return task(t);
-            } else if (Array.isArray(t)) {
-                return gulp.parallel(...t.map(task));
-            }
-        });
+        return gulp.series(
+            ...arr.map(t => {
+                if (typeof t === 'string') {
+                    return task(t);
+                } else if (Array.isArray(t)) {
+                    return generateParallel(t);
+                }
+            }),
+        );
     };
 
     const build = cfg => {
@@ -268,7 +282,7 @@ const reactium = (gulp, config, webpackConfig) => {
 
         ReactiumGulp.Hook.runSync('build-series', series);
 
-        return gulp.series(...generateSeries(series));
+        return generateSeries(series);
     };
 
     const apidocs = done => {
@@ -843,7 +857,7 @@ $color: map.set($color, "{{key}}", \${{{ key }}});
         return series;
     };
 
-    const styles = gulp.series(...generateSeries(getStyleSeries()));
+    const styles = generateSeries(getStyleSeries());
 
     const compress = done =>
         isDev
