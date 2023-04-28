@@ -768,7 +768,7 @@ $assets: map.set($assets, "{{key}}", "{{{dataURL}}}");
 @use "sass:map";
 
 {{#each this}}
-\${{{ key }}}: "{{{value}}}" !default;
+\${{{ key }}}: {{{value}}} !default;
 {{/each}}
 
 $color: () !default;
