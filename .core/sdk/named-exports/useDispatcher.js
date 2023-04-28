@@ -1,10 +1,8 @@
 import _ from 'underscore';
 import op from 'object-path';
-import {
-    ComponentEvent,
-    useEventEffect,
-} from '@atomic-reactor/reactium-sdk-core';
+import { ComponentEvent } from '@atomic-reactor/reactium-sdk-core';
 import cc from 'camelcase';
+import { useEffect } from 'react';
 
 export const useDispatcherFactory = Reactium => ({ props, state }) => (
     type,
@@ -24,5 +22,25 @@ export const useDispatcherFactory = Reactium => ({ props, state }) => (
     if (_.isFunction(cb)) state.removeEventListener(type, cb);
 };
 
-export const useStateEffectFactory = Reactium => (handlers = {}, deps) =>
-    useEventEffect(Reactium.State, handlers, deps);
+export const useStateEffectFactory = Reactium => (handlers = {}, deps) => {
+    const unsubs = [];
+    const target = Reactium.State;
+
+    // sanitize handlers
+    Object.entries(handlers).forEach(([type, cb]) => {
+        if (
+            typeof cb === 'function' &&
+            !Object.values(op.get(target, ['listeners', type], {})).find(
+                f => f === cb,
+            )
+        ) {
+            unsubs.push(target.addEventListener(type, cb));
+        }
+    });
+
+    useEffect(() => {
+        return () => {
+            unsubs.forEach(unsub => unsub());
+        };
+    }, deps);
+};
