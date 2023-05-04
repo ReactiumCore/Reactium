@@ -1,9 +1,0 @@
-{
-  "type": "module",
-  "name": "icon-generator",
-  "version": "0.0.1",
-  "description": "Reactium: Import icons from an Icomoon selection file.",
-  "main": "index.js",
-  "author": "Reactium LLC",
-  "license": "MIT"
-}
