@@ -1,6 +1,6 @@
 {
-  "name": "reactium-core",
-  "version": "5.0.0-alpha-3",
+  "name": "reactium-core-project",
+  "version": "5.0.0",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -58,7 +58,7 @@
     "@atomic-reactor/reactium-user": "5.0.1",
     "@atomic-reactor/reactium-setting": "5.0.1",
     "@atomic-reactor/reactium-svg": "0.0.3",
-    "@atomic-reactor/reactium-core": "5.0.1"
+    "@atomic-reactor/reactium-core": "5.0.2"
   },
   "workspaces": [
     "reactium_modules/*",
