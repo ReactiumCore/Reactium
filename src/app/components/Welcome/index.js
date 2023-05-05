@@ -8,7 +8,7 @@ import React from 'react';
 const Welcome = () => {
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
-            <iframe width='100%' height='100%' src='https://reactium.io/' />
+            <iframe width='100%' height='100%' src='https://www.reactium.io/' />
         </div>
     );
 };
