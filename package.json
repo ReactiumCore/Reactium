@@ -1,6 +1,6 @@
 {
   "name": "reactium-core-project",
-  "version": "5.0.0",
+  "version": "5.0.6",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
