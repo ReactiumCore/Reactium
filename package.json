@@ -58,7 +58,7 @@
     "@atomic-reactor/reactium-user": "5.0.1",
     "@atomic-reactor/reactium-setting": "5.0.1",
     "@atomic-reactor/reactium-svg": "0.0.3",
-    "@atomic-reactor/reactium-core": "5.0.2"
+    "@atomic-reactor/reactium-core": "5.0.6"
   },
   "workspaces": [
     "reactium_modules/*",
