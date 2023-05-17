@@ -2,6 +2,7 @@
 // import 'core-js/stable';
 // import 'regenerator-runtime/runtime';
 import { Shell } from '@atomic-reactor/reactium-core/app/shell';
+__webpack_public_path__ = window.resourceBaseUrl || '/assets/js/';
 
 (async () => {
     try {
