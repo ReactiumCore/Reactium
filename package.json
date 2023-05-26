@@ -9,8 +9,7 @@
     "heroku-prebuild": "npx reactium install",
     "static": "npm-run-all build:* && gulp static",
     "local": "gulp local",
-    "clean": "gulp clean",
-    "precommit": "lint-staged"
+    "clean": "gulp clean"
   },
   "keywords": [
     "react",
@@ -63,5 +62,10 @@
   "workspaces": [
     "reactium_modules/*",
     "reactium_modules/@*/*"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
 }
