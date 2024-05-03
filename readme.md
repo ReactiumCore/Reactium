@@ -11,7 +11,7 @@ An opinionated framework for creating React + Redux apps.
 To run in development mode from your project directory for local development:
 
 ```
-$ npm install
+$ npx reactium init
 $ npm run local
 ```
 
@@ -50,8 +50,5 @@ There are a many reasons why, but the most important ones to us are:
 -   **Robust Command Line Interface:** Reactium heavily relies on boiler-plated code to normalize and ease the dev workflow. Creating a component or a design system element can be done with the stroke of a few keys. No need to memorize all the commands either, you can use `--flags` or follow prompts. You can even customize the CLI by replacing or creating your own commands. [Learn more](https://www.npmjs.com/package/@atomic-reactor/cli).
 -   **Easy Deployment:** Reactium creates a Node server for both front-end and server side rendering making it easy to deploy to the host of your choice. We even have a docker setup included for you dev-opers.
 -   **Single Page App or Isolated Component Development:** Build anything from a full website to a single component and package for distribution.
--   **Built-in Redux Support:** Learning Redux can be hard. Sure you might have the basics down but building an application with it can quickly escalate to frustration and nightmares. Our simple Redux pattern makes it super easy to build stateful applications. Learn more about [Redux](https://redux.js.org/).
 -   **Built-in React Router Support**: Build routed websites in a single application with no additional setup. Learn more about [React Router](https://reacttraining.com/react-router/web/guides/quick-start)
--   **Plugin Architecture**: Dynamic composition where there's no need to hard code `import` statements through out your codebase. Simply identify "zones" where components can be injected. [Learn more](https://github.com/Atomic-Reactor/Reactium/blob/master/markdown/plugins.md).
-
-[More documentation](https://github.com/Atomic-Reactor/Reactium/tree/master/markdown).
+-   **Plugin Architecture**: Registered components, rendering Zone components, and run-time extensibility!
