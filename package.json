@@ -1,6 +1,6 @@
 {
   "name": "reactium-core-project",
-  "version": "5.0.6",
+  "version": "6.0.0",
   "description": "A framework for creating React + Redux apps using the domain driven design (DDD) paradigm.",
   "main": "index.js",
   "scripts": {
@@ -51,13 +51,13 @@
     ]
   },
   "reactiumDependencies": {
-    "@atomic-reactor/reactium-api": "5.0.3",
-    "@atomic-reactor/reactium-capability": "5.0.1",
+    "@atomic-reactor/reactium-api": "6.0.0",
+    "@atomic-reactor/reactium-capability": "6.0.0",
     "@atomic-reactor/reactium-role": "5.0.1",
-    "@atomic-reactor/reactium-user": "5.0.1",
+    "@atomic-reactor/reactium-user": "6.0.0",
     "@atomic-reactor/reactium-setting": "5.0.1",
     "@atomic-reactor/reactium-svg": "0.0.3",
-    "@atomic-reactor/reactium-core": "5.0.24"
+    "@atomic-reactor/reactium-core": "6.1.0"
   },
   "workspaces": [
     "reactium_modules/*",
